@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../style/font.css";
+import "../style/ui.css";
 import "../style/globals.css";
 import MasterHelper from "@/utils/MasterHelper";
 // import "bootstrap/dist/js/bootstrap.bundle.min.js";

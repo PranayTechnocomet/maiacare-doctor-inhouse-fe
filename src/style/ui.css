@@ -1,0 +1,11 @@
+.maiacare-input-field {
+ padding: 12px;
+ border: 1px solid var(--color-brand);   
+ border-radius: 8px;
+}
+
+.maiacare-input-field:focus{
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
