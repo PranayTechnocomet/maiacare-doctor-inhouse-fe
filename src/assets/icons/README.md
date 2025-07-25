@@ -1,0 +1,1 @@
+You can put all svg or icons in this folder
