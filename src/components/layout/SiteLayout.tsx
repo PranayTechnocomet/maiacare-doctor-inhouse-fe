@@ -15,6 +15,7 @@ import { RiChat3Line, RiNotificationLine } from "react-icons/ri";
 import { IoBagAddOutline } from "react-icons/io5";
 
 import Logo from "../../assets/images/logo.png";
+import Maia from "../../assets/images/maia.png";
 import UserProfileIcon from "../../assets/images/user-icon.png";
 import { useSelector } from "react-redux";
 import { RootState } from "@/utils/redux/store";
@@ -34,18 +35,11 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
   const [showOffcanvas, setShowOffcanvas] = useState(false);
 
   const navItems = [
+    { label: "Profile", href: "/profile", icon: <MdWindow size={22} /> },
     { label: "Doctors", href: "/doctors", icon: <MdWindow size={22} /> },
     { label: "Patients", href: "/patients", icon: <BsPeople size={22} /> },
-    {
-      label: "Appointments",
-      href: "/appointments",
-      icon: <MdOutlineCalendarToday size={22} />,
-    },
-    {
-      label: "Treatment Plan",
-      href: "/treatment-plan",
-      icon: <IoBagAddOutline size={22} />,
-    },
+    { label: "Appointments", href: "/appointments", icon: <MdOutlineCalendarToday size={22} />, },
+    { label: "Treatment Plan", href: "/treatment-plan", icon: <IoBagAddOutline size={22} />, },
     { label: "Settings", href: "/settings", icon: <MdSettings size={22} /> },
   ];
 
@@ -59,9 +53,8 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
     <div className="layout">
       {/* ====== DESKTOP SIDEBAR ====== */}
       <aside
-        className={`sidebar desktop-sidebar ${
-          collapsed ? "sidebar--collapsed" : "sidebar--expanded"
-        }`}
+        className={`sidebar desktop-sidebar ${collapsed ? "sidebar--collapsed" : "sidebar--expanded"
+          }`}
       >
         <button
           type="button"
@@ -73,7 +66,12 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
 
         <div className="sidebar__top">
           <Link href="/" className="sidebar__logo-link">
-            <img src={Logo.src} alt="Logo" className="sidebar__logo" />
+            {/* <img src={Logo.src} alt="Logo" className="sidebar__logo" /> */}
+            {collapsed ? (
+              <img src={Logo.src} alt="Collapsed Logo" className="sidebar__logo" />
+            ) : (
+              <img src={Maia.src} alt="Expanded Logo" className="sidebar__logo" />
+            )}
           </Link>
           <hr className="sidebar__divider" />
           <Nav className="sidebar__nav" ref={navRef}>
@@ -108,17 +106,18 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
         </div>
       </aside>
 
+
       {/* ====== OFFCANVAS SIDEBAR (MOBILE/TABLET) ====== */}
       <div className={`offcanvas-backdrop ${showOffcanvas ? "show" : ""}`} onClick={() => setShowOffcanvas(false)}></div>
       <aside className={`sidebar offcanvas-sidebar ${showOffcanvas ? "open" : ""}`}>
         <div className="offcanvas-header">
           <button
-          type="button"
-          className="sidebar__toggle"
-          onClick={() => setShowOffcanvas(false)}
-        >
-           <HiOutlineChevronDoubleLeft size={18} />
-        </button>
+            type="button"
+            className="sidebar__toggle"
+            onClick={() => setShowOffcanvas(false)}
+          >
+            <HiOutlineChevronDoubleLeft size={18} />
+          </button>
         </div>
         <div className="sidebar__top">
           <Link href="/" className="sidebar__logo-link" onClick={() => setShowOffcanvas(false)}>
@@ -140,7 +139,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
                 </Link>
               );
             })}
-            
+
           </Nav>
         </div>
 
