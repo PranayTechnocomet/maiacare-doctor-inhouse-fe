@@ -1,11 +1,119 @@
 .maiacare-input-field {
- padding: 12px;
- border: 1px solid var(--color-brand);   
- border-radius: 8px;
+    padding: 12px;
+    border: 1px solid var(--color-brand);
+    border-radius: 8px;
 }
 
-.maiacare-input-field:focus{
+.maiacare-input-field:focus {
     border-color: var(--color-brand);
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     outline: none;
+}
+
+.maiacare-radio-group {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.maiacare-radio-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+}
+
+.maiacare-radio-wrapper input[type="radio"] {
+    display: none;
+}
+
+.maiacare-radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--color-radio);
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+}
+
+.maiacare-radio-wrapper input[type="radio"]:checked+.maiacare-radio-custom {
+    background-color: #EDF5FF;
+    border: 1px solid var(--color-brand);
+}
+
+.maiacare-radio-wrapper input[type="radio"]:checked+.maiacare-radio-custom::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-brand);
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+}
+
+
+.maiacare-button {
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.content-layout {
+    padding: 32px 24px;
+    background-color: var(--color-white);
+    border-radius: 12px;
+    box-shadow: 0px 2px 10px 0px #2C313E0A;
+}
+
+.maiacare-phone-input-container {
+    width: 100%;
+  }
+  
+  .maiacare-phone-input {
+    width: 100% !important;
+    padding: 12px 12px 12px 44px !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--color-brand) !important;
+    height: auto !important;
+  }
+  
+  .maiacare-phone-button {
+    border: none !important;
+    border-right: 1px solid var(--color-brand) !important;
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+    background-color: transparent !important;
+  }
+
+  .maiacare-phone-button .selected-flag:hover {
+    background-color: transparent !important;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  .maiacare-phone-button .selected-flag .flag {
+    left: 28% !important;
+  }
+  .maiacare-phone-button .arrow {
+    display: none !important;
+  }
+
+  .maiacare-modal .modal-content{
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0px 2px 10px 0px #2C313E0A;
+    background-color: var(--color-white);
+  }
+
+@media (max-width: 991px) {
+    .content-layout {
+        padding: 24px 16px;
+    }
+}
+
+/* Optional: Smaller devices like phones (e.g., 575px and below) */
+@media (max-width: 575px) {
+    .content-layout {
+        padding: 16px 8px;
+    }
 }
