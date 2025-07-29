@@ -1,11 +1,122 @@
-.maiacare-input-field-label {
-    font-size: 14px;
-    font-weight: 600;
+/* Base styles (default for desktops > 991px) */
+* {
     font-family: 'Poppins', sans-serif;
 }
 
-.maiacare-input-field{
+.maiacare-input-field-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.maiacare-input-field {
     font-size: 16px;
     font-weight: 500;
-    font-family: 'Poppins', sans-serif;
+}
+
+.maiacare-input-field-helper-text {
+    color: var(--color-sidebar-icon);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.maiacare-input-field-error {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.maiacare-radio-wrapper {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-radio);
+}
+
+.maiacare-radio-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-radio-lable);
+}
+
+.maiacare-input-field-maxlength-indicator {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-sidebar-icon);
+}
+
+.maiacare-button {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.default-layout {
+    background-color: var(--color-brand);
+    color: var(--color-white);
+
+}
+
+.default-layout:hover {
+    background-color: var(--color-brand);
+    color: var(--color-white);
+}
+
+.default-layout:focus-visible{
+    background-color: var(--color-brand);
+    color: var(--color-white);
+}
+
+.default-layout:active {
+    background-color: var(--color-brand) !important;
+    color: var(--color-white) !important;
+    transform: scale(0.98);
+    transition: all 0.2s ease-in-out;
+}
+
+.default-layout:disabled {
+    background-color: var(--color-brand) !important;
+    color: var(--color-white) !important;
+    cursor: not-allowed;
+}
+
+.maiacare-phone-input {
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+/* Media Query: Tablets (991px and below) */
+@media (max-width: 991px) {
+    .maiacare-input-field-label {
+        font-size: 13px;
+    }
+
+    .maiacare-input-field {
+        font-size: 15px;
+    }
+
+    .maiacare-input-field-helper-text,
+    .maiacare-input-field-error {
+        font-size: 13px;
+    }
+
+    .maiacare-radio-label {
+        font-size: 13px;
+    }
+}
+
+/* Optional: Smaller devices like phones (e.g., 575px and below) */
+@media (max-width: 575px) {
+    .maiacare-input-field-label {
+        font-size: 12px;
+    }
+
+    .maiacare-input-field {
+        font-size: 14px;
+    }
+
+    .maiacare-input-field-helper-text,
+    .maiacare-input-field-error {
+        font-size: 12px;
+    }
+
+    .maiacare-radio-label {
+        font-size: 12px;
+    }
 }
