@@ -5,11 +5,12 @@
   --color-border: #e2e8f0;
   --color-brand: #2b4360;
   --color-heading: #292929;
-  --color-icon-border: #DDE1E8;
-  --color-sidebar-icon: #8A8D93;
+  --color-icon-border: #DDE1E8;   
+  --color-sidebar-icon: #8A8D93; 
   --sidebar-width: 225px;
   --sidebar-width-collapsed: 58px;
   --color-radio: #B0B4C1;
+  --color-subtitle-pink:#E29578;
   --color-radio-lable: #3E4A57;
   --color-modal-heading: #E29578;
 }

@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setHeaderData } from "@/utils/redux/slices/headerSlice";
 import Profile from "@/components/Profile/Profile";
+import ProfileTabes from "@/components/Profile/ProfileTabes";
 
 function Page() {
     const dispatch: AppDispatch = useDispatch();
@@ -14,6 +15,7 @@ function Page() {
   return (
     <div>
       <Profile/>
+      <ProfileTabes/>
       </div>
   )
 }
