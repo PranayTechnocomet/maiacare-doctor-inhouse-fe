@@ -15,7 +15,8 @@ export const InputFieldGroup = ({
     readOnly=false,
     error="",
     helperText="",
-    className=""    
+    className="",    
+    children
 }: {
     label?: string;
     name?: string;
@@ -31,11 +32,12 @@ export const InputFieldGroup = ({
     error?: string;
     helperText?: string;
     className?: string;
+    children?: React.ReactNode;
 }) => {
     return (
   <div className={`maiacare-input-field-container ${className}`}>
     <InputFieldLabel label={label} required={required} />
-    <InputField name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} required={required} disabled={disabled} readOnly={readOnly} />
+    <InputField name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} required={required} disabled={disabled} readOnly={readOnly} children={children} />
     {error && <InputFieldError error={error} />}
     {helperText && <InputFieldHelperText helperText={helperText} />}
   </div> 
@@ -59,8 +61,8 @@ export const InputField = ({
     required=false,
     disabled=false,
     readOnly=false,
-    className=""
-    
+    className="",
+    children
 }: {
     name?: string;
     type?: string;
@@ -73,9 +75,13 @@ export const InputField = ({
     disabled?: boolean;
     readOnly?: boolean;
     className?: string;
+    children?: React.ReactNode;
 }) => {
     return (
+        <>
         <Form.Control className={`maiacare-input-field ${className}`} name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} required={required} disabled={disabled} readOnly={readOnly} />
+        {children}
+        </>
     )
 }
 
