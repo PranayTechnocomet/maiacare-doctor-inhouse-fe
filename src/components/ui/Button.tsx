@@ -16,8 +16,7 @@ export default function Button({
 }) {
     return (
         <BootstrapButton
-            className={`maiacare-button ${variant == "default" ? "default-layout" : ""} ${className}`}
-            variant={variant}
+            className={`maiacare-button ${variant == "default" ? "default-layout" : variant == "outline" ? "outline-layout" : ""} ${className}`}
             disabled={disabled}
             onClick={onClick}
         >

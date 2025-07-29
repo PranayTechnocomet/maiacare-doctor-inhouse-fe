@@ -6,11 +6,17 @@
 .maiacare-input-field-label {
     font-size: 14px;
     font-weight: 600;
+    color: var(--color-brand);
 }
 
 .maiacare-input-field {
     font-size: 16px;
     font-weight: 500;
+    color: var(--color-brand);
+}
+
+.maiacare-input-field::placeholder{
+    color: var(--color-radio);
 }
 
 .maiacare-input-field-helper-text {
@@ -76,6 +82,38 @@
     cursor: not-allowed;
 }
 
+.outline-layout {
+    background-color: transparent;
+    color: var(--color-brand);
+    border: 1px solid var(--color-brand);
+}
+
+.outline-layout:hover {
+    background-color: transparent;
+    color: var(--color-brand);
+    border: 1px solid var(--color-brand);
+}
+
+.outline-layout:focus-visible{
+    background-color: transparent;
+    color: var(--color-brand);
+    border: 1px solid var(--color-brand);
+}
+
+.outline-layout:active {
+    background-color: transparent !important;
+    color: var(--color-brand) !important;
+    border: 1px solid var(--color-brand) !important;
+    transform: scale(0.98);
+    transition: all 0.2s ease-in-out;
+}
+
+.outline-layout:disabled {
+    background-color: var(--color-brand) !important;
+    color: var(--color-white) !important;
+    cursor: not-allowed;
+}
+
 .maiacare-phone-input {
     font-size: 16px !important;
     font-weight: 500;
@@ -99,6 +137,9 @@
     .maiacare-radio-label {
         font-size: 13px;
     }
+    .modal-custom-header{
+        font-size: 20px;
+    }
 }
 
 /* Optional: Smaller devices like phones (e.g., 575px and below) */
@@ -118,5 +159,8 @@
 
     .maiacare-radio-label {
         font-size: 12px;
+    }
+    .modal-custom-header{
+        font-size: 18px;
     }
 }

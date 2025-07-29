@@ -105,9 +105,25 @@
     background-color: var(--color-white);
   }
 
+  .modal-close-icon {
+    cursor: pointer;
+    border: 1px solid #DDE1E8;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 @media (max-width: 991px) {
     .content-layout {
         padding: 24px 16px;
+    }
+    .maiacare-modal .modal-content{
+        padding: 18px;
+    }
+    .modal-close-icon {
+        padding: 12px;
     }
 }
 
@@ -115,5 +131,11 @@
 @media (max-width: 575px) {
     .content-layout {
         padding: 16px 8px;
+    }
+    .maiacare-modal .modal-content{
+        padding: 14px;
+    }
+    .modal-close-icon {
+        padding: 8px;
     }
 }
