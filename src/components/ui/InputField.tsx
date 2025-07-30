@@ -37,7 +37,7 @@ export const InputFieldGroup = ({
     return (
   <div className={`maiacare-input-field-container ${className}`}>
     <InputFieldLabel label={label} required={required} />
-    <InputField name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} required={required} disabled={disabled} readOnly={readOnly} children={children} />
+    <InputField name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} disabled={disabled} readOnly={readOnly} children={children} />
     {error && <InputFieldError error={error} />}
     {helperText && <InputFieldHelperText helperText={helperText} />}
   </div> 
@@ -79,7 +79,7 @@ export const InputField = ({
 }) => {
     return (
         <>
-        <Form.Control className={`maiacare-input-field ${className}`} name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} required={required} disabled={disabled} readOnly={readOnly} />
+        <Form.Control className={`maiacare-input-field ${className}`} name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} disabled={disabled} readOnly={readOnly} />
         {children}
         </>
     )

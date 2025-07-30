@@ -55,7 +55,7 @@ export const DatePickerFieldGroup = ({
           onBlur={onBlur}
           onClick={onClick}
           placeholder={placeholder}
-          required={required}
+          // required={required}
           disabled={disabled}
           readOnly={readOnly}
         />

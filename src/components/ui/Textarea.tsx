@@ -44,7 +44,7 @@ export default function Textarea({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        required={required}
+        // required={required}
         disabled={disabled}
         readOnly={readOnly}
         className={`maiacare-input-field`}

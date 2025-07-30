@@ -41,7 +41,7 @@ export default function InputSelect({
         onChange={onChange}
         onBlur={onBlur}
         onClick={onClick}
-        required={required}
+        // required={required}
         disabled={disabled}
         className={`maiacare-input-field`}
       >
