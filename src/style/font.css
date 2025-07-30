@@ -8,13 +8,14 @@
     font-weight: 600;
     color: var(--color-brand);
 }
+
 .maiacare-input-field {
     font-size: 16px;
     font-weight: 500;
     color: var(--color-brand);
 }
 
-.maiacare-input-field::placeholder{
+.maiacare-input-field::placeholder {
     color: var(--color-radio);
 }
 
@@ -62,7 +63,7 @@
     color: var(--color-white);
 }
 
-.default-layout:focus-visible{
+.default-layout:focus-visible {
     background-color: var(--color-brand);
     color: var(--color-white);
 }
@@ -92,7 +93,7 @@
     border: 1px solid var(--color-brand);
 }
 
-.outline-layout:focus-visible{
+.outline-layout:focus-visible {
     background-color: transparent;
     color: var(--color-brand);
     border: 1px solid var(--color-brand);
@@ -120,63 +121,116 @@
 
 /* ======= Profile Componet css  =========== */
 
-.profile-main-heading{
+.profile-name {
     color: var(--color-heading);
-    font-size: 18px;
-
+    font-size: 20px;
 }
 
 .profile-verified-badge {
-  font-size: 15px;
-  color: var(--color-subtitle-pink);
-  font-weight: 600;
+    font-size: 15px;
+    color: var(--color-subtitle-pink);
+    font-weight: 600;
 }
 
-.profile-sub-title{
+.profile-sub-title {
     color: var(--color-sidebar-icon);
     line-height: 0;
 }
 
 .profile-member-since {
-  font-style: italic;
-  font-size: 14px;  
-  font-weight: 400;
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .edit-profile-btn {
-  border: 1px solid var(--color-radio-lable); /* dark blue border */
-  color: var(--color-brand); /* dark blue text */
-  font-weight: 500;
-  background-color: transparent;
+    border: 1px solid var(--color-radio-lable);
+    color: var(--color-brand);
+    font-weight: 500;
+    background-color: transparent;
 }
 
 .edit-profile-btn:hover,
 .edit-profile-btn:focus,
 .edit-profile-btn:active {
-  background-color: transparent !important;
-  color: var(--color-brand) !important;
-  border: 1px solid var(--color-radio-lable)!important;; 
-  box-shadow: none !important;
+    background-color: transparent !important;
+    color: var(--color-brand) !important;
+    border: 1px solid var(--color-radio-lable) !important;
+    ;
+    box-shadow: none !important;
 }
 
 /* Profile Tabes 2nd componet */
 .custom-tab .nav-link.active {
-  color: #1e2a55;
-  border-bottom: 2px solid #1e2a55;
-  font-weight: 600;
+    color: var(--color-brand);
+    border-bottom: 2px solid var(--color-brand);
+    font-weight: 600;
 }
+
 .custom-tab {
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #f7f9fb;
+    border-bottom: 1px solid var(--color-icon-border);
 }
 
 .custom-tab .nav-link {
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: #adb5bd;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #adb5bd;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
 }
+
+.profile-card-main-titile {
+    color: var(--color-heading);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.profile-card-boeder {
+    border-color: var(--color-icon-border) !important;
+}
+
+.card-feild {
+    color: var(--color-radio-lable) !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.card-university-text .maiacare-input-field-label{
+    color: var(--color-radio-lable) !important;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.card-year {
+    color: var(--color-sidebar-icon);
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.about-text {
+    color: var(--color-radio-lable) !important;
+    font-weight: 400;
+    font-size: 16px !important;
+}
+
+.check-box input[type="checkbox"] {
+  border: 2px solid var(--color-radio);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Media Query: Tablets (991px and below) */
@@ -197,7 +251,8 @@
     .maiacare-radio-label {
         font-size: 13px;
     }
-    .modal-custom-header{
+
+    .modal-custom-header {
         font-size: 20px;
     }
 }
@@ -220,7 +275,8 @@
     .maiacare-radio-label {
         font-size: 12px;
     }
-    .modal-custom-header{
+
+    .modal-custom-header {
         font-size: 18px;
     }
 }

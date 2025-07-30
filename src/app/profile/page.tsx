@@ -4,8 +4,8 @@ import { AppDispatch } from "@/utils/redux/store";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setHeaderData } from "@/utils/redux/slices/headerSlice";
-import Profile from "@/components/Profile/Profile";
-import ProfileTabes from "@/components/Profile/ProfileTabes";
+import Profile from "@/components/Profile";
+import ProfileTabes from "@/components/ProfileTabes";
 
 function Page() {
     const dispatch: AppDispatch = useDispatch();

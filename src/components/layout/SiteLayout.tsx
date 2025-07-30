@@ -121,7 +121,9 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
         </div>
         <div className="sidebar__top">
           <Link href="/" className="sidebar__logo-link" onClick={() => setShowOffcanvas(false)}>
-            <img src={Logo.src} alt="Logo" className="sidebar__logo" />
+            {/* <img src={Logo.src} alt="Logo" className="sidebar__logo" /> */}
+             <img src={Maia.src} alt="Expanded Logo" className="sidebar__logo" />
+            
           </Link>
           <hr className="sidebar__divider" />
           <Nav className="sidebar__nav">

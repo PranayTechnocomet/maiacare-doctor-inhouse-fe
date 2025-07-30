@@ -1,0 +1,22 @@
+.tab-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+
+  /* Hide scrollbar for WebKit browsers */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.tab-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.custom-tab {
+  display: inline-flex;
+  flex-wrap: nowrap;
+ 
+}
+
+.nav-item {
+  flex: 0 0 auto;
+}
