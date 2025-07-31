@@ -54,8 +54,8 @@ const Profile = () => {
                                     </div>
                                 </div>
 
-{/* flex-md-row align-items-center align-items-md-center justify-content-center justify-content-md-start  
-text-center text-md-start     ======= small screen all data center */} 
+                                {/* flex-md-row align-items-center align-items-md-center justify-content-center justify-content-md-start  
+text-center text-md-start     ======= small screen all data center */}
 
                                 <div className="profile-details">
                                     <div className="detail-row profile-sub-title">

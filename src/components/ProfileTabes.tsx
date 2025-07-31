@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Table } from 'react-bootstrap';
 import Add from "../assets/images/Add.png";
 import Delete from "../assets/images/Delete.png";
 import LightEditimg from "../assets/images/LightEditimg.png";
+import Pdfimg from "../assets/images/Pdfimg.png";
+import Dowmload from "../assets/images/Download.png";
+import BookCalendar from "../assets/images/BookCalendar.png";
 import Image from 'next/image';
 import ContentContainer from "./ui/ContentContainer";
 import { InputFieldGroup } from './ui/InputField';
 import "../style/ProfileTabes.css";
-// import { IoIosEye } from 'react-icons/io';
+import { leaveData, leaveColumns } from "../../src/utils/StaticData";
+import BaseTable from "./ui/BaseTable";
+
 
 const ProfileTabes = () => {
   const [activeTab, setActiveTab] = useState('basic');
@@ -16,19 +21,37 @@ const ProfileTabes = () => {
     { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
   ]);
 
+  const documents = [
+    { name: 'Certificate.pdf', date: 'October 20, 2024' },
+    { name: 'Aadhar Card.pdf', date: 'October 20, 2024' },
+    { name: 'License.pdf', date: 'October 20, 2024' },
+    { name: 'Certificate.pdf', date: 'October 20, 2024' },
+  ];
+
+  const leaves = [
+    { id: 1, type: 'Casual leave', start: '12/08/25', end: '12/08/25', days: '1 Day' },
+    { id: 2, type: 'Sick leave', start: '12/08/25', end: '12/08/25', days: '3 Days' },
+    { id: 3, type: 'Vacation', start: '12/08/25', end: '12/08/25', days: '15 Days' },
+    { id: 4, type: 'Family Thing', start: '12/08/25', end: '12/08/25', days: '1 Day' },
+    { id: 5, type: 'Sick leave', start: '12/08/25', end: '12/08/25', days: '2 Days' },
+    { id: 6, type: 'Casual leave', start: '12/08/25', end: '12/08/25', days: '1 Day' },
+    { id: 7, type: 'Family thing', start: '12/08/25', end: '12/08/25', days: '2 Days' },
+    { id: 8, type: 'Casual leave', start: '12/08/25', end: '12/08/25', days: '1 Day' },
+  ];
+
   const [formData, setFormData] = useState({
-    MF :"",
-    SS : "",
-    Time : "",
-    Timer :"",
+    MF: "",
+    SS: "",
+    Time: "",
+    Timer: "",
 
   });
 
   return (
     <Container fluid className="mt-3">
 
-      
-       {/* <ul className="custom-tab nav">
+
+      {/* <ul className="custom-tab nav">
         <li className="nav-item">
           <button
             className={`nav-link ${activeTab === 'basic' ? 'active' : ''}`}
@@ -58,48 +81,45 @@ const ProfileTabes = () => {
       </ul> */}
 
 
-<div className="tab-scroll-container">
-  <ul className="custom-tab nav">
-    <li className="nav-item">
-      <button
-        className={`nav-link ${activeTab === 'basic' ? 'active' : ''}`}
-        onClick={() => setActiveTab('basic')}
-      >
-        Basic Details
-      </button>
-    </li>
+      <div className="tab-scroll-container">
+        <ul className="custom-tab nav">
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'basic' ? 'active' : ''}`}
+              onClick={() => setActiveTab('basic')}
+            >
+              Basic Details
+            </button>
+          </li>
 
-    <li className="nav-item">
-      <button
-        className={`nav-link ${activeTab === 'leaves' ? 'active' : ''}`}
-        onClick={() => setActiveTab('leaves')}
-      >
-        Manage Leaves
-      </button>
-    </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'leaves' ? 'active' : ''}`}
+              onClick={() => setActiveTab('leaves')}
+            >
+              Manage Leaves
+            </button>
+          </li>
 
-    <li className="nav-item">
-      <button
-        className={`nav-link ${activeTab === 'Reviews' ? 'active' : ''}`}
-        onClick={() => setActiveTab('Reviews')}
-      >
-        Reviews
-      </button>
-    </li>
-  </ul>
-</div>
-
-
-
-
+          <li className="nav-item">
+            <button
+              className={`nav-link ${activeTab === 'Reviews' ? 'active' : ''}`}
+              onClick={() => setActiveTab('Reviews')}
+            >
+              Reviews
+            </button>
+          </li>
+        </ul>
+      </div>
 
       <div className="mt-4">
+
         {activeTab === 'basic' && (
           <Row>
 
             {/* =====LEFT COLUMN  PART ======== */}
 
-
+            {/* Qualification */}
 
             <Col lg={8} className="mb-3">
               <div>
@@ -123,11 +143,11 @@ const ProfileTabes = () => {
                       </div>
 
                       <div className="d-flex gap-2">
-                        <Button variant="light" className="border  p-2 rounded-3">
+                        <Button variant="light" className="border p-2 rounded-3">
                           <Image src={LightEditimg} alt="Specialization" width={22} height={22} />
                         </Button>
 
-                        <Button variant="light" className="border  p-2 rounded-3 ">
+                        <Button variant="light" className="border p-2 rounded-3 ">
                           <Image src={Delete} alt="Specialization" width={22} height={22} />
                         </Button>
                       </div>
@@ -135,6 +155,8 @@ const ProfileTabes = () => {
                   ))}
                 </ContentContainer>
               </div>
+
+              {/* Operational hours & Days */}
 
               <div>
                 <ContentContainer className="mt-4">
@@ -234,7 +256,7 @@ const ProfileTabes = () => {
 
 
             {/* ======RIGHT COLUMN =========== */}
-
+            {/* About */}
 
             <Col lg={4}>
               <div>
@@ -246,10 +268,38 @@ const ProfileTabes = () => {
                 </ContentContainer>
               </div>
 
-
+              {/* Documents */}
               <div>
                 <ContentContainer className="mt-4">
                   <div>
+                    <h5 className="mb-4 profile-card-main-titile">Documents</h5>
+
+                    {documents.map((doc, index) => (
+                      <div
+                        className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3  document-main-border"
+                        key={index}
+                      >
+                        <div className="d-flex align-items-center">
+                          <Image
+                            src={Pdfimg}
+                            alt="pdf"
+                            width="40"
+                            className="me-3"
+                          />
+                          <div>
+                            <div className="fw-semibold">{doc.name}</div>
+                            <div className="text-muted small">{doc.date}</div>
+                          </div>
+                        </div>
+
+                        <button
+                          className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded  Download-border"
+                        >
+                          <Image src={Dowmload} alt="experience" width={25} height={25} />
+                        </button>
+
+                      </div>
+                    ))}
 
                   </div>
 
@@ -258,19 +308,40 @@ const ProfileTabes = () => {
 
 
             </Col>
-
-
-
-
-
-
           </Row>
 
         )}
 
+
         {activeTab === 'leaves' && (
-          <div>Manage Leaves Content</div>
+          <div className="p-3">
+
+            {/* Header Row */}
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
+              <h4 className="mb-2 mb-md-0 profile-card-main-titile">Leave History</h4>
+              <div className="d-flex align-items-center flex-wrap gap-2">
+                <div className="d-flex align-items-center gap-2">
+                  <span className="about-text ">Sort by:</span>
+                  <Button className=" px-3 bg-white px-2 edit-profile-btn">
+                    Last 6 Months
+                  </Button>
+                </div>
+
+                <Button className="d-flex align-items-center gap-2 px- all-btn-color">
+                  <Image src={BookCalendar} alt="Specialization" width={22} height={22}/>
+                  Block Calendar
+                </Button>
+              </div>
+            </div>
+
+            {/* Table Section */}
+            <div className="mt-4 ">
+              <BaseTable data={leaveData} columns={leaveColumns} />
+            </div>
+
+          </div>
         )}
+
 
         {activeTab === 'Reviews' && (
           <div>Reviews Content</div>
