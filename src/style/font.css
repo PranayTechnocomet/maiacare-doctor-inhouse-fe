@@ -48,8 +48,18 @@
     color: var(--color-sidebar-icon);
 }
 
-.maiacare-button {
+.maiacare-button-large {
     font-size: 18px;
+    font-weight: 500;
+}
+
+.maiacare-button-medium {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.maiacare-button-small {
+    font-size: 14px;
     font-weight: 500;
 }
 
@@ -140,6 +150,17 @@
     .modal-custom-header{
         font-size: 20px;
     }
+    .maiacare-button-large {
+        font-size: 16px;
+    }
+    
+    .maiacare-button-medium {
+        font-size: 14px;
+    }
+    
+    .maiacare-button-small {
+        font-size: 12px;
+    }
 }
 
 /* Optional: Smaller devices like phones (e.g., 575px and below) */
@@ -162,5 +183,16 @@
     }
     .modal-custom-header{
         font-size: 18px;
+    }
+    .maiacare-button-large {
+        font-size: 14px;
+    }
+    
+    .maiacare-button-medium {
+        font-size: 12px;
+    }
+    
+    .maiacare-button-small {
+        font-size: 10px;
     }
 }

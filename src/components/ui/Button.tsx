@@ -8,6 +8,7 @@ export default function Button({
     disabled=false,
     onClick,
     type="button",
+    contentSize="large",
     ...rest
 }: {
     children: React.ReactNode;
@@ -17,10 +18,11 @@ export default function Button({
     onClick?: () => void;
     type?: "button" | "submit" | "reset";
     [key: string]: any;
+    contentSize?: "small" | "medium" | "large";
 }) {
     return (
         <BootstrapButton
-            className={`maiacare-button ${variant == "default" ? "default-layout" : variant == "outline" ? "outline-layout" : ""} ${className}`}
+            className={`maiacare-button ${contentSize == "small" ? "maiacare-button-small" : contentSize == "medium" ? "maiacare-button-medium" : "maiacare-button-large"} ${variant == "default" ? "default-layout" : variant == "outline" ? "outline-layout" : ""} ${className}`}
             disabled={disabled}
             onClick={onClick}
             type={type}
