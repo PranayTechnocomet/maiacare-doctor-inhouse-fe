@@ -6,7 +6,7 @@ export function middleware(req: NextRequest) {
 
   // If no token, redirect to login
   if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
+    // return NextResponse.redirect(new URL("/login", req.url));
   }
 
   // Otherwise, allow request
