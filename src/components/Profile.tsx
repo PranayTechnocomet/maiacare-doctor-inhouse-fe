@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import "../style/profile.css";
 import Profiledoctor from "../assets/images/Profile-doctor.png";
@@ -11,10 +11,15 @@ import Email from "../assets/images/Email.png";
 import MaiaVerify from "../assets/images/MaiaVerify.png";
 import EditProfile from "../assets/images/EditProfile.png";
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const Profile = () => {
 
+  const router = useRouter();
 
+  const handleEditProfile = () => {
+    router.push('/edit-profile'); // Route to your Edit Profile screen
+  };
 
     const doctorData = {
         name: "Dr. Riya Dharang",
@@ -85,7 +90,7 @@ text-center text-md-start     ======= small screen all data center */}
                     </Col>
 
                     <Col lg={4} md={3} className="text-md-end text-center mt-4 mt-md-0">
-                        <Button className="edit-profile-btn">
+                        <Button className="edit-profile-btn" onClick={handleEditProfile}>
                             <span className="me-2">
                                 <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} />
                             </span>

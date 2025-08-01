@@ -13,7 +13,6 @@ import { BsPeople } from "react-icons/bs";
 import { FaChevronDown } from "react-icons/fa";
 import { RiChat3Line, RiNotificationLine } from "react-icons/ri";
 import { IoBagAddOutline } from "react-icons/io5";
-
 import Logo from "../../assets/images/logo.png";
 import Maia from "../../assets/images/maia.png";
 import UserProfileIcon from "../../assets/images/user-icon.png";
@@ -36,6 +35,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
 
   const navItems = [
     { label: "Profile", href: "/profile", icon: <MdWindow size={22} /> },
+    // { label: "EditProfile", href: "/EditProfile"},
     { label: "Doctors", href: "/doctors", icon: <MdWindow size={22} /> },
     { label: "Patients", href: "/patients", icon: <BsPeople size={22} /> },
     { label: "Appointments", href: "/appointments", icon: <MdOutlineCalendarToday size={22} />, },
