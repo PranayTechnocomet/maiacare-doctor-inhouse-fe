@@ -16,7 +16,8 @@ export const RadioButtonGroup = ({
   required = false,
   onChange = () => {},
   error = '',
-  className = ''
+  className = '',
+  ...rest
 }: {
   label?: string;
   name: string;
@@ -27,6 +28,7 @@ export const RadioButtonGroup = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   className?: string;
+  [key: string]: any;
 }) => {
   return (
     <div className={`maiacare-input-field-container ${className}`}>
@@ -42,6 +44,7 @@ export const RadioButtonGroup = ({
               checked={value === option.value || defaultValue === option.value}
               onChange={onChange}
               required={required}
+              {...rest}
             />
             <span className="maiacare-radio-custom"></span>
             <span className="maiacare-radio-label">{option.label}</span>

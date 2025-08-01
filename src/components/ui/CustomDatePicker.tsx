@@ -15,7 +15,8 @@ export const DatePickerFieldGroup = ({
   readOnly = false,
   error = "",
   helperText = "",
-  className = ""
+  className = "",
+  ...rest
 }: {
   label?: string;
   name?: string;
@@ -30,6 +31,7 @@ export const DatePickerFieldGroup = ({
   error?: string;
   helperText?: string;
   className?: string;
+  [key: string]: any;
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,9 +57,10 @@ export const DatePickerFieldGroup = ({
           onBlur={onBlur}
           onClick={onClick}
           placeholder={placeholder}
-          required={required}
+          // required={required}
           disabled={disabled}
           readOnly={readOnly}
+          {...rest}
         />
       </div>
 
