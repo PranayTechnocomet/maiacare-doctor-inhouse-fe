@@ -12,6 +12,7 @@ interface PhoneNumberInputProps {
   helperText?: string;
   className?: string;
   placeholder?: string;
+  [key: string]: any;
 }
 
 export const PhoneNumberInput = ({
@@ -22,7 +23,8 @@ export const PhoneNumberInput = ({
   error = '',
   helperText = '',
   className = '',
-  placeholder = 'Enter your phone number'
+  placeholder = 'Enter your phone number',
+  ...rest
 }: PhoneNumberInputProps) => {
   return (
     <div className={`maiacare-input-field-container ${className}`}>
@@ -42,6 +44,7 @@ export const PhoneNumberInput = ({
         placeholder={placeholder}
         enableSearch
         disableDropdown={false}
+        {...rest}
       />
 
       {error && <InputFieldError error={error} />}

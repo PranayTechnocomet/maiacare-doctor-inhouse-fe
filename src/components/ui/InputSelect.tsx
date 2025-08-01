@@ -16,7 +16,8 @@ export default function InputSelect({
     error,
     helperText,
     className,
-    options = []
+    options = [],
+    ...rest
 }: {
     label?: string;
     name?: string;
@@ -31,6 +32,7 @@ export default function InputSelect({
     helperText?: string;
     className?: string;
     options?: { id: string, value: string, label: string }[];
+    [key: string]: any;
 }) {
   return (
     <div className={`maiacare-input-field-container ${className}`}>
@@ -44,6 +46,7 @@ export default function InputSelect({
         // required={required}
         disabled={disabled}
         className={`maiacare-input-field`}
+        {...rest}
       >
         <option value={""}>Select</option>
         {options.map(option => (

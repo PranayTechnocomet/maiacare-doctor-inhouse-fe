@@ -7,7 +7,8 @@ export default function Button({
     variant="default",
     disabled=false,
     onClick,
-    type="button"
+    type="button",
+    ...rest
 }: {
     children: React.ReactNode;
     className?: string;
@@ -15,6 +16,7 @@ export default function Button({
     disabled?: boolean;
     onClick?: () => void;
     type?: "button" | "submit" | "reset";
+    [key: string]: any;
 }) {
     return (
         <BootstrapButton
@@ -22,6 +24,7 @@ export default function Button({
             disabled={disabled}
             onClick={onClick}
             type={type}
+            {...rest}
         >
             {children}
         </BootstrapButton>
