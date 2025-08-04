@@ -20,6 +20,7 @@ export default function Textarea({
   helperText,
   className,
   maxLength,
+  ...rest
 }: {
   label: string;
   name: string;
@@ -33,6 +34,7 @@ export default function Textarea({
   helperText?: string;
   className?: string;
   maxLength?: number;
+  [key: string]: any;
 }) {
   return (
     <div className={`${className}`}>
@@ -44,11 +46,12 @@ export default function Textarea({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        required={required}
+        // required={required}
         disabled={disabled}
         readOnly={readOnly}
         className={`maiacare-input-field`}
         maxLength={maxLength}
+        {...rest}
       />
       {maxLength && (
         <div className={`maiacare-input-field-maxlength-indicator d-flex align-items-center ${error ? 'justify-content-between' : 'justify-content-end'}`}>
