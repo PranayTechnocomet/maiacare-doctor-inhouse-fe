@@ -82,44 +82,109 @@ const columns: ColumnDef<Patient>[] = [
       return (
         <span
           className={`badge ${
-            status === 'Active'
-              ? 'bg-primary'
-              : status === 'Discontinued'
-              ? 'bg-warning'
-              : 'bg-danger'
+            status === "Active"
+              ? "bg-primary"
+              : status === "Discontinued"
+              ? "bg-warning"
+              : "bg-danger"
           }`}
         >
           {status}
         </span>
       );
     },
-  }
+  },
 ];
 
+// Types for form data and form error
+type FormData = {
+  name: string;
+  email: string;
+  password: string;
+  doctor: string;
+  date: string;
+  gender: string;
+  description: string;
+  phone: string;
+};
 
+type FormError = Partial<Record<keyof FormData, string>>;
+
+const initialFormData: FormData = {
+  name: "",
+  email: "",
+  password: "",
+  doctor: "",
+  date: "",
+  gender: "",
+  description: "",
+  phone: "",
+};
+
+const initialFormError: FormError = {};
 
 export default function Page() {
-      const dispatch: AppDispatch = useDispatch();
-      useEffect(() => {
-        dispatch(setHeaderData({ title: "Doctors", subtitle: "Doctors List" }));
-      }, []);
-    
-      const [showModal, setShowModal] = useState(false);
-      
-      const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        doctor: "",
-        date: "",
-        gender: "",
-        description: "",
-        phone: "",
-      });
-    
+  const dispatch: AppDispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      setHeaderData({
+        title: "Sample Page",
+        subtitle: "Sample Page for check common components",
+      })
+    );
+  }, []);
+
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formError, setFormError] = useState<FormError>(initialFormError);
+
+  // Validation Function
+  const validateForm = (data: FormData): FormError => {
+    const errors: FormError = {};
+
+    if (!data.name.trim()) errors.name = "Name is required";
+    if (!data.doctor.trim()) errors.doctor = "Doctor name is required";
+    if (!data.date) errors.date = "Date is required";
+    if (!data.gender) errors.gender = "Gender is required";
+
+    if (!data.phone.trim()) {
+      errors.phone = "Phone number is required";
+    } 
+
+    if (!data.description.trim())
+      errors.description = "Description is required";
+
+    return errors;
+  };
+
+  // Handle form field change
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormError((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  // Submit Handler
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errors = validateForm(formData);
+    setFormError(errors);
+    console.log("errors", errors);
+    if (Object.keys(errors).length === 0) {
+      setShowModal(true);
+      setFormData(initialFormData);
+    }
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
   return (
-    <div>
-         <ContentContainer>
+    <form onSubmit={handleSubmit}>
+      <ContentContainer>
         <InputFieldGroup
           label="Name"
           name="name"
@@ -137,8 +202,15 @@ export default function Page() {
           helperText="Enter name"
           className="position-relative"
         >
-          <div className="position-absolute" style={{top: "44%", right: "0%", transform: "translate(-50%, -50%)"}}>
-          <IoIosEye size={25}/>
+          <div
+            className="position-absolute"
+            style={{
+              top: "44%",
+              right: "0%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <IoIosEye size={25} />
           </div>
         </InputFieldGroup>
 
@@ -216,14 +288,14 @@ export default function Page() {
           error={formError.phone}
         />
 
-<div className="d-flex gap-2">
-        <Button variant="default" disabled={false} onClick={() => setShowModal(true)}>
-          Submit
-        </Button>
-        <Button variant="outline" disabled={false} onClick={() => setShowModal(true)}>
-          Cancel
-        </Button>
-</div>
+        <div className="d-flex gap-2">
+          <Button variant="default" disabled={false} type="submit">
+            Submit
+          </Button>
+          <Button variant="outline" disabled={false} onClick={handleClose}>
+            Cancel
+          </Button>
+        </div>
       </ContentContainer>
 
       <div className="my-4">
@@ -231,8 +303,13 @@ export default function Page() {
         <BaseTable data={data} columns={columns} />
       </div>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)} header="Modal Header" closeButton={true}>
-          <h2 className="mb-0 text-center">This is modal content</h2>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        header="Modal Header"
+        closeButton={true}
+      >
+        <h2 className="mb-0 text-center">Form Submitted Successfully</h2>
       </Modal>
     </form>
   );
