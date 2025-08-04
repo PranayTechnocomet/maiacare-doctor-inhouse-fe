@@ -2,7 +2,6 @@ import React from 'react';
 import { Container, Button} from 'react-bootstrap';
 import BookCalendar from "../../assets/images/BookCalendar.png";
 import Image from 'next/image';
-import "../../style/profileTabes.css";
 import { leaveData, leaveColumns } from "@/utils/StaticData";
 import BaseTable from "@/components/ui/BaseTable";
 

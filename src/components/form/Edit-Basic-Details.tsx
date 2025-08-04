@@ -4,8 +4,41 @@ import { Form, Row, Col, Container } from "react-bootstrap";
 import Simpleeditpro from "../../assets/images/Simpleeditpro.png";
 import Image from "next/image";
 import cameraicon from "../../assets/images/Cameraicon.png";
+import { InputFieldGroup } from "../ui/InputField";
+import { ChangeEvent, useState } from "react";
+import InputSelect from "../ui/InputSelect";
+import { DatePickerFieldGroup } from "../ui/CustomDatePicker";
 
 export default function PersonalDetails() {
+
+  interface FormError {
+  [key: string]: string;
+}
+
+const initialFormError: FormError = {};
+  const [formError, setFormError] = useState<FormError>(initialFormError);
+
+
+
+  const [formData, setFormData] = useState({
+    Name: "",
+    Speciality: "",
+    Experience: "",
+    DOB: "",
+    Gender: "", 
+    Contact:"",
+    Email :"",
+    About  :"",
+  });
+  
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormError((prev) => ({ ...prev, [name]: "" }));
+  };
+
   return (
     <div className="personal-details-container">
       <Container className="mt-5">
@@ -23,12 +56,12 @@ export default function PersonalDetails() {
             <div
               className="  rounded-3 p-2 position-absolute"
               style={{ bottom: 0, right: 0 }}
-              // onClick={handleImageClick}
+            // onClick={handleImageClick}
             >       <Image
-              src={cameraicon}
-              alt="Profile"
-              style={{ cursor: "pointer", width: 40, height: 40}}
-            />
+                src={cameraicon}
+                alt="Profile"
+                style={{ cursor: "pointer", width: 40, height: 40 }}
+              />
             </div>
           </div>
 
@@ -42,21 +75,44 @@ export default function PersonalDetails() {
       <Form className="mt-5">
         <Row className="mb-3">
           <Col>
-            <Form.Group>
-              <Form.Label>Name *</Form.Label>
-              <Form.Control type="text" placeholder="Riya Dharang" />
-            </Form.Group>
+            <InputFieldGroup
+              label="Name"
+              name="Time"
+              type="text"
+              value={formData.Name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFormData({ ...formData, Name: e.target.value });
+              }}
+              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+              placeholder="Name"
+              required={false}
+              disabled={false}
+              readOnly={false}
+              className="position-relative"
+            >
+            </InputFieldGroup>
           </Col>
         </Row>
 
         <Row>
           <Col md={6}>
-            <Form.Group>
-              <Form.Label>Speciality *</Form.Label>
-              <Form.Select>
-                <option>Gynaecologist</option>
-              </Form.Select>
-            </Form.Group>
+            <InputSelect
+              label="Select Doctor"
+              name="doctor"
+              value={formData.Speciality}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                handleChange(e);
+              }}
+              onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+              required={true}
+              disabled={false}
+              helperText="Select doctor"
+              options={[
+                { id: "1", value: "1", label: "Doctor 1" },
+                { id: "2", value: "2", label: "Doctor 2" },
+                { id: "3", value: "3", label: "Doctor 3" },
+              ]}
+            />
           </Col>
           <Col md={6}>
             <Form.Group>
@@ -68,10 +124,21 @@ export default function PersonalDetails() {
 
         <Row className="mb-3">
           <Col md={6}>
-            <Form.Group>
-              <Form.Label>DOB *</Form.Label>
-              <Form.Control type="date" />
-            </Form.Group>
+          
+          <DatePickerFieldGroup
+                label="Select Date"
+                name="date"
+                value={formData.DOB}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleChange(e);
+                }}
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                required={true}
+                disabled={false}
+                error={formError.DOB}
+                helperText="Select date"
+              />
+
           </Col>
           <Col md={6}>
             <Form.Label>Gender *</Form.Label>
@@ -84,31 +151,61 @@ export default function PersonalDetails() {
 
         <Row className="mb-3">
           <Col md={6}>
-            <Form.Group>
-              <Form.Label>Contact Number *</Form.Label>
-              <Form.Control type="tel" placeholder="+91 12345 67890" />
-            </Form.Group>
+           <InputFieldGroup
+              label="Contact Name"
+              name="Time"
+              type="text"
+              value={formData.Contact}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFormData({ ...formData, Contact: e.target.value });
+              }}
+              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+              placeholder=" +91 12345 67890"
+              required={false}
+              disabled={false}
+              readOnly={false}
+              className="position-relative"
+            >
+            </InputFieldGroup>
           </Col>
           <Col md={6}>
-            <Form.Group>
-              <Form.Label>Email ID *</Form.Label>
-              <Form.Control type="email" placeholder="riyadharang@gmail.com" />
-            </Form.Group>
+               <InputFieldGroup
+              label="Email"
+              name="Time"
+              type="text"
+              value={formData.Email}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFormData({ ...formData, Email: e.target.value });
+              }}
+              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+              placeholder="Email"
+              required={false}
+              disabled={false}
+              readOnly={false}
+              className="position-relative"
+            >
+            </InputFieldGroup>
           </Col>
         </Row>
 
         <Row className="mb-3">
           <Col>
-            <Form.Group>
-              <Form.Label>About *</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="I’m Dr. Riya Dharang, a fertility specialist..."
-                maxLength={500}
-              />
-              <div className="char-count text-end">120/500</div>
-            </Form.Group>
+                  <InputFieldGroup
+              label="About"
+              name="Time"
+              type="text"
+              value={formData.About}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFormData({ ...formData, About: e.target.value });
+              }}
+              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+              placeholder="Email"
+              required={false}
+              disabled={false}
+              readOnly={false}
+              className="position-relative"
+            >
+            </InputFieldGroup>
           </Col>
         </Row>
       </Form>

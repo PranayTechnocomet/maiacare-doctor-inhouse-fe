@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container} from 'react-bootstrap';
 import ProfileManageLeave from "@/components/form/Profile-Manage-Leave";
 import ProfileBasicDetails from "@/components/form/Profile-Basic-Details";
-
+import "../style/ProfileTabes.css";
 
 const ProfileTabes = () => {
   const [activeTab, setActiveTab] = useState('basic');

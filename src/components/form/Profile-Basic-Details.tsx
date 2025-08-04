@@ -6,7 +6,7 @@ import LightEditimg from "../../assets/images/LightEditimg.png";
 import Pdfimg from "../../assets/images/Pdfimg.png";
 import Download from "../../assets/images/Download.png";
 import Image from 'next/image';
-import "../../style/profileTabes.css";
+
 import ContentContainer from '../ui/ContentContainer';
 import { InputFieldGroup } from '../ui/InputField';
 
