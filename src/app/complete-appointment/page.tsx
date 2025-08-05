@@ -4,7 +4,7 @@ import { AppDispatch } from "@/utils/redux/store";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setHeaderData } from "@/utils/redux/slices/headerSlice";
-import Consultation from "@/components/Consultation";
+import Appointment from "@/components/Appointment";
 
 function Page() {
   const dispatch: AppDispatch = useDispatch();
@@ -15,7 +15,7 @@ function Page() {
 
   return (
     <>
-      <Consultation />
+      <Appointment/>
     </>
   );
 }

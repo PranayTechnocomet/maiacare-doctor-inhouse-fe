@@ -2,17 +2,15 @@
 
 import React from "react";
 import {
-    Card,
     Form,
     InputGroup,
     Button,
     Pagination,
 } from "react-bootstrap";
-import { consultationData } from "@/utils/StaticData";
+import { completeData } from "@/utils/StaticData";
 import Image from "next/image";
 import CommonTable from "@/components/ui/BaseTable";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
 import { IoSearch } from "react-icons/io5";
 import { PiSlidersDuotone } from "react-icons/pi";
 import "@/style/Consultation.css"
@@ -20,24 +18,16 @@ import { LuTrash2, LuArrowDown } from "react-icons/lu";
 import AppointmentSummaryCards from "@/components/layout/AppointmentSummaryCards";
 
 
-
 const statusColor: Record<string, string> = {
     Completed: "success",
-    Pending: "primary",
-    Scheduled: "info",
-    "No Response": "danger",
-    Rescheduled: "warning",
 };
 
 export type ConsultationStatus =
-    | "Completed"
-    | "Pending"
-    | "Scheduled"
-    | "No Response"
-    | "Rescheduled";
+    | "Completed";
 
 
 export default function Consultation() {
+
 
     const columns: ColumnDef<any>[] = [
         {
@@ -116,7 +106,7 @@ export default function Consultation() {
     return (
         <div className="container-fluid py-4 px-3 px-md-4">
             {/* Summary Cards */}
-         <AppointmentSummaryCards />
+            <AppointmentSummaryCards />
 
             {/* Search and Filter */}
             <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
@@ -147,7 +137,7 @@ export default function Consultation() {
             </div>
 
             {/* Common Table */}
-            <CommonTable data={consultationData} columns={columns} />
+            <CommonTable data={completeData} columns={columns} />
 
             {/* Pagination */}
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
