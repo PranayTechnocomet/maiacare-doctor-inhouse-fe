@@ -23,6 +23,7 @@ import { Patient } from "@/utils/types/interfaces";
 import { tableResponse } from "@/utils/StaticData";
 import Textarea from "@/components/ui/Textarea";
 import CustomTabs from "@/components/ui/CustomTabs";
+import { TimePickerFieldGroup } from "@/components/ui/CustomTimePicker";
 
 const data: Patient[] = [
   {
@@ -101,6 +102,8 @@ type FormData = {
   gender: string;
   description: string;
   phone: string;
+  startTime: string;
+  endTime: string;
 };
 
 type FormError = Partial<Record<keyof FormData, string>>;
@@ -112,6 +115,8 @@ const initialFormData: FormData = {
   gender: "",
   description: "",
   phone: "",
+  startTime: "",
+  endTime: "",
 };
 
 const initialFormError: FormError = {};
@@ -135,6 +140,9 @@ export default function Page() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [formError, setFormError] = useState<FormError>(initialFormError);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  
 
   // Validation Function
   const validateForm = (data: FormData): FormError => {
@@ -151,6 +159,9 @@ export default function Page() {
 
     if (!data.description.trim())
       errors.description = "Description is required";
+
+    if (!data.startTime.trim()) errors.startTime = "Start time is required";
+    if (!data.endTime.trim()) errors.endTime = "End time is required";
 
     return errors;
   };
@@ -336,6 +347,22 @@ export default function Page() {
           required
           helperText="Enter a valid number including country code"
           error={formError.phone}
+        />
+        <TimePickerFieldGroup
+          label="Start Time"
+          name="startTime"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+          required
+          error={formError.startTime}
+        />
+
+        <TimePickerFieldGroup
+          label="End Time"
+          name="endTime"
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
+          helperText="Enter operational end time"
         />
 
         <div className="d-flex gap-2">
