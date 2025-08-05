@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container} from 'react-bootstrap';
 import ProfileManageLeave from "@/components/form/Profile-Manage-Leave";
 import ProfileBasicDetails from "@/components/form/Profile-Basic-Details";
 import "../style/ProfileTabes.css";
 
 const ProfileTabes = () => {
-  const [activeTab, setActiveTab] = useState('basic');
+  const [activeTab, setActiveTab] = useState<string>('defaultTab');
+
+  useEffect(() => {
+    const storedTab = localStorage.getItem('activeTab');
+    if (storedTab) {
+      setActiveTab(storedTab);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
+
 
   return (
     <Container fluid className="mt-3">

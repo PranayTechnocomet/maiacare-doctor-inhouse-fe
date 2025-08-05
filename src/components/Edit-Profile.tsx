@@ -1,9 +1,24 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Editbasicdetails from './form/Edit-Basic-Details';
+import Editkycdetails from './form/Edit-Kyc-Details';
+import "../style/Edit-Profile.css";
 
 const EditProfile = () => {
-    const [activeTab, setActiveTab] = useState('basic');
+  const [activeTab, setActiveTab] = useState<string>('defaultTab');
+
+  useEffect(() => {
+    const storedTab = localStorage.getItem('activeTab');
+    if (storedTab) {
+      setActiveTab(storedTab);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('activeTab', activeTab);
+  }, [activeTab]);
+
+
     return (
         <div>
             <div className="tab-scroll-container">
@@ -37,7 +52,7 @@ const EditProfile = () => {
 
         {activeTab === 'KYC' && (
           <div>
-          shruti
+   <Editkycdetails/>
           </div>
         )}
 
