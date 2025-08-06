@@ -1,107 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import { Container} from 'react-bootstrap';
+// import { Container} from 'react-bootstrap';
 import ProfileManageLeave from "@/components/form/Profile-Manage-Leave";
 import ProfileBasicDetails from "@/components/form/Profile-Basic-Details";
 import "../style/ProfileTabes.css";
+// import ContentContainer from './ui/ContentContainer';
+import CustomTabs from './ui/CustomTabs';
 
 const ProfileTabes = () => {
-  const [activeTab, setActiveTab] = useState<string>('defaultTab');
+  const [activeTab, setActiveTab] = useState<string>("basic");
 
-  useEffect(() => {
-    const storedTab = localStorage.getItem('activeTab');
-    if (storedTab) {
-      setActiveTab(storedTab);
-    }
-  }, []);
+  const tabOptions = [
+    {
+      key: "basic",
+      label: "Basic Details",
+      content: (
+     <></>
+      ),
+    },
+    {
+      key: "leaves",
+      label: "Manage Leaves",
+      content: (
+        <></>
+      ),
+    },
+    {
+      key: "reviews",
+      label: "Reviews",
+      content: (
+          <>Reviews</>
+      ),
+    },
 
-  useEffect(() => {
-    localStorage.setItem('activeTab', activeTab);
-  }, [activeTab]);
+  ];
 
 
   return (
-    <Container fluid className="mt-3">
+    <div className="mt-4">
 
-      {/* <ul className="custom-tab nav">
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'basic' ? 'active' : ''}`}
-            onClick={() => setActiveTab('basic')}
-          >
-            Basic Details
-          </button>
-        </li>
+      <CustomTabs
+        activeKey={activeTab}
+        setActiveKey={setActiveTab}
+        tabOptions={tabOptions}
+      />
 
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'leaves' ? 'active' : ''}`}
-            onClick={() => setActiveTab('leaves')}
-          >
-            Manage Leaves
-          </button>
-        </li>
-
-        <li className="nav-item">
-          <button
-            className={`nav-link ${activeTab === 'Reviews' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Reviews')}
-          >
-            Reviews
-          </button>
-        </li>
-      </ul> */}
-
-
-      <div className="tab-scroll-container">
-        <ul className="custom-tab nav">
-          <li className="nav-item">
-            <button
-              className={`nav-link ${activeTab === 'basic' ? 'active' : ''}`}
-              onClick={() => setActiveTab('basic')}
-            >
-              Basic Details
-            </button>
-          </li>
-
-          <li className="nav-item">
-            <button
-              className={`nav-link ${activeTab === 'leaves' ? 'active' : ''}`}
-              onClick={() => setActiveTab('leaves')}
-            >
-              Manage Leaves
-            </button>
-          </li>
-
-          <li className="nav-item">
-            <button
-              className={`nav-link ${activeTab === 'Reviews' ? 'active' : ''}`}
-              onClick={() => setActiveTab('Reviews')}
-            >
-              Reviews
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div className="mt-4">
-        {activeTab === 'basic' && (
+    {activeTab === 'basic' && (
           <div>
        <ProfileBasicDetails/>
           </div>
         )}
 
-        {activeTab === 'leaves' && (
+     {activeTab === 'leaves' && (
           <div>
             <ProfileManageLeave />
           </div>
         )}
 
-        {activeTab === 'Reviews' && (
+    {activeTab === 'Reviews' && (
           <div>Reviews Content</div>
         )}
-      </div>
 
-    </Container>
+    </div>
+
+
+
+
+      
   );
 };
 
