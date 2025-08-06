@@ -5,6 +5,7 @@ import { LeaveEntry } from "../utils/types/interfaces";
 import Trash from "../assets/images/Trash.png";
 import LightEditimg from "../assets/images/LightEditimg.png";
 import Image from 'next/image';
+import { Patient } from "./types/interfaces";
 
 export const leaveData: LeaveEntry[] = [
     {   
@@ -99,9 +100,11 @@ export const leaveColumns: ColumnDef<LeaveEntry>[] = [
             </div>
         ),
     },
-import { Patient } from "./types/interfaces";
 
-export const tableResponse: Patient[] = [
+];
+
+
+export const tableResponse: Patient[] = [   
   {
     id: 1,
     name: "Meera Joshi",

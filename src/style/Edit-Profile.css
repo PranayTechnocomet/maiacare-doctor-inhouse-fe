@@ -1,6 +1,4 @@
 
-
-
 .form-title {
   font-size: 18px;
   font-weight: 600;
@@ -66,7 +64,6 @@
 
 /* Basic Details Tabes Css */
 
-
 .profile-wrapper {
   position: relative;
   display: flex;
@@ -99,4 +96,16 @@
 /* Edit Profile Modal  */
 .custom-modal-width {
   max-width: 500px;
+}
+
+
+/* Kyc Details  */
+
+
+.add-file-box {
+  width: 120px;
+  height: 120px;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
 }

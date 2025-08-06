@@ -128,10 +128,10 @@
     font-weight: 500;
 }
 
-.all-btn-color{
+.all-btn-color {
     background-color: var(--color-brand) !important;
     border: none !important;
-    color: var( --color-white) !important;
+    color: var(--color-white) !important;
     font-size: 15px;
 
 }
@@ -174,7 +174,6 @@
     background-color: transparent !important;
     color: var(--color-brand) !important;
     border: 1px solid var(--color-radio-lable) !important;
-    ;
     box-shadow: none !important;
 }
 
@@ -213,7 +212,7 @@
     font-size: 16px;
 }
 
-.card-university-text .maiacare-input-field-label{
+.card-university-text .maiacare-input-field-label {
     color: var(--color-radio-lable) !important;
     font-weight: 600;
     font-size: 14px;
@@ -232,11 +231,19 @@
 }
 
 .check-box input[type="checkbox"] {
-  border: 2px solid var(--color-radio);
+    border: 2px solid var(--color-radio);
 }
 
+.kyc-details {
+    color: var(--color-sidebar-icon);
+    font-weight: 400;
+    font-size: 16px;
+}
 
+.btn-border {
+    border-color: 1px solid var(--color-radio-lable) !important;
 
+}
 
 
 
@@ -273,14 +280,15 @@
     .modal-custom-header {
         font-size: 20px;
     }
+
     .maiacare-button-large {
         font-size: 16px;
     }
-    
+
     .maiacare-button-medium {
         font-size: 14px;
     }
-    
+
     .maiacare-button-small {
         font-size: 12px;
     }
@@ -308,14 +316,15 @@
     .modal-custom-header {
         font-size: 18px;
     }
+
     .maiacare-button-large {
         font-size: 14px;
     }
-    
+
     .maiacare-button-medium {
         font-size: 12px;
     }
-    
+
     .maiacare-button-small {
         font-size: 10px;
     }

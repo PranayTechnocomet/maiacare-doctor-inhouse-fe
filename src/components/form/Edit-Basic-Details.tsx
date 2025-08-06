@@ -1,11 +1,11 @@
 "use client";
 // import { useState } from "react";
-import { Form, Row, Col, Container, Button } from "react-bootstrap";
+import { Form, Row, Col, Button } from "react-bootstrap";
 import Simpleeditpro from "../../assets/images/Simpleeditpro.png";
 import Image from "next/image";
 import cameraicon from "../../assets/images/Cameraicon.png";
 import { InputFieldGroup } from "../ui/InputField";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import InputSelect from "../ui/InputSelect";
 import { DatePickerFieldGroup } from "../ui/CustomDatePicker";
 import { RadioButtonGroup } from "../ui/RadioField";
@@ -13,13 +13,15 @@ import Textarea from "../ui/Textarea";
 import ContentContainer from "../ui/ContentContainer";
 import { ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
-import Profiledoctor from "../../assets/images/Profile-doctor.png";
+// import Profiledoctor from "../../assets/images/Profile-doctor.png";
 import Trash from "../../assets/images/Trash.png";
 import ImageSquare from "../../assets/images/ImageSquare.png";
 import LightEditimg from "../../assets/images/LightEditimg.png";
 import Camera from "../../assets/images/Camera.png";
+import { TimePickerFieldGroup } from "../ui/CustomTimePicker";
 
-export default function PersonalDetails() {
+
+export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   // Personal Details
   interface FormError {
     [key: string]: string;
@@ -27,6 +29,8 @@ export default function PersonalDetails() {
   const initialFormError: FormError = {};
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   const [formData, setFormData] = useState({
     Name: "",
@@ -56,26 +60,31 @@ export default function PersonalDetails() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setFormError((prev) => ({ ...prev, [name]: "" }));
-
   };
 
-  const yearOptions = Array.from({ length: 30 }, (_, i) => {
+  const yearOptions = Array.from({ length: 31 }, (_, i) => {
     const year = 2000 + i;
     return { id: year.toString(), value: year.toString(), label: year.toString() };
   });
 
 
   //********* EDIT PROFILE MODAL *********//
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);  // file input programmatically open 
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null);  //previewImage 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);//selectedImage 
+
+  const handleOpenModal = () => {
+    setPreviewImage(selectedImage || Simpleeditpro.src); // show image in modal
+    setShowModal(true);
+  };
 
   const handleEditClick = () => {
-    fileInputRef.current?.click();
+    fileInputRef.current?.click();   //Edit btn click in file chhose
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
+    const selectedFile = event.target.files?.[0]; //previewImage chnages
     if (selectedFile) {
       const imageURL = URL.createObjectURL(selectedFile);
       setPreviewImage(imageURL);
@@ -89,12 +98,17 @@ export default function PersonalDetails() {
     setShowModal(false); // Close modal
   };
 
+  const handleDelete = () => {
+    setSelectedImage(null); // remove selected image
+    setPreviewImage(Simpleeditpro.src); // reset to default image in modal
+  };
+
   return (
     <div>
       <ContentContainer className="mt-4">
         <Row className="mt-1">
           <Col>
-            <h5 className="fw-bold">Personal Details</h5>
+            <h5 className="profile-card-main-titile">Personal Details</h5>
             <div className="d-flex align-items-center gap-4 mt-4 flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
               <div className="profile-wrapper">
                 {/* Profile image */}
@@ -105,11 +119,12 @@ export default function PersonalDetails() {
                   width={160}
                   height={160}
                 />
-
                 {/* Camera Icon */}
                 <div
                   className="camera-icon"
-                  onClick={() => setShowModal(true)} style={{ cursor: "pointer" }}
+                  // onClick={() => setShowModal(true)}  onClick={handleOpenModal}   style={{ cursor: "pointer" }}
+                  onClick={handleOpenModal}
+                  style={{ cursor: "pointer" }}
                 >
                   <Image
                     src={cameraicon}
@@ -120,9 +135,7 @@ export default function PersonalDetails() {
                 </div>
               </div>
 
-
               {/* Edit Profile click in Modal  */}
-
               <Modal
                 show={showModal}
                 onHide={() => setShowModal(false)}
@@ -134,11 +147,12 @@ export default function PersonalDetails() {
                 <div className="d-flex flex-column align-items-center p-4">
                   <div
                     className="rounded overflow-hidden mb-2 mx-auto position-relative"
-                    style={{ width: 160, height: 160, borderRadius: "16px" }}
-                  >
+                    style={{ width: 160, height: 160, borderRadius: "16px" }}>
+
+                    {/* Defult Profile Image */}
                     <Image
-                      src={previewImage ? previewImage : Profiledoctor}
-                      alt="Profile"
+                      src={previewImage ? previewImage : Simpleeditpro}
+                      alt="Simpleeditpro"
                       width={160}
                       height={160}
                       style={{ objectFit: "cover" }}
@@ -159,10 +173,19 @@ export default function PersonalDetails() {
                         />
                       </div>
 
-                      <div className="text-center">
+                      <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
                         <Image src={ImageSquare} alt="Add Photo" width={18} height={18} />
                         <div className="small">Add Photo</div>
+
+                        <input
+                          type="file"
+                          accept="image/*"
+                          ref={fileInputRef}
+                          onChange={handleFileChange}
+                          style={{ display: 'none' }}
+                        />
                       </div>
+
                       <div className="text-center">
                         <Image src={Camera} alt="Take Photo" width={18} height={18} />
                         <div className="small">Take Photo</div>
@@ -170,9 +193,11 @@ export default function PersonalDetails() {
                     </div>
 
                     <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
-                      <button className="btn p-0">
+
+                      <button className="btn p-0" onClick={handleDelete}>
                         <Image src={Trash} alt="Trash" width={22} height={22} />
                       </button>
+
                       <button className="btn px-4 py-2 all-btn-color" onClick={handleSave}>
                         Save
                       </button>
@@ -180,6 +205,9 @@ export default function PersonalDetails() {
                   </div>
                 </div>
               </Modal>
+
+
+
 
               <div>
                 <div className="fw-semibold">Add Profile Picture</div>
@@ -445,86 +473,52 @@ export default function PersonalDetails() {
 
         <Row className="mb-3">
           <Col md={6}>
-            <InputFieldGroup
-              label="Monday - Friday"
-              name="MF"
-              type="text"
-              value={formData.MF}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormData({ ...formData, MF: e.target.value });
-              }}
-              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-              placeholder="10 AM"
-              required={false}
-              disabled={false}
-              readOnly={false}
-              className="position-relative card-university-text"
-            >
-            </InputFieldGroup>
-
+            <TimePickerFieldGroup
+              label="Monday-Friday"
+              name="startTime"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+              error={formError.startTime}
+            />
           </Col>
           <Col md={6} className="mt-2 ">
-            <InputFieldGroup
-              name="Time"
-              type="text"
-              value={formData.Time}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormData({ ...formData, Time: e.target.value });
-              }}
-              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-              placeholder="8 AM"
-              required={false}
-              disabled={false}
-              readOnly={false}
-              className="position-relative"
-            >
-            </InputFieldGroup>
+            <TimePickerFieldGroup
+              name="endTime"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+
+            />
+
           </Col>
         </Row>
 
         <Row>
           <Col md={6}>
-            <InputFieldGroup
-              label="Saturday- Sunday"
-              name="SS"
-              type="text"
-              value={formData.SS}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormData({ ...formData, SS: e.target.value });
-              }}
-              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-              placeholder="10 AM"
-              required={false}
-              disabled={false}
-              readOnly={false}
-              className="position-relative card-university-text"
-            >
-            </InputFieldGroup>
+            <TimePickerFieldGroup
+              label="Saturday-Sunday"
+              name="startTime"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              required
+              error={formError.startTime}
+            />
           </Col>
 
           <Col md={6} className="mt-2">
-            <InputFieldGroup
-              name="name"
-              type="text"
-              value={formData.Timer}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormData({ ...formData, Timer: e.target.value });
-              }}
-              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-              placeholder="8 AM"
-              required={false}
-              disabled={false}
-              readOnly={false}
-              className="position-relative"
-            >
-            </InputFieldGroup>
+            <TimePickerFieldGroup
+              name="endTime"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+
+            />
           </Col>
         </Row>
       </ContentContainer>
 
 
       <div className="d-flex justify-content-end mt-4">
-        <Button variant="dark" className="d-flex align-items-center gap-2 px-4 py-2 rounded-2 all-btn-color">
+        <Button variant="dark" className="d-flex align-items-center gap-2 px-4 py-2 rounded-2 all-btn-color" onClick={onNext}>
           Next <ArrowRight size={16} />
         </Button>
       </div>
