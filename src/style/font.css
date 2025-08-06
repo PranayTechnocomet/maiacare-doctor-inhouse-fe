@@ -312,6 +312,24 @@
     .modal-custom-header {
         font-size: 18px;
     }
+
+    .modal-heading {
+        font-size: 20px !important;
+    }
+
+    .brand-text {
+        font-size: 14px !important;
+    }
+
+    .forget-password {
+        font-size: 12px !important;
+    }
+
+    .verification-form {
+        margin: 20px;
+        padding: 40px !important;
+    }
+
     .maiacare-button-large {
         font-size: 14px;
     }
