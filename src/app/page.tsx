@@ -3,11 +3,15 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { setHeaderData } from "@/utils/redux/slices/headerSlice";
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+
 
 export default function Home() {
   const dispatch = useDispatch();
 
-  dispatch(setHeaderData({ title: "Home", subtitle: "Welcome to Maiacare" }));
+   useEffect(() => {
+    dispatch(setHeaderData({ title: "Home", subtitle: "Welcome to Maiacare" }));
+  }, [dispatch]); // ✅ Run once after initial render
 
   return (
     <Container>

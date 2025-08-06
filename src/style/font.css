@@ -1,9 +1,5 @@
 /* Base styles (default for desktops > 991px) */
-* {
-    font-family: 'Poppins', sans-serif;
-}
-
-.maiacare-input-field-label {
+* .maiacare-input-field-label {
     font-size: 14px;
     font-weight: 600;
     color: var(--color-brand);
@@ -316,7 +312,6 @@
     .modal-custom-header {
         font-size: 18px;
     }
-
     .maiacare-button-large {
         font-size: 14px;
     }
@@ -328,4 +323,87 @@
     .maiacare-button-small {
         font-size: 10px;
     }
+}
+
+@media (max-width: 375px) {
+    .modal-heading {
+        font-size: 16px !important;
+    }
+
+    .brand-text {
+        font-size: 12px !important;
+    }
+
+    .login-form {
+        padding: 0px !important;
+    }
+
+    .verification-form {
+        margin: 15px;
+        padding: 20px !important;
+    }
+}
+
+
+.modal-heading {
+    color: var(--color-modal-heading);
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.login-heading {
+    font-size: 20px;
+    color: var(--color-modal-heading);
+    font-weight: 600;
+}
+
+.brand-text {
+    color: var(--color-sidebar-icon);
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.Button-login {
+    background-color: var(--color-brand);
+    /* e.g., #2b4360 */
+    color: var(--color-white);
+    /* e.g., #ffffff */
+    border: none;
+    outline: none;
+    box-shadow: none;
+    transition: none;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.Button-login:hover,
+.Button-login:focus,
+.Button-login:active,
+.Button-login:active:focus,
+.Button-login.active,
+.Button-login.active:focus,
+.show>.Button-login.dropdown-toggle {
+    background-color: var(--color-brand) !important;
+    color: var(--color-white) !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.pass-list {
+    color: var(--color-brand);
+    font-size: 12px;
+}
+
+.pass-list-head {
+    color: var(--color-brand);
+    font-size: 14px;
+}
+
+.setting-head {
+    color: var(--color-heading);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 26px;
+
 }
