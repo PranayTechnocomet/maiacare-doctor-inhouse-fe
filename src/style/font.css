@@ -62,7 +62,6 @@
 .default-layout {
     background-color: var(--color-brand);
     color: var(--color-white);
-
 }
 
 .default-layout:hover {
@@ -124,6 +123,129 @@
     font-size: 16px !important;
     font-weight: 500;
 }
+
+.all-btn-color{
+    background-color: var(--color-brand) !important;
+    border: none !important;
+    color: var( --color-white) !important;
+    font-size: 15px;
+
+}
+
+/* ======= Profile Componet css  =========== */
+
+.profile-name {
+    color: var(--color-heading);
+    font-size: 20px;
+}
+
+.profile-verified-badge {
+    font-size: 15px;
+    color: var(--color-subtitle-pink);
+    font-weight: 600;
+}
+
+.profile-sub-title {
+    color: var(--color-sidebar-icon);
+    line-height: 0;
+}
+
+.profile-member-since {
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.edit-profile-btn {
+    border: 1px solid var(--color-radio-lable);
+    color: var(--color-brand);
+    font-weight: 500;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.edit-profile-btn:hover,
+.edit-profile-btn:focus,
+.edit-profile-btn:active {
+    background-color: transparent !important;
+    color: var(--color-brand) !important;
+    border: 1px solid var(--color-radio-lable) !important;
+    ;
+    box-shadow: none !important;
+}
+
+/* Profile Tabes 2nd componet */
+.custom-tab .nav-link.active {
+    color: var(--color-brand);
+    border-bottom: 2px solid var(--color-brand);
+    font-weight: 600;
+}
+
+.custom-tab {
+    border-bottom: 1px solid var(--color-icon-border);
+}
+
+.custom-tab .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: #adb5bd;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.profile-card-main-titile {
+    color: var(--color-heading);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.profile-card-boeder {
+    border-color: var(--color-icon-border) !important;
+}
+
+.card-feild {
+    color: var(--color-radio-lable) !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.card-university-text .maiacare-input-field-label{
+    color: var(--color-radio-lable) !important;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.card-year {
+    color: var(--color-sidebar-icon);
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.about-text {
+    color: var(--color-radio-lable) !important;
+    font-weight: 400;
+    font-size: 16px !important;
+}
+
+.check-box input[type="checkbox"] {
+  border: 2px solid var(--color-radio);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Media Query: Tablets (991px and below) */
 @media (max-width: 991px) {

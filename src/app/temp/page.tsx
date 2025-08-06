@@ -193,7 +193,7 @@ export default function Page() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(e);
           }}
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {}}
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
           placeholder="Enter name"
           required={true}
           disabled={false}
@@ -213,6 +213,7 @@ export default function Page() {
             <IoIosEye size={25} />
           </div>
         </InputFieldGroup>
+
         <InputSelect
           label="Select Doctor"
           name="doctor"
@@ -220,7 +221,7 @@ export default function Page() {
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             handleChange(e);
           }}
-          onBlur={(e: React.FocusEvent<HTMLSelectElement>) => {}}
+          onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
           required={true}
           disabled={false}
           error={formError.doctor}
@@ -231,6 +232,7 @@ export default function Page() {
             { id: "3", value: "3", label: "Doctor 3" },
           ]}
         />
+        
         <DatePickerFieldGroup
           label="Select Date"
           name="date"
@@ -238,7 +240,7 @@ export default function Page() {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(e);
           }}
-          onBlur={(e: React.FocusEvent<HTMLInputElement>) => {}}
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
           required={true}
           disabled={false}
           error={formError.date}
@@ -265,7 +267,7 @@ export default function Page() {
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleChange(e);
           }}
-          onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => {}}
+          onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => { }}
           required={true}
           disabled={false}
           error={formError.description}
