@@ -16,7 +16,7 @@ export default function Modal({
 }: {
   show: boolean;
   onHide?: () => void;
-  size?: ModalProps['size'];
+  size?: 'sm' | 'lg' | 'xl';
   children: React.ReactNode;
   className?: string;
   centered?: boolean;
