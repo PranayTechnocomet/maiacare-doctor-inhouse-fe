@@ -49,12 +49,12 @@ export const consultationData: ConsultationEntry[] = [
     status: "No Response",
     image: AnjaliImg,
   },
-    {
+  {
     name: "Anjali Shinde",
     mobile: "9092038491",
     email: "ranidesai@protonmail.com",
     pin: "400077",
-    status: "No Response",
+    status: "Cancelled",
     image: AnjaliImg,
   },
   {
@@ -73,10 +73,6 @@ export const consultationData: ConsultationEntry[] = [
     status: "No Response",
     image: AnjaliImg,
   },
-];
-
-
-export const completeData: ConsultationEntry[] = [
   {
     name: "Rani Desai",
     mobile: "9092038491",
@@ -86,46 +82,25 @@ export const completeData: ConsultationEntry[] = [
     image: RaniImg,
   },
   {
-    name: "Nina Gupta",
-    mobile: "9092038491",
-    email: "ranidesai@protonmail.com",
-    pin: "400077",
-    status: "Completed",
-    image: NinaImg,
-  },
-  {
-    name: "Himari Roy",
-    mobile: "9092038491",
-    email: "ranidesai@protonmail.com",
-    pin: "400077",
-    status: "Completed",
-    image: HimariImg,
-  },
-  {
     name: "Anjali Shinde",
     mobile: "9092038491",
     email: "ranidesai@protonmail.com",
     pin: "400077",
-    status: "Completed",
+    status: "Cancelled",
     image: AnjaliImg,
-  },
-    {
-    name: "Himari Roy",
-    mobile: "9092038491",
-    email: "ranidesai@protonmail.com",
-    pin: "400077",
-    status: "Completed",
-    image: HimariImg,
   },
   {
-    name: "Anjali Shinde",
+    name: "Rani Desai",
     mobile: "9092038491",
     email: "ranidesai@protonmail.com",
     pin: "400077",
     status: "Completed",
-    image: AnjaliImg,
+    image: RaniImg,
   },
 ];
+
+
+
 // static.ts
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -135,98 +110,98 @@ import LightEditimg from "../assets/images/LightEditimg.png";
 import Image from 'next/image';
 
 export const leaveData: LeaveEntry[] = [
-    {   
-        id: '01',
-        type: 'Casual leave',
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '1 Day',
-    },
-    {
-        id: '02',
-        type: 'Sick leave', 
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '3 Days',
-    },
-    {
-        id: '03',
-        type: 'Vacation',
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '15 Days',
-    },
-    {
-        id: '04',
-        type: 'Family Thing',
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '1 Day',
-    },
-    {
-        id: '05',
-        type: 'Sick leave',
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '2 Days',
-    },
-    {
-        id: '06',
-        type: 'Casual leave',
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '1 Day',
-    },
-    {
-        id: '07',
-        type: 'Family thing',
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '2 Days',
-    },
-    {
-        id: '08',
-        type: 'Casual leave',
-        startDate: '12/08/25',
-        endDate: '12/08/25',
-        days: '1 Day',
-    },
+  {
+    id: '01',
+    type: 'Casual leave',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '1 Day',
+  },
+  {
+    id: '02',
+    type: 'Sick leave',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '3 Days',
+  },
+  {
+    id: '03',
+    type: 'Vacation',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '15 Days',
+  },
+  {
+    id: '04',
+    type: 'Family Thing',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '1 Day',
+  },
+  {
+    id: '05',
+    type: 'Sick leave',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '2 Days',
+  },
+  {
+    id: '06',
+    type: 'Casual leave',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '1 Day',
+  },
+  {
+    id: '07',
+    type: 'Family thing',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '2 Days',
+  },
+  {
+    id: '08',
+    type: 'Casual leave',
+    startDate: '12/08/25',
+    endDate: '12/08/25',
+    days: '1 Day',
+  },
 ];
 
 export const leaveColumns: ColumnDef<LeaveEntry>[] = [
-    {
-        header: '#',
-        accessorKey: 'id',
-    },
-    {
-        header: 'Leave Type',
-        accessorKey: 'type',
-    },
-    {
-        header: 'Start Date',
-        accessorKey: 'startDate',
-    },
-    {
-        header: 'End Date',
-        accessorKey: 'endDate',
-    },
-    {
-        header: 'No. of days',
-        accessorKey: 'days',
-    },
-    {
-        header: 'Action',
-        cell: () => (
-            <div className="d-flex gap-2">
-                <button className="btn btn-sm profile-card-boeder ">
-                              <Image src={LightEditimg} alt="Specialization" width={18} height={20} />
-                </button>
-                <button className="btn btn-sm profile-card-boeder">
-                   <Image src={Trash} alt="Specialization" width={18} height={20} />
-                </button>
-            </div>
-        ),
-    },
+  {
+    header: '#',
+    accessorKey: 'id',
+  },
+  {
+    header: 'Leave Type',
+    accessorKey: 'type',
+  },
+  {
+    header: 'Start Date',
+    accessorKey: 'startDate',
+  },
+  {
+    header: 'End Date',
+    accessorKey: 'endDate',
+  },
+  {
+    header: 'No. of days',
+    accessorKey: 'days',
+  },
+  {
+    header: 'Action',
+    cell: () => (
+      <div className="d-flex gap-2">
+        <button className="btn btn-sm profile-card-boeder ">
+          <Image src={LightEditimg} alt="Specialization" width={18} height={20} />
+        </button>
+        <button className="btn btn-sm profile-card-boeder">
+          <Image src={Trash} alt="Specialization" width={18} height={20} />
+        </button>
+      </div>
+    ),
+  },
 ];
 import { Patient } from "./types/interfaces";
 

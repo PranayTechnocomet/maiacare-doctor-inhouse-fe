@@ -1,8 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-    Card,
     Form,
     InputGroup,
     Button,
@@ -12,32 +11,44 @@ import { consultationData } from "@/utils/StaticData";
 import Image from "next/image";
 import CommonTable from "@/components/ui/BaseTable";
 import { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { IoSearch } from "react-icons/io5";
 import { PiSlidersDuotone } from "react-icons/pi";
-import "@/style/Consultation.css"
+import "@/style/Consultation.css";
 import { LuTrash2, LuArrowDown } from "react-icons/lu";
 import AppointmentSummaryCards from "@/components/layout/AppointmentSummaryCards";
 
-
-
-const statusColor: Record<string, string> = {
-    Completed: "success",
-    Pending: "primary",
-    Scheduled: "info",
-    "No Response": "danger",
-    Rescheduled: "warning",
-};
+// const statusColor: Record<string, string> = {
+//     Completed: "success",
+//     Pending: "primary",
+//     Scheduled: "info",
+//     "No Response": "danger",
+//     Rescheduled: "warning",
+// };
 
 export type ConsultationStatus =
     | "Completed"
     | "Pending"
     | "Scheduled"
     | "No Response"
-    | "Rescheduled";
-
+    | "Rescheduled"
+    | "Cancelled";
 
 export default function Consultation() {
+    const searchParams = useSearchParams();
+    const filter = searchParams.get("filter");
+
+    const [filteredData, setFilteredData] = useState(consultationData);
+
+    useEffect(() => {
+        if (filter === "completed") {
+            setFilteredData(consultationData.filter(item => item.status === "Completed"));
+        } else if (filter === "cancelled") {
+            setFilteredData(consultationData.filter(item => item.status === "Cancelled"));
+        } else {
+            setFilteredData(consultationData);
+        }
+    }, [filter]);
 
     const columns: ColumnDef<any>[] = [
         {
@@ -48,7 +59,6 @@ export default function Consultation() {
             header: "Name",
             cell: (info) => {
                 const imgSrc = info.row.original.image;
-
                 return (
                     <div className="d-flex align-items-center gap-2">
                         {typeof imgSrc === "string" ? (
@@ -97,7 +107,6 @@ export default function Consultation() {
                 );
             },
         },
-
         {
             header: "Actions",
             cell: () => (
@@ -116,7 +125,7 @@ export default function Consultation() {
     return (
         <div className="container-fluid py-4 px-3 px-md-4">
             {/* Summary Cards */}
-         <AppointmentSummaryCards />
+            <AppointmentSummaryCards />
 
             {/* Search and Filter */}
             <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
@@ -146,16 +155,16 @@ export default function Consultation() {
                 </div>
             </div>
 
-            {/* Common Table */}
-            <CommonTable data={consultationData} columns={columns} />
+            {/* Table */}
+            <CommonTable data={filteredData} columns={columns} />
 
             {/* Pagination */}
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-                <small className="text-muted">Showing 100 of 1,000 results</small>
+                <small className="text-muted">Showing {filteredData.length} of {consultationData.length} results</small>
                 <Pagination size="sm" className="mb-0">
                     <Pagination.Prev disabled />
                     {[1, 2, 3, 4, 5].map((p) => (
-                        <Pagination.Item key={p} active={p === 5}>
+                        <Pagination.Item key={p} active={p === 1}>
                             {p}
                         </Pagination.Item>
                     ))}

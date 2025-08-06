@@ -59,6 +59,11 @@
     color: #3F83F8;
 }
 
+.status-cancelled {
+    background-color: #FDF2F2;
+    color: #F05252;
+}
+
 .status-scheduled {
     background-color: #EDEBFE;
     color: #7E3AF2;
@@ -92,3 +97,5 @@
 .arrow-down {
     color: #2B4360;
 }
+
+
