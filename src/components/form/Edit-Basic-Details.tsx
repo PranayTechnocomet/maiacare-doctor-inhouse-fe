@@ -29,10 +29,33 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   const initialFormError: FormError = {};
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
 
-  const [formData, setFormData] = useState({
+
+
+  type FormData = {
+    Name: string;
+    Speciality: string;
+    Experience: string;
+    date: string;
+    gender: string; // default will be "female"
+    Contact: string;
+    Email: string;
+    About: string;
+
+    degree: string;
+    field: string;
+    university: string;
+    startYear: string;
+    endYear: string;
+
+    MF: string;
+    SS: string;
+    Time: string;
+    Timer: string;
+  };
+
+
+  const initialFormData: FormData = {
     Name: "",
     Speciality: "",
     Experience: "",
@@ -52,7 +75,60 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     SS: "",
     Time: "",
     Timer: "",
-  });
+  };
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+
+  const validateForm = (data: FormData): FormError => {
+    const errors: FormError = {};
+
+    if (!data.Name.trim()) errors.Name = "Name is required";
+    if (!data.Speciality.trim()) errors.Speciality = "Speciality is required";
+    // if (!data.Experience.trim()) errors.Experience = "Experience is required";
+    if (!data.date.trim()) errors.date = "Date is required";
+    if (!data.gender.trim()) errors.gender = "Gender is required";
+
+
+
+    const contactRegex = /^[0-9]{10}$/;
+
+    if (!data.Contact.trim()) {
+      errors.Contact = "Contact is required";
+    } else if (!contactRegex.test(data.Contact)) {
+      errors.Contact = "Please enter valid number";
+    }
+
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!data.Email.trim()) {
+      errors.Email = "Email is required";
+    } else if (!emailRegex.test(data.Email)) {
+      errors.Email = "Enter a valid email address";
+    }
+
+    if (!data.About.trim()) errors.About = "About is required";
+    if (!data.degree.trim()) errors.degree = "Degree is required";
+    if (!data.field.trim()) errors.field = "Field is required";
+    if (!data.university.trim()) errors.university = "University is required";
+    if (!data.startYear.trim()) errors.startYear = "Start year is required";
+    if (!data.endYear.trim()) errors.endYear = "End year is required";
+
+    if (!data.MF.trim()) errors.MF = "Start time is required";
+    if (!data.SS.trim()) errors.SS = "Start time required";
+    if (!data.Time.trim()) errors.Time = "End Time is required";
+    if (!data.Timer.trim()) errors.Timer = "End Time is required";
+
+    return errors;
+  };
+
+  const handleNextClick = () => {
+    const errors = validateForm(formData);
+    setFormError(errors);
+    if (Object.keys(errors).length === 0) {
+      onNext();
+    } else {
+      console.log("Form has errors:", errors);
+    }
+  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -135,7 +211,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 </div>
               </div>
 
-              {/* Edit Profile click in Modal  */}
+              {/* Edit Profile click in Modal */}
               <Modal
                 show={showModal}
                 onHide={() => setShowModal(false)}
@@ -207,8 +283,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               </Modal>
 
 
-
-
               <div>
                 <div className="fw-semibold">Add Profile Picture</div>
                 <div className="text-muted small">
@@ -225,7 +299,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             <Col>
               <InputFieldGroup
                 label="Name"
-                name="Time"
+                name="Name"
                 type="text"
                 value={formData.Name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,30 +310,30 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 required={true}
                 disabled={false}
                 readOnly={false}
-                className="position-relative"
-              >
+                error={formError.Name}
+                className="position-relative">
               </InputFieldGroup>
             </Col>
           </Row>
 
           <Row>
             <Col md={6}>
-              <InputSelect
-                label="Select Doctor"
-                name="doctor"
+              <InputFieldGroup
+                label="Speciality"
+                name="Speciality"
+                type="text"
                 value={formData.Speciality}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  handleChange(e);
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setFormData({ ...formData, Speciality: e.target.value });
                 }}
-                onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                placeholder="Speciality"
                 required={true}
                 disabled={false}
-                options={[
-                  { id: "1", value: "1", label: "Doctor 1" },
-                  { id: "2", value: "2", label: "Doctor 2" },
-                  { id: "3", value: "3", label: "Doctor 3" },
-                ]}
-              />
+                readOnly={false}
+                error={formError.Speciality}
+                className="position-relative">
+              </InputFieldGroup>
             </Col>
             <Col md={6}>
               <Form.Group>
@@ -292,21 +366,21 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.gender}
                 // defaultValue="female"
                 onChange={(e) => handleChange(e)}
+                error={formError.gender}
                 required
                 options={[
                   { label: "Male", value: "male" },
                   { label: "Female", value: "female" },
                 ]}
               />
-
             </Col>
           </Row>
 
           <Row className="mb-3">
             <Col md={6}>
               <InputFieldGroup
-                label="Contact Name"
-                name="Time"
+                label="Contact Number"
+                name="Contact"
                 type="text"
                 value={formData.Contact}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -317,15 +391,15 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 required={true}
                 disabled={false}
                 readOnly={false}
-                className="position-relative"
-              >
+                error={formError.Contact}
+                className="position-relative">
               </InputFieldGroup>
             </Col>
 
             <Col md={6}>
               <InputFieldGroup
                 label="Email"
-                name="Time"
+                name="Email"
                 type="text"
                 value={formData.Email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -336,6 +410,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 required={true}
                 disabled={false}
                 readOnly={false}
+                error={formError.Email}
                 className="position-relative"
               >
               </InputFieldGroup>
@@ -383,6 +458,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               required={true}
               disabled={false}
               readOnly={false}
+              error={formError.degree}
               className="position-relative"
             >
             </InputFieldGroup>
@@ -401,6 +477,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               required={true}
               disabled={false}
               readOnly={false}
+              error={formError.field}
               className="position-relative"
             >
             </InputFieldGroup>
@@ -422,6 +499,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               required={true}
               disabled={false}
               readOnly={false}
+              error={formError.university}
               className="position-relative"
             >
             </InputFieldGroup>
@@ -436,6 +514,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               value={formData.startYear}
               onChange={(e) => setFormData({ ...formData, startYear: e.target.value })}
               options={yearOptions}
+              error={formError.startYear}
               required
               disabled={false}
             />
@@ -448,6 +527,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               value={formData.endYear}
               onChange={(e) => setFormData({ ...formData, endYear: e.target.value })}
               options={yearOptions}
+              error={formError.startYear}
               required
               disabled={false}
             />
@@ -475,20 +555,26 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           <Col md={6}>
             <TimePickerFieldGroup
               label="Monday-Friday"
-              name="startTime"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
+              name="MF"
+              value={formData.MF}
+              onChange={(e) =>
+                setFormData({ ...formData, MF: e.target.value })
+              }
               required
-              error={formError.startTime}
+              error={formError?.MF}
             />
+
           </Col>
           <Col md={6} className="mt-2 ">
             <TimePickerFieldGroup
-              name="endTime"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-
+              name="Time"
+              value={formData.Time}
+              onChange={(e) =>
+                setFormData({ ...formData, Time: e.target.value })
+              }
+              error={formError?.Time}
             />
+
 
           </Col>
         </Row>
@@ -496,32 +582,42 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
         <Row>
           <Col md={6}>
             <TimePickerFieldGroup
-              label="Saturday-Sunday"
-              name="startTime"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
+              label="Monday-Friday"
+              name="SS"
+              value={formData.SS}
+              onChange={(e) =>
+                setFormData({ ...formData, SS: e.target.value })
+              }
               required
-              error={formError.startTime}
+              error={formError?.SS}
             />
           </Col>
 
           <Col md={6} className="mt-2">
             <TimePickerFieldGroup
-              name="endTime"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-
+              name="Timer"
+              value={formData.Timer}
+              onChange={(e) =>
+                setFormData({ ...formData, Timer: e.target.value })
+              }
+              error={formError?.Timer}
             />
+
           </Col>
         </Row>
       </ContentContainer>
 
 
       <div className="d-flex justify-content-end mt-4">
-        <Button variant="dark" className="d-flex align-items-center gap-2 px-4 py-2 rounded-2 all-btn-color" onClick={onNext}>
+        <Button
+          variant="dark"
+          className="d-flex align-items-center gap-2 px-4 py-2 rounded-2 all-btn-color"
+          onClick={handleNextClick} // 👈 aa mukvu pade
+        >
           Next <ArrowRight size={16} />
         </Button>
       </div>
+
 
 
     </div>

@@ -8,14 +8,41 @@ import Download from "../../assets/images/Download.png";
 import Image from 'next/image';
 
 import ContentContainer from '../ui/ContentContainer';
-import { InputFieldGroup } from '../ui/InputField';
+import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
 
 const ProfileBasicDetails = () => {
+  interface FormError {
+    [key: string]: string;
+  }
+  const initialFormError: FormError = {};
+
+  const [formError, setFormError] = useState<FormError>(initialFormError);
   const [activeTab,] = useState('basic');
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [qualifications,] = useState([
     { title: 'MD Gynaecology', university: 'Medical University', years: '2015 - 2017' },
     { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
   ]);
+
+
+
+type FormData = {
+  MF: string;
+  SS: string;
+  Time: string;
+  Timer: string;
+};
+
+const initialFormData: FormData = {
+    MF: "",
+    SS: "",
+    Time: "",
+    Timer: "",
+};
+const [formData, setFormData] = useState<FormData>(initialFormData);
+
+
 
   const documents = [
     { name: 'Certificate.pdf', date: 'October 20, 2024' },
@@ -24,12 +51,6 @@ const ProfileBasicDetails = () => {
     { name: 'Certificate.pdf', date: 'October 20, 2024' },
   ];
 
-  const [formData, setFormData] = useState({
-    MF: "",
-    SS: "",
-    Time: "",
-    Timer: "",
-  });
 
   return (
     <Container fluid className="mt-3">
@@ -91,79 +112,60 @@ const ProfileBasicDetails = () => {
 
                 <Row className="mb-3">
                   <Col md={6}>
-                    <InputFieldGroup
-                      label="Monday - Friday"
+                    <TimePickerFieldGroup
+                      label="Monday-Friday"
                       name="MF"
-                      type="text"
                       value={formData.MF}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setFormData({ ...formData, MF: e.target.value });
-                      }}
-                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                      placeholder="10 AM"
-                      required={false}
-                      disabled={false}
-                      readOnly={false}
-                      className="position-relative card-university-text"
-                    >
-                    </InputFieldGroup>
+                      onChange={(e) =>
+                        setFormData({ ...formData, MF: e.target.value })
+                      }
+                      required
+                      error={formError?.MF}
+                    />
+
+
+
 
                   </Col>
                   <Col md={6} className="mt-2 ">
-                    <InputFieldGroup
+                    <TimePickerFieldGroup
                       name="Time"
-                      type="text"
                       value={formData.Time}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setFormData({ ...formData, Time: e.target.value });
-                      }}
-                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                      placeholder="8 AM"
-                      required={false}
-                      disabled={false}
-                      readOnly={false}
-                      className="position-relative"
-                    >
-                    </InputFieldGroup>
+                      onChange={(e) =>
+                        setFormData({ ...formData, Time: e.target.value })
+                      }
+                      error={formError?.Time}
+                    />
+
+
                   </Col>
                 </Row>
 
                 <Row>
                   <Col md={6}>
-                    <InputFieldGroup
-                      label="Saturday- Sunday"
+                    <TimePickerFieldGroup
+                     label="Monday-Friday"
                       name="SS"
-                      type="text"
                       value={formData.SS}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setFormData({ ...formData, SS: e.target.value });
-                      }}
-                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                      placeholder="10 AM"
-                      required={false}
-                      disabled={false}
-                      readOnly={false}
-                      className="position-relative card-university-text"
-                    >
-                    </InputFieldGroup>
+                      onChange={(e) =>
+                        setFormData({ ...formData, SS: e.target.value })
+                      }
+                      required
+                      error={formError?.SS}
+                    />
+
                   </Col>
 
                   <Col md={6} className="mt-2">
-                    <InputFieldGroup
-                      name="name"
-                      type="text"
+                     <TimePickerFieldGroup
+                      name="Timer"
                       value={formData.Timer}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setFormData({ ...formData, Timer: e.target.value });
-                      }}
-                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                      placeholder="8 AM"
-                      required={false}
-                      disabled={false}
-                      readOnly={false}
-                      className="position-relative"
-                    >
-                    </InputFieldGroup>
+                      onChange={(e) =>
+                        setFormData({ ...formData, Timer: e.target.value })
+                      }
+                      error={formError?.Timer}
+                    />
+
                   </Col>
                 </Row>
               </ContentContainer>
