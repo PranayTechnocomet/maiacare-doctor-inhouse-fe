@@ -341,6 +341,10 @@
     .maiacare-button-small {
         font-size: 10px;
     }
+
+    .sub-heading-patient {
+        font-size: 15px !important;
+    }
 }
 
 @media (max-width: 375px) {
@@ -359,6 +363,27 @@
     .verification-form {
         margin: 15px;
         padding: 20px !important;
+    }
+
+    .sub-heading-patient {
+        font-size: 12px !important;
+    }
+
+    .Patient-Details {
+        font-size: 18px !important;
+    }
+
+    .name-patient {
+        font-size: 20px !important;
+    }
+
+    .Patient-review {
+        font-size: 13px !important;
+    }
+
+    .sub-patient {
+        font-size: 12px !important;
+        padding: 4px 4px !important;
     }
 }
 
@@ -424,4 +449,41 @@
     font-weight: 600;
     line-height: 26px;
 
+}
+
+.heading-patient {
+    color: #666B7A;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.sub-heading-patient {
+    color: #131D2A;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.name-patient {
+    color: #131D2A;
+    font-size: 24px;
+}
+
+.Patient-Details {
+    color: #131D2A;
+    font-size: 20px;
+}
+
+.Patient-review {
+    color: #292929;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.sub-patient {
+    color: #E29578;
+    border: 1px solid #E29578;
+    font-weight: 400;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 4px;
 }

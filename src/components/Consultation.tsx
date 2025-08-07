@@ -17,6 +17,7 @@ import { PiSlidersDuotone } from "react-icons/pi";
 import "@/style/Consultation.css";
 import { LuTrash2, LuArrowDown } from "react-icons/lu";
 import AppointmentSummaryCards from "@/components/layout/AppointmentSummaryCards";
+import Link from "next/link";
 
 // const statusColor: Record<string, string> = {
 //     Completed: "success",
@@ -59,27 +60,32 @@ export default function Consultation() {
             header: "Name",
             cell: (info) => {
                 const imgSrc = info.row.original.image;
+                const name = info.row.original.name;
+                const id = info.row.original.id; // <-- Make sure you have an `id`
+
                 return (
-                    <div className="d-flex align-items-center gap-2">
-                        {typeof imgSrc === "string" ? (
-                            <img
-                                src={imgSrc}
-                                alt={info.row.original.name}
-                                className="rounded-circle border"
-                                width="36"
-                                height="36"
-                            />
-                        ) : (
-                            <Image
-                                src={imgSrc}
-                                alt={info.row.original.name}
-                                width={36}
-                                height={36}
-                                className="rounded-circle border"
-                            />
-                        )}
-                        {info.row.original.name}
-                    </div>
+                    <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
+                        <div className="d-flex align-items-center gap-2">
+                            {typeof imgSrc === "string" ? (
+                                <img
+                                    src={imgSrc}
+                                    alt={name}
+                                    className="rounded-circle border"
+                                    width="36"
+                                    height="36"
+                                />
+                            ) : (
+                                <Image
+                                    src={imgSrc}
+                                    alt={name}
+                                    width={36}
+                                    height={36}
+                                    className="rounded-circle border"
+                                />
+                            )}
+                            {name}
+                        </div>
+                    </Link>
                 );
             },
         },
