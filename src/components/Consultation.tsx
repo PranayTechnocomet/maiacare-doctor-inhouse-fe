@@ -61,32 +61,34 @@ export default function Consultation() {
             cell: (info) => {
                 const imgSrc = info.row.original.image;
                 const name = info.row.original.name;
+                const id = info.row.original.id; // <-- Make sure you have an `id`
 
                 return (
-                    <div className="d-flex align-items-center gap-2">
-                        {typeof imgSrc === "string" ? (
-                            <img
-                                src={imgSrc}
-                                alt={name}
-                                className="rounded-circle border"
-                                width="36"
-                                height="36"
-                            />
-                        ) : (
-                            <Image
-                                src={imgSrc}
-                                alt={name}
-                                width={36}
-                                height={36}
-                                className="rounded-circle border"
-                            />
-                        )}
-                        {name}
-                    </div>
+                    <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
+                        <div className="d-flex align-items-center gap-2">
+                            {typeof imgSrc === "string" ? (
+                                <img
+                                    src={imgSrc}
+                                    alt={name}
+                                    className="rounded-circle border"
+                                    width="36"
+                                    height="36"
+                                />
+                            ) : (
+                                <Image
+                                    src={imgSrc}
+                                    alt={name}
+                                    width={36}
+                                    height={36}
+                                    className="rounded-circle border"
+                                />
+                            )}
+                            {name}
+                        </div>
+                    </Link>
                 );
             },
         },
-
         {
             header: "Mobile No",
             accessorKey: "mobile",
@@ -160,16 +162,10 @@ export default function Consultation() {
             </div>
 
             {/* Table */}
-            <CommonTable
-                data={filteredData}
-                columns={columns}
-                totalResults={consultationData.length}
-                currentResults={filteredData.length}
-            />
-
+            <CommonTable data={filteredData} columns={columns} />
 
             {/* Pagination */}
-            {/* <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+            <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
                 <small className="text-muted">Showing {filteredData.length} of {consultationData.length} results</small>
                 <Pagination size="sm" className="mb-0">
                     <Pagination.Prev disabled />
@@ -182,7 +178,7 @@ export default function Consultation() {
                     <Pagination.Item>99</Pagination.Item>
                     <Pagination.Next />
                 </Pagination>
-            </div> */}
+            </div>
         </div>
     );
 }
