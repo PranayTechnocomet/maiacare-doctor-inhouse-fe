@@ -45,3 +45,35 @@ body {
   height:50px;
   width: 50px;
 }
+.custom-pagination .page-item .page-link {
+  border: none;
+  background: transparent;
+  color: #8A8D93;
+  padding: 4px 8px;
+  font-size: 14px;
+   font-weight: 500;
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: #EDF5FF;
+  color: #2B4360;
+  border-radius: 6px;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+  color: #8A8D93;
+  
+}
+
+.custom-pagination .page-item:first-child .page-link,
+.custom-pagination .page-item:last-child .page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-results{
+  color: #8A8D93;
+  font-size: 14px;
+  font-weight: 500;
+}
