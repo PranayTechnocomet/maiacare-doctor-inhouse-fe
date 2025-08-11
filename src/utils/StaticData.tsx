@@ -207,7 +207,6 @@ export const leaveColumns: ColumnDef<LeaveEntry>[] = [
   },
 ];
 
-
 export const tableResponse: Patient[] = [   
   {
     id: 1,

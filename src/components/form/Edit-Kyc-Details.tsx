@@ -29,7 +29,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const initialFormError: FormError = {};
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
-
+  const [completedFiles, setCompletedFiles] = useState<UploadedFile[]>([]);
 
   type FormData = {
     Adcard: string,
@@ -67,9 +67,16 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   };
 
 
+  interface UploadedFile {
+    name: string;
+    size: string;
+    progress?: number;
+    status: "uploading" | "completed";
+    reportName: string;
+  }
 
   // Add Button click in modal open //
-  const [uploadedFiles, setUploadedFiles] = useState([
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([
     {
       name: "MD_Gynaecologist_Certificate.pdf",
       size: "60 KB of 120 KB",
@@ -86,23 +93,75 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   ]);
 
 
-  // browser select image //
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [file, setFile] = useState<File | null>(null);
+
+  const handleOpenModal = () => {
+    setUploadedFiles([]); // reset every time modal opens
+    setShowModal(true);
+  };
 
   const handleButtonClick = () => {
-    fileInputRef.current?.click(); // Open file manager
+    fileInputRef.current?.click();
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-    }
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const sizeInKB = `${Math.round(file.size / 1024)} KB`;
+    const newFile: UploadedFile = {
+      name: file.name,
+      size: `0 KB of ${sizeInKB}`,
+      progress: 0,
+      status: "uploading",
+      reportName: "",
+    };
+
+    setUploadedFiles((prev) => [...prev, newFile]);
+    simulateUpload(file, sizeInKB);
   };
 
 
-  const handleClose = () => setShowModal(false);
+  const simulateUpload = (file: File, totalSize: string) => {
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+
+      setUploadedFiles((prev) =>
+        prev.map((f) =>
+          f.name === file.name
+            ? {
+              ...f,
+              progress: Math.min(progress, 100),
+              size:
+                progress < 100
+                  ? `${Math.floor((progress / 100) * parseInt(totalSize))} KB of ${totalSize}`
+                  : `${totalSize}`,
+              status: progress >= 100 ? "completed" : "uploading",
+            }
+            : f
+        )
+      );
+
+      if (progress >= 100) clearInterval(interval);
+    }, 300);
+  };
+
+
+
+  const handleSave = () => {
+    const completed = uploadedFiles.filter((f) => f.status === "completed");
+    setCompletedFiles((prev) => [...prev, ...completed]);
+    setUploadedFiles([]);
+    setShowModal(false); // closes the modal
+  };
+
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
+
 
 
   return (
@@ -166,16 +225,21 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     src={Pdfimg}
                     alt="pdf"
                     width="50"
-                    className="me-3 "
+                    className="me-3"
                   />
                   <div className="flex-grow-1">
                     <div className="card-feild">Aadhar Card</div>
                     <div className="kyc-details">Aadhar_Card.pdf</div>
                     <div className="card-year">60 KB - 11 Feb 2025</div>
                   </div>
+                  <button className="btn btn-sm profile-card-boeder me-2">
+                    <Image src={Trash} alt="Specialization" width={17} height={18} />
+                  </button>
                 </div>
               </Form.Group>
             </Col>
+
+
 
             <Col md={6} sm={12}>
               <Form.Group>
@@ -200,6 +264,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 </div>
               </Form.Group>
             </Col>
+
+
+
           </Row>
 
           {/* Licence Number */}
@@ -256,177 +323,182 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
 
+
+
       <ContentContainer className="mt-4">
-        <div >
-          <h6 className="profile-card-main-titile mb-3">Qualification Certificates</h6>
-          <div>
+        <h6 className="profile-card-main-titile mb-3">Qualification Certificates</h6>
+        <div>
+          {/* Add New File */}
+
+          {/* modal save button click in add data  */}
+          <div className="d-flex gap-3 flex-wrap">
+            {completedFiles.map((file, idx) => (
+              <div
+                key={idx}
+                className="border rounded-3 p-3 text-center position-relative bg-white"
+                style={{ width: "130px", height: "130px" }} // fixed size same as Add button
+              >
+                {/* Delete Icon */}
+                <button
+                  className="btn p-0 position-absolute top-0 end-0 m-2"
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={() =>
+                    setCompletedFiles((prev) => prev.filter((_, i) => i !== idx))
+                  }
+                >
+                  <Image src={Trash} alt="delete" width={18} height={18} />
+                </button>
+
+                {/* PDF Icon */}
+                <Image src={Pdfimg} alt="pdf" width={40} height={40} />
+
+                {/* File Title */}
+                <div
+                  className="fw-semibold mt-2 text-truncate"
+                  style={{ maxWidth: "100%" }}
+                  title={file.reportName || file.name}
+                >
+                  {file.reportName || file.name}
+                </div>
+
+                {/* File Name */}
+                <div
+                  className="text-muted small text-truncate"
+                  style={{ maxWidth: "100%" }}
+                >
+                  {file.name}
+                </div>
+              </div>
+            ))}
+
+            {/* Add New File Button */}
             <div
-              className="add-file-box rounded-3 border profile-card-boeder d-flex flex-column align-items-center justify-content-center text-center"
-              onClick={() => setShowModal(true)}
+              className="add-file-box rounded-3 border profile-card-boeder d-flex flex-column align-items-center justify-content-center text-center bg-white"
+              style={{ width: "130px", height: "130px", cursor: "pointer" }} // same size as uploaded files
+              onClick={handleOpenModal}
             >
-              <Image
-                src={Add}
-                alt="pdf"
-                width="40"
-              />
+              <Image src={Add} alt="add" width={40} />
               <span className="about-text">Add New File</span>
             </div>
-
-            <Modal
-              show={showModal}
-              onHide={() => setShowModal(false)}
-              header="Upload Report"
-              closeButton={true}
-              dialogClassName="custom-modal-width"
-            >
-              <div className="border rounded-3 p-4 text-center mb-4">
-                <div className="mb-2 ">
-                  <Image
-                    src={uplodimg}
-                    alt="pdf"
-                    width="30"
-                    height="30"
-                    className="modal-bg p-1 rounded-2"
-                  />
-                </div>
-                <div>Click here to upload your file or drag.</div>
-                <small className="text-muted">Supported Format: SVG, JPG, PNG (10mb each)</small>
-                <div className="mt-3">
-
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                  />
-                  <Button variant="btn-border border" onClick={handleButtonClick}>Browse File</Button>
-                </div>
-              </div>
-
-              {/* File Previews */}
-              {uploadedFiles.map((file, index) => (
-                <div key={index} className="p-3 mb-4 bg-white rounded-3 border ">
-
-                  {/* Header Row */}
-
-                  <div className="modal-bg p-3 rounded-3">
-                    <div className="d-flex justify-content-between align-items-start ">
-                      <div className="d-flex align-items-center gap-3">
-
-                        {/* PDF Icon */}
-                        <div className=" d-flex align-items-center justify-content-center">
-                          <Image
-                            src={Pdfimg}
-                            alt="pdf"
-                            width="45"
-                            height="50"
-                          />
-                        </div>
-
-                        {/* File Info */}
-
-                        <div>
-                          <div className="fw-semibold">{file.name}</div>
-                          <div className="text-muted">{file.size} •
-                            {file.status === "uploading" ? (
-                              <span className="d-inline-flex align-items-center gap-1">
-                                <div role="status" />
-                                <Image src={Loading} alt="pdf" width="20" height="20" /> Uploading...
-                              </span>
-                            ) : (
-                              <span className="d-inline-flex align-items-center gap-1">
-                                <div role="status" />
-                                <Image src={Completed} alt="pdf" width="20" height="20" /> Completed
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                      </div>
-
-                      {/* Cancel/Delete Button */}
-                      <button className="btn btn-sm btn-outline-light text-muted border-0">✕</button>
-                    </div>
-
-                    {/* Progress Bar */}
-                    {file.status === "uploading" && (
-                      <div className="mt-3">
-                        <div className="progress rounded-pill" style={{ height: '8px' }}>
-                          <div
-                            className="progress-bar bg-dark rounded-pill"
-                            role="progressbar"
-                            style={{ width: `${file.progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-
-                  {/* Report Name */}
-                  <div className="mt-4">
-                    <label className="form-label fw-semibold">
-                      Report Name <span className="text-  ">*</span>
-                    </label>
-
-                    <div className="d-flex align-items-center">
-                      <input
-                        type="text"
-                        className="form-control rounded-3 px-3 py-2 me-2"
-                        placeholder="Enter Report Name"
-                        value={file.reportName}
-                        onChange={(e) =>
-                          setUploadedFiles((prev) =>
-                            prev.map((f) =>
-                              f.name === file.name ? { ...f, reportName: e.target.value } : f
-                            )
-                          )
-                        }
-                      />
-
-                      <div
-                        className="d-flex align-items-center justify-content-center border rounded-3 p-2 bg-white"
-                        style={{ width: '42px', height: '42px' }}
-                      >
-                        {file.status === 'completed' ? (
-                          <Image src={EditProfile} alt="completed" width="20" height="20" />
-                        ) : (
-                          <Image src={GreenRight} alt="editing" width="20" height="20" />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-
-
-
-
-
-                </div>
-              ))}
-
-
-              {/* Action Buttons */}
-              <div className="d-flex justify-content-between mt-4">
-                <Button variant="btn-border border" onClick={handleClose}>
-                  Cancel
-                </Button>
-                <Button className="all-btn-color">Save</Button>
-              </div>
-            </Modal>
-
-
           </div>
+
+
+          <Modal
+            show={showModal}
+            onHide={handleClose}
+            header="Upload Report"
+            closeButton
+            dialogClassName="custom-modal-width"
+          >
+            {/* Always show Browse UI */}
+            <div className="border rounded-3 p-4 text-center mb-4">
+              <div className="mb-2">
+                <Image src={uplodimg} alt="upload" width={30} height={30} className="modal-bg p-1 rounded-2" />
+              </div>
+              <div>Click here to upload your file or drag.</div>
+              <small className="text-muted">Supported Format: SVG, JPG, PNG (10mb each)</small>
+              <div className="mt-3">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+                <Button variant="btn-border border" onClick={handleButtonClick}>
+                  Browse File
+                </Button>
+              </div>
+            </div>
+
+            {/* Uploaded files list (below browse) */}
+            {uploadedFiles.map((file, index) => (
+              <div key={index} className="p-3 mb-4 bg-white rounded-3 border">
+                <div className="modal-bg p-3 rounded-3">
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div className="d-flex align-items-center gap-3">
+                      <Image src={Pdfimg} alt="pdf" width={45} height={50} />
+                      <div>
+                        <div className="fw-semibold">{file.name}</div>
+                        <div className="text-muted">
+                          {file.size} •{" "}
+                          {file.status === "uploading" ? (
+                            <>
+                              <Image src={Loading} alt="loading" width={20} height={20} /> Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <Image src={Completed} alt="completed" width={20} height={20} /> Completed
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {file.status === "uploading" && (
+                    <div className="mt-3">
+                      <div className="progress rounded-pill" style={{ height: "8px" }}>
+                        <div
+                          className="progress-bar bg-dark rounded-pill"
+                          role="progressbar"
+                          style={{ width: `${file.progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="mt-4">
+                  <label className="form-label fw-semibold">
+                    Report Name <span className="text-  ">*</span>
+                  </label>
+
+                  <div className="d-flex align-items-center">
+                    <input
+                      type="text"
+                      className="form-control rounded-3 px-3 py-2 me-2"
+                      placeholder="Enter Report Name"
+                      value={file.reportName}
+                      onChange={(e) =>
+                        setUploadedFiles((prev) =>
+                          prev.map((f) =>
+                            f.name === file.name ? { ...f, reportName: e.target.value } : f
+                          )
+                        )
+                      }
+                    />
+                    <div
+                      className="d-flex align-items-center justify-content-center border rounded-3rounded-3 p-2 bg-white"
+                      style={{ width: '42px', height: '42px' }}
+                    >
+                      {file.status === 'completed' ? (
+                        <Image src={EditProfile} alt="completed" width="20" height="20" />
+                      ) : (
+                        <Image src={GreenRight} alt="editing" width="20" height="20" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Action Buttons */}
+            <div className="d-flex justify-content-between mt-4">
+              <Button variant="btn-border border" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button className="all-btn-color" onClick={handleSave}>
+                Save
+              </Button>
+            </div>
+          </Modal>
+
+
         </div>
       </ContentContainer>
-
-
-
-
-
-
-
-
 
       <div className="d-flex justify-content-end gap-3 mt-4">
         {/* Previous Button */}
