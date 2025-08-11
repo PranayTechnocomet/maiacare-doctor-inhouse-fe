@@ -122,8 +122,8 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
         <div className="sidebar__top">
           <Link href="/" className="sidebar__logo-link" onClick={() => setShowOffcanvas(false)}>
             {/* <img src={Logo.src} alt="Logo" className="sidebar__logo" /> */}
-             <img src={Maia.src} alt="Expanded Logo" className="sidebar__logo" />
-            
+            <img src={Maia.src} alt="Expanded Logo" className="sidebar__logo" />
+
           </Link>
           <hr className="sidebar__divider" />
           <Nav className="sidebar__nav">
@@ -179,9 +179,9 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
             <span className="header-icon-container">
               <RiChat3Line size={18} />
             </span>
-            <span className="header-icon-container">
+            <Link href="/notifications" className="header-icon-container" style={{ cursor: "pointer" }}>
               <RiNotificationLine size={18} />
-            </span>
+            </Link>
           </div>
         </header>
         <div className="layout__body">{children}</div>

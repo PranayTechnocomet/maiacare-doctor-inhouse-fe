@@ -159,7 +159,7 @@ const SettingsPage = () => {
         </Col>
       </Row>
     </Container>
-);
+  );
 }
 
 export default SettingsPage;
