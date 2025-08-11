@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     dispatch(setHeaderData({ title: "Home", subtitle: "Welcome to Maiacare" }));
   }, [dispatch]); // ✅ Run once after initial render
-  dispatch(setHeaderData({ title: "Home", subtitle: "Welcome to Maiacare" }));
+  // dispatch(setHeaderData({ title: "Home", subtitle: "Welcome to Maiacare" }));
 
   return (
     <Container>

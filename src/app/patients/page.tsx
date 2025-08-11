@@ -4,17 +4,24 @@ import { AppDispatch } from "@/utils/redux/store";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setHeaderData } from "@/utils/redux/slices/headerSlice";
+import { Suspense } from "react";
+import Consultation from "@/components/Consultation";
 
-function Page() {
-    const dispatch: AppDispatch = useDispatch();
+export default function PatientsPage() {
+  const dispatch: AppDispatch = useDispatch();
+
+
   useEffect(() => {
-    dispatch(setHeaderData({ title: "Patients", subtitle: "Patients List" }));
+   dispatch(setHeaderData({ title: "Consultation Bookings ", }));
   }, []);
 
   return (
-    <div>Patients</div>
+   <div>
+      <Suspense fallback={<div>Loading consultations...</div>}>
+        <Consultation />
+      </Suspense>
+    </div>
   );
   
 }
 
-export default Page;

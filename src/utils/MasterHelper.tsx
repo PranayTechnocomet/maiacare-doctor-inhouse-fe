@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 function MasterHelper({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(true);
-  const authPages = ["/login", "/register"];
+const authPages = ["/login", "/register", "/forgot-password","/reset-password","/verification"];
   const pathName = usePathname();
   
   return (
@@ -15,12 +15,12 @@ function MasterHelper({ children }: { children: React.ReactNode }) {
       {authPages.includes(pathName) ? (
         children //Implement auth layout here 
       ) : (
-    <div className="d-flex">
-      <SiteLayout collapsed={collapsed} setCollapsed={setCollapsed}>
-        {children}
-      </SiteLayout>
-    </div>
-    )}
+          <div className="d-flex">
+          <SiteLayout collapsed={collapsed} setCollapsed={setCollapsed}>
+            {children}
+          </SiteLayout>
+        </div>
+      )}
     </Provider>
   );
 }
