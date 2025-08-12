@@ -83,7 +83,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
     if (!data.Name.trim()) errors.Name = "Name is required";
     if (!data.Speciality.trim()) errors.Speciality = "Speciality is required";
-    // if (!data.Experience.trim()) errors.Experience = "Experience is required";
+    if (!data.Experience.trim()) errors.Experience = "Experience is required";
     if (!data.date.trim()) errors.date = "Date is required";
     if (!data.gender.trim()) errors.gender = "Gender is required";
 
@@ -166,6 +166,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       setPreviewImage(imageURL);
     }
   };
+  const handleFileCamera = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setPreviewImage(imageURL);
+    }
+  };
 
   const handleSave = () => {
     if (previewImage) {
@@ -173,6 +180,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     }
     setShowModal(false); // Close modal
   };
+
 
   const handleDelete = () => {
     setSelectedImage(null); // remove selected image
@@ -262,10 +270,19 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                         />
                       </div>
 
-                      <div className="text-center">
+                      <div className="text-center" style={{ cursor: "pointer" }} onClick={handleEditClick}>
                         <Image src={Camera} alt="Take Photo" width={18} height={18} />
                         <div className="small">Take Photo</div>
                       </div>
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="user" // front camera (use "environment" for back camera)
+                        ref={fileInputRef}
+                        style={{ display: "none" }}
+                        onChange={handleFileCamera}
+                      />
                     </div>
 
                     <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
@@ -335,11 +352,25 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="position-relative">
               </InputFieldGroup>
             </Col>
+
+
             <Col md={6}>
-              <Form.Group>
-                <Form.Label>Years Of Experience *</Form.Label>
-                <Form.Control type="number" placeholder="11" />
-              </Form.Group>
+                         <InputFieldGroup
+                label="Year Of Experience"
+                name="Experience"
+                type="text"
+                value={formData.Experience}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setFormData({ ...formData, Experience: e.target.value });
+                }}
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                placeholder="Year Of Experience"
+                required={true}
+                disabled={false}
+                readOnly={false}
+                error={formError.Experience}
+                className="position-relative">
+              </InputFieldGroup>
             </Col>
           </Row>
 

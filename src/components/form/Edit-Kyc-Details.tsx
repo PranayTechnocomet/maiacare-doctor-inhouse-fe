@@ -14,8 +14,8 @@ import Add from "../../assets/images/Add.png";
 import Loading from "../../assets/images/Loading.png";
 import Completed from "../../assets/images/Completed.png";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-
 import Modal from "../ui/Modal";
+
 
 
 
@@ -30,6 +30,17 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
   const [completedFiles, setCompletedFiles] = useState<UploadedFile[]>([]);
+  const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
+  const [aadharFile, setAadharFile] = useState<UploadedFile | null>(null);
+  const [panFile, setPanFile] = useState<UploadedFile | null>(null);
+  const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
+
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const panFileRef = useRef<HTMLInputElement | null>(null)
+  const aadharFileRef = useRef<HTMLInputElement>(null);
+  const licenceFileRef = useRef<HTMLInputElement>(null);
+
 
   type FormData = {
     Adcard: string,
@@ -54,7 +65,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     return errors;
   };
 
-  const handleNextClick = () => {
+  const handleSaveChnage = () => {
     const errors = validateForm(formData);
     setFormError(errors);
 
@@ -67,14 +78,104 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   };
 
 
+
+
+  // Aadhar Card image select //
+  const handleAadharFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const sizeInKB = (file.size / 1024).toFixed(2);
+      const fileDate = new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+      const fileURL = URL.createObjectURL(file);
+
+      const newFile: UploadedFile = {
+        name: file.name,
+        size: `${sizeInKB} KB`,
+        actualSize: sizeInKB,
+        date: fileDate,
+        preview: fileURL,
+        status: "completed",
+        reportName: "Aadhar Card", // You can change if needed
+      };
+
+      setAadharFile(newFile);
+    }
+  };
+
+
+  //PanCard image select //
+  const handlePanFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const sizeInKB = (file.size / 1024).toFixed(2);
+      const fileDate = new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+      const fileURL = URL.createObjectURL(file);
+
+      const newFile: UploadedFile = {
+        name: file.name,
+        size: `${sizeInKB} KB`,
+        actualSize: sizeInKB,
+        date: fileDate,
+        status: "completed",
+        reportName: "Pan Card", // You can make this dynamic
+      };
+
+      setPanFile(newFile);
+    }
+  };
+
+  // licence image select//
+
+  const handleLicenceFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const sizeInKB = (file.size / 1024).toFixed(2);
+      const fileDate = new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+
+      const newFile: UploadedFile = {
+        name: file.name,
+        size: `${sizeInKB} KB`,
+        actualSize: sizeInKB,
+        date: fileDate,
+        status: "completed",
+        reportName: "Licence",
+      };
+
+      setLicenceFile(newFile);
+    }
+  };
+
+
+
+
   interface UploadedFile {
     name: string;
     size: string;
     progress?: number;
     status: "uploading" | "completed";
     reportName: string;
+
+
+    // KYC ADHAR,PAN,LICEN CARD 
+    date?: string;       // For uploaded date
+    preview?: string;    // For preview URL or icon
+    actualSize?: string; // For original file size
   }
 
+
+  
   // Add Button click in modal open //
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([
     {
@@ -92,9 +193,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     },
   ]);
 
-
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
   const handleOpenModal = () => {
     setUploadedFiles([]); // reset every time modal opens
     setShowModal(true);
@@ -109,19 +207,29 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     if (!file) return;
 
     const sizeInKB = `${Math.round(file.size / 1024)} KB`;
+
+    const fileURL = URL.createObjectURL(file);
+
     const newFile: UploadedFile = {
       name: file.name,
-      size: `0 KB of ${sizeInKB}`,
+      size: sizeInKB, // ✅ use actual size for display
       progress: 0,
       status: "uploading",
       reportName: "",
+
     };
 
+    // ✅ Update preview card
+    setSelectedFile(newFile);
+
+    // ✅ Keep in uploadedFiles if you still need for tracking
     setUploadedFiles((prev) => [...prev, newFile]);
+
     simulateUpload(file, sizeInKB);
   };
 
 
+  // MODAL DATA SHOW IN PERVIOUS PAGE 
   const simulateUpload = (file: File, totalSize: string) => {
     let progress = 0;
     const interval = setInterval(() => {
@@ -147,8 +255,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     }, 300);
   };
 
-
-
   const handleSave = () => {
     const completed = uploadedFiles.filter((f) => f.status === "completed");
     setCompletedFiles((prev) => [...prev, ...completed]);
@@ -156,12 +262,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     setShowModal(false); // closes the modal
   };
 
-
   const handleClose = () => {
     setShowModal(false);
   };
-
-
 
 
   return (
@@ -215,59 +318,140 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
           {/* Aadhar & Pan Card Upload Previews */}
           <Row className="mb-3">
+
+
             <Col md={6} sm={12}>
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Aadhar Card Photo <span className="text-danger">*</span>
                 </Form.Label>
-                <div className="custom-tab  border rounded-3 d-flex align-items-center p-1 gap-2">
-                  <Image
-                    src={Pdfimg}
-                    alt="pdf"
-                    width="50"
-                    className="me-3"
-                  />
-                  <div className="flex-grow-1">
-                    <div className="card-feild">Aadhar Card</div>
-                    <div className="kyc-details">Aadhar_Card.pdf</div>
-                    <div className="card-year">60 KB - 11 Feb 2025</div>
-                  </div>
-                  <button className="btn btn-sm profile-card-boeder me-2">
-                    <Image src={Trash} alt="Specialization" width={17} height={18} />
-                  </button>
+
+                <div
+                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (!aadharFile) {
+                      aadharFileRef.current?.click(); // only open file manager if no file selected
+                    }
+                  }}
+                >
+                  {aadharFile ? (
+                    <>
+                      <Image
+                        src={Pdfimg} // or Jpgimg depending on type
+                        alt="jpg"
+                        width={50}
+                        className="me-3"
+                      />
+                      <div className="flex-grow-1">
+                        <div className="card-feild">Aadhar Card</div>
+                        <div className="kyc-details">{aadharFile.name}</div>
+                        <div className="card-year">
+                          {aadharFile.size} - {aadharFile.date}
+                        </div>
+                      </div>
+
+                      {/* Delete Button */}
+                      <button
+                        type="button"
+                        className="btn btn-sm profile-card-boeder me-2"
+                        onClick={(e) => {
+                          e.stopPropagation(); // prevent file manager opening
+                          setAadharFile(null); // clear file
+                        }}
+                      >
+                        <Image src={Trash} alt="delete" width={17} height={18} />
+                      </button>
+                    </>
+                  ) : (
+                    <div
+                      className="d-flex flex-column justify-content-center align-items-center"
+                      style={{ height: "100%", width: "100%" }}
+                    >
+                      <Image src={Add} alt="add" width={40} className="p-1" />
+                      <span className="about-text">Add Aadhar Card Photo</span>
+                    </div>
+                  )}
                 </div>
+
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={aadharFileRef}
+                  style={{ display: "none" }}
+                  onChange={handleAadharFileChange}
+                />
               </Form.Group>
             </Col>
-
-
 
             <Col md={6} sm={12}>
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Pan Card Photo <span className="text-danger">*</span>
                 </Form.Label>
-                <div className="custom-tab  rounded-3 border d-flex align-items-center p-1 gap-2">
-                  <Image
-                    src={Jpgimg}
-                    alt="pdf"
-                    width="50"
-                    className="me-3 "
-                  />
-                  <div className="flex-grow-1">
-                    <div className="card-feild">Pan Card</div>
-                    <div className="kyc-details">Pan_Card.jpg</div>
-                    <div className="card-year">60 KB - 11 Feb 2025</div>
-                  </div>
-                  <button className="btn btn-sm profile-card-boeder me-2">
-                    <Image src={Trash} alt="Specialization" width={17} height={18} />
-                  </button>
+
+                <div
+                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (!panFile) {
+                      panFileRef.current?.click(); // only open file manager if no file selected
+                    }
+                  }}
+                >
+                  {panFile ? (
+                    <>
+                      <Image
+                        src={Jpgimg}
+                        alt="jpg"
+                        width={50}
+                        className="me-3"
+                      />
+                      <div className="flex-grow-1">
+                        <div className="card-feild">Pan Card</div>
+                        <div className="kyc-details">{panFile.name}</div>
+                        <div className="card-year">
+                          {panFile.size} - {panFile.date}
+                        </div>
+                      </div>
+
+                      {/* Delete Button */}
+                      <button
+                        type="button"
+                        className="btn btn-sm profile-card-boeder me-2"
+                        onClick={(e) => {
+                          e.stopPropagation(); // prevent file manager opening
+                          setPanFile(null); // clear file
+                        }}
+                      >
+                        <Image src={Trash} alt="delete" width={17} height={18} />
+                      </button>
+                    </>
+                  ) : (
+                    <div
+                      className="d-flex flex-column justify-content-center align-items-center"
+                      style={{ height: "100%", width: "100%" }}
+                    >
+                      <Image src={Add} alt="add" width={40} className="p-1" />
+                      <span className="about-text">Add Pan Card Photo</span>
+                    </div>
+                  )}
                 </div>
+
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={panFileRef}
+                  style={{ display: "none" }}
+                  onChange={handlePanFileChange}
+                />
               </Form.Group>
             </Col>
 
-
-
           </Row>
+
 
           {/* Licence Number */}
           <Row className="mb-3">
@@ -299,24 +483,66 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 <Form.Label className="maiacare-input-field-label">
                   Licence Photo <span className="text-danger">*</span>
                 </Form.Label>
-                <div className="border custom-tab rounded-3 d-flex align-items-center p-1 ">
-                  <Image
-                    src={Pdfimg}
-                    alt="pdf"
-                    width="50"
-                    className="me-3"
-                  />
-                  <div className="flex-grow-1">
-                    <div className="card-feild">License</div>
-                    <div className="kyc-details">License.pdf</div>
-                    <div className="card-year">60 KB - 11 Feb 2025</div>
-                  </div>
-                  <button className="btn btn-sm profile-card-boeder me-2 ">
-                    <Image src={Trash} alt="Specialization" width={17} height={18} />
-                  </button>
+
+                <div
+                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (!licenceFile) {
+                      licenceFileRef.current?.click(); // only open if no file selected
+                    }
+                  }}
+                >
+                  {licenceFile ? (
+                    <>
+                      <Image
+                        src={Pdfimg}
+                        alt="pdf"
+                        width={50}
+                        className="me-3"
+                      />
+                      <div className="flex-grow-1">
+                        <div className="card-feild">License</div>
+                        <div className="kyc-details">{licenceFile.name}</div>
+                        <div className="card-year">
+                          {licenceFile.size} - {licenceFile.date}
+                        </div>
+                      </div>
+
+                      {/* Delete Button */}
+                      <button
+                        type="button"
+                        className="btn btn-sm profile-card-boeder me-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLicenceFile(null);
+                        }}
+                      >
+                        <Image src={Trash} alt="delete" width={17} height={18} />
+                      </button>
+                    </>
+                  ) : (
+                    <div
+                      className="d-flex flex-column justify-content-center align-items-center"
+                      style={{ height: "100%", width: "100%" }}
+                    >
+                      <Image src={Add} alt="add" width={40} className="p-1" />
+                      <span className="about-text">Add Licence Photo</span>
+                    </div>
+                  )}
                 </div>
+
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  ref={licenceFileRef}
+                  style={{ display: "none" }}
+                  onChange={handleLicenceFileChange}
+                />
               </Form.Group>
             </Col>
+
           </Row>
         </div>
       </ContentContainer>
@@ -431,7 +657,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                             </>
                           ) : (
                             <>
-                              <Image src={Completed} alt="completed" width={20} height={20} /> Completed
+                              <Image src={Completed} alt="completed" width={20} height={20}/> Completed
                             </>
                           )}
                         </div>
@@ -453,7 +679,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 </div>
                 <div className="mt-4">
                   <label className="form-label fw-semibold">
-                    Report Name <span className="text-  ">*</span>
+                    Report Name <span className="text-center">*</span>
                   </label>
 
                   <div className="d-flex align-items-center">
@@ -495,8 +721,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               </Button>
             </div>
           </Modal>
-
-
+          
         </div>
       </ContentContainer>
 
@@ -513,11 +738,13 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         {/* Next Button */}
         <button
           className="all-btn-color text-white d-flex align-items-center gap-2 px-4 py-2 rounded-3"
-          onClick={handleNextClick}
+          onClick={ handleSaveChnage}
         >
-          Next
-          <ArrowRight size={16} />
+          Save Changes
         </button>
+
+
+
       </div>
 
 
