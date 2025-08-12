@@ -58,11 +58,67 @@
   .notifications-page {
     padding: 16px;
   }
+
   .notification-item {
     padding: 14px;
   }
+
+  .notification-title {
+    font-size: 14px !important;
+  }
+
+  .notification-description {
+    font-size: 12px !important;
+  }
+
+  .notification-time {
+    font-size: 12px !important;
+  }
+
 }
+
+@media (max-width: 425px) {
+
+  .notification-title {
+    font-size: 12px !important;
+  }
+
+  .notification-description {
+    font-size: 11px !important;
+  }
+
+  .notification-time {
+    font-size: 10px !important;
+  }
+}
+
 /* NotificationScreen.css */
 .notification-item.unread {
-  background-color: #f0f6ff; /* light blue background */
+  background-color: #f0f6ff;
+  /* light blue background */
+}
+
+.notification-title {
+  color: #292929;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.notification-description {
+  color: #8A8D93;
+  font-size: 14px;
+  font-weight: 400;
+
+}
+
+.notification-time {
+  color: #3E4A57;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.notification-image{
+  height: 35px;
+  width: 35px;
+  object-fit: cover;
 }

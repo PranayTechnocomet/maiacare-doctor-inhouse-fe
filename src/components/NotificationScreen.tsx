@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
-import { InputGroup, Form, Button } from "react-bootstrap";
+import { InputGroup, Form } from "react-bootstrap";
 import { IoSearch } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import "@/style/NotificationScreen.css";
-import { PiSlidersDuotone } from "react-icons/pi";
 import "@/style/Consultation.css";
 import emergencyImg from "@/assets/images/emergency.png";
 import leaveUpdateImg from "@/assets/images/leave-update.png";
-import doctorBackImg from "@/assets/images/doctor-back.png";
+import doctorBackImg from "@/assets/images/Avatar.png";
+import ContentContainer from "@/components/ui/ContentContainer";
 
 interface NotificationItem {
   title: string;
@@ -20,39 +20,44 @@ interface NotificationItem {
 
 const notifications: NotificationItem[] = [
   {
-    title: "Emergency update",
-    description: "Patient Riya Gupta needed a sudden Laparoscopic procedure",
-    time: "10 mins ago",
+    title: "Dolo 650 Low Stock",
+    description: "Important updates and system-wide notifications.",
+    time: "3 months ago",
     image: emergencyImg.src,
   },
   {
-    title: "Dr. Sonia Advani - Leave Update",
-    description: "Check and block doctor's calendar during the leave",
-    time: "15 mins ago",
-    image: leaveUpdateImg.src,
-    unread: true,
-  },
-  {
-    title: "Dr. Sushant Patil - Leave Update",
-    description: "Dr. Sushant is back from leave schedule missed appointments",
-    time: "18 days ago",
-    image: leaveUpdateImg.src
-  },
-  {
-    title: "System Alerts",
-    description: "Important updates and system-wide notifications.",
-    time: "1 month ago",
-    image: doctorBackImg.src
-  },
-  {
-    title: "System Alerts",
-    description: "Important updates and system-wide notifications.",
+    title: "Stock Updated",
+    description: "Dolo 650 stocks updated",
     time: "3 months ago",
     image: doctorBackImg.src,
     unread: true,
-  }
+  },
+  {
+    title: "Allegra Out of Stock ",
+    description: "Allegra Out of Stock.",
+    time: "3 months ago",
+    image: emergencyImg.src,
+  },
+  {
+    title: "System Alerts",
+    description: "Important updates and system-wide notifications.",
+    time: "3 month ago",
+    image: leaveUpdateImg.src,
+  },
+  {
+    title: "Allegra Out of Stock ",
+    description: "Allegra Out of Stock.",
+    time: "3 months ago",
+    image: emergencyImg.src,
+    unread: true,
+  },
+  {
+    title: "System Alerts",
+    description: "Important updates and system-wide notifications.",
+    time: "3 month ago",
+    image: leaveUpdateImg.src,
+  },
 ];
-
 
 
 const NotificationScreen: React.FC = () => {
@@ -76,7 +81,7 @@ const NotificationScreen: React.FC = () => {
         </div>
 
         {/* Sort + Filter */}
-        <div className="d-flex align-items-center gap-2 mb-2">
+        <div className="d-flex align-items-center gap-2 mb-2">                                                                                                                                                                                                                                                                                                                                  
           <span className="text-muted small short-by">Sort by:</span>
           <Form.Select className="custom-sort-select">
             <option>All Time</option>
@@ -84,9 +89,9 @@ const NotificationScreen: React.FC = () => {
             <option>This Week</option>
             <option>This Month</option>
           </Form.Select>
-          <Button variant="light" className="border custom-filter-button">
+          {/* <Button variant="light" className="border custom-filter-button">
             <PiSlidersDuotone />
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -101,33 +106,31 @@ const NotificationScreen: React.FC = () => {
       </div> */}
 
       {/* list */}
-      <div className="mt-3 notifications-list">
+      <ContentContainer className="mt-3 notifications-list">
         {notifications.map((n, idx) => (
           <div
             key={idx}
             className={`notification-item d-flex justify-content-between align-items-start p-3 mb-2 rounded ${n.unread ? "unread" : ""}`}
-
             role="button"
           >
             <div className="d-flex align-items-start">
               <img
                 src={n.image}
                 alt={n.title}
-                className="me-3"
-                style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
+                className="me-3 notification-image"
               />
               <div>
-                <div className="fw-semibold">{n.title}</div>
-                <div className="text-muted small">{n.description}</div>
+                <div className="notification-title">{n.title}</div>
+                <div className="notification-description">{n.description}</div>
               </div>
             </div>
-            <div className="text-muted small ms-3">{n.time}</div>
+            <div className="notification-time ms-3">{n.time}</div>
           </div>
         ))}
-
-      </div>
+      </ContentContainer>
     </div>
   );
 };
 
 export default NotificationScreen;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
