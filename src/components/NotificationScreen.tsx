@@ -18,7 +18,7 @@ interface NotificationItem {
   image: string;
 }
 
-const notifications: NotificationItem[] = [
+const notifications: NotificationItem[] = [  
   {
     title: "Dolo 650 Low Stock",
     description: "Important updates and system-wide notifications.",
@@ -71,7 +71,7 @@ const NotificationScreen: React.FC = () => {
         <div>
           <InputGroup className="mb-2 custom-search-group">
             <Form.Control
-              placeholder="Search"
+              placeholder=" Search History"
               className="custom-search-input"
             />
             <InputGroup.Text className="custom-search-icon">
@@ -81,7 +81,7 @@ const NotificationScreen: React.FC = () => {
         </div>
 
         {/* Sort + Filter */}
-        <div className="d-flex align-items-center gap-2 mb-2">                                                                                                                                                                                                                                                                                                                                  
+        <div className="d-flex align-items-center gap-2 mb-2">
           <span className="text-muted small short-by">Sort by:</span>
           <Form.Select className="custom-sort-select">
             <option>All Time</option>
@@ -106,11 +106,11 @@ const NotificationScreen: React.FC = () => {
       </div> */}
 
       {/* list */}
-      <ContentContainer className="mt-3 notifications-list">
+      <ContentContainer className="mt-3 notifications-list p-0 border">
         {notifications.map((n, idx) => (
           <div
             key={idx}
-            className={`notification-item d-flex justify-content-between align-items-start p-3 mb-2 rounded ${n.unread ? "unread" : ""}`}
+            className={`notification-item d-flex justify-content-between align-items-start p-3  rounded ${n.unread ? "unread" : ""}`}
             role="button"
           >
             <div className="d-flex align-items-start">
@@ -122,7 +122,7 @@ const NotificationScreen: React.FC = () => {
               <div>
                 <div className="notification-title">{n.title}</div>
                 <div className="notification-description">{n.description}</div>
-              </div>
+              </div>    
             </div>
             <div className="notification-time ms-3">{n.time}</div>
           </div>
@@ -133,4 +133,3 @@ const NotificationScreen: React.FC = () => {
 };
 
 export default NotificationScreen;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          

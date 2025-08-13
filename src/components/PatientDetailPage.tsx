@@ -83,10 +83,10 @@ export default function PatientDetailPageComponent() {
                 </div>
             </div>
 
-            <div className="row mb-4">
+            <div className="row mb-5">
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
-                    <ContentContainer className="shadow-sm border-0">
+                    <ContentContainer className="shadow-sm border-0 mb-4">
                         <Card.Body>
                             <strong className=" d-block mb-2 heading-patient">Consultation Review *</strong>
                             <p className=" border rounded p-3 Patient-review">
@@ -112,10 +112,19 @@ export default function PatientDetailPageComponent() {
                 </div>
             </div>
 
-            <div className="d-flex justify-content-end gap-3 ">
-                <Button variant="light" className="edit-profile-btn ">Cancel</Button>
-                <Button className="Button-login" variant="primary ">Mark as Complete</Button>
+            <div
+                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100"
+                style={{
+                    position: "fixed",
+                    bottom: 0,
+                    right: 0,
+                    zIndex: 1050
+                }}
+            >
+                <Button variant="light" className="edit-profile-btn">Cancel</Button>
+                <Button className="Button-login" variant="primary">Mark as Complete</Button>
             </div>
+
         </>
     );
 }
