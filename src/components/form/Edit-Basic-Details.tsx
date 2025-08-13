@@ -5,7 +5,7 @@ import Simpleeditpro from "../../assets/images/Simpleeditpro.png";
 import Image from "next/image";
 import cameraicon from "../../assets/images/Cameraicon.png";
 import { InputFieldGroup } from "../ui/InputField";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import InputSelect from "../ui/InputSelect";
 import { DatePickerFieldGroup } from "../ui/CustomDatePicker";
 import { RadioButtonGroup } from "../ui/RadioField";
@@ -30,6 +30,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
 
+  const [qualifications, setQualifications] = useState([
+    { degree: "", field: "", university: "", startYear: "", endYear: "" }
+  ]);
 
 
   type FormData = {
@@ -138,6 +141,22 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     setFormError((prev) => ({ ...prev, [name]: "" }));
   };
 
+
+  // const handleQualificationChange = (index: number, field: string, value: string) => {
+  //   const updated = [...qualifications];
+  //   updated[index][field] = value;
+  //   setQualifications(updated);
+  // };
+
+  // Add new qualification
+
+  const handleAddQualification = () => {
+    setQualifications([
+      ...qualifications,
+      { degree: "", field: "", university: "", startYear: "", endYear: "" }
+    ]);
+  };
+
   const yearOptions = Array.from({ length: 31 }, (_, i) => {
     const year = 2000 + i;
     return { id: year.toString(), value: year.toString(), label: year.toString() };
@@ -146,6 +165,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
   //********* EDIT PROFILE MODAL *********//
   const fileInputRef = useRef<HTMLInputElement>(null);  // file input programmatically open 
+  const cameraInputRef = useRef<HTMLInputElement>(null); // camera image select 
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);  //previewImage 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);//selectedImage 
@@ -159,6 +179,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     fileInputRef.current?.click();   //Edit btn click in file chhose
   };
 
+  const openCamera = () => {
+    cameraInputRef.current?.click();
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0]; //previewImage chnages
     if (selectedFile) {
@@ -166,11 +190,12 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       setPreviewImage(imageURL);
     }
   };
+
   const handleFileCamera = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
-      setPreviewImage(imageURL);
+      setPreviewImage(imageURL); // show preview
     }
   };
 
@@ -180,7 +205,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     }
     setShowModal(false); // Close modal
   };
-
 
   const handleDelete = () => {
     setSelectedImage(null); // remove selected image
@@ -206,7 +230,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 {/* Camera Icon */}
                 <div
                   className="camera-icon"
-                  // onClick={() => setShowModal(true)}  onClick={handleOpenModal}   style={{ cursor: "pointer" }}
+                  // onClick={() => setShowModal(true)}  onClick={handleOpenModal} style={{ cursor: "pointer" }}
                   onClick={handleOpenModal}
                   style={{ cursor: "pointer" }}
                 >
@@ -245,6 +269,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
                   <div className="w-100 border-top pt-3 d-flex justify-content-between align-items-center flex-wrap">
                     <div className="d-flex gap-4 align-items-center flex-wrap">
+
                       <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
                         <Image src={LightEditimg} alt="Edit" width={18} height={18} />
                         <div className="small">Edit</div>
@@ -270,23 +295,25 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                         />
                       </div>
 
-                      <div className="text-center" style={{ cursor: "pointer" }} onClick={handleEditClick}>
-                        <Image src={Camera} alt="Take Photo" width={18} height={18} />
-                        <div className="small">Take Photo</div>
+                      <div className="text-center" style={{ cursor: "pointer" }}>
+                        {/* Camera button */}
+                          <Image src={Camera} alt="Take Photo" width={18} height={18} onClick={openCamera}/>
+                          <div className="small">Take Photo</div>
+                    
+                        {/* Hidden input for camera */}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          capture="user" // front camera
+                          ref={cameraInputRef}
+                          style={{ display: "none" }}
+                          onChange={handleFileCamera}
+                        />
                       </div>
-
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="user" // front camera (use "environment" for back camera)
-                        ref={fileInputRef}
-                        style={{ display: "none" }}
-                        onChange={handleFileCamera}
-                      />
                     </div>
 
-                    <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
 
+                    <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                       <button className="btn p-0" onClick={handleDelete}>
                         <Image src={Trash} alt="Trash" width={22} height={22} />
                       </button>
@@ -298,7 +325,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   </div>
                 </div>
               </Modal>
-
 
               <div>
                 <div className="fw-semibold">Add Profile Picture</div>
@@ -333,7 +359,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             </Col>
           </Row>
 
-          <Row>
+          <Row className="mb-3">
             <Col md={6}>
               <InputFieldGroup
                 label="Speciality"
@@ -355,7 +381,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
             <Col md={6}>
-                         <InputFieldGroup
+              <InputFieldGroup
                 label="Year Of Experience"
                 name="Experience"
                 type="text"
@@ -471,100 +497,141 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       </ContentContainer>
 
 
+
+
+
+
+
+
+
+
       <ContentContainer className="mt-4">
         <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
 
-        <Row className="mb-3">
-          <Col md={6}>
-            <InputFieldGroup
-              label="degree"
-              name="degree"
-              type="text"
-              value={formData.degree}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormData({ ...formData, degree: e.target.value });
-              }}
-              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-              placeholder="Degree"
-              required={true}
-              disabled={false}
-              readOnly={false}
-              error={formError.degree}
-              className="position-relative"
-            >
-            </InputFieldGroup>
-          </Col>
-          <Col md={6}>
-            <InputFieldGroup
-              label="Field of study"
-              name="field"
-              type="text"
-              value={formData.field}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormData({ ...formData, field: e.target.value });
-              }}
-              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-              placeholder="field"
-              required={true}
-              disabled={false}
-              readOnly={false}
-              error={formError.field}
-              className="position-relative"
-            >
-            </InputFieldGroup>
-          </Col>
-        </Row>
+        {qualifications.map((q, index) => (
+          <div key={index} className="position-relative mb-4">
 
-        <Row className="mb-3">
-          <Col>
-            <InputFieldGroup
-              label="University"
-              name="University"
-              type="text"
-              value={formData.university}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormData({ ...formData, university: e.target.value });
-              }}
-              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-              placeholder="university"
-              required={true}
-              disabled={false}
-              readOnly={false}
-              error={formError.university}
-              className="position-relative"
-            >
-            </InputFieldGroup>
-          </Col>
-        </Row>
+            {/* Remove Button - Show only for added qualifications */}
+            {index > 0 && (
+              <div className="d-flex justify-content-end mb-1">
+                <Button
+                  variant="danger"
+                  className="d-flex align-items-center justify-content-center custom-remove-btn"
+                  size="sm"
+                  onClick={() => {
+                    const updated = qualifications.filter((_, i) => i !== index);
+                    setQualifications(updated);
+                  }}
+                >
+                  -
+                </Button>
+              </div>
+            )}
 
-        <Row className="mb-3">
-          <Col md={6}>
-            <InputSelect
-              label="Start Year"
-              name="startYear"
-              value={formData.startYear}
-              onChange={(e) => setFormData({ ...formData, startYear: e.target.value })}
-              options={yearOptions}
-              error={formError.startYear}
-              required
-              disabled={false}
-            />
-          </Col>
+            {/* Qualification Box */}
+            <div className="border rounded p-3">
+              <Row className="mb-3">
+                <Col md={6}>
+                  <InputFieldGroup
+                    label="Degree"
+                    name="degree"
+                    type="text"
+                    value={q.degree}
+                    onChange={(e) => {
+                         setFormData({ ...formData, degree: e.target.value });
+                      const updated = [...qualifications];
+                      updated[index].degree = e.target.value;
+                      setQualifications(updated);
+                    }}
+                    placeholder="Degree"
+                    required
+                    error={formError.degree}
+                  />
+                </Col>
 
-          <Col md={6}>
-            <InputSelect
-              label="End Year"
-              name="endYear"
-              value={formData.endYear}
-              onChange={(e) => setFormData({ ...formData, endYear: e.target.value })}
-              options={yearOptions}
-              error={formError.startYear}
-              required
-              disabled={false}
-            />
-          </Col>
-        </Row>
-        <Button variant="dark" className="px-4 py-2 all-btn-color">
+                <Col md={6}>
+                  <InputFieldGroup
+                    label="Field of study"
+                    name="field"
+                    type="text"
+                    value={q.field}
+                    onChange={(e) => {
+                                setFormData({ ...formData, field: e.target.value });
+                      const updated = [...qualifications];
+                      updated[index].field = e.target.value;
+                      setQualifications(updated);
+                    }}
+                    placeholder="Field"
+                    required
+                    error={formError.field}
+                  />
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col>
+                  <InputFieldGroup
+                    label="University"
+                    name="university"
+                    type="text"
+                    value={q.university}
+                    onChange={(e) => {
+                          setFormData({ ...formData, university: e.target.value });
+                      const updated = [...qualifications];
+                      updated[index].university = e.target.value;
+                      setQualifications(updated);
+                    }}
+                    placeholder="University"
+                    required
+                    error={formError.university}
+                  />
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={6}>
+                  <InputSelect
+                    label="Start Year"
+                    name="startYear"
+                    value={q.startYear}
+                    onChange={(e) => {
+                      setFormData({ ...formData, startYear: e.target.value });
+                      const updated = [...qualifications];
+                      updated[index].startYear = e.target.value;
+                      setQualifications(updated);
+                    }}
+                    options={yearOptions}
+                    error={formError.startYear}
+                    required
+                  />
+                </Col>
+
+                <Col md={6}>
+                  <InputSelect
+                    label="End Year"
+                    name="endYear"
+                    value={q.endYear}
+                    onChange={(e) => {
+                       setFormData({ ...formData, endYear: e.target.value });
+                      const updated = [...qualifications];
+                      updated[index].endYear = e.target.value;
+                      setQualifications(updated);
+                    }}
+                    options={yearOptions}
+                    error={formError.endYear}
+                    required
+                  />
+                </Col>
+              </Row>
+            </div>
+          </div>
+        ))}
+
+        <Button
+          variant="dark"
+          className="px-4 py-2 all-btn-color"
+          onClick={handleAddQualification}
+        >
           + Add Qualification
         </Button>
       </ContentContainer>
@@ -610,7 +677,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           </Col>
         </Row>
 
-        <Row>
+        <Row className="mb-3">
           <Col md={6}>
             <TimePickerFieldGroup
               label="Monday-Friday"

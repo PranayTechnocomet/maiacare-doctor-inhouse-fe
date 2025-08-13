@@ -10,13 +10,13 @@ import uplodimg from "../../assets/images/Upload.png";
 import EditProfile from "../../assets/images/EditProfile.png";
 import GreenRight from "../../assets/images/GreenRight.png";
 import Trash from "../../assets/images/Trash.png";
+import Pluslight from "../../assets/images/Pluslight.png";
 import Add from "../../assets/images/Add.png";
 import Loading from "../../assets/images/Loading.png";
 import Completed from "../../assets/images/Completed.png";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
-
-
+import { useRouter } from "next/navigation";
 
 
 export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void, onPrevious: () => void }) {
@@ -27,6 +27,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
   }
   const initialFormError: FormError = {};
+     const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
   const [completedFiles, setCompletedFiles] = useState<UploadedFile[]>([]);
@@ -66,18 +67,18 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   };
 
   const handleSaveChnage = () => {
+  
     const errors = validateForm(formData);
     setFormError(errors);
 
     if (Object.keys(errors).length === 0) {
       console.log("✅ Form is valid, go to next step");
+   router.push("/profile");  //navigate for profile screen  
       // onNext(); // navigate to next tab or page
     } else {
       console.log("❌ Form has errors:", errors);
     }
   };
-
-
 
 
   // Aadhar Card image select //
@@ -156,9 +157,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       setLicenceFile(newFile);
     }
   };
-
-
-
 
   interface UploadedFile {
     name: string;
@@ -318,8 +316,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
           {/* Aadhar & Pan Card Upload Previews */}
           <Row className="mb-3">
-
-
             <Col md={6} sm={12}>
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
@@ -347,7 +343,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         <div className="card-feild">Aadhar Card</div>
                         <div className="kyc-details">{aadharFile.name}</div>
                         <div className="card-year">
-                          {aadharFile.size} - {aadharFile.date}
+                          {aadharFile.size} - {aadharFile.date} 
+                          
+                          
                         </div>
                       </div>
 
@@ -453,7 +451,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           </Row>
 
 
-          {/* Licence Number */}
+          {/* Licence Number */}  
           <Row className="mb-3">
             <Col md={6} sm={12}>
               <InputFieldGroup
@@ -526,7 +524,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       className="d-flex flex-column justify-content-center align-items-center"
                       style={{ height: "100%", width: "100%" }}
                     >
-                      <Image src={Add} alt="add" width={40} className="p-1" />
+                      <Image src={Add} alt="add" width={40} className="p-1 " />
                       <span className="about-text">Add Licence Photo</span>
                     </div>
                   )}
@@ -558,6 +556,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
           {/* modal save button click in add data  */}
           <div className="d-flex gap-3 flex-wrap">
+
             {completedFiles.map((file, idx) => (
               <div
                 key={idx}
@@ -603,11 +602,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
             {/* Add New File Button */}
             <div
-              className="add-file-box rounded-3 border profile-card-boeder d-flex flex-column align-items-center justify-content-center text-center bg-white"
+              className="add-file-box rounded-3 border  d-flex flex-column align-items-center justify-content-center text-center bg-white"
               style={{ width: "130px", height: "130px", cursor: "pointer" }} // same size as uploaded files
               onClick={handleOpenModal}
             >
-              <Image src={Add} alt="add" width={40} />
+              <Image src={Pluslight} alt="add" width={65} className="my-custom-icon"/>
               <span className="about-text">Add New File</span>
             </div>
           </div>
@@ -677,7 +676,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     </div>
                   )}
                 </div>
+
                 <div className="mt-4">
+
                   <label className="form-label fw-semibold">
                     Report Name <span className="text-center">*</span>
                   </label>
@@ -708,6 +709,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     </div>
                   </div>
                 </div>
+
               </div>
             ))}
 
@@ -725,6 +727,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         </div>
       </ContentContainer>
 
+
+
+
       <div className="d-flex justify-content-end gap-3 mt-4">
         {/* Previous Button */}
         <button
@@ -736,6 +741,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         </button>
 
         {/* Next Button */}
+
         <button
           className="all-btn-color text-white d-flex align-items-center gap-2 px-4 py-2 rounded-3"
           onClick={ handleSaveChnage}

@@ -209,6 +209,11 @@
     border-color: var(--color-icon-border) !important;
 }
 
+.my-custom-icon {
+    color: var(--color-icon-border) !important;
+  /* or other filter or styles */
+}
+
 .card-feild {
     color: var(--color-radio-lable) !important;
     font-weight: 600;
@@ -230,7 +235,7 @@
 .about-text {
     color: var(--color-radio-lable) !important;
     font-weight: 400;
-    font-size: 16px !important;
+    font-size: 14px !important;
 }
 
 .check-box input[type="checkbox"] {
