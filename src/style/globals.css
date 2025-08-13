@@ -77,3 +77,13 @@ body {
   font-size: 14px;
   font-weight: 500;
 }
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+.patient-detail-page .overflow-auto {
+    scrollbar-width: none; /* Firefox */
+}
+.patient-detail-page .overflow-auto::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
