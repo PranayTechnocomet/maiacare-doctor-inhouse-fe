@@ -18,7 +18,7 @@ interface NotificationItem {
   image: string;
 }
 
-const notifications: NotificationItem[] = [  
+const notifications: NotificationItem[] = [
   {
     title: "Dolo 650 Low Stock",
     description: "Important updates and system-wide notifications.",
@@ -122,7 +122,7 @@ const NotificationScreen: React.FC = () => {
               <div>
                 <div className="notification-title">{n.title}</div>
                 <div className="notification-description">{n.description}</div>
-              </div>    
+              </div>
             </div>
             <div className="notification-time ms-3">{n.time}</div>
           </div>
