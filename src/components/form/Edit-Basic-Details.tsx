@@ -35,6 +35,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   ]);
 
 
+  
   type FormData = {
     Name: string;
     Speciality: string;
@@ -57,7 +58,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     Timer: string;
   };
 
-
   const initialFormData: FormData = {
     Name: "",
     Speciality: "",
@@ -79,7 +79,20 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     Time: "",
     Timer: "",
   };
+
+
+type Qualification = {
+  degree: string;
+  field: string;
+  university: string;
+  startYear: string;
+  endYear: string;
+};
+
+
   const [formData, setFormData] = useState<FormData>(initialFormData);
+
+
 
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
@@ -297,9 +310,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
                       <div className="text-center" style={{ cursor: "pointer" }}>
                         {/* Camera button */}
-                          <Image src={Camera} alt="Take Photo" width={18} height={18} onClick={openCamera}/>
-                          <div className="small">Take Photo</div>
-                    
+                        <Image src={Camera} alt="Take Photo" width={18} height={18} onClick={openCamera} />
+                        <div className="small">Take Photo</div>
+
                         {/* Hidden input for camera */}
                         <input
                           type="file"
@@ -339,6 +352,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
         <div>
           <Row className="mb-3">
+
+
             <Col>
               <InputFieldGroup
                 label="Name"
@@ -347,6 +362,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.Name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Name: e.target.value });
+                  if (formError.Name) {   // typing in hide error 
+                    setFormError({ ...formError, Name: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Name"
@@ -357,6 +375,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="position-relative">
               </InputFieldGroup>
             </Col>
+
+
           </Row>
 
           <Row className="mb-3">
@@ -368,6 +388,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.Speciality}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Speciality: e.target.value });
+                  if (formError.Speciality) {   // typing in hide error 
+                    setFormError({ ...formError, Speciality: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Speciality"
@@ -388,6 +411,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.Experience}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Experience: e.target.value });
+                  if (formError.Experience) {   // typing in hide error 
+                    setFormError({ ...formError, Experience: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Year Of Experience"
@@ -408,6 +434,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.date}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   handleChange(e);
+                  if (formError.date) {   // typing in hide error 
+                    setFormError({ ...formError, date: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 required={true}
@@ -422,7 +451,12 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 name="gender"
                 value={formData.gender}
                 // defaultValue="female"
-                onChange={(e) => handleChange(e)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleChange(e)
+                  if (formError.gender) {   // typing in hide error 
+                    setFormError({ ...formError, gender: "" });
+                  }
+                }}
                 error={formError.gender}
                 required
                 options={[
@@ -442,6 +476,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.Contact}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Contact: e.target.value });
+                  if (formError.Contact) {   // typing in hide error 
+                    setFormError({ ...formError, Contact: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder=" +91 12345 67890"
@@ -461,6 +498,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.Email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Email: e.target.value });
+                  if (formError.Email) {   // typing in hide error 
+                    setFormError({ ...formError, Email: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Email"
@@ -482,6 +522,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 value={formData.About}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                   handleChange(e);
+                  if (formError.About) {   // typing in hide error 
+                    setFormError({ ...formError, About: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => { }}
                 placeholder="About"
@@ -495,10 +538,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           </Row>
         </div>
       </ContentContainer>
-
-
-
-
 
 
 
@@ -538,10 +577,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     type="text"
                     value={q.degree}
                     onChange={(e) => {
-                         setFormData({ ...formData, degree: e.target.value });
+                      setFormData({ ...formData, degree: e.target.value });
                       const updated = [...qualifications];
                       updated[index].degree = e.target.value;
                       setQualifications(updated);
+                      if (formError.degree) {   // typing in hide error 
+                        setFormError({ ...formError, degree: "" });
+                      }
                     }}
                     placeholder="Degree"
                     required
@@ -556,10 +598,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     type="text"
                     value={q.field}
                     onChange={(e) => {
-                                setFormData({ ...formData, field: e.target.value });
+                      setFormData({ ...formData, field: e.target.value });
                       const updated = [...qualifications];
                       updated[index].field = e.target.value;
                       setQualifications(updated);
+                      if (formError.field) {   // typing in hide error 
+                        setFormError({ ...formError, field: "" });
+                      }
                     }}
                     placeholder="Field"
                     required
@@ -576,10 +621,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     type="text"
                     value={q.university}
                     onChange={(e) => {
-                          setFormData({ ...formData, university: e.target.value });
+                      setFormData({ ...formData, university: e.target.value });
                       const updated = [...qualifications];
                       updated[index].university = e.target.value;
                       setQualifications(updated);
+                      if (formError.university) {   // typing in hide error 
+                        setFormError({ ...formError, university: "" });
+                      }
                     }}
                     placeholder="University"
                     required
@@ -599,6 +647,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       const updated = [...qualifications];
                       updated[index].startYear = e.target.value;
                       setQualifications(updated);
+                      if (formError.startYear) {   // typing in hide error 
+                        setFormError({ ...formError, startYear: "" });
+                      }
                     }}
                     options={yearOptions}
                     error={formError.startYear}
@@ -612,10 +663,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     name="endYear"
                     value={q.endYear}
                     onChange={(e) => {
-                       setFormData({ ...formData, endYear: e.target.value });
+                      setFormData({ ...formData, endYear: e.target.value });
                       const updated = [...qualifications];
                       updated[index].endYear = e.target.value;
                       setQualifications(updated);
+                      if (formError.endYear) {   // typing in hide error 
+                        setFormError({ ...formError, endYear: "" });
+                      }
                     }}
                     options={yearOptions}
                     error={formError.endYear}
@@ -637,6 +691,55 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       </ContentContainer>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <ContentContainer className="mt-4">
         <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
           <h5 className="profile-card-main-titile mb-2 mb-md-0">
@@ -650,30 +753,39 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
         </div>
 
         <Row className="mb-3">
+
           <Col md={6}>
             <TimePickerFieldGroup
               label="Monday-Friday"
               name="MF"
               value={formData.MF}
-              onChange={(e) =>
-                setFormData({ ...formData, MF: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({ ...formData, MF: e.target.value });
+
+                if (formError.MF) {
+                  setFormError({ ...formError, MF: "" });
+                }
+              }}
+
               required
               error={formError?.MF}
             />
 
           </Col>
+
+
           <Col md={6} className="mt-2 ">
             <TimePickerFieldGroup
               name="Time"
               value={formData.Time}
-              onChange={(e) =>
-                setFormData({ ...formData, Time: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({ ...formData, Time: e.target.value });
+                if (formError.Time) {
+                  setFormError({ ...formError, Time: "" });
+                }
+              }}
               error={formError?.Time}
             />
-
-
           </Col>
         </Row>
 
@@ -683,9 +795,12 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               label="Monday-Friday"
               name="SS"
               value={formData.SS}
-              onChange={(e) =>
+              onChange={(e) =>{
                 setFormData({ ...formData, SS: e.target.value })
-              }
+                  if (formError.Time) {
+                  setFormError({ ...formError, Time: "" });
+                }
+              }}
               required
               error={formError?.SS}
             />
@@ -704,6 +819,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           </Col>
         </Row>
       </ContentContainer>
+
+
+
 
 
       <div className="d-flex justify-content-end mt-4">
