@@ -27,7 +27,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
   }
   const initialFormError: FormError = {};
-     const router = useRouter();
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
   const [completedFiles, setCompletedFiles] = useState<UploadedFile[]>([]);
@@ -60,20 +60,24 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     const errors: FormError = {};
 
     if (!data.Adcard.trim()) errors.Adcard = "Adcard is required";
+    if (!data.Adcard) errors.Adphoto = "Aadhar card photo is required";
+    if (!data.Pancard) errors.Panphoto = "Pancard photo is required";
     if (!data.Pancard.trim()) errors.Pancard = "Pancard is required";
     // if (!data.Experience.trim()) errors.Experience = "Experience is required";
     if (!data.LicNumber.trim()) errors.LicNumber = "LicNumber is required";
+    if (!data.LicNumber) errors.Licphoto = "Licence photo is required";
+
     return errors;
   };
 
   const handleSaveChnage = () => {
-  
+
     const errors = validateForm(formData);
     setFormError(errors);
 
     if (Object.keys(errors).length === 0) {
       console.log("✅ Form is valid, go to next step");
-   router.push("/profile");  //navigate for profile screen  
+      router.push("/profile");  //navigate for profile screen  
       // onNext(); // navigate to next tab or page
     } else {
       console.log("❌ Form has errors:", errors);
@@ -90,6 +94,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         day: "2-digit",
         month: "short",
         year: "numeric",
+
       });
       const fileURL = URL.createObjectURL(file);
 
@@ -104,6 +109,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       };
 
       setAadharFile(newFile);
+      setFormError((prev) => ({ ...prev, Adphoto: "" }));
     }
   };
 
@@ -130,6 +136,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       };
 
       setPanFile(newFile);
+      setFormError((prev) => ({ ...prev, Panphoto: "" }));
     }
   };
 
@@ -155,6 +162,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       };
 
       setLicenceFile(newFile);
+      setFormError((prev) => ({ ...prev, Licphoto: "" }));
     }
   };
 
@@ -173,7 +181,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   }
 
 
-  
+
   // Add Button click in modal open //
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([
     {
@@ -281,6 +289,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 value={formData.Adcard}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Adcard: e.target.value });
+                  if (formError.Adcard) {  // msg type validtation msg hide 
+                    setFormError({ ...formError, Adcard: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Aadhar Number"
@@ -301,6 +312,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 value={formData.Pancard}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Pancard: e.target.value });
+                  if (formError.Pancard) {  // msg type validtation msg hide 
+                    setFormError({ ...formError, Pancard: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Pan Card Number"
@@ -343,9 +357,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         <div className="card-feild">Aadhar Card</div>
                         <div className="kyc-details">{aadharFile.name}</div>
                         <div className="card-year">
-                          {aadharFile.size} - {aadharFile.date} 
-                          
-                          
+                          {aadharFile.size} - {aadharFile.date}
+
+
                         </div>
                       </div>
 
@@ -370,6 +384,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       <span className="about-text">Add Aadhar Card Photo</span>
                     </div>
                   )}
+
                 </div>
 
                 {/* Hidden file input */}
@@ -381,6 +396,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   onChange={handleAadharFileChange}
                 />
               </Form.Group>
+              {formError?.Adphoto && (
+                <div className="text-danger small mt-1">{formError.Adphoto}</div>
+              )}
             </Col>
 
             <Col md={6} sm={12}>
@@ -388,6 +406,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 <Form.Label className="maiacare-input-field-label">
                   Pan Card Photo <span className="text-danger">*</span>
                 </Form.Label>
+
 
                 <div
                   className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
@@ -435,6 +454,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       <span className="about-text">Add Pan Card Photo</span>
                     </div>
                   )}
+
                 </div>
 
                 {/* Hidden file input */}
@@ -446,12 +466,16 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   onChange={handlePanFileChange}
                 />
               </Form.Group>
+              {formError?.Panphoto && (
+                <div className="text-danger small mt-1">{formError.Panphoto}</div>
+              )}
+
             </Col>
 
           </Row>
 
 
-          {/* Licence Number */}  
+          {/* Licence Number */}
           <Row className="mb-3">
             <Col md={6} sm={12}>
               <InputFieldGroup
@@ -461,6 +485,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 value={formData.LicNumber}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, LicNumber: e.target.value });
+                  if (formError.LicNumber) {  // msg type validtation msg hide 
+                    setFormError({ ...formError, LicNumber: "" });
+                  }
                 }}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Licence Number"
@@ -539,11 +566,21 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   onChange={handleLicenceFileChange}
                 />
               </Form.Group>
+              {formError?.Licphoto && (
+                <div className="text-danger small mt-1">{formError.Licphoto}</div>
+              )}
+
             </Col>
 
           </Row>
         </div>
       </ContentContainer>
+
+
+
+
+
+
 
 
 
@@ -606,7 +643,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               style={{ width: "130px", height: "130px", cursor: "pointer" }} // same size as uploaded files
               onClick={handleOpenModal}
             >
-              <Image src={Pluslight} alt="add" width={65} className="my-custom-icon"/>
+              <Image src={Pluslight} alt="add" width={65} className="my-custom-icon" />
               <span className="about-text">Add New File</span>
             </div>
           </div>
@@ -656,7 +693,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                             </>
                           ) : (
                             <>
-                              <Image src={Completed} alt="completed" width={20} height={20}/> Completed
+                              <Image src={Completed} alt="completed" width={20} height={20} /> Completed
                             </>
                           )}
                         </div>
@@ -723,7 +760,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               </Button>
             </div>
           </Modal>
-          
+
         </div>
       </ContentContainer>
 
@@ -744,7 +781,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
         <button
           className="all-btn-color text-white d-flex align-items-center gap-2 px-4 py-2 rounded-3"
-          onClick={ handleSaveChnage}
+          onClick={handleSaveChnage}
         >
           Save Changes
         </button>
