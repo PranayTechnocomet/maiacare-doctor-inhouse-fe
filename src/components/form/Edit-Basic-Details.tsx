@@ -683,7 +683,7 @@ type Qualification = {
 
         <Button
           variant="dark"
-          className="px-4 py-2 all-btn-color"
+          className="maiacare-button"
           onClick={handleAddQualification}
         >
           + Add Qualification
@@ -827,7 +827,7 @@ type Qualification = {
       <div className="d-flex justify-content-end mt-4">
         <Button
           variant="dark"
-          className="d-flex align-items-center gap-2 px-4 py-2 rounded-2 all-btn-color"
+          className="maiacare-button"
           onClick={handleNextClick} // 👈 aa mukvu pade
         >
           Next <ArrowRight size={16} />

@@ -111,13 +111,24 @@ export const consultationData: ConsultationEntry[] = [
 
 
 import { ColumnDef } from '@tanstack/react-table';
-import { LeaveEntry } from "../utils/types/interfaces";
+// import { LeaveEntry } from "../utils/types/interfaces";
 import Trash from "../assets/images/Trash.png";
 import LightEditimg from "../assets/images/LightEditimg.png";
 import Image from 'next/image';
 import { Patient } from "./types/interfaces";
 
-export const leaveData: LeaveEntry[] = [
+
+
+
+export type LeaveEntry = {
+  id: string;
+  type: string;
+  startDate: string;
+  endDate: string;
+  days: string;
+};
+
+export const leaveData: LeaveEntry [] = [
   {
     id: '01',
     type: 'Casual leave',
@@ -197,19 +208,20 @@ export const leaveColumns: ColumnDef<LeaveEntry>[] = [
     header: 'No. of days',
     accessorKey: 'days',
   },
-  {
-    header: 'Action',
-    cell: () => (
-      <div className="d-flex gap-2">
-        <button className="btn btn-sm profile-card-boeder ">
-          <Image src={LightEditimg} alt="Specialization" width={18} height={20} />
-        </button>
-        <button className="btn btn-sm profile-card-boeder">
-          <Image src={Trash} alt="Specialization" width={18} height={20} />
-        </button>
-      </div>
-    ),
-  },
+  // {
+  //   header: 'Action',
+  //   cell: () => (
+  //     <div className="d-flex gap-2">
+  //       <button className="btn btn-sm profile-card-boeder ">
+  //         <Image src={LightEditimg} alt="Specialization" width={18} height={20} />
+  //       </button>
+        
+  //       <button className="btn btn-sm profile-card-boeder">
+  //         <Image src={Trash} alt="Specialization" width={18} height={20} />
+  //       </button>
+  //     </div>
+  //   ),
+  // },
 ];
 
 export const tableResponse: Patient[] = [
