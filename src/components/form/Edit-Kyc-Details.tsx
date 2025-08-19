@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { Row, Col, Form, Button, ProgressBar } from "react-bootstrap";
+import { Row, Col, Form, Button, ProgressBar, Toast } from "react-bootstrap";
 import Jpgimg from "../../assets/images/Jpgimg.png";
 import ContentContainer from "../ui/ContentContainer";
 import { InputFieldGroup } from "../ui/InputField";
@@ -735,7 +735,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       }
                     />
                     <div
-                      className="d-flex align-items-center justify-content-center border rounded-3rounded-3 p-2 bg-white"
+                      className="d-flex align-items-center justify-content-center border rounded-3 p-2 bg-white"
                       style={{ width: '42px', height: '42px' }}
                     >
                       {file.status === 'completed' ? (
@@ -755,7 +755,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               <Button variant="btn-border border" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button className="all-btn-color" onClick={handleSave}>
+              <Button className=" maiacare-button" onClick={handleSave}>
                 Save
               </Button>
             </div>
@@ -770,7 +770,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       <div className="d-flex justify-content-end gap-3 mt-4">
         {/* Previous Button */}
         <button
-          className="btn-border border   d-flex align-items-center gap-2 px-4 py-2 rounded-3"
+          className="btn-border border d-flex align-items-center gap-2 px-4 py-2 rounded-3"
           onClick={onPrevious}
         >
           <ArrowLeft size={16} />
@@ -778,15 +778,18 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         </button>
 
         {/* Next Button */}
-
+        {/* 
         <button
           className="all-btn-color text-white d-flex align-items-center gap-2 px-4 py-2 rounded-3"
           onClick={handleSaveChnage}
         >
           Save Changes
-        </button>
+        </button> */}
 
 
+        <Button variant="default" disabled={false} type="submit" className=" maiacare-button"  onClick={handleSaveChnage}>
+        Save Changes 
+        </Button>
 
       </div>
 

@@ -9,13 +9,6 @@ export interface User {
 
 // interfaces.ts
 
-export interface LeaveEntry {
-  id: string;
-  type: string;
-  startDate: string;
-  endDate: string;
-  days: string;
-}
   export interface Patient {
     id: number;
     name: string;

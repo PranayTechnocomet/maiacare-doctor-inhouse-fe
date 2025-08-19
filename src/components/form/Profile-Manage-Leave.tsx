@@ -1,12 +1,50 @@
-import React from 'react';
-import { Container, Button} from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Button } from 'react-bootstrap';
 import BookCalendar from "../../assets/images/BookCalendar.png";
 import Image from 'next/image';
-import { leaveData, leaveColumns } from "@/utils/StaticData";
+import {
+  leaveData as defaultLeaveData,
+  leaveColumns as defaultLeaveColumns,
+  LeaveEntry,
+} from "@/utils/StaticData";
 import BaseTable from "@/components/ui/BaseTable";
-
+import Trash from "../../assets/images/Trash.png";
+import LightEditimg from "../../assets/images/LightEditimg.png";
 
 const ManageLeave = () => {
+
+  const [leaveData, setLeaveData] = useState<LeaveEntry[]>(defaultLeaveData);
+
+  // delete function
+  const handleDelete = (id: string) => {
+    const updated = leaveData.filter((item) => item.id !== id);
+    setLeaveData(updated);
+  };
+
+
+  const leaveColumns = [
+    ...defaultLeaveColumns,
+    {
+      header: "Action",
+      cell: ({ row }: any) => (
+        <div className="d-flex gap-2">
+          {/* Edit Button */}
+          <button className="btn btn-sm profile-card-boeder">
+            <Image src={LightEditimg} alt="Edit" width={18} height={20} />
+          </button>
+
+          {/* Delete Button */}
+          <button
+            className="btn btn-sm profile-card-boeder"
+            onClick={() => handleDelete(row.original.id)}
+          >
+            <Image src={Trash} alt="Delete" width={18} height={20} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <Container fluid className="mt-3">
       <div className="mt-4">
@@ -23,7 +61,7 @@ const ManageLeave = () => {
                 </Button>
               </div>
 
-              <Button className="d-flex align-items-center gap-2 px-2 all-btn-color">
+              <Button className="d-flex align-items-center gap-2 px-2 maiacare-button">
                 <Image src={BookCalendar} alt="Specialization" width={22} height={22} />
                 Block Calendar
               </Button>
@@ -31,7 +69,7 @@ const ManageLeave = () => {
           </div>
 
           {/* Table Section */}
-          <div className="mt-4 ">
+          <div className="mt-4">
             <BaseTable data={leaveData} columns={leaveColumns} />
           </div>
 

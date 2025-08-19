@@ -20,27 +20,27 @@ const ProfileBasicDetails = () => {
   const [activeTab,] = useState('basic');
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [qualifications,] = useState([
+  const [qualifications, setQualifications] = useState([
     { title: 'MD Gynaecology', university: 'Medical University', years: '2015 - 2017' },
     { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
   ]);
 
 
 
-type FormData = {
-  MF: string;
-  SS: string;
-  Time: string;
-  Timer: string;
-};
+  type FormData = {
+    MF: string;
+    SS: string;
+    Time: string;
+    Timer: string;
+  };
 
-const initialFormData: FormData = {
+  const initialFormData: FormData = {
     MF: "",
     SS: "",
     Time: "",
     Timer: "",
-};
-const [formData, setFormData] = useState<FormData>(initialFormData);
+  };
+  const [formData, setFormData] = useState<FormData>(initialFormData);
 
 
 
@@ -50,6 +50,20 @@ const [formData, setFormData] = useState<FormData>(initialFormData);
     { name: 'License.pdf', date: 'October 20, 2024' },
     { name: 'Certificate.pdf', date: 'October 20, 2024' },
   ];
+
+  const handleDelete = (index: number) => {
+    const updated = qualifications.filter((_, i) => i !== index);
+    setQualifications(updated);
+  };
+
+  const handleDownload = (url: string, name: string) => {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = name; // 👈 download name set
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
 
   return (
@@ -70,28 +84,39 @@ const [formData, setFormData] = useState<FormData>(initialFormData);
                   </Button>
                 </div>
 
-                {qualifications.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="d-flex justify-content-between align-items-center p-3 mb-3 bg-white border rounded-4 shadow-sm profile-card-boeder"
-                  >
-                    <div>
-                      <div className="card-feild">{item.title}</div>
-                      <div className="card-university-text">{item.university}</div>
-                      <div className="card-year">{item.years}</div>
-                    </div>
-
-                    <div className="d-flex gap-2">
-                      <Button variant="light" className="border p-2 rounded-3">
-                        <Image src={LightEditimg} alt="Specialization" width={22} height={22} />
-                      </Button>
-
-                      <Button variant="light" className="border p-2 rounded-3 ">
-                        <Image src={Delete} alt="Specialization" width={22} height={22} />
-                      </Button>
-                    </div>
+                {qualifications.length === 0 ? (
+                  <div className="text-center text-muted p-4 border rounded-4 shadow-sm">
+                    Data not found
                   </div>
-                ))}
+                ) : (
+                  qualifications.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="d-flex justify-content-between align-items-center p-3 mb-3 bg-white border rounded-4 shadow-sm profile-card-boeder"
+                    >
+                      <div>
+                        <div className="card-feild">{item.title}</div>
+                        <div className="card-university-text">{item.university}</div>
+                        <div className="card-year">{item.years}</div>
+                      </div>
+
+                      <div className="d-flex gap-2">
+                        <Button variant="light" className="border p-2 rounded-3">
+                          <Image src={LightEditimg} alt="Specialization" width={22} height={22} />
+                        </Button>
+
+                        <Button
+                          variant="light"
+                          className="border p-2 rounded-3"
+                          onClick={() => handleDelete(idx)} // 👈 click par delete
+                        >
+                          <Image src={Delete} alt="Specialization" width={22} height={22} />
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                )}
+
               </ContentContainer>
             </div>
 
@@ -144,7 +169,7 @@ const [formData, setFormData] = useState<FormData>(initialFormData);
                 <Row>
                   <Col md={6}>
                     <TimePickerFieldGroup
-                     label="Monday-Friday"
+                      label="Monday-Friday"
                       name="SS"
                       value={formData.SS}
                       onChange={(e) =>
@@ -157,7 +182,7 @@ const [formData, setFormData] = useState<FormData>(initialFormData);
                   </Col>
 
                   <Col md={6} className="mt-2">
-                     <TimePickerFieldGroup
+                    <TimePickerFieldGroup
                       name="Timer"
                       value={formData.Timer}
                       onChange={(e) =>
@@ -194,7 +219,7 @@ const [formData, setFormData] = useState<FormData>(initialFormData);
 
                   {documents.map((doc, index) => (
                     <div
-                      className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3  document-main-border"
+                      className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border"
                       key={index}
                     >
                       <div className="d-flex align-items-center">
@@ -212,6 +237,8 @@ const [formData, setFormData] = useState<FormData>(initialFormData);
 
                       <button
                         className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded  Download-border"
+                        onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}
+
                       >
                         <Image src={Download} alt="experience" width={25} height={25} />
                       </button>
