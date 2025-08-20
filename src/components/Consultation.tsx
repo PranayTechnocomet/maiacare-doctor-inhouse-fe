@@ -41,6 +41,24 @@ export default function Consultation() {
 
     const [filteredData, setFilteredData] = useState(consultationData);
 
+    // const [leaveData, setLeaveData] = useState<LeaveEntry[]>(defaultLeaveData);
+    const handleDownload = (url: string, name: string) => {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+
+    // delete function
+    const handleDelete = (id: number) => {
+        const updated = filteredData.filter((item) => item.id !== id);
+        setFilteredData(updated);
+    };
+
+
     useEffect(() => {
         if (filter === "completed") {
             setFilteredData(consultationData.filter(item => item.status === "Completed"));
@@ -115,17 +133,28 @@ export default function Consultation() {
         },
         {
             header: "Actions",
-            cell: () => (
-                <div className="text-center d-flex">
-                    <Button size="sm" className="me-2 border bg-white">
-                        <LuArrowDown className="arrow-down" />
-                    </Button>
-                    <Button className="border bg-white" size="sm">
-                        <LuTrash2 className="trash" />
-                    </Button>
-                </div>
-            ),
-        },
+            cell: (info) => {
+                const id = info.row.original.id; // <-- use id directly
+                return (
+                    <div className="text-center d-flex">
+                        <Button
+                            size="sm"
+                            className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border me-2"
+                            onClick={() => handleDownload(`/files/${name}.pdf`, `${name}.pdf`)}
+                        >
+                            <LuArrowDown className="arrow-down" />
+                        </Button>
+                        <Button
+                            size="sm"
+                            className="btn btn-sm profile-card-boeder border bg-white"
+                            onClick={() => handleDelete(id)} // <-- pass id
+                        >
+                            <LuTrash2 className="trash" />
+                        </Button>
+                    </div>
+                );
+            },
+        }
     ];
 
     return (

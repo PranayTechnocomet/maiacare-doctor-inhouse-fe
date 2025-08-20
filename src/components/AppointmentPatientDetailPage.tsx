@@ -110,13 +110,13 @@ export default function AppointmentPatientDetailPage() {
                     tabOptions={tabOptions}
                 />
                 {activeTab === 'basic' && (
-                    <div>
+                    <div className="mt-2">
                         ProfileBasicDetails
                     </div>
                 )}
 
                 {activeTab === 'Details' && (
-                    <div>
+                    <div className="mt-2">
                         ProfileManageLeave
                     </div>
                 )}
