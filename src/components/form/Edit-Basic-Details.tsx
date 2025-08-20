@@ -34,8 +34,11 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     { degree: "", field: "", university: "", startYear: "", endYear: "" }
   ]);
 
+  const [formErrors, setFormErrors] = useState([
+    { degree: "", field: "", university: "", startYear: "", endYear: "" },
+  ]);
 
-  
+
   type FormData = {
     Name: string;
     Speciality: string;
@@ -81,18 +84,19 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   };
 
 
-type Qualification = {
-  degree: string;
-  field: string;
-  university: string;
-  startYear: string;
-  endYear: string;
-};
+  type Qualification = {
+    degree: string;
+    field: string;
+    university: string;
+    startYear: string;
+    endYear: string;
+  };
 
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
 
 
+  // All Validatation  
 
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
@@ -128,23 +132,60 @@ type Qualification = {
     if (!data.startYear.trim()) errors.startYear = "Start year is required";
     if (!data.endYear.trim()) errors.endYear = "End year is required";
 
-    if (!data.MF.trim()) errors.MF = "Start time is required";
-    if (!data.SS.trim()) errors.SS = "Start time required";
-    if (!data.Time.trim()) errors.Time = "End Time is required";
-    if (!data.Timer.trim()) errors.Timer = "End Time is required";
+    // if (!data.MF.trim()) errors.MF = "Start time is required";
+    // if (!data.SS.trim()) errors.SS = "Start time required";
+    // if (!data.Time.trim()) errors.Time = "End Time is required";
+    // if (!data.Timer.trim()) errors.Timer = "End Time is required";
 
     return errors;
   };
 
+
+  // Add Qualifications validtation  
+  const validateForm1 = (quals: typeof qualifications) => {
+    const errors = quals.map((q) => ({
+      degree: !q.degree ? "Degree is required" : "",
+      field: !q.field ? "Field is required" : "",
+      university: !q.university ? "University is required" : "",
+      startYear: !q.startYear ? "Start Year is required" : "",
+      endYear: !q.endYear ? "End Year is required" : "",
+    }));
+    return errors;
+  };
+
+
+
+
+  // const handleNextClick = () => {
+  //   const errors = validateForm(formData);
+  //   setFormError(errors);
+  //   if (Object.keys(errors).length === 0) {
+  //     onNext();
+  //   } else {
+  //     console.log("Form has errors:", errors);
+  //   }
+  // };
+
+
   const handleNextClick = () => {
-    const errors = validateForm(formData);
+    const errors = validateForm(formData);    // single form errors All 
+    const qualErrors = validateForm1(qualifications); // qualifications errors
+
     setFormError(errors);
-    if (Object.keys(errors).length === 0) {
+    setFormErrors(qualErrors); // 👈 new state for qualifications
+
+    const hasQualError = qualErrors.some((err) =>
+      Object.values(err).some((msg) => msg !== "")
+    );
+
+    if (Object.keys(errors).length === 0 && !hasQualError) {
       onNext();
     } else {
-      console.log("Form has errors:", errors);
+      console.log("Form has errors:", { errors, qualErrors });
     }
   };
+
+
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -168,7 +209,13 @@ type Qualification = {
       ...qualifications,
       { degree: "", field: "", university: "", startYear: "", endYear: "" }
     ]);
+    setFormErrors([
+      ...formErrors,
+      { degree: "", field: "", university: "", startYear: "", endYear: "" },
+    ]);
   };
+
+
 
   const yearOptions = Array.from({ length: 31 }, (_, i) => {
     const year = 2000 + i;
@@ -331,7 +378,7 @@ type Qualification = {
                         <Image src={Trash} alt="Trash" width={22} height={22} />
                       </button>
 
-                      <button className="btn px-4 py-2 all-btn-color" onClick={handleSave}>
+                      <button className="btn px-4 py-2 maiacare-button" onClick={handleSave}>
                         Save
                       </button>
                     </div>
@@ -541,25 +588,24 @@ type Qualification = {
 
 
 
-
-
-
       <ContentContainer className="mt-4">
         <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
 
         {qualifications.map((q, index) => (
           <div key={index} className="position-relative mb-4">
-
-            {/* Remove Button - Show only for added qualifications */}
+            {/* Remove Button */}
             {index > 0 && (
               <div className="d-flex justify-content-end mb-1">
                 <Button
                   variant="danger"
-                  className="d-flex align-items-center justify-content-center custom-remove-btn"
                   size="sm"
+                  className="d-flex align-items-center justify-content-center"
+                  style={{ width: "32px", height: "32px", padding: 0 }}
                   onClick={() => {
-                    const updated = qualifications.filter((_, i) => i !== index);
-                    setQualifications(updated);
+                    const updatedQuals = qualifications.filter((_, i) => i !== index);
+                    const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
+                    setQualifications(updatedQuals);
+                    setFormErrors(updatedErrors);
                   }}
                 >
                   -
@@ -577,17 +623,18 @@ type Qualification = {
                     type="text"
                     value={q.degree}
                     onChange={(e) => {
-                      setFormData({ ...formData, degree: e.target.value });
-                      const updated = [...qualifications];
-                      updated[index].degree = e.target.value;
-                      setQualifications(updated);
-                      if (formError.degree) {   // typing in hide error 
-                        setFormError({ ...formError, degree: "" });
-                      }
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].degree = e.target.value;
+                      setQualifications(updatedQuals);
+
+                      // clear error only for this field/index
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].degree = "";
+                      setFormErrors(updatedErrors);
                     }}
                     placeholder="Degree"
                     required
-                    error={formError.degree}
+                    error={formErrors[index]?.degree}
                   />
                 </Col>
 
@@ -598,17 +645,17 @@ type Qualification = {
                     type="text"
                     value={q.field}
                     onChange={(e) => {
-                      setFormData({ ...formData, field: e.target.value });
-                      const updated = [...qualifications];
-                      updated[index].field = e.target.value;
-                      setQualifications(updated);
-                      if (formError.field) {   // typing in hide error 
-                        setFormError({ ...formError, field: "" });
-                      }
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].field = e.target.value;
+                      setQualifications(updatedQuals);
+
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].field = "";
+                      setFormErrors(updatedErrors);
                     }}
                     placeholder="Field"
                     required
-                    error={formError.field}
+                    error={formErrors[index]?.field}
                   />
                 </Col>
               </Row>
@@ -621,17 +668,17 @@ type Qualification = {
                     type="text"
                     value={q.university}
                     onChange={(e) => {
-                      setFormData({ ...formData, university: e.target.value });
-                      const updated = [...qualifications];
-                      updated[index].university = e.target.value;
-                      setQualifications(updated);
-                      if (formError.university) {   // typing in hide error 
-                        setFormError({ ...formError, university: "" });
-                      }
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].university = e.target.value;
+                      setQualifications(updatedQuals);
+
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].university = "";
+                      setFormErrors(updatedErrors);
                     }}
                     placeholder="University"
                     required
-                    error={formError.university}
+                    error={formErrors[index]?.university}
                   />
                 </Col>
               </Row>
@@ -643,16 +690,16 @@ type Qualification = {
                     name="startYear"
                     value={q.startYear}
                     onChange={(e) => {
-                      setFormData({ ...formData, startYear: e.target.value });
-                      const updated = [...qualifications];
-                      updated[index].startYear = e.target.value;
-                      setQualifications(updated);
-                      if (formError.startYear) {   // typing in hide error 
-                        setFormError({ ...formError, startYear: "" });
-                      }
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].startYear = e.target.value;
+                      setQualifications(updatedQuals);
+
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].startYear = "";
+                      setFormErrors(updatedErrors);
                     }}
                     options={yearOptions}
-                    error={formError.startYear}
+                    error={formErrors[index]?.startYear}
                     required
                   />
                 </Col>
@@ -663,16 +710,16 @@ type Qualification = {
                     name="endYear"
                     value={q.endYear}
                     onChange={(e) => {
-                      setFormData({ ...formData, endYear: e.target.value });
-                      const updated = [...qualifications];
-                      updated[index].endYear = e.target.value;
-                      setQualifications(updated);
-                      if (formError.endYear) {   // typing in hide error 
-                        setFormError({ ...formError, endYear: "" });
-                      }
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].endYear = e.target.value;
+                      setQualifications(updatedQuals);
+
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].endYear = "";
+                      setFormErrors(updatedErrors);
                     }}
                     options={yearOptions}
-                    error={formError.endYear}
+                    error={formErrors[index]?.endYear}
                     required
                   />
                 </Col>
@@ -680,6 +727,7 @@ type Qualification = {
             </div>
           </div>
         ))}
+
 
         <Button
           variant="dark"
@@ -689,14 +737,6 @@ type Qualification = {
           + Add Qualification
         </Button>
       </ContentContainer>
-
-
-
-
-
-
-
-
 
 
 
@@ -753,7 +793,6 @@ type Qualification = {
         </div>
 
         <Row className="mb-3">
-
           <Col md={6}>
             <TimePickerFieldGroup
               label="Monday-Friday"
@@ -761,18 +800,9 @@ type Qualification = {
               value={formData.MF}
               onChange={(e) => {
                 setFormData({ ...formData, MF: e.target.value });
-
-                if (formError.MF) {
-                  setFormError({ ...formError, MF: "" });
-                }
               }}
-
-              required
-              error={formError?.MF}
             />
-
           </Col>
-
 
           <Col md={6} className="mt-2 ">
             <TimePickerFieldGroup
@@ -780,11 +810,7 @@ type Qualification = {
               value={formData.Time}
               onChange={(e) => {
                 setFormData({ ...formData, Time: e.target.value });
-                if (formError.Time) {
-                  setFormError({ ...formError, Time: "" });
-                }
               }}
-              error={formError?.Time}
             />
           </Col>
         </Row>
@@ -792,17 +818,12 @@ type Qualification = {
         <Row className="mb-3">
           <Col md={6}>
             <TimePickerFieldGroup
-              label="Monday-Friday"
+              label="Saturday-Sunday"
               name="SS"
               value={formData.SS}
-              onChange={(e) =>{
-                setFormData({ ...formData, SS: e.target.value })
-                  if (formError.Time) {
-                  setFormError({ ...formError, Time: "" });
-                }
+              onChange={(e) => {
+                setFormData({ ...formData, SS: e.target.value });
               }}
-              required
-              error={formError?.SS}
             />
           </Col>
 
@@ -810,12 +831,10 @@ type Qualification = {
             <TimePickerFieldGroup
               name="Timer"
               value={formData.Timer}
-              onChange={(e) =>
-                setFormData({ ...formData, Timer: e.target.value })
-              }
-              error={formError?.Timer}
+              onChange={(e) => {
+                setFormData({ ...formData, Timer: e.target.value });
+              }}
             />
-
           </Col>
         </Row>
       </ContentContainer>
