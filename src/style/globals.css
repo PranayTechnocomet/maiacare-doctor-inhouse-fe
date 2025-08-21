@@ -87,3 +87,10 @@ body::-webkit-scrollbar {
 .patient-detail-page .overflow-auto::-webkit-scrollbar {
     display: none; /* Chrome, Safari */
 }
+.Assign-button {
+  background-color: #2B4360 !important;
+  border-color: #2B4360 !important;
+  width: 108px;
+  height: 32px;
+  border-radius: 8px;
+}

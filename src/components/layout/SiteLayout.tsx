@@ -18,6 +18,7 @@ import Maia from "../../assets/images/maia.png";
 import UserProfileIcon from "../../assets/images/user-icon.png";
 import { useSelector } from "react-redux";
 import { RootState } from "@/utils/redux/store";
+import { FaBoxesStacked } from "react-icons/fa6";
 
 interface Props {
   collapsed: boolean;
@@ -38,6 +39,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
     // { label: "EditProfile", href: "/EditProfile"},
     { label: "Doctors", href: "/doctors", icon: <MdWindow size={22} /> },
     { label: "Patients", href: "/patients", icon: <BsPeople size={22} /> },
+    { label: "Inventory", href: "/inventory", icon: <FaBoxesStacked size={22} /> },
     { label: "Appointments", href: "/appointments", icon: <MdOutlineCalendarToday size={22} />, },
     { label: "Treatment Plan", href: "/treatment-plan", icon: <IoBagAddOutline size={22} />, },
     { label: "Settings", href: "/settings", icon: <MdSettings size={22} /> },

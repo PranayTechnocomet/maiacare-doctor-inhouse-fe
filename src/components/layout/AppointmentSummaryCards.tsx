@@ -9,12 +9,17 @@ import Frame2 from "@/assets/images/Frame2.png";
 import Frame3 from "@/assets/images/Frame3.png";
 import ContentContainer from "@/components/ui/ContentContainer";
 
-export default function AppointmentSummaryCards() {
+// Props type
+interface AppointmentSummaryCardsProps {
+    target: "patients" | "inventory"; // 👈 compulsory prop
+}
+
+export default function AppointmentSummaryCards({ target }: AppointmentSummaryCardsProps) {
     const router = useRouter();
 
     const handleCardClick = (filterType: string) => {
-        // Pass filter as query parameter
-        router.push(`/patients?filter=${filterType}`);
+        // Pass filter as query parameter to correct target
+        router.push(`/${target}?filter=${filterType}`);
     };
 
     return (

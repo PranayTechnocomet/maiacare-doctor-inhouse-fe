@@ -7,7 +7,7 @@ import {
     Button,
     Pagination,
 } from "react-bootstrap";
-import { consultationData } from "@/utils/StaticData";
+import { inventoryData } from "@/utils/StaticData";
 import Image from "next/image";
 import CommonTable from "@/components/ui/BaseTable";
 import { ColumnDef } from "@tanstack/react-table";
@@ -27,7 +27,7 @@ import Link from "next/link";
 //     Rescheduled: "warning",
 // };
 
-export type ConsultationStatus =
+export type InventoryDataStatus =
     | "Completed"
     | "Pending"
     | "Scheduled"
@@ -35,11 +35,11 @@ export type ConsultationStatus =
     | "Rescheduled"
     | "Cancelled";
 
-export default function Consultation() {
+export default function Inventory() {
     const searchParams = useSearchParams();
     const filter = searchParams.get("filter");
 
-    const [filteredData, setFilteredData] = useState(consultationData);
+    const [filteredData, setFilteredData] = useState(inventoryData);
 
     // const [leaveData, setLeaveData] = useState<LeaveEntry[]>(defaultLeaveData);
     const handleDownload = (url: string, name: string) => {
@@ -61,11 +61,11 @@ export default function Consultation() {
 
     useEffect(() => {
         if (filter === "completed") {
-            setFilteredData(consultationData.filter(item => item.status === "Completed"));
+            setFilteredData(inventoryData.filter(item => item.status === "Completed"));
         } else if (filter === "cancelled") {
-            setFilteredData(consultationData.filter(item => item.status === "Cancelled"));
+            setFilteredData(inventoryData.filter(item => item.status === "Cancelled"));
         } else {
-            setFilteredData(consultationData);
+            setFilteredData(inventoryData);
         }
     }, [filter]);
 
@@ -82,7 +82,7 @@ export default function Consultation() {
                 const id = info.row.original.id; // <-- Make sure you have an `id`
 
                 return (
-                    <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
+                    <Link href={`/inventory/${id}`} className="text-decoration-none text-dark">
                         <div className="d-flex align-items-center gap-2">
                             {typeof imgSrc === "string" ? (
                                 <img
@@ -119,6 +119,7 @@ export default function Consultation() {
             header: "Pin Code",
             accessorKey: "pin",
         },
+
         {
             header: "Status",
             cell: (info) => {
@@ -128,6 +129,19 @@ export default function Consultation() {
                     <span className={`status-pill ${statusClass}`}>
                         {status}
                     </span>
+                );
+            },
+        },
+        {
+            header: "Schedule",
+            cell: (info) => {
+                const id = info.row.original.id; // <-- use id directly
+                return (
+                    <div>
+                        <Button className="maiacare-button-small Assign-button" variant="primary">
+                            Assign
+                        </Button>
+                    </div>
                 );
             },
         },
@@ -154,13 +168,14 @@ export default function Consultation() {
                     </div>
                 );
             },
-        }
+        },
+
     ];
 
     return (
         <div className="container-fluid py-4 px-3 px-md-4">
             {/* Summary Cards */}
-     <AppointmentSummaryCards target="patients" />
+            <AppointmentSummaryCards target="inventory" />
 
             {/* Search and Filter */}
             <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
@@ -195,7 +210,7 @@ export default function Consultation() {
 
             {/* Pagination */}
             <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
-                <small className="text-muted">Showing {filteredData.length} of {consultationData.length} results</small>
+                <small className="text-muted">Showing {filteredData.length} of {inventoryData.length} results</small>
                 <Pagination size="sm" className="mb-0">
                     <Pagination.Prev disabled />
                     {[1, 2, 3, 4, 5].map((p) => (

@@ -15,6 +15,17 @@ export interface ConsultationEntry {
   image: string | StaticImageData;
 }
 
+export interface InventoryEntry {
+  id: number; // <-- ADD ID
+  name: string;
+  mobile: string;
+  email: string;
+  pin: string;
+  status: string;
+  image: string | StaticImageData;
+}
+
+
 export const consultationData: ConsultationEntry[] = [
   {
     id: 1,
@@ -109,6 +120,56 @@ export const consultationData: ConsultationEntry[] = [
 ];
 
 
+export const inventoryData: InventoryEntry[] = [
+  {
+    id: 1,
+    name: "Rani Desai",
+    mobile: "9092038491",
+    email: "ranidesai@protonmail.com",
+    pin: "400077",
+    status: "Completed",
+    image: RaniImg,
+  },
+  {
+    id: 2,
+    name: "Nina Gupta",
+    mobile: "9092038491",
+    email: "ninagupta@protonmail.com",
+    pin: "400077",
+    status: "Pending",
+    image: NinaImg,
+  },
+  {
+    id: 3,
+    name: "Himari Roy",
+    mobile: "9092038491",
+    email: "himariroy@protonmail.com",
+    pin: "400077",
+    status: "Scheduled",
+    image: HimariImg,
+  },
+  {
+    id: 4,
+    name: "Anjali Shinde",
+    mobile: "9092038491",
+    email: "anjalishinde@protonmail.com",
+    pin: "400077",
+    status: "No Response",
+    image: AnjaliImg,
+  },
+  {
+    id: 5,
+    name: "Anjali Shinde",
+    mobile: "9092038491",
+    email: "anjalishinde@protonmail.com",
+    pin: "400077",
+    status: "Cancelled",
+    image: AnjaliImg,
+  },
+
+];
+
+
 
 import { ColumnDef } from '@tanstack/react-table';
 // import { LeaveEntry } from "../utils/types/interfaces";
@@ -128,7 +189,7 @@ export type LeaveEntry = {
   days: string;
 };
 
-export const leaveData: LeaveEntry [] = [
+export const leaveData: LeaveEntry[] = [
   {
     id: '01',
     type: 'Casual leave',
@@ -215,7 +276,7 @@ export const leaveColumns: ColumnDef<LeaveEntry>[] = [
   //       <button className="btn btn-sm profile-card-boeder ">
   //         <Image src={LightEditimg} alt="Specialization" width={18} height={20} />
   //       </button>
-        
+
   //       <button className="btn btn-sm profile-card-boeder">
   //         <Image src={Trash} alt="Specialization" width={18} height={20} />
   //       </button>
