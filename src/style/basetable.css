@@ -26,8 +26,8 @@
   } 
   
   .table thead th{
-    font-weight: 600;
-    font-size: 13px;
+    font-weight: 400;
+    font-size: 14px;
     color: #8A8D93;
 }
   .table tbody tr {
@@ -47,7 +47,7 @@
 .table tbody td{
     font-size: 14px;
     font-weight: 500;
-    color: #2C313E;
+    color: #292929;
 }
 
   .table .avatar-name {

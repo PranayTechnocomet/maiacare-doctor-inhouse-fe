@@ -56,7 +56,7 @@ const ManageLeave = () => {
             <div className="d-flex align-items-center flex-wrap gap-2">
               <div className="d-flex align-items-center gap-2">
                 <span className="about-text ">Sort by:</span>
-                <Button className="bg-white edit-profile-btn">
+                <Button className="last-month">
                   Last 6 Months
                 </Button>
               </div>

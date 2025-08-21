@@ -36,7 +36,7 @@ const ProfileTabes = () => {
 
 
   return (
-    <div className="mt-4">
+    <div className='mt-4'>
 
       <CustomTabs
         activeKey={activeTab}

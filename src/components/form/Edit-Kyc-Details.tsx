@@ -304,8 +304,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           <h5 className="mb-3 profile-card-main-titile">KYC Details</h5>
 
           {/* Aadhar & Pan Card Inputs */}
-          <Row className="mb-3">
-            <Col md={6} sm={12}>
+          <Row >
+            <Col md={6} sm={12} className="mt-3">
               <InputFieldGroup
                 label="Aadhar Number"
                 name="field"
@@ -332,7 +332,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               </InputFieldGroup>
             </Col>
 
-            <Col md={6} sm={12}>
+            <Col md={6} sm={12} className="mt-3">
               <InputFieldGroup
                 label="Pan Card Number"
                 name="Pancard"
@@ -357,8 +357,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           </Row>
 
           {/* Aadhar & Pan Card Upload Previews */}
-          <Row className="mb-3">
-            <Col md={6} sm={12}>
+          <Row >
+            <Col md={6} sm={12}className="mt-3" >
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Aadhar Card Photo <span className="text-danger">*</span>
@@ -429,7 +429,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               )}
             </Col>
 
-            <Col md={6} sm={12}>
+            <Col md={6} sm={12} className="mt-3">
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Pan Card Photo <span className="text-danger">*</span>
@@ -504,8 +504,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
           {/* Licence Number */}
-          <Row className="mb-3">
-            <Col md={6} sm={12}>
+          <Row >
+            <Col md={6} sm={12} className="mt-3">
               <InputFieldGroup
                 label="Licence Number"
                 name="LicNumber"
@@ -531,7 +531,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
           {/* Licence Upload Preview */}
           <Row>
-            <Col md={6} sm={12}>
+            <Col md={6} sm={12} className="mt-3">
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Licence Photo <span className="text-danger">*</span>

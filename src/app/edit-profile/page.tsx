@@ -2,17 +2,23 @@
 
 import { AppDispatch } from "@/utils/redux/store";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { setHeaderData } from "@/utils/redux/slices/headerSlice";
 import EditProfile from "../../components/Edit-Profile";
 
 function Page() {
     const dispatch: AppDispatch = useDispatch();
+
+    
   useEffect(() => {
-    dispatch(setHeaderData({ title: "EditProfile", subtitle: "EditProfile List" }));
+    dispatch(setHeaderData({ title: "EditProfile", subtitle: "profile > EditProfile " }));
   }, []);
+  
   return (
-    <EditProfile/>
+        <Suspense fallback={<div>Loading...</div>}>
+          <EditProfile/>
+        </Suspense>
+    
   );
 
 }

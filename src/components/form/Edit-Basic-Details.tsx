@@ -5,7 +5,7 @@ import Simpleeditpro from "../../assets/images/Simpleeditpro.png";
 import Image from "next/image";
 import cameraicon from "../../assets/images/Cameraicon.png";
 import { InputFieldGroup } from "../ui/InputField";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import InputSelect from "../ui/InputSelect";
 import { DatePickerFieldGroup } from "../ui/CustomDatePicker";
 import { RadioButtonGroup } from "../ui/RadioField";
@@ -14,11 +14,12 @@ import ContentContainer from "../ui/ContentContainer";
 import { ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
 // import Profiledoctor from "../../assets/images/Profile-doctor.png";
-import Trash from "../../assets/images/Trash.png";
+import LightTrush from "../../assets/images/LightTrush.png";
 import ImageSquare from "../../assets/images/ImageSquare.png";
-import LightEditimg from "../../assets/images/LightEditimg.png";
+import EditProfile from "../../assets/images/Edit-Profile.png";
 import Camera from "../../assets/images/Camera.png";
 import { TimePickerFieldGroup } from "../ui/CustomTimePicker";
+import { useSearchParams } from "next/navigation";
 
 
 export default function PersonalDetails({ onNext }: { onNext: () => void }) {
@@ -114,8 +115,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     if (!data.Contact.trim()) {
       errors.Contact = "Contact is required";
     } else if (!contactRegex.test(data.Contact)) {
-      errors.Contact = "Please enter valid number";
+      errors.Contact = "Please enter a valid 10-digit number";
     }
+
 
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -271,10 +273,32 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     setPreviewImage(Simpleeditpro.src); // reset to default image in modal
   };
 
+
+
+//profile qualification Edit button click in scroll to qualification-section
+ const searchParams = useSearchParams();
+ const id = searchParams.get("id");
+  const scrollTo = searchParams.get("scrollTo");
+ useEffect(() => {
+    if (scrollTo === "qualification") {
+      setTimeout(() => {
+        const section = document.getElementById("qualification-section");
+        if (section) {
+          section.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 300);
+    }
+  }, [scrollTo]);
+
+
+
   return (
     <div>
-      <ContentContainer className="mt-4">
-        <Row className="mt-1">
+      <ContentContainer className="mt-3">
+        <Row>
           <Col>
             <h5 className="profile-card-main-titile">Personal Details</h5>
             <div className="d-flex align-items-center gap-4 mt-4 flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
@@ -314,7 +338,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               >
                 <div className="d-flex flex-column align-items-center p-4">
                   <div
-                    className="rounded overflow-hidden mb-2 mx-auto position-relative"
+                    className="rounded overflow-hidden mb-3 mx-auto position-relative"
                     style={{ width: 160, height: 160, borderRadius: "16px" }}>
 
                     {/* Defult Profile Image */}
@@ -323,16 +347,16 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       alt="Simpleeditpro"
                       width={160}
                       height={160}
-                      style={{ objectFit: "cover" }}
+                      style={{ objectFit: "cover"}}
                     />
                   </div>
 
-                  <div className="w-100 border-top pt-3 d-flex justify-content-between align-items-center flex-wrap">
+                  <div className="w-100 border-top pt-3  d-flex justify-content-between align-items-center flex-wrap">
                     <div className="d-flex gap-4 align-items-center flex-wrap">
 
                       <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
-                        <Image src={LightEditimg} alt="Edit" width={18} height={18} />
-                        <div className="small">Edit</div>
+                        <Image src={EditProfile} alt="Edit" width={18} height={18} />
+                        <div className="kyc-details">Edit</div>
                         <input
                           type="file"
                           accept="image/*"
@@ -375,7 +399,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
                     <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                       <button className="btn p-0" onClick={handleDelete}>
-                        <Image src={Trash} alt="Trash" width={22} height={22} />
+                        <Image src={LightTrush} alt="Trash" width={22} height={22} />
+                         <div className="kyc-details">Delete</div>
                       </button>
 
                       <button className="btn px-4 py-2 maiacare-button" onClick={handleSave}>
@@ -383,6 +408,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       </button>
                     </div>
                   </div>
+
+
                 </div>
               </Modal>
 
@@ -398,10 +425,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
         </Row>
 
         <div>
-          <Row className="mb-3">
-
-
-            <Col>
+          <Row >
+            <Col className="mt-3">
               <InputFieldGroup
                 label="Name"
                 name="Name"
@@ -422,12 +447,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="position-relative">
               </InputFieldGroup>
             </Col>
-
-
           </Row>
 
-          <Row className="mb-3">
-            <Col md={6}>
+          <Row >
+            <Col md={6} className="mt-3">
               <InputFieldGroup
                 label="Speciality"
                 name="Speciality"
@@ -450,7 +473,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             </Col>
 
 
-            <Col md={6}>
+            <Col md={6} className="mt-3">
               <InputFieldGroup
                 label="Year Of Experience"
                 name="Experience"
@@ -473,8 +496,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             </Col>
           </Row>
 
-          <Row className="mb-3">
-            <Col md={6}>
+          <Row >
+            <Col md={6} className="mt-3">
               <DatePickerFieldGroup
                 label="Select Date"
                 name="date"
@@ -492,7 +515,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               />
 
             </Col>
-            <Col md={6}>
+            <Col md={6} className="mt-3">
               <RadioButtonGroup
                 label="Gender"
                 name="gender"
@@ -514,30 +537,34 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             </Col>
           </Row>
 
-          <Row className="mb-3">
-            <Col md={6}>
+          <Row >
+
+            <Col md={6} className="mt-3">
               <InputFieldGroup
                 label="Contact Number"
                 name="Contact"
                 type="text"
                 value={formData.Contact}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFormData({ ...formData, Contact: e.target.value });
-                  if (formError.Contact) {   // typing in hide error 
+                  // Remove any non-digit character while typing
+                  const value = e.target.value.replace(/\D/g, "");
+                  setFormData({ ...formData, Contact: value });
+
+                  if (formError.Contact) { // hide error while typing
                     setFormError({ ...formError, Contact: "" });
                   }
                 }}
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                placeholder=" +91 12345 67890"
+                placeholder="1234567890"
                 required={true}
                 disabled={false}
                 readOnly={false}
                 error={formError.Contact}
-                className="position-relative">
-              </InputFieldGroup>
+                className="position-relative"
+              />
             </Col>
 
-            <Col md={6}>
+
+            <Col md={6} className="mt-3">
               <InputFieldGroup
                 label="Email"
                 name="Email"
@@ -561,8 +588,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             </Col>
           </Row>
 
-          <Row className="mb-3">
-            <Col>
+          <Row >
+            <Col className="mt-3">
               <Textarea
                 label="Description"
                 name="About"
@@ -588,7 +615,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-      <ContentContainer className="mt-4">
+
+
+<div id="qualification-section">
+           <ContentContainer className="mt-3" >
         <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
 
         {qualifications.map((q, index) => (
@@ -605,7 +635,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     const updatedQuals = qualifications.filter((_, i) => i !== index);
                     const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
                     setQualifications(updatedQuals);
-                    setFormErrors(updatedErrors);
+                    setFormErrors(updatedErrors); 
                   }}
                 >
                   -
@@ -615,8 +645,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
             {/* Qualification Box */}
             <div className="border rounded p-3">
-              <Row className="mb-3">
-                <Col md={6}>
+              <Row>
+                <Col md={6} className="mt-3">
                   <InputFieldGroup
                     label="Degree"
                     name="degree"
@@ -638,7 +668,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   />
                 </Col>
 
-                <Col md={6}>
+                <Col md={6} className="mt-3">
                   <InputFieldGroup
                     label="Field of study"
                     name="field"
@@ -660,8 +690,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
-                <Col>
+              <Row >
+                <Col className="mt-3">
                   <InputFieldGroup
                     label="University"
                     name="university"
@@ -683,8 +713,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 </Col>
               </Row>
 
-              <Row className="mb-3">
-                <Col md={6}>
+              <Row>
+                <Col md={6} className="mt-3">
                   <InputSelect
                     label="Start Year"
                     name="startYear"
@@ -704,7 +734,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   />
                 </Col>
 
-                <Col md={6}>
+                <Col md={6} className="mt-3">
                   <InputSelect
                     label="End Year"
                     name="endYear"
@@ -738,40 +768,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
         </Button>
       </ContentContainer>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</div>
 
 
 
@@ -804,7 +801,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             />
           </Col>
 
-          <Col md={6} className="mt-2 ">
+          <Col md={6} className="mt-2">
             <TimePickerFieldGroup
               name="Time"
               value={formData.Time}
