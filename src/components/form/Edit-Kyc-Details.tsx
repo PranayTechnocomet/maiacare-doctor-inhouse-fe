@@ -56,15 +56,39 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [formData, setFormData] = useState<FormData>(initialFormData);
 
 
+
+  const formatAadhaar = (value: string) => {
+    return value
+      .replace(/\D/g, "") // remove non-digits
+      .slice(0, 12) // max 12 digits
+      .replace(/(\d{4})(?=\d)/g, "$1 "); // add space after every 4 digits
+  };
+
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
 
-    if (!data.Adcard.trim()) errors.Adcard = "Adcard is required";
+    // if (!data.Adcard.trim()) errors.Adcard = "Adcard  number is required";
+    if (!data.Adcard.trim()) {
+      errors.Adcard = "Aadhaar number is required";
+    } else {
+      const rawValue = data.Adcard.replace(/\s/g, ""); // remove spaces
+
+      if (rawValue.length < 12) {
+        errors.Adcard = "Aadhaar number must be 12 digits";
+      }
+    }
+
     if (!data.Adcard) errors.Adphoto = "Aadhar card photo is required";
     if (!data.Pancard) errors.Panphoto = "Pancard photo is required";
-    if (!data.Pancard.trim()) errors.Pancard = "Pancard is required";
+    // if (!data.Pancard.trim()) errors.Pancard = "Pancard is required";
+    if (!data.Pancard.trim()) {
+      errors.Pancard = "Pancard  number is required";
+    } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(data.Pancard)) {
+      errors.Pancard = "Invalid Pancard format (e.g. ABCDE1234F)";
+    }
+
     // if (!data.Experience.trim()) errors.Experience = "Experience is required";
-    if (!data.LicNumber.trim()) errors.LicNumber = "LicNumber is required";
+    if (!data.LicNumber.trim()) errors.LicNumber = "Licence Number is required";
     if (!data.LicNumber) errors.Licphoto = "Licence photo is required";
 
     return errors;
@@ -286,14 +310,17 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 label="Aadhar Number"
                 name="field"
                 type="text"
-                value={formData.Adcard}
+                value={formatAadhaar(formData.Adcard)} // 👈 format while typing  
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Adcard: e.target.value });
                   if (formError.Adcard) {  // msg type validtation msg hide 
                     setFormError({ ...formError, Adcard: "" });
                   }
                 }}
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+
+                }}
                 placeholder="Aadhar Number"
                 required={true}
                 disabled={false}
@@ -301,6 +328,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 error={formError.Adcard}
                 className="position-relative"
               >
+
               </InputFieldGroup>
             </Col>
 
@@ -787,8 +815,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         </button> */}
 
 
-        <Button variant="default" disabled={false} type="submit" className=" maiacare-button"  onClick={handleSaveChnage}>
-        Save Changes 
+        <Button variant="default" disabled={false} type="submit" className=" maiacare-button" onClick={handleSaveChnage}>
+          Save Changes
         </Button>
 
       </div>
