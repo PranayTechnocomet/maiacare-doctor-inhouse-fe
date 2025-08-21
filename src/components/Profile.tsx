@@ -12,14 +12,15 @@ import MaiaVerify from "../assets/images/MaiaVerify.png";
 import EditProfile from "../assets/images/EditProfile.png";
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import ContentContainer from './ui/ContentContainer';
 
 const Profile = () => {
 
-  const router = useRouter();
+    const router = useRouter();
 
-  const handleEditProfile = () => {
-    router.push('/edit-profile'); // Route to your Edit Profile screen
-  };
+    const handleEditProfile = () => {
+        router.push('/edit-profile'); // Route to your Edit Profile screen
+    };
 
     const doctorData = {
         name: "Dr. Riya Dharang",
@@ -38,10 +39,11 @@ const Profile = () => {
         return (
 
 
-            <div className="profile-card bg-white">
+            <ContentContainer>
                 <Row>
-                    <Col lg={8} md={9} className='d-flex flex-md-row flex-column align-items-center'>
-                        <div className='col-4 col-md-4 col-lg-3 col-xl-2'>
+                    <Col lg={7} md={9} className='d-flex flex-md-row flex-column align-items-center'>
+
+                        <div className='col-4 col-md-3 col-lg-3  col-xl-2'>
                             <Image
                                 src={doctor.image}
                                 alt="Profile"
@@ -49,7 +51,7 @@ const Profile = () => {
                             />
                         </div>
 
-                        <div className='col-12 col-md-8 col-lg-9 col-xl-10 ms-4 mt-3 '>
+                        <div className='col-12 col-md-9 col-lg-9 col-xl-9 ms-4 mt-3 mt-md-0'>
                             <div>
                                 <div className="d-flex flex-md-row align-items-start align-items-md-center gap-1 ">
                                     <strong>{doctor.name}</strong>
@@ -67,7 +69,7 @@ text-center text-md-start     ======= small screen all data center */}
                                         <span>
                                             <Image src={Stethoscope} alt="Specialization" width={18} height={18} /> {doctor.specialization}</span>
                                         <span>
-                                            <Image src={Expirence} alt="experience" width={18} height={18} /> {doctor.experience}</span>
+                                            <Image src={Expirence} alt="experience" width={17} height={17} /> {doctor.experience}</span>
                                     </div>
                                     <div className="detail-row profile-sub-title">
                                         <span>
@@ -86,21 +88,17 @@ text-center text-md-start     ======= small screen all data center */}
                             </div>
                         </div>
 
-
                     </Col>
-
-                    <Col lg={4} md={3} className="text-md-end text-center mt-4 mt-md-0">
+                    <Col lg={5} md={3} className="text-md-end text-center mt-4 mt-md-0">
                         <Button className="edit-profile-btn" onClick={handleEditProfile}>
                             <span className="me-2">
-                                <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} />
+                                <Image src={EditProfile} alt="EditProfile-btn" width={20} height={22} />
                             </span>
                             Edit Profile
                         </Button>
                     </Col>
                 </Row>
-            </div>
-
-
+            </ContentContainer>
         );
     };
 

@@ -6,6 +6,7 @@ import LightEditimg from "../../assets/images/LightEditimg.png";
 import Pdfimg from "../../assets/images/Pdfimg.png";
 import Download from "../../assets/images/Download.png";
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
 
 import ContentContainer from '../ui/ContentContainer';
 import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
@@ -13,7 +14,15 @@ import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
 const ProfileBasicDetails = () => {
   interface FormError {
     [key: string]: string;
+    
   }
+
+  const router = useRouter();
+
+const handleEditClick = () => {
+  router.push("/edit-profile");
+};
+
   const initialFormError: FormError = {};
 
   const [formError, setFormError] = useState<FormError>(initialFormError);
@@ -67,32 +76,33 @@ const ProfileBasicDetails = () => {
 
 
   return (
-    <Container fluid className="mt-3">
-      <div className="mt-4">
+    // <Container fluid className="mt-3">
+      <div>
         <Row>
 
           {/* =====LEFT COLUMN  PART ======== */}
           {/* Qualification */}
 
-          <Col lg={8} className="mb-3">
+          <Col lg={8}>
             <div>
-              <ContentContainer className="mt-4">
+              <ContentContainer className='mt-4' >
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="profile-card-main-titile">Qualification</h5>
-                  <Button variant="light" className="profile-card-boeder">
-                    <Image src={Add} alt="Add" width={18} height={18} />
+                  <Button variant="light" className="profile-card-boeder profile-card-button" >
+                    <Image src={Add} alt="Add" />
                   </Button>
                 </div>
 
                 {qualifications.length === 0 ? (
-                  <div className="text-center text-muted p-4 border rounded-4 shadow-sm">
+                  <div className="text-center text-muted p-4 border rounded-4 ">
                     Data not found
                   </div>
                 ) : (
                   qualifications.map((item, idx) => (
+
                     <div
                       key={idx}
-                      className="d-flex justify-content-between align-items-center p-3 mb-3 bg-white border rounded-4 shadow-sm profile-card-boeder"
+                      className="d-flex justify-content-between align-items-start p-3 mb-3 bg-white border rounded-4 profile-card-boeder"
                     >
                       <div>
                         <div className="card-feild">{item.title}</div>
@@ -101,19 +111,19 @@ const ProfileBasicDetails = () => {
                       </div>
 
                       <div className="d-flex gap-2">
-                        <Button variant="light" className="border p-2 rounded-3">
-                          <Image src={LightEditimg} alt="Specialization" width={22} height={22} />
+                        <Button  onClick={handleEditClick}  className="border p-2 rounded-3  bg-transparent">
+                          <Image src={LightEditimg} alt="Specialization" width={20} height={20} />
                         </Button>
 
-                        <Button
-                          variant="light"
-                          className="border p-2 rounded-3"
+                        <Button className="border p-2 rounded-3  bg-transparent"
                           onClick={() => handleDelete(idx)} // 👈 click par delete
                         >
-                          <Image src={Delete} alt="Specialization" width={22} height={22} />
+                          <Image src={Delete} alt="Specialization" width={20} height={20} />
                         </Button>
+                        
                       </div>
                     </div>
+
                   ))
                 )}
 
@@ -144,7 +154,7 @@ const ProfileBasicDetails = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, MF: e.target.value })
                       }
-                      required
+                      // required
                       error={formError?.MF}
                     />
 
@@ -175,7 +185,7 @@ const ProfileBasicDetails = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, SS: e.target.value })
                       }
-                      required
+                      // required
                       error={formError?.SS}
                     />
 
@@ -205,7 +215,7 @@ const ProfileBasicDetails = () => {
             <div>
               <ContentContainer className="mt-4">
                 <h5 className="profile-card-main-titile">About</h5>
-                <p className="mb-0 about-text" style={{ fontSize: "14px" }}>
+                <p className="mb-0 about-text" >
                   I'm Dr. Riya Dharang, a fertility specialist with over 12 years of experience in reproductive medicine. I specialize in IVF, IUI, and fertility preservation, providing personalized, compassionate care to help individuals and couples achieve their parenthood dreams. Your well-being and trust are my top priorities.
                 </p>
               </ContentContainer>
@@ -230,8 +240,8 @@ const ProfileBasicDetails = () => {
                           className="me-3"
                         />
                         <div>
-                          <div className="fw-semibold">{doc.name}</div>
-                          <div className="text-muted small">{doc.date}</div>
+                          <div className="card-university-text">{doc.name}</div>
+                          <div className="card-year">{doc.date}</div>
                         </div>
                       </div>
 
@@ -254,7 +264,7 @@ const ProfileBasicDetails = () => {
           </Col>
         </Row>
       </div>
-    </Container>
+    // </Container>
   );
 };
 

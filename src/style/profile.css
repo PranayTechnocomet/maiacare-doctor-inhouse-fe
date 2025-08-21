@@ -32,9 +32,23 @@
   gap: 15px;
   /* align-items: center; */
 }
-
-.edit-profile-btn{
-  border-radius: 8px;
-  padding: 6px 14px;
+.last-month{
+border-radius: 8px !important;
+padding: 6px 12px !important; 
 }
 
+.profile-card-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.profile-card-button img {
+  /* optional if you want to style the image inside button */
+  width: 17px;
+  height: 20px;
+}

@@ -52,8 +52,8 @@
     outline: none !important;
     box-shadow: none !important;
     /* border: 1px solid #999 !important; grey focus border */
-  }
-  
+}
+
 .maiacare-button-large {
     font-size: 18px;
     font-weight: 500;
@@ -133,9 +133,10 @@
     font-size: 16px !important;
     font-weight: 500;
 }
+
 .btn-border {
     border-color: 1px solid var(--color-radio-lable) !important;
-    height: 40px !important;    
+    height: 40px !important;
 }
 
 /* ======= Profile Componet css  =========== */
@@ -168,6 +169,8 @@
     font-weight: 500;
     background-color: transparent;
     font-size: 16px;
+     padding: 9px 15px;
+    border-radius: 8px;
 }
 
 .edit-profile-btn:hover,
@@ -210,7 +213,7 @@
 
 .my-custom-icon {
     color: var(--color-icon-border) !important;
-  /* or other filter or styles */
+    /* or other filter or styles */
 }
 
 .card-feild {
@@ -219,9 +222,10 @@
     font-size: 16px;
 }
 
-.card-university-text .maiacare-input-field-label {
+.card-university-text {
     color: var(--color-radio-lable) !important;
-    font-weight: 600;
+    /* color: red !important; */
+    font-weight: 400;
     font-size: 14px;
 }
 
@@ -234,7 +238,7 @@
 .about-text {
     color: var(--color-radio-lable) !important;
     font-weight: 400;
-    font-size: 14px !important;
+    font-size: 16px !important;
 }
 
 .check-box input[type="checkbox"] {
@@ -251,7 +255,11 @@
     background-color: var(--color-bg) !important;
 }
 
-
+.last-month{
+    border-color: var(--color-icon-border) !important;
+    background-color: transparent !important;
+    color: var(--color-brand) !important;
+}
 
 
 
@@ -354,7 +362,7 @@
 
 @media (max-width: 375px) {
 
-     .modal-heading {
+    .modal-heading {
         font-size: 16px !important;
     }
 
