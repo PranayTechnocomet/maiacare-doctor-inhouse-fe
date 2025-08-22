@@ -30,7 +30,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   const initialFormError: FormError = {};
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
-
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [qualifications, setQualifications] = useState([
     { degree: "", field: "", university: "", startYear: "", endYear: "" }
   ]);
@@ -245,14 +245,45 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     cameraInputRef.current?.click();
   };
 
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const selectedFile = event.target.files?.[0]; //previewImage chnages
+  //   if (selectedFile) {
+  //     const imageURL = URL.createObjectURL(selectedFile);
+  //     setPreviewImage(imageURL);
+  //   }
+  // };
+
+
+  //  modal open and seletc image jpg/png image allow 
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0]; //previewImage chnages
-    if (selectedFile) {
-      const imageURL = URL.createObjectURL(selectedFile);
-      setPreviewImage(imageURL);
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
+
+    // ✅ 1. Only allow JPG and PNG
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      setErrorMessage("Only JPG and PNG images are allowed.");
+      event.target.value = ""; // reset input
+      return;
     }
+
+    // ✅ 2. Max size 5MB check
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (selectedFile.size > maxSize) {
+      setErrorMessage("File size must be less than 5MB.");
+      event.target.value = ""; // reset input
+      return;
+    }
+
+    // ✅ 3. If valid → set preview & clear error
+    const imageURL = URL.createObjectURL(selectedFile);
+    setPreviewImage(imageURL);
+    setErrorMessage(""); // clear previous error
   };
 
+
+  // camera image select 
   const handleFileCamera = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -261,25 +292,27 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     }
   };
 
-  const handleSave = () => {
-    if (previewImage) {
-      setSelectedImage(previewImage); // ✅ set image in parent
-    }
-    setShowModal(false); // Close modal
-  };
 
-  const handleDelete = () => {
-    setSelectedImage(null); // remove selected image
-    setPreviewImage(Simpleeditpro.src); // reset to default image in modal
-  };
+const handleSave = () => {
+  setSelectedImage(previewImage); // save modal preview to actual profile
+  setShowModal(false);
+};
+
+const handleDelete = () => {
+  setPreviewImage(null); // delete only in modal
+};
+//modal  image delete click in save btn click image set.
+useEffect(() => {
+  if (showModal) {
+    setPreviewImage(selectedImage);
+  }
+}, [showModal]);
 
 
-
-//profile qualification Edit button click in scroll to qualification-section
- const searchParams = useSearchParams();
- const id = searchParams.get("id");
+  //profile qualification Edit button click in scroll to qualification-section
+  const searchParams = useSearchParams();
   const scrollTo = searchParams.get("scrollTo");
- useEffect(() => {
+  useEffect(() => {
     if (scrollTo === "qualification") {
       setTimeout(() => {
         const section = document.getElementById("qualification-section");
@@ -289,7 +322,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             block: "start",
           });
         }
-      }, 300);
+      }, 200);
     }
   }, [scrollTo]);
 
@@ -328,6 +361,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               </div>
 
               {/* Edit Profile click in Modal */}
+
               <Modal
                 show={showModal}
                 onHide={() => setShowModal(false)}
@@ -336,7 +370,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="text-pink"
                 dialogClassName="custom-modal-width"
               >
-                <div className="d-flex flex-column align-items-center p-4">
+                <div className="d-flex flex-column align-items-center ">
                   <div
                     className="rounded overflow-hidden mb-3 mx-auto position-relative"
                     style={{ width: 160, height: 160, borderRadius: "16px" }}>
@@ -347,10 +381,14 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       alt="Simpleeditpro"
                       width={160}
                       height={160}
-                      style={{ objectFit: "cover"}}
+                      style={{ objectFit: "cover" }}
                     />
                   </div>
-
+                  {errorMessage && (   // error msg only jpg/png image allow
+                    <div className="text-danger mb-2" style={{ fontSize: "14px" }}>
+                      {errorMessage}
+                    </div>
+                  )}
                   <div className="w-100 border-top pt-3  d-flex justify-content-between align-items-center flex-wrap">
                     <div className="d-flex gap-4 align-items-center flex-wrap">
 
@@ -400,7 +438,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                       <button className="btn p-0" onClick={handleDelete}>
                         <Image src={LightTrush} alt="Trash" width={22} height={22} />
-                         <div className="kyc-details">Delete</div>
+                        <div className="kyc-details">Delete</div>
                       </button>
 
                       <button className="btn px-4 py-2 maiacare-button" onClick={handleSave}>
@@ -412,6 +450,28 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
                 </div>
               </Modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
               <div>
                 <div className="fw-semibold">Add Profile Picture</div>
@@ -426,10 +486,11 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
         <div>
           <Row >
-            <Col className="mt-3">
+            <Col className="mt-3 ">
               <InputFieldGroup
                 label="Name"
                 name="Name"
+                
                 type="text"
                 value={formData.Name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -444,7 +505,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 disabled={false}
                 readOnly={false}
                 error={formError.Name}
-                className="position-relative">
+                className="position-relative ">
               </InputFieldGroup>
             </Col>
           </Row>
@@ -546,11 +607,18 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 type="text"
                 value={formData.Contact}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // Remove any non-digit character while typing
-                  const value = e.target.value.replace(/\D/g, "");
+                  // ✅ Remove any non-digit character while typing
+                  let value = e.target.value.replace(/\D/g, "");
+
+                  // ✅ Allow only max 10 digits
+                  if (value.length > 10) {
+                    value = value.slice(0, 10);
+                  }
+
                   setFormData({ ...formData, Contact: value });
 
-                  if (formError.Contact) { // hide error while typing
+                  // ✅ Hide error while typing
+                  if (formError.Contact) {
                     setFormError({ ...formError, Contact: "" });
                   }
                 }}
@@ -617,158 +685,170 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-<div id="qualification-section">
-           <ContentContainer className="mt-3" >
-        <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
 
-        {qualifications.map((q, index) => (
-          <div key={index} className="position-relative mb-4">
-            {/* Remove Button */}
-            {index > 0 && (
-              <div className="d-flex justify-content-end mb-1">
-                <Button
-                  variant="danger"
-                  size="sm"
-                  className="d-flex align-items-center justify-content-center"
-                  style={{ width: "32px", height: "32px", padding: 0 }}
-                  onClick={() => {
-                    const updatedQuals = qualifications.filter((_, i) => i !== index);
-                    const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
-                    setQualifications(updatedQuals);
-                    setFormErrors(updatedErrors); 
-                  }}
-                >
-                  -
-                </Button>
+
+
+
+
+
+
+
+
+
+
+
+      <div id="qualification-section">
+        <ContentContainer className="mt-3" >
+          <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
+
+          {qualifications.map((q, index) => (
+            <div key={index} className="position-relative mb-4">
+              {/* Remove Button */}
+              {index > 0 && (
+                <div className="d-flex justify-content-end mb-1">
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="d-flex align-items-center justify-content-center"
+                    style={{ width: "32px", height: "32px", padding: 0 }}
+                    onClick={() => {
+                      const updatedQuals = qualifications.filter((_, i) => i !== index);
+                      const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
+                      setQualifications(updatedQuals);
+                      setFormErrors(updatedErrors);
+                    }}
+                  >
+                    -
+                  </Button>
+                </div>
+              )}
+
+              {/* Qualification Box */}
+              <div className="border rounded p-3">
+                <Row>
+                  <Col md={6} className="mt-3">
+                    <InputFieldGroup
+                      label="Degree"
+                      name="degree"
+                      type="text"
+                      value={q.degree}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].degree = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        // clear error only for this field/index
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].degree = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      placeholder="Degree"
+                      required
+                      error={formErrors[index]?.degree}
+                    />
+                  </Col>
+
+                  <Col md={6} className="mt-3">
+                    <InputFieldGroup
+                      label="Field of study"
+                      name="field"
+                      type="text"
+                      value={q.field}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].field = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].field = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      placeholder="Field"
+                      required
+                      error={formErrors[index]?.field}
+                    />
+                  </Col>
+                </Row>
+
+                <Row >
+                  <Col className="mt-3">
+                    <InputFieldGroup
+                      label="University"
+                      name="university"
+                      type="text"
+                      value={q.university}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].university = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].university = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      placeholder="University"
+                      required
+                      error={formErrors[index]?.university}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col md={6} className="mt-3">
+                    <InputSelect
+                      label="Start Year"
+                      name="startYear"
+                      value={q.startYear}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].startYear = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].startYear = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      options={yearOptions}
+                      error={formErrors[index]?.startYear}
+                      required
+                    />
+                  </Col>
+
+                  <Col md={6} className="mt-3">
+                    <InputSelect
+                      label="End Year"
+                      name="endYear"
+                      value={q.endYear}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].endYear = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].endYear = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      options={yearOptions}
+                      error={formErrors[index]?.endYear}
+                      required
+                    />
+                  </Col>
+                </Row>
               </div>
-            )}
-
-            {/* Qualification Box */}
-            <div className="border rounded p-3">
-              <Row>
-                <Col md={6} className="mt-3">
-                  <InputFieldGroup
-                    label="Degree"
-                    name="degree"
-                    type="text"
-                    value={q.degree}
-                    onChange={(e) => {
-                      const updatedQuals = [...qualifications];
-                      updatedQuals[index].degree = e.target.value;
-                      setQualifications(updatedQuals);
-
-                      // clear error only for this field/index
-                      const updatedErrors = [...formErrors];
-                      updatedErrors[index].degree = "";
-                      setFormErrors(updatedErrors);
-                    }}
-                    placeholder="Degree"
-                    required
-                    error={formErrors[index]?.degree}
-                  />
-                </Col>
-
-                <Col md={6} className="mt-3">
-                  <InputFieldGroup
-                    label="Field of study"
-                    name="field"
-                    type="text"
-                    value={q.field}
-                    onChange={(e) => {
-                      const updatedQuals = [...qualifications];
-                      updatedQuals[index].field = e.target.value;
-                      setQualifications(updatedQuals);
-
-                      const updatedErrors = [...formErrors];
-                      updatedErrors[index].field = "";
-                      setFormErrors(updatedErrors);
-                    }}
-                    placeholder="Field"
-                    required
-                    error={formErrors[index]?.field}
-                  />
-                </Col>
-              </Row>
-
-              <Row >
-                <Col className="mt-3">
-                  <InputFieldGroup
-                    label="University"
-                    name="university"
-                    type="text"
-                    value={q.university}
-                    onChange={(e) => {
-                      const updatedQuals = [...qualifications];
-                      updatedQuals[index].university = e.target.value;
-                      setQualifications(updatedQuals);
-
-                      const updatedErrors = [...formErrors];
-                      updatedErrors[index].university = "";
-                      setFormErrors(updatedErrors);
-                    }}
-                    placeholder="University"
-                    required
-                    error={formErrors[index]?.university}
-                  />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col md={6} className="mt-3">
-                  <InputSelect
-                    label="Start Year"
-                    name="startYear"
-                    value={q.startYear}
-                    onChange={(e) => {
-                      const updatedQuals = [...qualifications];
-                      updatedQuals[index].startYear = e.target.value;
-                      setQualifications(updatedQuals);
-
-                      const updatedErrors = [...formErrors];
-                      updatedErrors[index].startYear = "";
-                      setFormErrors(updatedErrors);
-                    }}
-                    options={yearOptions}
-                    error={formErrors[index]?.startYear}
-                    required
-                  />
-                </Col>
-
-                <Col md={6} className="mt-3">
-                  <InputSelect
-                    label="End Year"
-                    name="endYear"
-                    value={q.endYear}
-                    onChange={(e) => {
-                      const updatedQuals = [...qualifications];
-                      updatedQuals[index].endYear = e.target.value;
-                      setQualifications(updatedQuals);
-
-                      const updatedErrors = [...formErrors];
-                      updatedErrors[index].endYear = "";
-                      setFormErrors(updatedErrors);
-                    }}
-                    options={yearOptions}
-                    error={formErrors[index]?.endYear}
-                    required
-                  />
-                </Col>
-              </Row>
             </div>
-          </div>
-        ))}
+          ))}
 
 
-        <Button
-          variant="dark"
-          className="maiacare-button"
-          onClick={handleAddQualification}
-        >
-          + Add Qualification
-        </Button>
-      </ContentContainer>
+          <Button
+            variant="dark"
+            className="maiacare-button"
+            onClick={handleAddQualification}
+          >
+            + Add Qualification
+          </Button>
+        </ContentContainer>
 
-</div>
+      </div>
 
 
 

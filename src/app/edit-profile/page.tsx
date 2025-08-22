@@ -15,7 +15,7 @@ function Page() {
   }, []);
   
   return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div></div>}>
           <EditProfile/>
         </Suspense>
     

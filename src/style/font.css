@@ -254,14 +254,18 @@
 .modal-bg {
     background-color: var(--color-bg) !important;
 }
-
+.kyc-modal-subheading{
+    color: var(--color-modal-subheading) !important;
+}
 .last-month{
     border-color: var(--color-icon-border) !important;
     background-color: transparent !important;
     color: var(--color-brand) !important;
 }
 
-
+.modal-border-color{
+    color: var( --color-modal-border) !important;
+}
 
 
 

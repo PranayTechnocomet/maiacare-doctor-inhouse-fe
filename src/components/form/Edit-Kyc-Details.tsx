@@ -69,12 +69,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
     // if (!data.Adcard.trim()) errors.Adcard = "Adcard  number is required";
     if (!data.Adcard.trim()) {
-      errors.Adcard = "Aadhaar number is required";
+      errors.Adcard = "Aadhaar card number is required";
     } else {
       const rawValue = data.Adcard.replace(/\s/g, ""); // remove spaces
 
       if (rawValue.length < 12) {
-        errors.Adcard = "Aadhaar number must be 12 digits";
+        errors.Adcard = "Aadhaar card number must be 12 digits";
       }
     }
 
@@ -112,83 +112,114 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   // Aadhar Card image select //
   const handleAadharFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const sizeInKB = (file.size / 1024).toFixed(2);
-      const fileDate = new Date().toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
+    if (!file) return;
 
-      });
-      const fileURL = URL.createObjectURL(file);
+    // Allowed file types
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "application/pdf"];
 
-      const newFile: UploadedFile = {
-        name: file.name,
-        size: `${sizeInKB} KB`,
-        actualSize: sizeInKB,
-        date: fileDate,
-        preview: fileURL,
-        status: "completed",
-        reportName: "Aadhar Card", // You can change if needed
-      };
-
-      setAadharFile(newFile);
-      setFormError((prev) => ({ ...prev, Adphoto: "" }));
+    if (!allowedTypes.includes(file.type)) {
+      // Show error if file type is not allowed
+      setFormError((prev) => ({ ...prev, Adphoto: "Only JPG, PNG, or PDF files are allowed." }));
+      e.target.value = ""; // Reset the input
+      return;
     }
+
+    const sizeInKB = (file.size / 1024).toFixed(2);
+    const fileDate = new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    const fileURL = URL.createObjectURL(file);
+
+    const newFile: UploadedFile = {
+      name: file.name,
+      size: `${sizeInKB} KB`,
+      actualSize: sizeInKB,
+      date: fileDate,
+      preview: fileURL,
+      status: "completed",
+      reportName: "Aadhar Card",
+    };
+
+    setAadharFile(newFile);
+    setFormError((prev) => ({ ...prev, Adphoto: "" }));
   };
 
 
   //PanCard image select //
   const handlePanFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const sizeInKB = (file.size / 1024).toFixed(2);
-      const fileDate = new Date().toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
-      const fileURL = URL.createObjectURL(file);
+    if (!file) return;
 
-      const newFile: UploadedFile = {
-        name: file.name,
-        size: `${sizeInKB} KB`,
-        actualSize: sizeInKB,
-        date: fileDate,
-        status: "completed",
-        reportName: "Pan Card", // You can make this dynamic
-      };
+    // Allowed file types
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "application/pdf"];
 
-      setPanFile(newFile);
-      setFormError((prev) => ({ ...prev, Panphoto: "" }));
+    if (!allowedTypes.includes(file.type)) {
+      // Show error if file type is not allowed
+      setFormError((prev) => ({ ...prev, Panphoto: "Only JPG, PNG, or PDF files are allowed." }));
+      e.target.value = ""; // Reset the input
+      return;
     }
+
+    const sizeInKB = (file.size / 1024).toFixed(2);
+    const fileDate = new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    const fileURL = URL.createObjectURL(file);
+
+    const newFile: UploadedFile = {
+      name: file.name,
+      size: `${sizeInKB} KB`,
+      actualSize: sizeInKB,
+      date: fileDate,
+      preview: fileURL,
+      status: "completed",
+      reportName: "Pan Card",
+    };
+
+    setPanFile(newFile);
+    setFormError((prev) => ({ ...prev, Panphoto: "" }));
   };
 
   // licence image select//
 
   const handleLicenceFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const sizeInKB = (file.size / 1024).toFixed(2);
-      const fileDate = new Date().toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
+    if (!file) return;
 
-      const newFile: UploadedFile = {
-        name: file.name,
-        size: `${sizeInKB} KB`,
-        actualSize: sizeInKB,
-        date: fileDate,
-        status: "completed",
-        reportName: "Licence",
-      };
+    // Allowed file types
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "application/pdf"];
 
-      setLicenceFile(newFile);
-      setFormError((prev) => ({ ...prev, Licphoto: "" }));
+    if (!allowedTypes.includes(file.type)) {
+      // Show error if file type is not allowed
+      setFormError((prev) => ({ ...prev, Licphoto: "Only JPG, PNG, or PDF files are allowed." }));
+      e.target.value = ""; // Reset the input
+      return;
     }
+
+    const sizeInKB = (file.size / 1024).toFixed(2);
+    const fileDate = new Date().toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
+    const newFile: UploadedFile = {
+      name: file.name,
+      size: `${sizeInKB} KB`,
+      actualSize: sizeInKB,
+      date: fileDate,
+      status: "completed",
+      reportName: "Licence",
+    };
+
+    setLicenceFile(newFile);
+    setFormError((prev) => ({ ...prev, Licphoto: "" }));
   };
+
 
   interface UploadedFile {
     name: string;
@@ -354,11 +385,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               >
               </InputFieldGroup>
             </Col>
+
           </Row>
 
           {/* Aadhar & Pan Card Upload Previews */}
           <Row >
-            <Col md={6} sm={12}className="mt-3" >
+            <Col md={6} sm={12} className="mt-3">
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Aadhar Card Photo <span className="text-danger">*</span>
@@ -369,15 +401,15 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     if (!aadharFile) {
-                      aadharFileRef.current?.click(); // only open file manager if no file selected
+                      aadharFileRef.current?.click();
                     }
                   }}
                 >
                   {aadharFile ? (
                     <>
                       <Image
-                        src={Pdfimg} // or Jpgimg depending on type
-                        alt="jpg"
+                        src={aadharFile.name.endsWith(".pdf") ? Pdfimg : Jpgimg}
+                        alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
                         width={50}
                         className="me-3"
                       />
@@ -386,18 +418,15 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         <div className="kyc-details">{aadharFile.name}</div>
                         <div className="card-year">
                           {aadharFile.size} - {aadharFile.date}
-
-
                         </div>
                       </div>
 
-                      {/* Delete Button */}
                       <button
                         type="button"
                         className="btn btn-sm profile-card-boeder me-2"
                         onClick={(e) => {
-                          e.stopPropagation(); // prevent file manager opening
-                          setAadharFile(null); // clear file
+                          e.stopPropagation();
+                          setAadharFile(null);
                         }}
                       >
                         <Image src={Trash} alt="delete" width={17} height={18} />
@@ -412,13 +441,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       <span className="about-text">Add Aadhar Card Photo</span>
                     </div>
                   )}
-
                 </div>
 
-                {/* Hidden file input */}
                 <input
                   type="file"
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.pdf"
                   ref={aadharFileRef}
                   style={{ display: "none" }}
                   onChange={handleAadharFileChange}
@@ -428,6 +455,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 <div className="text-danger small mt-1">{formError.Adphoto}</div>
               )}
             </Col>
+
+
+
+
 
             <Col md={6} sm={12} className="mt-3">
               <Form.Group>
@@ -448,8 +479,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   {panFile ? (
                     <>
                       <Image
-                        src={Jpgimg}
-                        alt="jpg"
+                        src={panFile.name.endsWith(".pdf") ? Pdfimg : Jpgimg}
+                        alt={panFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
                         width={50}
                         className="me-3"
                       />
@@ -488,7 +519,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  accept="image/*"
+                accept=".jpg,.jpeg,.png,.pdf"
                   ref={panFileRef}
                   style={{ display: "none" }}
                   onChange={handlePanFileChange}
@@ -549,8 +580,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   {licenceFile ? (
                     <>
                       <Image
-                        src={Pdfimg}
-                        alt="pdf"
+                        src={licenceFile.name.endsWith(".pdf") ? Pdfimg : Jpgimg}
+                        alt={licenceFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
                         width={50}
                         className="me-3"
                       />
@@ -588,7 +619,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  accept=".pdf,image/*"
+                  accept=".jpg,.jpeg,.png,.pdf" 
                   ref={licenceFileRef}
                   style={{ display: "none" }}
                   onChange={handleLicenceFileChange}
@@ -671,7 +702,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               style={{ width: "130px", height: "130px", cursor: "pointer" }} // same size as uploaded files
               onClick={handleOpenModal}
             >
-              <Image src={Pluslight} alt="add" width={65} className="my-custom-icon" />
+              <Image src={Pluslight} alt="add" width={65} className="my-custom-icon"/>
               <span className="about-text">Add New File</span>
             </div>
           </div>
@@ -685,12 +716,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             dialogClassName="custom-modal-width"
           >
             {/* Always show Browse UI */}
-            <div className="border rounded-3 p-4 text-center mb-4">
+            <div className="border rounded-3 p-4 text-center mb-4 ">
               <div className="mb-2">
-                <Image src={uplodimg} alt="upload" width={30} height={30} className="modal-bg p-1 rounded-2" />
+                <Image src={uplodimg} alt="upload" width={33} height={33} className="modal-bg p-1 rounded-2" />
               </div>
               <div>Click here to upload your file or drag.</div>
-              <small className="text-muted">Supported Format: SVG, JPG, PNG (10mb each)</small>
+              <small className="kyc-modal-subheading">Supported Format: SVG, JPG, PNG (10mb each)</small>
               <div className="mt-3">
                 <input
                   type="file"
@@ -698,7 +729,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />
-                <Button variant="btn-border border" onClick={handleButtonClick}>
+                <Button variant="borde edit-profile-btn" onClick={handleButtonClick}>
                   Browse File
                 </Button>
               </div>
@@ -744,14 +775,14 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 <div className="mt-4">
 
-                  <label className="form-label fw-semibold">
-                    Report Name <span className="text-center">*</span>
+                  <label className="form-label fw-semibold ">
+                    Report Name <span className="text-center text-danger">*</span>
                   </label>
 
                   <div className="d-flex align-items-center">
                     <input
                       type="text"
-                      className="form-control rounded-3 px-3 py-2 me-2"
+                      className="form-control  px-3 py-2 me-2 maiacare-input-field"
                       placeholder="Enter Report Name"
                       value={file.reportName}
                       onChange={(e) =>

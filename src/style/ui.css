@@ -10,6 +10,7 @@
     outline: none;
 }
 
+
 .maiacare-radio-group {
     display: flex;
     gap: 16px;
@@ -133,7 +134,7 @@
     }
 
     .modal-close-icon {
-        padding: 12px;
+        padding: 10px;
     }
 }
 

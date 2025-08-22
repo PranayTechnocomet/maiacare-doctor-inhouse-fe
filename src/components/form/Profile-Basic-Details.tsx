@@ -20,7 +20,7 @@ const ProfileBasicDetails = () => {
   const router = useRouter();
 
 const handleEditClick = () => {
-  router.push("/edit-profile");
+  router.push("/edit-profile?scrollTo=qualification");
 };
 
   const initialFormError: FormError = {};
@@ -88,13 +88,13 @@ const handleEditClick = () => {
               <ContentContainer className='mt-4' >
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="profile-card-main-titile">Qualification</h5>
-                  <Button variant="light" className="profile-card-boeder profile-card-button" >
+                  <Button onClick={handleEditClick} className="profile-card-boeder profile-card-button bg-transparent" >
                     <Image src={Add} alt="Add" />
                   </Button>
                 </div>
 
                 {qualifications.length === 0 ? (
-                  <div className="text-center text-muted p-4 border rounded-4 ">
+                  <div className="text-center text-muted p-4 border rounded-4">
                     Data not found
                   </div>
                 ) : (
