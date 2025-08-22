@@ -1,0 +1,48 @@
+.doctorImage {
+  border-radius: 50%;
+  border: 1px solid #dee2e6;
+}
+
+/* Common slot button */
+.slot-btn {
+  width: 100%;
+  font-size: 13px;
+  border-radius: 8px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  /* light gray border */
+  background-color: #f8f9fa;
+  /* light background */
+  color: #6b7280;
+  /* gray text */
+  transition: all 0.2s ease;
+  padding: 4px;
+}
+
+/* Hover effect */
+/* .slot-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+} */
+
+/* Selected slot */
+.slot-btn.selected {
+  background-color: white;
+  /* blue */
+  color: #666B7A;
+  /* white text */
+  border-color: #666B7A;
+}
+
+.assign-doctor {
+  color: #292929;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.assign-header {
+  color: #8A8D93;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+}
