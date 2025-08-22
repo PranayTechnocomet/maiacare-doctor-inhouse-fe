@@ -4,6 +4,10 @@ import HimariImg from "@/assets/images/Img-3.png";
 import AnjaliImg from "@/assets/images/Img-4.png";
 import AasthaImg from "@/assets/images/Img-5.png";
 import { StaticImageData } from "next/image";
+import Doctor1 from "@/assets/images/doctor1.png";
+import Doctor2 from "@/assets/images/doctor2.png";
+import Doctor3 from "@/assets/images/doctor3.png";
+import Doctor4 from "@/assets/images/doctor4.png";
 
 export interface ConsultationEntry {
   id: number; // <-- ADD ID
@@ -24,6 +28,13 @@ export interface InventoryEntry {
   status: string;
   image: string | StaticImageData;
 }
+
+export type Doctor = {
+  id: string | number;
+  name: string;
+  image: string | StaticImageData;
+  slots: string[];
+};
 
 
 export const consultationData: ConsultationEntry[] = [
@@ -120,6 +131,7 @@ export const consultationData: ConsultationEntry[] = [
 ];
 
 
+
 export const inventoryData: InventoryEntry[] = [
   {
     id: 1,
@@ -168,6 +180,45 @@ export const inventoryData: InventoryEntry[] = [
   },
 
 ];
+
+
+
+export const doctorsData: Doctor[] = [
+  {
+    id: 1,
+    name: "Dr. Manan Gupta",
+    image: Doctor1,
+    slots: ["3:00 PM", "3:30 PM", "4:00 PM", "5:00 PM", "5:30 PM"],
+  },
+  {
+    id: 2,
+    name: "Dr. Manan Gupta",
+    image: Doctor2,
+    slots: ["3:00 PM", "3:30 PM", "4:00 PM", "5:00 PM"],
+  },
+  {
+    id: 3,
+    name: "Dr. Jaya Prakesh",
+    image: Doctor3,
+    slots: ["3:00 PM", "3:30 PM", "4:00 PM", "5:00 PM", "6:00 PM"],
+  },
+  {
+    id: 4,
+    name: "Dr. Megha Singh",
+    image: RaniImg,
+    slots: ["3:00 PM", "3:30 PM", "4:00 PM", "5:00 PM"],
+  },
+  {
+    id: 5,
+    name: "Dr. Veena Raman",
+    image: Doctor4,
+    slots: ["3:00 PM", "3:30 PM", "4:00 PM", "5:00 PM", "5:30 PM"],
+  },
+];
+
+
+
+
 
 
 

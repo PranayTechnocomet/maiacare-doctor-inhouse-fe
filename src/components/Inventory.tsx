@@ -18,6 +18,8 @@ import "@/style/Consultation.css";
 import { LuTrash2, LuArrowDown } from "react-icons/lu";
 import AppointmentSummaryCards from "@/components/layout/AppointmentSummaryCards";
 import Link from "next/link";
+import AssignScheduleModal from "@/components/layout/AssignScheduleModal"; // adjust path
+
 
 // const statusColor: Record<string, string> = {
 //     Completed: "success",
@@ -58,6 +60,13 @@ export default function Inventory() {
         setFilteredData(updated);
     };
 
+    const [showAssign, setShowAssign] = useState(false);
+    const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
+
+    const handleAssignClick = (doctor: any) => {
+        setSelectedDoctor(doctor);
+        setShowAssign(true);
+    };
 
     useEffect(() => {
         if (filter === "completed") {
@@ -135,16 +144,21 @@ export default function Inventory() {
         {
             header: "Schedule",
             cell: (info) => {
-                const id = info.row.original.id; // <-- use id directly
+                const doctor = info.row.original;
                 return (
                     <div>
-                        <Button className="maiacare-button-small Assign-button" variant="primary">
+                        <Button
+                            className="maiacare-button-small Assign-button"
+                            variant="primary"
+                            onClick={() => handleAssignClick(doctor)}
+                        >
                             Assign
                         </Button>
                     </div>
                 );
             },
         },
+
         {
             header: "Actions",
             cell: (info) => {
@@ -204,6 +218,13 @@ export default function Inventory() {
                     </Button>
                 </div>
             </div>
+            {/* Assign Schedule Modal */}
+            <AssignScheduleModal
+                show={showAssign}
+                onHide={() => setShowAssign(false)}
+                // doctors={selectedDoctor ? [selectedDoctor] : []}
+            />
+
 
             {/* Table */}
             <CommonTable data={filteredData} columns={columns} />
