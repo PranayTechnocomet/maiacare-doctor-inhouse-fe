@@ -81,7 +81,10 @@ export default function Inventory() {
     const columns: ColumnDef<any>[] = [
         {
             header: "#",
-            cell: () => "01",
+            cell: (info) => {
+                const index = info.row.index + 1; // row number start from 1
+                return index < 10 ? `0${index}` : index; // format 01,02,03
+            },
         },
         {
             header: "Name",
@@ -89,7 +92,6 @@ export default function Inventory() {
                 const imgSrc = info.row.original.image;
                 const name = info.row.original.name;
                 const id = info.row.original.id; // <-- Make sure you have an `id`
-
                 return (
                     <Link href={`/inventory/${id}`} className="text-decoration-none text-dark">
                         <div className="d-flex align-items-center gap-2">
@@ -187,7 +189,7 @@ export default function Inventory() {
     ];
 
     return (
-        <div className="container-fluid py-4 px-3 px-md-4">
+        <div className="">
             {/* Summary Cards */}
             <AppointmentSummaryCards target="inventory" />
 
@@ -222,7 +224,7 @@ export default function Inventory() {
             <AssignScheduleModal
                 show={showAssign}
                 onHide={() => setShowAssign(false)}
-                // doctors={selectedDoctor ? [selectedDoctor] : []}
+            // doctors={selectedDoctor ? [selectedDoctor] : []}
             />
 
 

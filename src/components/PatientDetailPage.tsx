@@ -58,7 +58,7 @@ export default function PatientDetailPageComponent() {
                             <div className="mb-3">
                                 <strong className=" d-block mb-2 heading-patient">Type:</strong>
                                 <div className="d-flex gap-3 flex-wrap mb-4">
-                                    {["Irregular Periods", "Trouble Getting Pregnant", "Hormonal Imbalance", " Getting Pregnant",].map((tag) => (
+                                    {["Irregular Periods", "Trouble Getting Pregnant", "Hormonal Imbalance", " Getting Pregnant", "Trouble Getting ",].map((tag) => (
                                         <span
                                             key={tag}
                                             className="sub-patient bg-white"

@@ -15,8 +15,9 @@ export default function AssignScheduleModal({ show, onHide }: Props) {
     const [selected, setSelected] = useState<{ [key: string]: string | null }>({});
 
     return (
-        <Modal show={show} onHide={onHide} centered size="lg">
-            <div className="container-fluid">
+        <Modal closeButton={false} show={show} onHide={onHide} centered size="lg" className="p-3">
+            
+            <div className="">
                 {/* ===== Header Row ===== */}
                 <div className="row border-bottom pb-2 mb-3 assign-header">
                     <div className="col-2 col-md-1">#</div>
@@ -27,7 +28,7 @@ export default function AssignScheduleModal({ show, onHide }: Props) {
 
                 {/* ===== Rows ===== */}
                 {doctorsData.map((doctor: Doctor) => (
-                    <div key={doctor.id} className="row align-items-center py-3 border-bottom">
+                    <div key={doctor.id} className="row align-items-center py-2 border-bottom">
                         {/* ID */}
                         <div className="col-2 col-md-1 assign-doctor">
                             {String(doctor.id).padStart(2, "0")}
@@ -65,7 +66,7 @@ export default function AssignScheduleModal({ show, onHide }: Props) {
                         </div>
 
                         {/* Action */}
-                        <div className="col-12 col-md-3 text-end mt-3 mt-md-0">
+                        <div className="col-12 col-md-3 text-center mt-3 mt-md-0">
                             <Button
                                 variant="primary"
                                 className="maiacare-button-small Assign-button"
