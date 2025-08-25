@@ -70,10 +70,14 @@ export default function Consultation() {
     }, [filter]);
 
     const columns: ColumnDef<any>[] = [
-        {
-            header: "#",
-            cell: () => "01",
-        },
+       {
+  header: "#",
+  cell: (info) => {
+    const index = info.row.index + 1; // row number start from 1
+    return index < 10 ? `0${index}` : index; // format 01,02,03
+  },
+},
+
         {
             header: "Name",
             cell: (info) => {
@@ -158,9 +162,9 @@ export default function Consultation() {
     ];
 
     return (
-        <div className="container-fluid py-4 px-3 px-md-4">
+        <div className="">
             {/* Summary Cards */}
-     <AppointmentSummaryCards target="patients" />
+            <AppointmentSummaryCards target="patients" />
 
             {/* Search and Filter */}
             <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">

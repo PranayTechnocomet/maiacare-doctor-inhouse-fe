@@ -99,8 +99,10 @@ export default function inventoryDetailPage() {
                                     onChange={(e) => setReview(e.target.value)}
                                     onBlur={() => { }}
                                     required
-                                    maxLength={300}
+                                    // maxLength={300}
                                     rows={5}
+                                    className="review-area"
+                                    style={{ border: "1px solid #DDE1E8" }}
                                 />
                             </div>
 

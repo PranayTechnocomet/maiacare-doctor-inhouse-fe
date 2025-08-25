@@ -7,6 +7,7 @@
     color: #8A8D93;
     box-shadow: none !important;
     border-color: #DDE1E8 !important;
+    padding: 8px;
 }
 
 .custom-search-icon {
@@ -27,10 +28,13 @@
     font-size: 15px;
     box-shadow: none !important;
     border-color: #DDE1E8 !important;
+    padding: 8px;
+    text-align: center;
 }
 
 .custom-filter-button {
     color: #2B4360;
+    background-color: white;
 }
 
 .short-by {
@@ -96,4 +100,13 @@
 
 .arrow-down {
     color: #2B4360;
+}
+
+.custom-sort-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none !important;
+    padding-right: 1rem;
+    /* arrow ni jagya cover karva */
 }
