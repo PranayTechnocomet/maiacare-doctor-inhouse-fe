@@ -54,10 +54,10 @@ const handleEditClick = () => {
 
 
   const documents = [
-    { name: 'Certificate.pdf', date: 'October 20, 2024' },
-    { name: 'Aadhar Card.pdf', date: 'October 20, 2024' },
+    { name: 'Certificate.pdf', date: 'October 20, 2024'},
+    { name: 'Aadhar Card.pdf', date: 'October 20, 2024'},
     { name: 'License.pdf', date: 'October 20, 2024' },
-    { name: 'Certificate.pdf', date: 'October 20, 2024' },
+    { name: 'Certificate.pdf', date: 'October 20, 2024'},
   ];
 
   const handleDelete = (index: number) => {
@@ -107,18 +107,18 @@ const handleEditClick = () => {
                       <div>
                         <div className="card-feild">{item.title}</div>
                         <div className="card-university-text">{item.university}</div>
-                        <div className="card-year">{item.years}</div>
+                        <div className="card-year">{item.years}</div> 
                       </div>
 
                       <div className="d-flex gap-2">
-                        <Button  onClick={handleEditClick}  className="border p-2 rounded-3  bg-transparent">
-                          <Image src={LightEditimg} alt="Specialization" width={20} height={20} />
+                        <Button  onClick={handleEditClick}  className="border p-2 rounded-3 edit-del-btn  bg-transparent">
+                          <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
                         </Button>
 
-                        <Button className="border p-2 rounded-3  bg-transparent"
+                        <Button className="border p-2 rounded-2 edit-del-btn  bg-transparent"
                           onClick={() => handleDelete(idx)} // 👈 click par delete
                         >
-                          <Image src={Delete} alt="Specialization" width={20} height={20} />
+                          <Image src={Delete} alt="Specialization" width={18} height={18} />
                         </Button>
                         
                       </div>
@@ -126,12 +126,10 @@ const handleEditClick = () => {
 
                   ))
                 )}
-
               </ContentContainer>
+
             </div>
-
             {/* Operational hours & Days */}
-
             <div>
               <ContentContainer className="mt-4">
                 <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
@@ -237,7 +235,7 @@ const handleEditClick = () => {
                           className="me-3"
                         />
                         <div>
-                          <div className="card-university-text">{doc.name}</div>
+                          <div className="card-feild">{doc.name}</div>
                           <div className="card-year">{doc.date}</div>
                         </div>
                       </div>
@@ -249,7 +247,6 @@ const handleEditClick = () => {
                       >
                         <Image src={Download} alt="experience" width={25} height={25} />
                       </button>
-
                     </div>
                   ))}
 

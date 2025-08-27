@@ -36,8 +36,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [aadharFile, setAadharFile] = useState<UploadedFile | null>(null);
   const [panFile, setPanFile] = useState<UploadedFile | null>(null);
   const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [fileError, setFileError] = useState<string>("");
 
-    
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const panFileRef = useRef<HTMLInputElement | null>(null)
   const aadharFileRef = useRef<HTMLInputElement>(null);
@@ -89,7 +90,13 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     }
 
     // if (!data.Experience.trim()) errors.Experience = "Experience is required";
-    if (!data.LicNumber.trim()) errors.LicNumber = "Licence Number is required";
+    if (!data.LicNumber.trim()) {
+      errors.LicNumber = "Licence Number is required";
+    } else if (!/^\d+$/.test(data.LicNumber)) {
+      errors.LicNumber = "Licence Number must contain only digits";
+    } else if (data.LicNumber.length !== 10) {
+      errors.LicNumber = "Licence Number must be exactly 10 digits";
+    }
     if (!data.LicNumber) errors.Licphoto = "Licence photo is required";
 
     return errors;
@@ -263,34 +270,54 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    const sizeInKB = `${Math.round(file.size / 1024)} KB`;
+  // Validation rules
+  const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg"];
+  const maxSize = 10 * 1024 * 1024; // 10 MB
 
-    const fileURL = URL.createObjectURL(file);
+  if (!allowedTypes.includes(file.type)) {
+    setFileError(`Only SVG, PNG, JPG Allowed.`);
+    return;
+  }
 
-    const newFile: UploadedFile = {
-      name: file.name,
-      size: sizeInKB, // ✅ use actual size for display
-      progress: 0,
-      status: "uploading",
-      reportName: "",
+  if (file.size > maxSize) {
+    setFileError(`Exceeds 10MB limit.`);
+    return;
+  }
 
-    };
+  setFileError("");
 
-    // ✅ Update preview card
-    setSelectedFile(newFile);
+  // Check if file already uploaded
+  const exists = uploadedFiles.some((f) => f.name === file.name && f.size === `${Math.round(file.size / 1024)} KB`);
+  if (exists) {
+    setFileError("This file is already uploaded.");
+    return;
+  }
 
-    // ✅ Keep in uploadedFiles if you still need for tracking
-    setUploadedFiles((prev) => [...prev, newFile]);
+  const sizeInKB = `${Math.round(file.size / 1024)} KB`;
+  const fileURL = URL.createObjectURL(file);
 
-    simulateUpload(file, sizeInKB);
+  const newFile: UploadedFile = {
+    name: file.name,
+    size: sizeInKB,
+    progress: 0,
+    status: "uploading",
+    reportName: "",
+    preview: fileURL,
   };
 
+  setSelectedFile(newFile);
+  setUploadedFiles((prev) => [...prev, newFile]);
+  simulateUpload(file, sizeInKB);
 
-  // MODAL DATA SHOW IN PERVIOUS PAGE 
+  e.target.value = "";
+};
+
+
+  // MODAL DATA SHOW IN PERVIOUS PAGE  Qualificataion
   const simulateUpload = (file: File, totalSize: string) => {
     let progress = 0;
     const interval = setInterval(() => {
@@ -316,11 +343,34 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     }, 300);
   };
 
+
+
   const handleSave = () => {
+    let newErrors: { [key: number]: string } = {};
+
+    // ✅ Validation: Required + unique report names
+    const reportNames: string[] = [];
+    uploadedFiles.forEach((file, index) => {
+      if (!file.reportName.trim()) {
+        newErrors[index] = "Report Name is required";
+      } else if (reportNames.includes(file.reportName.trim())) {
+        newErrors[index] = "Report Name must be unique";
+      } else {
+        reportNames.push(file.reportName.trim());
+      }
+    });
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return; // stop saving
+    }
+
+    // ✅ Move completed files
     const completed = uploadedFiles.filter((f) => f.status === "completed");
     setCompletedFiles((prev) => [...prev, ...completed]);
     setUploadedFiles([]);
-    setShowModal(false); // closes the modal
+    setShowModal(false);
   };
 
   const handleClose = () => {
@@ -390,6 +440,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
           {/* Aadhar & Pan Card Upload Previews */}
           <Row >
+
+
             <Col md={6} sm={12} className="mt-3">
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
@@ -397,7 +449,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 </Form.Label>
 
                 <div
-                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
+                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     if (!aadharFile) {
@@ -415,7 +467,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       />
                       <div className="flex-grow-1">
                         <div className="card-feild">Aadhar Card</div>
-                        <div className="kyc-details">{aadharFile.name}</div>
+                        <div
+                          className="kyc-details file-name-ellipsis "
+                          title={aadharFile.name} // show full name on hover
+                        >  {aadharFile.name}
+                        </div>
                         <div className="card-year">
                           {aadharFile.size} - {aadharFile.date}
                         </div>
@@ -457,9 +513,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             </Col>
 
 
-
-
-
             <Col md={6} sm={12} className="mt-3">
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
@@ -485,8 +538,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         className="me-3"
                       />
                       <div className="flex-grow-1">
-                        <div className="card-feild">Pan Card</div>
-                        <div className="kyc-details">{panFile.name}</div>
+                        <div className="card-feild  ">Pan Card</div>
+                        <div className="kyc-details file-name-ellipsis ">{panFile.name}</div>
+
+
                         <div className="card-year">
                           {panFile.size} - {panFile.date}
                         </div>
@@ -535,7 +590,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
           {/* Licence Number */}
-          <Row >
+          <Row>
             <Col md={6} sm={12} className="mt-3">
               <InputFieldGroup
                 label="Licence Number"
@@ -543,22 +598,31 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 type="text"
                 value={formData.LicNumber}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFormData({ ...formData, LicNumber: e.target.value });
-                  if (formError.LicNumber) {  // msg type validtation msg hide 
+                  // ✅ ફક્ત digits જ allow
+                  let value = e.target.value.replace(/\D/g, "");
+
+                  // ✅ 10 digit થી વધારે ન લખાય
+                  if (value.length > 10) {
+                    value = value.slice(0, 10);
+                  }
+
+                  setFormData({ ...formData, LicNumber: value });
+
+                  // ✅ error remove while typing
+                  if (formError.LicNumber) {
                     setFormError({ ...formError, LicNumber: "" });
                   }
                 }}
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Licence Number"
-                required={true} gap-2
+                required={true}
                 disabled={false}
                 readOnly={false}
                 error={formError.LicNumber}
                 className="position-relative"
-              >
-              </InputFieldGroup>
+              />
             </Col>
           </Row>
+
 
           {/* Licence Upload Preview */}
           <Row>
@@ -587,7 +651,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       />
                       <div className="flex-grow-1">
                         <div className="card-feild">License</div>
-                        <div className="kyc-details">{licenceFile.name}</div>
+                        <div className="kyc-details file-name-ellipsis  ">{licenceFile.name}</div>
                         <div className="card-year">
                           {licenceFile.size} - {licenceFile.date}
                         </div>
@@ -634,6 +698,28 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           </Row>
         </div>
       </ContentContainer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -723,7 +809,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             dialogClassName="custom-modal-width"
           >
             {/* Always show Browse UI */}
-            <div className="border modal-border-color  rounded-3 p-4 text-center mb-4 ">
+            <div className="border modal-border-color  rounded-3 p-4 text-center mb-4">
               <div className="mb-2">
                 <Image src={uplodimg} alt="upload" width={33} height={33} className="modal-bg p-1 rounded-2" />
               </div>
@@ -733,6 +819,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 <input
                   type="file"
                   ref={fileInputRef}
+                  accept="image/*"
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />
@@ -740,32 +827,45 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   Browse File
                 </Button>
               </div>
+              {fileError && <div className="text-danger mt-2">{fileError}</div>}
+
             </div>
 
             {/* Uploaded files list (below browse) */}
             {uploadedFiles.map((file, index) => (
-              <div key={index} className="p-3 mb-4 bg-white modal-border-color  rounded-3 border">
-                <div className="modal-bg p-3 rounded-3">
+              <div
+                key={index}
+                className="p-3 mb-4 bg-white modal-border-color rounded-3 border"
+              >
+                <div className="modal-bg p-3 rounded-3 ">
                   <div className="d-flex justify-content-between align-items-start">
                     <div className="d-flex align-items-center gap-3">
                       <Image src={PdfWhite} alt="pdf" width={45} height={50} />
                       <div>
-                        <div className="fw-semibold">{file.name}</div>
-
+                        <div className="fw-semibold file-name-ellipsis">
+                          {file.name}
+                        </div>
                         <div className="d-flex align-items-center gap-2">
-                          {/* File Size - muted color */}
                           <span className="profile-sub-title">{file.size}</span>
-
                           <span>•</span>
-
                           {file.status === "uploading" ? (
                             <span className="d-flex align-items-center gap-1 upload-text">
-                              <Image src={Loading} alt="loading" width={20} height={20} />
+                              <Image
+                                src={Loading}
+                                alt="loading"
+                                width={20}
+                                height={20}
+                              />
                               Uploading...
                             </span>
                           ) : (
                             <span className="d-flex align-items-center gap-1 text-success">
-                              <Image src={Completed} alt="completed" width={20} height={20} />
+                              <Image
+                                src={Completed}
+                                alt="completed"
+                                width={20}
+                                height={20}
+                              />
                               Completed
                             </span>
                           )}
@@ -774,8 +874,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     </div>
                   </div>
 
+                  {/* Progress Bar */}
                   {file.status === "uploading" && (
-
                     <div className="mt-3">
                       <div className="progress rounded-pill" style={{ height: "8px" }}>
                         <div
@@ -785,56 +885,65 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         />
                       </div>
                     </div>
-
                   )}
                 </div>
 
-                <div className="mt-4">
-
-                  <label className="form-label fw-semibold ">
-                    Report Name <span className="text-center text-danger">*</span>
+                {/* Report Name Input */}
+                <div className="mt-4 mb-3">
+                  <label className="form-label fw-semibold">
+                    Report Name <span className="text-danger">*</span>
                   </label>
-
                   <div className="d-flex align-items-center">
                     <input
                       type="text"
                       className="form-control px-3 py-2 me-2 maiacare-input-field"
                       placeholder="Enter Report Name"
                       value={file.reportName}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const value = e.target.value;
                         setUploadedFiles((prev) =>
-                          prev.map((f) =>
-                            f.name === file.name ? { ...f, reportName: e.target.value } : f
+                          prev.map((f, i) =>
+                            i === index ? { ...f, reportName: value } : f
                           )
-                        )
-                      }
+                        );
+                        setErrors((prev) => {
+                          const updated = { ...prev };
+                          delete updated[index];
+                          return updated;
+                        });
+                      }}
                     />
                     <div
                       className="d-flex align-items-center justify-content-center border rounded-3 p-2 bg-white"
-                      style={{ width: '42px', height: '42px' }}
+                      style={{ width: "42px", height: "42px" }}
                     >
-                      {file.status === 'completed' ? (
-                        <Image src={EditProfile} alt="completed" width="20" height="20" />
+                      {file.status === "completed" ? (
+                        <Image src={EditProfile} alt="edit" width={20} height={20} />
                       ) : (
-                        <Image src={GreenRight} alt="editing" width="20" height="20" />
+                        <Image src={GreenRight} alt="editing" width={20} height={20} />
                       )}
                     </div>
                   </div>
-                </div>
 
+                  {/* Error Message */}
+                  {errors[index] && (
+                    <div className="text-danger mt-1">{errors[index]}</div>
+                  )}
+                </div>
               </div>
             ))}
+
 
             {/* Action Buttons */}
 
 
             <div className="row mt-4">
-                <div className="col-6">
-              <Button variant="btn-border border" className="w-100" onClick={handleClose}>
-                Cancel
-              </Button>
+              <div className="col-6">
+                <Button variant="btn-border border" className="w-100" onClick={handleClose}>
+                  Cancel
+                </Button>
               </div>
-               <div className="col-6 ">
+              <div className="col-6 ">
                 <Button className=" maiacare-button w-100" onClick={handleSave}>
                   Save
                 </Button>
@@ -846,7 +955,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
 
-            
+
           </Modal>
 
         </div>

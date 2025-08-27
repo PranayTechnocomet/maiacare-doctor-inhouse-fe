@@ -1,10 +1,9 @@
-
 .profile-card {
   border-radius: 8px;
   padding: 20px;
 }
 
-.profile-image {
+.profile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -32,9 +31,10 @@
   gap: 15px;
   /* align-items: center; */
 }
-.last-month{
-border-radius: 8px !important;
-padding: 6px 12px !important; 
+
+.last-month {
+  border-radius: 8px !important;
+  padding: 8px 13px !important;
 }
 
 .profile-card-button {
@@ -51,4 +51,14 @@ padding: 6px 12px !important;
   /* optional if you want to style the image inside button */
   width: 17px;
   height: 20px;
+}
+
+.edit-del-btn {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }

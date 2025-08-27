@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Editbasicdetails from './form/Edit-Basic-Details';
 import Editkycdetails from './form/Edit-Kyc-Details';
 import "../style/Edit-Profile.css";
@@ -10,14 +10,16 @@ import CustomTabs from './ui/CustomTabs';
 
 
 const EditProfile = () => {
-
+  
+  const [activeTab, setActiveTab] = useState<string>("basic");
+  
   const handleNextClick = () => {
     setActiveTab("KYC");
   };
   const handlePrevious = () => {
     setActiveTab("basic");
   };
-  const [activeTab, setActiveTab] = useState<string>("basic");
+
 
   const tabOptions = [
     {
