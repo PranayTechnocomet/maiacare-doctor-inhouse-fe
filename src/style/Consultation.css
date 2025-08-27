@@ -10,6 +10,11 @@
     padding: 8px;
 }
 
+.custom-search-input::placeholder {
+    color: #8A8D93 !important;
+    opacity: 1;
+}
+
 .custom-search-icon {
     background-color: white;
     color: #8A8D93;
@@ -30,11 +35,13 @@
     border-color: #DDE1E8 !important;
     padding: 8px;
     text-align: center;
+    border-radius: 8px;
 }
 
 .custom-filter-button {
     color: #2B4360;
     background-color: white;
+    border-radius: 8px;
 }
 
 .short-by {
@@ -83,10 +90,9 @@
     color: #0694A2;
 }
 
-
 .table .btn-sm {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     padding: 0;
     display: flex;
     align-items: center;
@@ -96,10 +102,14 @@
 
 .trash {
     color: #E85966;
+    height: 15px;
+    width: 15px;
 }
 
 .arrow-down {
     color: #2B4360;
+    height: 15px;
+    width: 15px;
 }
 
 .custom-sort-select {
@@ -108,5 +118,4 @@
     -moz-appearance: none;
     background-image: none !important;
     padding-right: 1rem;
-    /* arrow ni jagya cover karva */
 }
