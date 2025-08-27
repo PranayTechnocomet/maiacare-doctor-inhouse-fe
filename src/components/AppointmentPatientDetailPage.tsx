@@ -25,12 +25,13 @@ export default function AppointmentPatientDetailPage() {
             ),
         },
     ];
+
     return (
         <>
-            <div className="row mb-4">
+            <div className="row mb-2">
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Patient Details</h6>
-                    <ContentContainer className="shadow-sm border-0 p-3">
+                    <ContentContainer className="shadow-sm border-0 h-75 ">
                         <Card.Body>
                             <div className="d-flex align-items-center mb-3">
                                 <Image
@@ -72,12 +73,12 @@ export default function AppointmentPatientDetailPage() {
 
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Consultation Type and Concerns</h6>
-                    <ContentContainer className="shadow-sm border-0">
+                    <ContentContainer className="shadow-sm border-0 h-75">
                         <Card.Body>
                             <div className="mb-3">
                                 <strong className=" d-block mb-2 heading-patient">Type:</strong>
                                 <div className="d-flex gap-3 flex-wrap mb-4">
-                                    {["Irregular Periods", "Trouble Getting Pregnant", "Hormonal Imbalance", " Getting Pregnant",].map((tag) => (
+                                    {["Irregular Periods", "Trouble Getting Pregnant", "Hormonal Imbalance",].map((tag) => (
                                         <span
                                             key={tag}
                                             className="sub-patient bg-white"
@@ -103,30 +104,27 @@ export default function AppointmentPatientDetailPage() {
             </div>
 
 
-            <div className="mt-4">
+            <div className="mt-1">
                 <CustomTabs
                     activeKey={activeTab}
                     setActiveKey={setActiveTab}
                     tabOptions={tabOptions}
                 />
                 {activeTab === 'basic' && (
-                    <div className="mt-2">
+                    <div className="mt-4 mb-5">
                         ProfileBasicDetails
                     </div>
                 )}
 
                 {activeTab === 'Details' && (
-                    <div className="mt-2">
+                    <div className="mt-4 mb-5">
                         ProfileManageLeave
                     </div>
                 )}
-
-
-
             </div>
 
             <div
-                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100"
+                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100 "
                 style={{
                     position: "fixed",
                     bottom: 0,

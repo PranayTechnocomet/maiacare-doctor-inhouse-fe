@@ -11,7 +11,7 @@ export default function PatientDetailPageComponent() {
             <div className="row mb-4">
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Patient Details</h6>
-                    <ContentContainer className="shadow-sm border-0 p-3">
+                    <ContentContainer className="shadow-sm border-0 h-75">
                         <Card.Body>
                             <div className="d-flex align-items-center mb-3">
                                 <Image
@@ -53,7 +53,7 @@ export default function PatientDetailPageComponent() {
 
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Consultation Type and Concerns</h6>
-                    <ContentContainer className="shadow-sm border-0">
+                    <ContentContainer className="shadow-sm border-0 h-75">
                         <Card.Body>
                             <div className="mb-3">
                                 <strong className=" d-block mb-2 heading-patient">Type:</strong>

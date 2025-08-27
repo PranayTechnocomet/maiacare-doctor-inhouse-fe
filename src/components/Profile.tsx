@@ -47,7 +47,7 @@ const Profile = () => {
                             <Image
                                 src={doctor.image}
                                 alt="Profile"
-                                className="profile-image"
+                                className="profile-img"
                             />
                         </div>
 
@@ -69,7 +69,7 @@ text-center text-md-start     ======= small screen all data center */}
                                         <span>
                                             <Image src={Stethoscope} alt="Specialization" width={18} height={18} /> {doctor.specialization}</span>
                                         <span>
-                                            <Image src={Expirence} alt="experience" width={17} height={17} /> {doctor.experience}</span>
+                                            <Image src={Expirence} alt="experience" width={16} height={15}  /> {doctor.experience}</span>
                                     </div>
                                     <div className="detail-row profile-sub-title">
                                         <span>

@@ -46,22 +46,20 @@ const ManageLeave = () => {
   ];
 
   return (
-    <Container fluid className="mt-3">
+   
       <div className="mt-4">
-        <div className="p-3">
-
           {/* Header Row */}
           <div className="d-flex justify-content-between align-items-center flex-wrap">
             <h4 className="mb-2 mb-md-0 profile-card-main-titile">Leave History</h4>
             <div className="d-flex align-items-center flex-wrap gap-2">
               <div className="d-flex align-items-center gap-2">
                 <span className="about-text ">Sort by:</span>
-                <Button className="last-month">
+                <Button className="last-month  ">
                   Last 6 Months
                 </Button>
               </div>
 
-              <Button className="d-flex align-items-center gap-2 px-2 maiacare-button">
+              <Button className="d-flex align-items-center gap-2 px-2 py-2 maiacare-button">
                 <Image src={BookCalendar} alt="Specialization" width={22} height={22} />
                 Block Calendar
               </Button>
@@ -75,8 +73,8 @@ const ManageLeave = () => {
 
         </div>
 
-      </div>
-    </Container>
+ 
+
   );
 };
 

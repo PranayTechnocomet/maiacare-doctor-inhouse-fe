@@ -1,0 +1,20 @@
+/* Default card */
+.card-container {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Selected states */
+.card-container.selected-all {
+  border-color: skyblue;
+}
+
+.card-container.selected-completed {
+  border-color: #FFAAB9;
+}
+
+.card-container.selected-cancelled {
+  border-color: #FFD1A4;
+}

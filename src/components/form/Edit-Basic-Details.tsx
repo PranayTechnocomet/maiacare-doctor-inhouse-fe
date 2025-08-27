@@ -126,14 +126,16 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     } else if (!emailRegex.test(data.Email)) {
       errors.Email = "Enter a valid email address";
     }
-
     if (!data.About.trim()) errors.About = "About is required";
-    if (!data.degree.trim()) errors.degree = "Degree is required";
-    if (!data.field.trim()) errors.field = "Field is required";
-    if (!data.university.trim()) errors.university = "University is required";
-    if (!data.startYear.trim()) errors.startYear = "Start year is required";
-    if (!data.endYear.trim()) errors.endYear = "End year is required";
 
+
+    // if (!data.degree.trim()) errors.degree = "Degree is required";
+    // if (!data.field.trim()) errors.field = "Field is required";
+    // if (!data.university.trim()) errors.university = "University is required";
+    // if (!data.startYear.trim()) errors.startYear = "Start year is required";
+    // if (!data.endYear.trim()) errors.endYear = "End year is required";
+
+    
     // if (!data.MF.trim()) errors.MF = "Start time is required";
     // if (!data.SS.trim()) errors.SS = "Start time required";
     // if (!data.Time.trim()) errors.Time = "End Time is required";
@@ -682,21 +684,6 @@ useEffect(() => {
       </ContentContainer>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       <div id="qualification-section">
         <ContentContainer className="mt-3" >
           <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
@@ -915,8 +902,6 @@ useEffect(() => {
           </Col>
         </Row>
       </ContentContainer>
-
-
 
 
 
