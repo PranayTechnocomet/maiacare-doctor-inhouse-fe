@@ -10,12 +10,13 @@ import CustomTabs from './ui/CustomTabs';
 
 
 const EditProfile = () => {
-  
   const [activeTab, setActiveTab] = useState<string>("basic");
   
-  const handleNextClick = () => {
-    setActiveTab("KYC");
-  };
+  
+    const handleNextClick = () => {
+      setActiveTab("KYC");
+    };
+    
   const handlePrevious = () => {
     setActiveTab("basic");
   };
