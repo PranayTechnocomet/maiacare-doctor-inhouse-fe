@@ -20,9 +20,10 @@ import EditProfile from "../../assets/images/Edit-Profile.png";
 import Camera from "../../assets/images/Camera.png";
 import { TimePickerFieldGroup } from "../ui/CustomTimePicker";
 import { useSearchParams } from "next/navigation";
+import { PhoneNumberInput } from "../ui/PhoneNumberInput";
 
 
-export default function PersonalDetails({ onNext }: { onNext: () => void }) {
+  export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   // Personal Details
   interface FormError {
     [key: string]: string;
@@ -184,7 +185,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
     if (Object.keys(errors).length === 0 && !hasQualError) {
       onNext();
-    } else {
+    } else {              
       console.log("Form has errors:", { errors, qualErrors });
     }
   };
@@ -456,25 +457,6 @@ useEffect(() => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               <div>
                 <div className="fw-semibold">Add Profile Picture</div>
                 <div className="text-muted small">
@@ -578,7 +560,7 @@ useEffect(() => {
               />
 
             </Col>
-            <Col md={6} className="mt-3">
+            <Col md={6} className="mt-3 ">
               <RadioButtonGroup
                 label="Gender"
                 name="gender"
@@ -603,34 +585,20 @@ useEffect(() => {
           <Row >
 
             <Col md={6} className="mt-3">
-              <InputFieldGroup
-                label="Contact Number"
-                name="Contact"
-                type="text"
-                value={formData.Contact}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // ✅ Remove any non-digit character while typing
-                  let value = e.target.value.replace(/\D/g, "");
-
-                  // ✅ Allow only max 10 digits
-                  if (value.length > 10) {
-                    value = value.slice(0, 10);
-                  }
-
-                  setFormData({ ...formData, Contact: value });
-
-                  // ✅ Hide error while typing
-                  if (formError.Contact) {
-                    setFormError({ ...formError, Contact: "" });
-                  }
-                }}
-                placeholder="1234567890"
-                required={true}
-                disabled={false}
-                readOnly={false}
-                error={formError.Contact}
-                className="position-relative"
-              />
+              <PhoneNumberInput
+                   label="Contact Number "
+                     value={formData.Contact}
+                   onChange={(phone: any) => {
+                     // setFormData((prev) => ({ ...prev, phone }));
+                     // setFormError((prev) => ({ ...prev, phone: "" }));
+                     handleChange({
+                       target: { name: "phone", value: phone },
+                     } as React.ChangeEvent<HTMLInputElement>);
+                   }}
+                   required
+                   error={formError.phone}
+                   
+                 />
             </Col>
 
 
@@ -909,7 +877,7 @@ useEffect(() => {
         <Button
           variant="dark"
           className="maiacare-button"
-          onClick={handleNextClick} // 👈 aa mukvu pade
+          onClick={handleNextClick} // navigate 
         >
           Next <ArrowRight size={16} />
         </Button>

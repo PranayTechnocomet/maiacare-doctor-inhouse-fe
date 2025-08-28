@@ -11,7 +11,7 @@ function Page() {
 
     
   useEffect(() => {
-    dispatch(setHeaderData({ title: "EditProfile", subtitle: "profile > EditProfile " }));
+    dispatch(setHeaderData({ title: "EditProfile", subtitle: " profile >  EditProfile" })); 
   }, []);
   
   return (
