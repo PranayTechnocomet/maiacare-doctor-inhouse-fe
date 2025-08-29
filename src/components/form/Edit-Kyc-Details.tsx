@@ -11,6 +11,8 @@ import uplodimg from "../../assets/images/Upload.png";
 import EditProfile from "../../assets/images/EditProfile.png";
 import GreenRight from "../../assets/images/GreenRight.png";
 import Trash from "../../assets/images/Trash.png";
+import Cross from "../../assets/images/Cross.png";
+import Delete from "../../assets/images/Delete.png";
 import Pluslight from "../../assets/images/Pluslight.png";
 import Add from "../../assets/images/Add.png";
 import Loading from "../../assets/images/Loading.png";
@@ -69,7 +71,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
 
-    // if (!data.Adcard.trim()) errors.Adcard = "Adcard  number is required";
+    // if (!data.Adcard.trim()) errors.Adcard = "Adcard  \number is required";
     if (!data.Adcard.trim()) {
       errors.Adcard = "Aadhaar card number is required";
     } else {
@@ -270,51 +272,51 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     fileInputRef.current?.click();
   };
 
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  // Validation rules
-  const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg"];
-  const maxSize = 10 * 1024 * 1024; // 10 MB
+    // Validation rules
+    const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg"];
+    const maxSize = 10 * 1024 * 1024; // 10 MB
 
-  if (!allowedTypes.includes(file.type)) {
-    setFileError(`Only SVG, PNG, JPG Allowed.`);
-    return;
-  }
+    if (!allowedTypes.includes(file.type)) {
+      setFileError(`Only SVG, PNG, JPG Allowed.`);
+      return;
+    }
 
-  if (file.size > maxSize) {
-    setFileError(`Exceeds 10MB limit.`);
-    return;
-  }
+    if (file.size > maxSize) {
+      setFileError(`Exceeds 10MB limit.`);
+      return;
+    }
 
-  setFileError("");
+    setFileError("");
 
-  // Check if file already uploaded
-  const exists = uploadedFiles.some((f) => f.name === file.name && f.size === `${Math.round(file.size / 1024)} KB`);
-  if (exists) {
-    setFileError("This file is already uploaded.");
-    return;
-  }
+    // Check if file already uploaded
+    const exists = uploadedFiles.some((f) => f.name === file.name && f.size === `${Math.round(file.size / 1024)} KB`);
+    if (exists) {
+      setFileError("This file is already uploaded.");
+      return;
+    }
 
-  const sizeInKB = `${Math.round(file.size / 1024)} KB`;
-  const fileURL = URL.createObjectURL(file);
+    const sizeInKB = `${Math.round(file.size / 1024)} KB`;
+    const fileURL = URL.createObjectURL(file);
 
-  const newFile: UploadedFile = {
-    name: file.name,
-    size: sizeInKB,
-    progress: 0,
-    status: "uploading",
-    reportName: "",
-    preview: fileURL,
+    const newFile: UploadedFile = {
+      name: file.name,
+      size: sizeInKB,
+      progress: 0,
+      status: "uploading",
+      reportName: "",
+      preview: fileURL,
+    };
+
+    setSelectedFile(newFile);
+    setUploadedFiles((prev) => [...prev, newFile]);
+    simulateUpload(file, sizeInKB);
+
+    e.target.value = "";
   };
-
-  setSelectedFile(newFile);
-  setUploadedFiles((prev) => [...prev, newFile]);
-  simulateUpload(file, sizeInKB);
-
-  e.target.value = "";
-};
 
 
   // MODAL DATA SHOW IN PERVIOUS PAGE  Qualificataion
@@ -839,8 +841,9 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               >
                 <div className="modal-bg p-3 rounded-3 ">
                   <div className="d-flex justify-content-between align-items-start">
+                    {/* File Info */}
                     <div className="d-flex align-items-center gap-3">
-                      <Image src={PdfWhite} alt="pdf" width={45} height={50} />
+                      <Image src={Jpgimg} alt="pdf" width={45} height={50} />
                       <div>
                         <div className="fw-semibold file-name-ellipsis">
                           {file.name}
@@ -850,28 +853,34 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                           <span>•</span>
                           {file.status === "uploading" ? (
                             <span className="d-flex align-items-center gap-1 upload-text">
-                              <Image
-                                src={Loading}
-                                alt="loading"
-                                width={20}
-                                height={20}
-                              />
+                              <Image src={Loading} alt="loading" width={20} height={20} />
                               Uploading...
                             </span>
                           ) : (
                             <span className="d-flex align-items-center gap-1 text-success">
-                              <Image
-                                src={Completed}
-                                alt="completed"
-                                width={20}
-                                height={20}
-                              />
+                              <Image src={Completed} alt="completed" width={20} height={20} />
                               Completed
                             </span>
                           )}
                         </div>
                       </div>
                     </div>
+
+                    {/* Close/Delete Icon */}
+                    <button
+                      className="btn border-0 bg-transparent"
+                      onClick={() => {
+                        setUploadedFiles((prev) =>
+                          prev.filter((_, i) => i !== index)
+                        );
+                      }}
+                    >
+                      {file.status === "uploading" ? (
+                        <Image src={Cross} alt="edit" width={20} height={20} />
+                      ) : (
+                        <Image src={Delete} alt="edit" width={20} height={20} />
+                      )}
+                    </button>
                   </div>
 
                   {/* Progress Bar */}
