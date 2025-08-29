@@ -23,7 +23,7 @@ import { useSearchParams } from "next/navigation";
 import { PhoneNumberInput } from "../ui/PhoneNumberInput";
 
 
-  export default function PersonalDetails({ onNext }: { onNext: () => void }) {
+export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   // Personal Details
   interface FormError {
     [key: string]: string;
@@ -136,7 +136,7 @@ import { PhoneNumberInput } from "../ui/PhoneNumberInput";
     // if (!data.startYear.trim()) errors.startYear = "Start year is required";
     // if (!data.endYear.trim()) errors.endYear = "End year is required";
 
-    
+
     // if (!data.MF.trim()) errors.MF = "Start time is required";
     // if (!data.SS.trim()) errors.SS = "Start time required";
     // if (!data.Time.trim()) errors.Time = "End Time is required";
@@ -185,7 +185,7 @@ import { PhoneNumberInput } from "../ui/PhoneNumberInput";
 
     if (Object.keys(errors).length === 0 && !hasQualError) {
       onNext();
-    } else {              
+    } else {
       console.log("Form has errors:", { errors, qualErrors });
     }
   };
@@ -217,10 +217,12 @@ import { PhoneNumberInput } from "../ui/PhoneNumberInput";
     setFormErrors([
       ...formErrors,
       { degree: "", field: "", university: "", startYear: "", endYear: "" },
-    ]);
+    ]); 
   };
 
 
+
+  
 
   const yearOptions = Array.from({ length: 31 }, (_, i) => {
     const year = 2000 + i;
@@ -296,20 +298,20 @@ import { PhoneNumberInput } from "../ui/PhoneNumberInput";
   };
 
 
-const handleSave = () => {
-  setSelectedImage(previewImage); // save modal preview to actual profile
-  setShowModal(false);
-};
+  const handleSave = () => {
+    setSelectedImage(previewImage); // save modal preview to actual profile
+    setShowModal(false);
+  };
 
-const handleDelete = () => {
-  setPreviewImage(null); // delete only in modal
-};
-//modal  image delete click in save btn click image set.
-useEffect(() => {
-  if (showModal) {
-    setPreviewImage(selectedImage);
-  }
-}, [showModal]);
+  const handleDelete = () => {
+    setPreviewImage(null); // delete only in modal
+  };
+  //modal  image delete click in save btn click image set.
+  useEffect(() => {
+    if (showModal) {
+      setPreviewImage(selectedImage);
+    }
+  }, [showModal]);
 
 
   //profile qualification Edit button click in scroll to qualification-section
@@ -395,7 +397,9 @@ useEffect(() => {
                   <div className="w-100 border-top pt-3  d-flex justify-content-between align-items-center flex-wrap">
                     <div className="d-flex gap-4 align-items-center flex-wrap">
 
-                      <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
+                      {/* Edit button  */}
+
+                      {/* <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
                         <Image src={EditProfile} alt="Edit" width={18} height={18} />
                         <div className="kyc-details">Edit</div>
                         <input
@@ -405,7 +409,7 @@ useEffect(() => {
                           onChange={handleFileChange}
                           style={{ display: 'none' }}
                         />
-                      </div>
+                      </div> */}
 
                       <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
                         <Image src={ImageSquare} alt="Add Photo" width={18} height={18} />
@@ -474,7 +478,7 @@ useEffect(() => {
               <InputFieldGroup
                 label="Name"
                 name="Name"
-                
+
                 type="text"
                 value={formData.Name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -583,22 +587,30 @@ useEffect(() => {
           </Row>
 
           <Row >
-
             <Col md={6} className="mt-3">
               <PhoneNumberInput
-                   label="Contact Number "
-                     value={formData.Contact}
-                   onChange={(phone: any) => {
-                     // setFormData((prev) => ({ ...prev, phone }));
-                     // setFormError((prev) => ({ ...prev, phone: "" }));
-                     handleChange({
-                       target: { name: "phone", value: phone },
-                     } as React.ChangeEvent<HTMLInputElement>);
-                   }}
-                   required
-                   error={formError.phone}
-                   
-                 />
+                label="Contact Number"
+                value={formData.Contact}
+                onChange={(phone: string) => {
+                  // ✅ Remove any non-digit character
+                  let value = phone.replace(/\D/g, "");
+
+                  // ✅ Allow only max 10 digits
+                  if (value.length > 10) {
+                    value = value.slice(0, 10);
+                  }
+
+                  // ✅ Update formData
+                  setFormData({ ...formData, Contact: value });
+
+                  // ✅ Hide error while typing
+                  if (formError.Contact) {
+                    setFormError({ ...formError, Contact: "" });
+                  }
+                }}
+                required
+                error={formError.Contact}
+              />
             </Col>
 
 
