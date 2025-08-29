@@ -277,7 +277,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     if (!file) return;
 
     // Validation rules
-    const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg"];
+    const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg", "application/pdf"];
     const maxSize = 10 * 1024 * 1024; // 10 MB
 
     if (!allowedTypes.includes(file.type)) {
@@ -377,6 +377,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
   const handleClose = () => {
     setShowModal(false);
+    setFileError("");       // file upload error reset (jo use karto hoy to)
   };
 
 
@@ -821,7 +822,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 <input
                   type="file"
                   ref={fileInputRef}
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.pdf"
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />
@@ -843,7 +844,22 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   <div className="d-flex justify-content-between align-items-start">
                     {/* File Info */}
                     <div className="d-flex align-items-center gap-3">
-                      <Image src={Jpgimg} alt="pdf" width={45} height={50} />
+                      {/* <Image src={Jpgimg} alt="pdf" width={45} height={50} /> */}
+                      <Image
+                        src={
+                          file.name.toLowerCase().endsWith(".pdf")
+                            ? PdfWhite
+                            : [".jpg", ".jpeg", ".png", ".gif"].some((ext) =>
+                              file.name.toLowerCase().endsWith(ext)
+                            )
+                              ? Jpgimg
+                              : PdfWhite // fallback = pdf icon
+                        }
+                        alt={file.name}
+                        width={45}
+                        height={50}
+                      />
+
                       <div>
                         <div className="fw-semibold file-name-ellipsis">
                           {file.name}
