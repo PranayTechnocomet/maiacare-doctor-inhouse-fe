@@ -96,3 +96,7 @@ body::-webkit-scrollbar {
   height: 32px;
   border-radius: 8px;
 }
+.women-image {
+  height: 35px;
+  width: 35px;
+}
