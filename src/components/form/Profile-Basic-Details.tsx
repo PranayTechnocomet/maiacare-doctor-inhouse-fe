@@ -20,6 +20,8 @@ const ProfileBasicDetails = () => {
   const router = useRouter();
 
 const handleEditClick = () => {
+  // set flag before navigation
+  sessionStorage.setItem("triggerQualificationScroll", "true");
   router.push("/edit-profile?scrollTo=qualification");
 };
 

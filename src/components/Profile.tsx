@@ -51,7 +51,8 @@ const Profile = () => {
                             />
                         </div>
 
-                        <div className='col-12 col-md-9 col-lg-9 col-xl-9 ms-4 mt-3 mt-md-0'>
+                        <div className='col-12 ms-4 mt-3 mt-md-0'> 
+                            {/* col-md-9 col-lg-9 col-xl-9    nedd to  above div */}
                             <div>
                                 <div className="d-flex flex-md-row align-items-start align-items-md-center gap-1 ">
                                     <strong>{doctor.name}</strong>
@@ -69,7 +70,7 @@ text-center text-md-start     ======= small screen all data center */}
                                         <span>
                                             <Image src={Stethoscope} alt="Specialization" width={18} height={18} /> {doctor.specialization}</span>
                                         <span>
-                                            <Image src={Expirence} alt="experience" width={16} height={15}  /> {doctor.experience}</span>
+                                            <Image src={Expirence} alt="experience" width={16} height={15} /> {doctor.experience}</span>
                                     </div>
                                     <div className="detail-row profile-sub-title">
                                         <span>
@@ -82,6 +83,7 @@ text-center text-md-start     ======= small screen all data center */}
                                         <span> <Image src={Email} alt="email" width={18} height={18} />  {doctor.email}</span>
                                     </div>
                                 </div>
+
                                 <div className="mt-3 profile-member-since profile-sub-title">
                                     Member since {doctor.memberSince}
                                 </div>

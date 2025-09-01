@@ -85,6 +85,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     if (!data.Adcard) errors.Adphoto = "Aadhar card photo is required";
     if (!data.Pancard) errors.Panphoto = "Pancard photo is required";
     // if (!data.Pancard.trim()) errors.Pancard = "Pancard is required";
+
+
     if (!data.Pancard.trim()) {
       errors.Pancard = "Pancard  number is required";
     } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(data.Pancard)) {
@@ -236,8 +238,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     progress?: number;
     status: "uploading" | "completed";
     reportName: string;
-
-
+    uploadedAt?: number; // timestamp (new Date().getTime())
     // KYC ADHAR,PAN,LICEN CARD 
     date?: string;       // For uploaded date
     preview?: string;    // For preview URL or icon
@@ -272,12 +273,15 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     fileInputRef.current?.click();
   };
 
+
+  //file size , file name / select file 
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     // Validation rules
-    const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg"];
+    const allowedTypes = ["image/svg+xml", "image/png", "image/jpeg", "application/pdf"];
     const maxSize = 10 * 1024 * 1024; // 10 MB
 
     if (!allowedTypes.includes(file.type)) {
@@ -293,6 +297,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     setFileError("");
 
     // Check if file already uploaded
+
     const exists = uploadedFiles.some((f) => f.name === file.name && f.size === `${Math.round(file.size / 1024)} KB`);
     if (exists) {
       setFileError("This file is already uploaded.");
@@ -309,6 +314,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       status: "uploading",
       reportName: "",
       preview: fileURL,
+      uploadedAt: Date.now(), // 👈 upload date store
     };
 
     setSelectedFile(newFile);
@@ -377,6 +383,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
   const handleClose = () => {
     setShowModal(false);
+    setFileError("");       // file upload error reset (jo use karto hoy to)
   };
 
 
@@ -422,8 +429,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 type="text"
                 value={formData.Pancard}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFormData({ ...formData, Pancard: e.target.value });
-                  if (formError.Pancard) {  // msg type validtation msg hide 
+                  // Restrict length to 10
+                  if (e.target.value.length <= 10) {
+                    setFormData({ ...formData, Pancard: e.target.value.toUpperCase() });
+                  }
+
+                  if (formError.Pancard) {
                     setFormError({ ...formError, Pancard: "" });
                   }
                 }}
@@ -434,6 +445,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 readOnly={false}
                 error={formError.Pancard}
                 className="position-relative"
+                maxLength={10}  // 👈 This ensures user cannot type more than 10 characters
               >
               </InputFieldGroup>
             </Col>
@@ -481,7 +493,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                       <button
                         type="button"
-                        className="btn  rounded-2 d-inline-flex p-2  profile-card-boeder me-2"
+                        className="btn  rounded-2 d-inline-flex p-2 profile-card-boeder me-2"
                         onClick={(e) => {
                           e.stopPropagation();
                           setAadharFile(null);
@@ -742,11 +754,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           <div className="d-flex gap-3 flex-wrap">
 
             {completedFiles.map((file, idx) => (
-
               <div
                 key={idx}
                 className="border rounded-3 p-3 text-center position-relative bg-white"
-                style={{ width: "130px", height: "130px" }} // fixed size same as Add button
+                style={{ width: "160px", height: "160px" }} // thodu mota card maate
               >
                 {/* Delete Icon */}
                 <button
@@ -763,15 +774,26 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   <div className="border profile-card-boeder rounded-2 d-inline-flex p-1">
                     <Image src={Trash} alt="delete" width={18} height={18} />
                   </div>
-
                 </button>
-
-                {/* PDF Icon */}
-                <Image src={pdfimg} alt="pdf" width={50} height={50} />
+                {/* File Icon (PDF or Image) */}
+                <Image
+                  src={
+                    file.name?.toLowerCase().endsWith(".pdf")
+                      ? pdfimg
+                      : [".jpg", ".jpeg", ".png", ".gif"].some((ext) =>
+                        file.name?.toLowerCase().endsWith(ext)
+                      )
+                        ? Jpgimg
+                        : pdfimg
+                  }
+                  alt={file.name}
+                  width={40}
+                  height={40}
+                />
 
                 {/* File Title */}
                 <div
-                  className=" mt-2 file-name text-truncate d-block"
+                  className="mt-2 card-feild text-truncate d-block"
                   style={{ maxWidth: "100%" }}
                   title={file.reportName || file.name}
                 >
@@ -785,16 +807,26 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 >
                   {file.name}
                 </div>
+
+                {/* File Size & Date */}
+                <div className="card-year">
+                  {file.size} •{" "}
+                  {file.uploadedAt
+                    ? new Date(file.uploadedAt).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                    : ""}
+                </div>
               </div>
-
-
-
             ))}
+
 
             {/* Add New File Button */}
             <div
               className="add-file-box rounded-3 border  d-flex flex-column align-items-center justify-content-center text-center bg-white"
-              style={{ width: "130px", height: "130px", cursor: "pointer" }} // same size as uploaded files
+              style={{ width: "160px", height: "160px", cursor: "pointer" }} // same size as uploaded files
               onClick={handleOpenModal}
             >
               <Image src={Pluslight} alt="add" width={65} className="my-custom-icon" />
@@ -821,7 +853,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 <input
                   type="file"
                   ref={fileInputRef}
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.pdf"
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />
@@ -843,7 +875,22 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   <div className="d-flex justify-content-between align-items-start">
                     {/* File Info */}
                     <div className="d-flex align-items-center gap-3">
-                      <Image src={Jpgimg} alt="pdf" width={45} height={50} />
+                      {/* <Image src={Jpgimg} alt="pdf" width={45} height={50} /> */}
+                      <Image
+                        src={
+                          file.name.toLowerCase().endsWith(".pdf")
+                            ? PdfWhite
+                            : [".jpg", ".jpeg", ".png", ".gif"].some((ext) =>
+                              file.name.toLowerCase().endsWith(ext)
+                            )
+                              ? Jpgimg
+                              : PdfWhite // fallback = pdf icon
+                        }
+                        alt={file.name}
+                        width={45}
+                        height={50}
+                      />
+
                       <div>
                         <div className="fw-semibold file-name-ellipsis">
                           {file.name}
