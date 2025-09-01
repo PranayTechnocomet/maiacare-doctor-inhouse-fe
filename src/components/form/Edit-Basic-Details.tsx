@@ -113,11 +113,11 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
     const contactRegex = /^[0-9]{10}$/;
 
-    if (!data.Contact.trim()) {
-      errors.Contact = "Contact is required";
-    } else if (!contactRegex.test(data.Contact)) {
-      errors.Contact = "Please enter a valid 10-digit number";
-    }
+if (!data.Contact.trim()) {
+  errors.Contact = "Contact number is required";
+} else if (!contactRegex.test(data.Contact)) {
+  errors.Contact = "Please enter a valid 10-digit number";
+}
 
 
 
@@ -127,6 +127,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     } else if (!emailRegex.test(data.Email)) {
       errors.Email = "Enter a valid email address";
     }
+
+
     if (!data.About.trim()) errors.About = "About is required";
 
 
@@ -212,17 +214,15 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   const handleAddQualification = () => {
     setQualifications([
       ...qualifications,
-      { degree: "", field: "", university: "", startYear: "", endYear: "" }
+      { degree: "", field: "", university: "", startYear: "", endYear: "" }             
     ]);
     setFormErrors([
       ...formErrors,
       { degree: "", field: "", university: "", startYear: "", endYear: "" },
-    ]); 
+    ]);
   };
 
 
-
-  
 
   const yearOptions = Array.from({ length: 31 }, (_, i) => {
     const year = 2000 + i;
@@ -292,15 +292,28 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   const handleFileCamera = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Allowed image types
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+
+      if (!allowedTypes.includes(file.type)) {
+        setErrorMessage("Only JPG and PNG images are allowed.");
+        setPreviewImage(null);
+        event.target.value = ""; // Reset input
+        return;
+      }
+
+      setErrorMessage(""); // clear error if valid
       const imageURL = URL.createObjectURL(file);
       setPreviewImage(imageURL); // show preview
     }
   };
 
 
+
   const handleSave = () => {
     setSelectedImage(previewImage); // save modal preview to actual profile
     setShowModal(false);
+
   };
 
   const handleDelete = () => {
@@ -317,20 +330,28 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   //profile qualification Edit button click in scroll to qualification-section
   const searchParams = useSearchParams();
   const scrollTo = searchParams.get("scrollTo");
+
   useEffect(() => {
     if (scrollTo === "qualification") {
-      setTimeout(() => {
-        const section = document.getElementById("qualification-section");
-        if (section) {
-          section.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      }, 200);
+      // Check if this scroll was triggered by button click
+      const shouldScroll = sessionStorage.getItem("triggerQualificationScroll");
+
+      if (shouldScroll === "true") {
+        setTimeout(() => {
+          const section = document.getElementById("qualification-section");
+          if (section) {
+            section.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 200);
+
+        // reset flag after scroll so refresh won’t scroll again
+        sessionStorage.removeItem("triggerQualificationScroll");
+      }
     }
   }, [scrollTo]);
-
 
 
   return (
@@ -369,11 +390,15 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
               <Modal
                 show={showModal}
-                onHide={() => setShowModal(false)}
+                onHide={() => {
+                  setShowModal(false);
+                  setErrorMessage(""); // 🔹 Reset error msg on modal close
+                }}
                 header="Profile Photo"
                 closeButton={true}
                 className="text-pink"
                 dialogClassName="custom-modal-width"
+
               >
                 <div className="d-flex flex-column align-items-center ">
                   <div
@@ -400,16 +425,16 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       {/* Edit button  */}
 
                       {/* <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
-                        <Image src={EditProfile} alt="Edit" width={18} height={18} />
-                        <div className="kyc-details">Edit</div>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                          style={{ display: 'none' }}
-                        />
-                      </div> */}
+                          <Image src={EditProfile} alt="Edit" width={18} height={18} />
+                          <div className="kyc-details">Edit</div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                          />
+                        </div> */}
 
                       <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
                         <Image src={ImageSquare} alt="Add Photo" width={18} height={18} />
@@ -453,8 +478,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       </button>
                     </div>
                   </div>
-
-
                 </div>
               </Modal>
 
@@ -468,7 +491,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 </div>
               </div>
             </div>
-
           </Col>
         </Row>
 
@@ -478,7 +500,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               <InputFieldGroup
                 label="Name"
                 name="Name"
-
                 type="text"
                 value={formData.Name}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -587,7 +608,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           </Row>
 
           <Row >
-            <Col md={6} className="mt-3">
+
+
+      <Col md={6} className="mt-3">
               <PhoneNumberInput
                 label="Contact Number"
                 value={formData.Contact}
@@ -613,7 +636,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               />
             </Col>
 
-
             <Col md={6} className="mt-3">
               <InputFieldGroup
                 label="Email"
@@ -625,7 +647,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   if (formError.Email) {   // typing in hide error 
                     setFormError({ ...formError, Email: "" });
                   }
-                }}
+                }} z
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Email"
                 required={true}
@@ -657,7 +679,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 error={formError.About}
                 maxLength={500}
               />
-
             </Col>
           </Row>
         </div>
@@ -820,10 +841,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-
-
-
-
       <ContentContainer className="mt-4">
         <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
           <h5 className="profile-card-main-titile mb-2 mb-md-0">
@@ -894,9 +911,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           Next <ArrowRight size={16} />
         </Button>
       </div>
-
-
-
     </div>
   );
 }
