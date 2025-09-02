@@ -113,11 +113,11 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
     const contactRegex = /^[0-9]{10}$/;
 
-if (!data.Contact.trim()) {
-  errors.Contact = "Contact number is required";
-} else if (!contactRegex.test(data.Contact)) {
-  errors.Contact = "Please enter a valid 10-digit number";
-}
+    if (!data.Contact.trim()) {
+      errors.Contact = "Contact number is required";
+    } else if (!contactRegex.test(data.Contact)) {
+      errors.Contact = "Please enter a valid 10-digit number";
+    }
 
 
 
@@ -214,7 +214,7 @@ if (!data.Contact.trim()) {
   const handleAddQualification = () => {
     setQualifications([
       ...qualifications,
-      { degree: "", field: "", university: "", startYear: "", endYear: "" }             
+      { degree: "", field: "", university: "", startYear: "", endYear: "" }
     ]);
     setFormErrors([
       ...formErrors,
@@ -328,30 +328,30 @@ if (!data.Contact.trim()) {
 
 
   //profile qualification Edit button click in scroll to qualification-section
-  const searchParams = useSearchParams();
-  const scrollTo = searchParams.get("scrollTo");
+  // const searchParams = useSearchParams();
+  // const scrollTo = searchParams.get("scrollTo");
 
-  useEffect(() => {
-    if (scrollTo === "qualification") {
-      // Check if this scroll was triggered by button click
-      const shouldScroll = sessionStorage.getItem("triggerQualificationScroll");
+  // useEffect(() => {
+  //   if (scrollTo === "qualification") {
+  //     // Check if this scroll was triggered by button click
+  //     const shouldScroll = sessionStorage.getItem("triggerQualificationScroll");
 
-      if (shouldScroll === "true") {
-        setTimeout(() => {
-          const section = document.getElementById("qualification-section");
-          if (section) {
-            section.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        }, 200);
+  //     if (shouldScroll === "true") {
+  //       setTimeout(() => {
+  //         const section = document.getElementById("qualification-section");
+  //         if (section) {
+  //           section.scrollIntoView({
+  //             behavior: "smooth",
+  //             block: "start",
+  //           });
+  //         }
+  //       }, 200);
 
-        // reset flag after scroll so refresh won’t scroll again
-        sessionStorage.removeItem("triggerQualificationScroll");
-      }
-    }
-  }, [scrollTo]);
+  //       // reset flag after scroll so refresh won’t scroll again
+  //       sessionStorage.removeItem("triggerQualificationScroll");
+  //     }
+  //   }
+  // }, [scrollTo]);
 
 
   return (
@@ -610,7 +610,7 @@ if (!data.Contact.trim()) {
           <Row >
 
 
-      <Col md={6} className="mt-3">
+            <Col md={6} className="mt-3">
               <PhoneNumberInput
                 label="Contact Number"
                 value={formData.Contact}
@@ -685,7 +685,77 @@ if (!data.Contact.trim()) {
       </ContentContainer>
 
 
-      <div id="qualification-section">
+
+
+
+
+
+      <ContentContainer className="mt-4">
+        <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
+          <h5 className="profile-card-main-titile mb-2 mb-md-0">
+            Operational hours & Days
+          </h5>
+          <Form.Check
+            type="checkbox"
+            label="Select custom Hours and Days?"
+            className="text-nowrap check-box input"
+          />
+        </div>
+
+        <Row className="mb-3">
+          <Col md={6}>
+            <TimePickerFieldGroup
+              label="Monday-Friday"
+              name="MF"
+              value={formData.MF}
+              onChange={(e) => {
+                setFormData({ ...formData, MF: e.target.value });
+              }}
+            />
+          </Col>
+
+          <Col md={6} className="mt-2">
+            <TimePickerFieldGroup
+              name="Time"
+              value={formData.Time}
+              onChange={(e) => {
+                setFormData({ ...formData, Time: e.target.value });
+              }}
+            />
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col md={6}>
+            <TimePickerFieldGroup
+              label="Saturday-Sunday"
+              name="SS"
+              value={formData.SS}
+              onChange={(e) => {
+                setFormData({ ...formData, SS: e.target.value });
+              }}
+            />
+          </Col>
+
+          <Col md={6} className="mt-2">
+            <TimePickerFieldGroup
+              name="Timer"
+              value={formData.Timer}
+              onChange={(e) => {
+                setFormData({ ...formData, Timer: e.target.value });
+              }}
+            />
+          </Col>
+        </Row>
+      </ContentContainer>
+
+
+
+
+
+
+
+      {/* <div id="qualification-section"> */}
         <ContentContainer className="mt-3" >
           <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
 
@@ -836,70 +906,7 @@ if (!data.Contact.trim()) {
           </Button>
         </ContentContainer>
 
-      </div>
-
-
-
-
-      <ContentContainer className="mt-4">
-        <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
-          <h5 className="profile-card-main-titile mb-2 mb-md-0">
-            Operational hours & Days
-          </h5>
-          <Form.Check
-            type="checkbox"
-            label="Select custom Hours and Days?"
-            className="text-nowrap check-box input"
-          />
-        </div>
-
-        <Row className="mb-3">
-          <Col md={6}>
-            <TimePickerFieldGroup
-              label="Monday-Friday"
-              name="MF"
-              value={formData.MF}
-              onChange={(e) => {
-                setFormData({ ...formData, MF: e.target.value });
-              }}
-            />
-          </Col>
-
-          <Col md={6} className="mt-2">
-            <TimePickerFieldGroup
-              name="Time"
-              value={formData.Time}
-              onChange={(e) => {
-                setFormData({ ...formData, Time: e.target.value });
-              }}
-            />
-          </Col>
-        </Row>
-
-        <Row className="mb-3">
-          <Col md={6}>
-            <TimePickerFieldGroup
-              label="Saturday-Sunday"
-              name="SS"
-              value={formData.SS}
-              onChange={(e) => {
-                setFormData({ ...formData, SS: e.target.value });
-              }}
-            />
-          </Col>
-
-          <Col md={6} className="mt-2">
-            <TimePickerFieldGroup
-              name="Timer"
-              value={formData.Timer}
-              onChange={(e) => {
-                setFormData({ ...formData, Timer: e.target.value });
-              }}
-            />
-          </Col>
-        </Row>
-      </ContentContainer>
-
+      {/* </div> */}
 
 
       <div className="d-flex justify-content-end mt-4">

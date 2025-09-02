@@ -1,3 +1,7 @@
+  .custom-modal-width {
+    max-width: 510px;
+  }
+
 .maiacare-input-field {
     padding: 12px;
     border: 1px solid var(--color-brand);

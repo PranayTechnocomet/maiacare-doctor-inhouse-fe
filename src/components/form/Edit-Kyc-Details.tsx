@@ -843,7 +843,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             dialogClassName="custom-modal-width"
           >
             {/* Always show Browse UI */}
-            <div className="border modal-border-color  rounded-3 p-4 text-center mb-4">
+            <div className="border modal-border-color rounded-3 p-4 text-center mb-4">
               <div className="mb-2">
                 <Image src={uplodimg} alt="upload" width={33} height={33} className="modal-bg p-1 rounded-2" />
               </div>
