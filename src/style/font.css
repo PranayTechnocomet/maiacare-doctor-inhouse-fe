@@ -347,6 +347,12 @@
     }
 }
 
+@media (max-width: 767px) {
+    .Consultations-image {
+        flex-wrap: wrap;
+    }
+}
+
 /* Optional: Smaller devices like phones (e.g., 575px and below) */
 @media (max-width: 575px) {
     .maiacare-input-field-label {
@@ -537,4 +543,10 @@
     font-size: 13px;
     padding: 4px 8px;
     border-radius: 4px;
+}
+
+.Consultations-book {
+    font-weight: 600;
+    font-size: 18px;
+    color: #292929;
 }

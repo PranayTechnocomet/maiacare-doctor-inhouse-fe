@@ -97,3 +97,7 @@ body::-webkit-scrollbar {
   border-radius: 8px;
 }
 
+.women-image {
+  height: 35px;
+  width: 35px;
+}
