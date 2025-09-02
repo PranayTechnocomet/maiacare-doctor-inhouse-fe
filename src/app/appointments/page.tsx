@@ -14,7 +14,8 @@ function Page() {
   return (
     <div>
       {/* Pass the data to the component */}
-      <AppointmentPatientDetailPage />
+      {/* <AppointmentPatientDetailPage /> */}
+      <h4>AppointmentPatient</h4>
     </div>
   )
 }

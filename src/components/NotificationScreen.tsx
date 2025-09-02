@@ -41,7 +41,7 @@ const notifications: NotificationItem[] = [
   {
     title: "System Alerts",
     description: "Important updates and system-wide notifications.",
-    time: "3 month ago",
+    time: "3 months ago",
     image: leaveUpdateImg.src,
   },
   {
@@ -49,13 +49,13 @@ const notifications: NotificationItem[] = [
     description: "Allegra Out of Stock.",
     time: "3 months ago",
     image: emergencyImg.src,
-    unread: true,
   },
   {
     title: "System Alerts",
     description: "Important updates and system-wide notifications.",
-    time: "3 month ago",
+    time: "3 months ago",
     image: leaveUpdateImg.src,
+    unread: true,
   },
 ];
 
@@ -83,7 +83,7 @@ const NotificationScreen: React.FC = () => {
         {/* Sort + Filter */}
         <div className="d-flex align-items-center gap-2 mb-2">
           <span className="text-muted small short-by">Sort by:</span>
-          <Form.Select className="custom-sort-select">
+          <Form.Select className="custom-filter-select">
             <option>All Time</option>
             <option>Today</option>
             <option>This Week</option>
@@ -106,7 +106,7 @@ const NotificationScreen: React.FC = () => {
       </div> */}
 
       {/* list */}
-      <ContentContainer className="mt-3 notifications-list p-0 border">
+      <ContentContainer className="mt-3 notifications-list p-0">
         {notifications.map((n, idx) => (
           <div
             key={idx}

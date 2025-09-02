@@ -18,6 +18,7 @@ import "@/style/Consultation.css";
 import { LuTrash2, LuArrowDown } from "react-icons/lu";
 import AppointmentSummaryCards from "@/components/layout/AppointmentSummaryCards";
 import Link from "next/link";
+import woman from "@/assets/images/woman.png";
 
 // const statusColor: Record<string, string> = {
 //     Completed: "success",
@@ -70,13 +71,13 @@ export default function Consultation() {
     }, [filter]);
 
     const columns: ColumnDef<any>[] = [
-       {
-  header: "#",
-  cell: (info) => {
-    const index = info.row.index + 1; // row number start from 1
-    return index < 10 ? `0${index}` : index; // format 01,02,03
-  },
-},
+        {
+            header: "#",
+            cell: (info) => {
+                const index = info.row.index + 1; // row number start from 1
+                return index < 10 ? `0${index}` : index; // format 01,02,03
+            },
+        },
 
         {
             header: "Name",
@@ -164,20 +165,30 @@ export default function Consultation() {
     return (
         <div className="">
             {/* Summary Cards */}
-            <AppointmentSummaryCards target="patients" />
+            {/* <AppointmentSummaryCards target="patients" /> */}
 
             {/* Search and Filter */}
-            <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
+            <div className="d-flex justify-content-between align-items-center flex-wrap mb-3">
                 {/* Search Input */}
-                <InputGroup className="mb-2 custom-search-group">
-                    <Form.Control
-                        placeholder="Search"
-                        className="custom-search-input"
-                    />
-                    <InputGroup.Text className="custom-search-icon">
-                        <IoSearch className="search-icon" />
-                    </InputGroup.Text>
-                </InputGroup>
+                <div className="d-flex align-items-center gap-2 mb-1 Consultations-image">
+                    {/* Search Input */}
+                    <InputGroup className=" custom-search-group">
+                        <Form.Control
+                            placeholder="Search"
+                            className="custom-search-input"
+                        />
+                        <InputGroup.Text className="custom-search-icon">
+                            <IoSearch className="search-icon" />
+                        </InputGroup.Text>
+                    </InputGroup>
+
+                    <div className="border custom-filter-button p-2" style={{ display: "flex", gap: "10px", }}>
+                        <Image src={woman} alt="Total" className="img-fluid women-image" />
+                        <div style={{ display: 'flex', alignItems: 'center', width: '190px' }}>
+                            <div className="Consultations-book">98 Consultations</div>
+                        </div>
+                    </div>
+                </div>
 
                 {/* Sort + Filter */}
                 <div className="d-flex align-items-center gap-2 mb-2">

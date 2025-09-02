@@ -1,11 +1,36 @@
 "use client";
+import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import { Button, Card } from "react-bootstrap";
 import ContentContainer from "@/components/ui/ContentContainer";
 import patientImage from "@/assets/images/Img-1.png";
 import EditProfile from "../assets/images/EditProfile-2.png";
+import "../style/ProfileTabes.css";
+// import ContentContainer from './ui/ContentContainer';
+import CustomTabs from './ui/CustomTabs';
+
 
 export default function PatientDetailPageComponent() {
+
+    const [activeTab, setActiveTab] = useState<string>("basic");
+
+    const tabOptions = [
+        {
+            key: "basic",
+            label: "Basic Details",
+            content: (
+                <></>
+            ),
+        },
+        {
+            key: "Details",
+            label: "Partner Details",
+            content: (
+                <></>
+            ),
+        },
+    ];
+
     return (
         <>
             <div className="row mb-4">
@@ -83,7 +108,7 @@ export default function PatientDetailPageComponent() {
                 </div>
             </div>
 
-            <div className="row mb-5">
+            {/* <div className="row mb-5">
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
                     <ContentContainer className="shadow-sm border-0 mb-4">
@@ -96,9 +121,7 @@ export default function PatientDetailPageComponent() {
                                 The IVF process, success rates, potential risks, and next steps were discussed.
                                 Patient was advised on pre-treatment preparation, and a follow-up was scheduled.
                             </p>
-                            {/* <Button variant="light" className="border d-flex align-items-center gap-2">
-                                <i className="bi bi-pencil"></i> Edit
-                            </Button> */}
+
                             <div className="d-flex justify-content-end mt-3">
                                 <Button className="edit-profile-btn d-flex align-items-center">
                                     <span className="me-2">
@@ -110,9 +133,8 @@ export default function PatientDetailPageComponent() {
                         </Card.Body>
                     </ContentContainer>
                 </div>
-            </div>
-
-            <div
+            </div> */}
+            {/* <div
                 className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100"
                 style={{
                     position: "fixed",
@@ -123,6 +145,24 @@ export default function PatientDetailPageComponent() {
             >
                 <Button variant="light" className="edit-profile-btn">Cancel</Button>
                 <Button className="Button-login" variant="primary">Mark as Complete</Button>
+            </div> */}
+            <div className="mt-1">
+                <CustomTabs
+                    activeKey={activeTab}
+                    setActiveKey={setActiveTab}
+                    tabOptions={tabOptions}
+                />
+                {activeTab === 'basic' && (
+                    <div className="mt-4 mb-5">
+                        ProfileBasicDetails
+                    </div>
+                )}
+
+                {activeTab === 'Details' && (
+                    <div className="mt-4 mb-5">
+                        ProfileManageLeave
+                    </div>
+                )}
             </div>
 
         </>
