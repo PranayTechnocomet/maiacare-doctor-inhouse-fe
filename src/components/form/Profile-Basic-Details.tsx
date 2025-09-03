@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Form, Table } from 'react-bootstrap';
+import { Container, Row, Col, Button, Form, Table, Accordion } from 'react-bootstrap';
 import Add from "../../assets/images/Add.png";
 import Delete from "../../assets/images/Delete.png";
 import LightEditimg from "../../assets/images/LightEditimg.png";
@@ -49,7 +49,7 @@ const ProfileBasicDetails = () => {
     SS: string;
     Time: string;
     Timer: string;
-    qualification: string;
+
     degree: string;
     field: string;
     university: string;
@@ -63,16 +63,23 @@ const ProfileBasicDetails = () => {
     SS: "",
     Time: "",
     Timer: "",
-    
-    qualification: "",
+
+
     degree: "",
     field: "",
     university: "",
     startYear: "",
     endYear: ""
   };
-  
+
   const [formData, setFormData] = useState<FormData>(initialFormData);
+
+  const [qualifications, setQualifications] = useState<FormData[]>([
+    { ...initialFormData },
+  ]);
+  const [formErrors, setFormErrors] = useState([
+    { degree: "", field: "", university: "", startYear: "", endYear: "" }
+  ]);
 
 
 
@@ -103,11 +110,20 @@ const ProfileBasicDetails = () => {
   ];
 
 
+
+
+
+  //================   Modal  no all data below =============//
+
+
   const handleOpen = () => setShowModal(true);
+
   const handleClose = () => {
     setShowModal(false);
     setFormData(initialFormData);
+
     setFormError(initialFormError);
+    setFormErrors([]);
   }
 
   const yearOptions = Array.from({ length: 31 }, (_, i) => {
@@ -115,65 +131,95 @@ const ProfileBasicDetails = () => {
     return { id: year.toString(), value: year.toString(), label: year.toString() };
   });
 
-// ✅ University list JSON
-const universities = [
-  { id: "1", value: "gujarat", label: "Gujarat University" },
-  { id: "2", value: "mumbai", label: "Atmiya University" },
-  { id: "3", value: "delhi", label: "saurashtra University" },
-  { id: "4", value: "bangalore", label: "Darshan University" },
-];
-
-
-
-
+  // ✅ University list JSON
+  const universities = [
+    { id: "1", value: "Gujarat University", label: "Gujarat University" },
+    { id: "2", value: "Atmiya University", label: "Atmiya University" },
+    { id: "3", value: "Saurashtra University", label: "Saurashtra University" },
+    { id: "4", value: "Darshan University", label: "Darshan University" },
+  ];
 
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
 
-    if (!data.qualification.trim()) errors.qualification = "Qualification is Required";
-    if (!data.degree.trim()) errors.degree = "Degree is required";
-    if (!data.field.trim()) errors.field = "Field is required";
-    if (!data.university.trim()) errors.university = "University is required";
-    if (!data.startYear.trim()) errors.startYear = "Start year is required";
-    if (!data.endYear.trim()) errors.endYear = "End year is required";
+    // if (!data.qualification.trim()) errors.qualification = "Qualification is Required";
+    // if (!data.degree.trim()) errors.degree = "Degree is required";
+    // if (!data.field.trim()) errors.field = "Field is required";
+    // if (!data.university.trim()) errors.university = "University is required";
+    // if (!data.startYear.trim()) errors.startYear = "Start year is required";
+    // if (!data.endYear.trim()) errors.endYear = "End year is required";
 
     return errors;
   };
 
 
+  const validateForm1 = (quals: typeof qualifications) => {
+    const errors = quals.map((q) => ({
+
+      degree: !q.degree ? "Degree is required" : "",
+      field: !q.field ? "Field is required" : "",
+      university: !q.university ? "University is required" : "",
+      startYear: !q.startYear ? "Start Year is required" : "",
+      endYear: !q.endYear ? "End Year is required" : "",
+    }));
+    return errors;
+  };
+
+  // ✅ Function to add data
+  const handleAddQualification = () => {
+    setQualifications([...qualifications, { ...initialFormData }]);
+    // ADDD Qualifications validtation msg 
+    setFormErrors([
+      ...formErrors,
+      { degree: "", field: "", university: "", startYear: "", endYear: "" }
+    ]);
+  };
+
+  const handleRemoveQualification = (index: number) => {
+    const updated = [...qualifications];
+    updated.splice(index, 1);
+    setQualifications(updated);
+  };
+
   const handleSave = () => {
-    const errors = validateForm(formData);
+    const errors = validateForm(formData);          // single form
+    const qualErrors = validateForm1(qualifications); // multi rows
+
     setFormError(errors);
+    setFormErrors(qualErrors); // ✅ set array
 
-    // ✅ If no errors → proceed
-    if (Object.keys(errors).length === 0) {
-      console.log("Form submitted", formData);
+    const hasQualError = qualErrors.some((err) =>
+      Object.values(err).some((msg) => msg !== "")
+    );
 
-      // 1) Close modal
+    if (Object.keys(errors).length === 0 && !hasQualError) {
+      console.log("Form submitted ✅", { formData, qualifications });
       handleClose();
 
-      // 2) Reset data & errors ONLY after success
+      // Reset form only after successful submit
       setFormData(initialFormData);
       setFormError(initialFormError);
+      setFormErrors([]);
+      setQualifications([]);
+    } else {
+      console.log("Form has errors ⚠️", { errors, qualErrors });
     }
+  };
+
+  // + add Qualification button diable data show after unable
+  const isQualificationComplete = (q: any) => {
+    return q.degree && q.field && q.university && q.startYear && q.endYear;
   };
 
 
 
 
-
-
-
-
-
-
-  
   return (
     // <Container fluid className="mt-3">
     <div>
       <Row>
 
-        {/* =====LEFT COLUMN  PART ======== */}
+        {/* =====LEFT COLUMN PART ======== */}
 
 
         <Col lg={8}>
@@ -207,7 +253,6 @@ const universities = [
                   <Image src={Add} alt="Add" />
                 </Button>
 
-
                 <Modal
                   show={showModal}
                   onHide={handleClose}
@@ -215,131 +260,175 @@ const universities = [
                   header="Qualification Details"
                   centered
                 >
+
+
+
+
                   <div>
-                    <div>
-                      <InputSelect
-                        label="Qualification Select"
-                        name="qualification"
-                        onChange={(e) => {
-                            setFormData({ ...formData, qualification: e.target.value });
+                    {/* 🔁 Loop through all qualifications */}
+                    <Accordion defaultActiveKey="0" alwaysOpen>
+                      {qualifications.map((q, index) => (
+                        <div key={index} className="mb-4"> {/* ← Add margin-bottom here for spacing */}
+                          <Accordion.Item eventKey={index.toString()}>
+                            <Accordion.Header>
+                              Qualification {index + 1}
+                            </Accordion.Header>
 
-                            // ✅ Error hide when user types
-                            if (formError.qualification) {
-                              setFormError({ ...formError, qualification: "" });
-                            }
-                          }}
-                        onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
-                        required={true}
-                        disabled={false}
-                        error={formError.qualification}
-                          options={universities}   // ✅ JSON array used here
-                      />
-                    </div>
+                            <Accordion.Body>
+                              <div className="position-relative pt-3  p-3 modal-border-dashed">
 
-                    {/* Fields */}
-                    <Row>
-                      <Col md={6} className="mt-3">
-                        <InputFieldGroup
-                          label="Degree"
-                          name="degree"
-                          type="text"
-                          value={formData.degree}
-                          onChange={(e) => {
-                            setFormData({ ...formData, degree: e.target.value });
+                                {/* ❌ Remove button - show only if NOT first item */}
+                                {index !== 0 && (
+                                  <button
+                                    type="button"
+                                    className="btn-close position-absolute"
+                                    style={{ top: "10px", right: "10px" }}
+                                    onClick={() => handleRemoveQualification(index)}
+                                  />
+                                )}
 
-                            // ✅ Error hide when user types
-                            if (formError.degree) {
-                              setFormError({ ...formError, degree: "" });
-                            }
-                          }}
-                          placeholder="Enter Degree"
-                          required={true}
-                          error={formError.degree}
-                        />
-                      </Col>
+                                <Row>
+                                  <Col md={6} className="mt-3">
+                                    <InputFieldGroup
+                                      label="Degree"
+                                      name="degree"
+                                      type="text"
+                                      value={q.degree}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].degree = e.target.value;
+                                        setQualifications(updated);
 
-                      <Col md={6} className="mt-3">
-                        <InputFieldGroup
-                          label="Field of study"
-                          name="field"
-                          type="text"
-                          value={formData.field}
-                          onChange={(e) => {
-                            setFormData({ ...formData, field: e.target.value });
-                            if (formError.field) {
-                              setFormError({ ...formError, field: "" });
-                            }
-                          }}
-                          placeholder="Select Field"
-                          required={true}
-                          error={formError.field}
-                        />
-                      </Col>
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].degree = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      placeholder="Enter Degree"
+                                      required={true}
+                                      error={formErrors[index]?.degree}
+                                    />
+                                  </Col>
 
-                      <Col md={12} className="mt-3">
-                        <InputFieldGroup
-                          label="University"
-                          name="university"
-                          type="text"
-                          value={formData.university}
-                          onChange={(e) => {
-                            setFormData({ ...formData, university: e.target.value });
-                            if (formError.university) {
-                              setFormError({ ...formError, university: "" });
-                            }
-                          }}
-                          placeholder="University"
-                          required={true}
-                          error={formError.university}
-                        />
-                      </Col>
+                                  <Col md={6} className="mt-3">
+                                    <InputFieldGroup
+                                      label="Field of study"
+                                      name="field"
+                                      type="text"
+                                      value={q.field}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].field = e.target.value;
+                                        setQualifications(updated);
 
-                      <Col md={6} className="mt-3">
-                        <InputSelect
-                          label="Start Year"
-                          name="startYear"
-                          value={formData.startYear}
-                          onChange={(e) => {
-                            setFormData({ ...formData, startYear: e.target.value });
-                            if (formError.startYear) {
-                              setFormError({ ...formError, startYear: "" });
-                            }
-                          }}
-                          required={true}
-                          error={formError.startYear}
-                          options={yearOptions}
-                        />
-                      </Col>
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].field = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      placeholder="Select Field"
+                                      required={true}
+                                      error={formErrors[index]?.field}
+                                    />
+                                  </Col>
 
-                      <Col md={6} className="mt-3">
-                        <InputSelect
-                          label="End Year"
-                          name="endYear"
-                          value={formData.endYear}
-                          onChange={(e) => {
-                            setFormData({ ...formData, endYear: e.target.value });
-                            if (formError.endYear) {
-                              setFormError({ ...formError, endYear: "" });
-                            }
-                          }}
-                          required={true}
-                          error={formError.endYear}
-                          options={yearOptions}
-                        />
-                      </Col>
-                    </Row>
+                                  <Col md={12} className="mt-3">
+                                    <InputFieldGroup
+                                      label="University"
+                                      name="university"
+                                      type="text"
+                                      value={q.university}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].university = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].university = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      placeholder="University"
+                                      required={true}
+                                      error={formErrors[index]?.university}
+                                    />
+                                  </Col>
+
+                                  <Col md={6} className="mt-3">
+                                    <InputSelect
+                                      label="Start Year"
+                                      name="startYear"
+                                      value={q.startYear}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].startYear = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].startYear = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      required={true}
+                                      error={formErrors[index]?.startYear}
+                                      options={yearOptions}
+                                    />
+                                  </Col>
+
+                                  <Col md={6} className="mt-3">
+                                    <InputSelect
+                                      label="End Year"
+                                      name="endYear"
+                                      value={q.endYear}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].endYear = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].endYear = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      required={true}
+                                      error={formErrors[index]?.endYear}
+                                      options={yearOptions}
+                                    />
+                                  </Col>
+                                </Row>
+
+                              </div>
+                            </Accordion.Body>
+
+                          </Accordion.Item>
+                        </div>
+                      ))}
+                    </Accordion>
                   </div>
 
                   <div className="d-flex justify-content-between mt-4">
-                    {/* Left side: Add button */}
-                    <Button className="maiacare-button">+ Add Qualification</Button>
+                    {/* Add Qualification Button */}
+                    <Button onClick={handleAddQualification}
+                      disabled={
+                        qualifications.length > 0 &&
+                        !isQualificationComplete(qualifications[qualifications.length - 1])
+                      }
+                      className="maiacare-button">
+                      + Add Qualification
+                    </Button>
 
-                    {/* Right side: Save button */}
+                    {/* Save Button */}
                     <Button onClick={handleSave} className="maiacare-button">
                       Save
                     </Button>
                   </div>
                 </Modal>
+
 
 
               </div>

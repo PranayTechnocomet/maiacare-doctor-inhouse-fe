@@ -286,6 +286,16 @@
 }
 
 
+
+.modal-border-dashed{
+  border: 2px dashed !important;
+  border-color:  var(--color-icon-border) !important;
+  border-radius: 16px !important ;
+  
+  
+}
+
+
 /* Media Query: Tablets (991px and below) */
 @media (max-width: 991px) {
     .maiacare-input-field-label {
