@@ -466,11 +466,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       </div>
                     </div>
 
-
                     <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                       <button className="btn p-0" onClick={handleDelete}>
                         <Image src={LightTrush} alt="Trash" width={22} height={22} />
-                        <div className="kyc-details">Delete</div>
+                        <div className="maiacare-input-field-helper-text">Delete</div>
                       </button>
 
                       <button className="btn px-4 py-2 maiacare-button" onClick={handleSave}>
@@ -480,8 +479,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   </div>
                 </div>
               </Modal>
-
-
 
 
               <div>
@@ -756,155 +753,155 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
       {/* <div id="qualification-section"> */}
-        <ContentContainer className="mt-3" >
-          <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
+      <ContentContainer className="mt-3" >
+        <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
 
-          {qualifications.map((q, index) => (
-            <div key={index} className="position-relative mb-4">
-              {/* Remove Button */}
-              {index > 0 && (
-                <div className="d-flex justify-content-end mb-1">
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    className="d-flex align-items-center justify-content-center"
-                    style={{ width: "32px", height: "32px", padding: 0 }}
-                    onClick={() => {
-                      const updatedQuals = qualifications.filter((_, i) => i !== index);
-                      const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
+        {qualifications.map((q, index) => (
+          <div key={index} className="position-relative mb-4">
+            {/* Remove Button */}
+            {index > 0 && (
+              <div className="d-flex justify-content-end mb-1">
+                <Button
+                  variant="danger"
+                  size="sm"
+                  className="d-flex align-items-center justify-content-center"
+                  style={{ width: "32px", height: "32px", padding: 0 }}
+                  onClick={() => {
+                    const updatedQuals = qualifications.filter((_, i) => i !== index);
+                    const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
+                    setQualifications(updatedQuals);
+                    setFormErrors(updatedErrors);
+                  }}
+                >
+                  -
+                </Button>
+              </div>
+            )}
+
+            {/* Qualification Box */}
+            <div className="border rounded p-3">
+              <Row>
+                <Col md={6} className="mt-3">
+                  <InputFieldGroup
+                    label="Degree"
+                    name="degree"
+                    type="text"
+                    value={q.degree}
+                    onChange={(e) => {
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].degree = e.target.value;
                       setQualifications(updatedQuals);
+
+                      // clear error only for this field/index
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].degree = "";
                       setFormErrors(updatedErrors);
                     }}
-                  >
-                    -
-                  </Button>
-                </div>
-              )}
+                    placeholder="Degree"
+                    required
+                    error={formErrors[index]?.degree}
+                  />
+                </Col>
 
-              {/* Qualification Box */}
-              <div className="border rounded p-3">
-                <Row>
-                  <Col md={6} className="mt-3">
-                    <InputFieldGroup
-                      label="Degree"
-                      name="degree"
-                      type="text"
-                      value={q.degree}
-                      onChange={(e) => {
-                        const updatedQuals = [...qualifications];
-                        updatedQuals[index].degree = e.target.value;
-                        setQualifications(updatedQuals);
+                <Col md={6} className="mt-3">
+                  <InputFieldGroup
+                    label="Field of study"
+                    name="field"
+                    type="text"
+                    value={q.field}
+                    onChange={(e) => {
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].field = e.target.value;
+                      setQualifications(updatedQuals);
 
-                        // clear error only for this field/index
-                        const updatedErrors = [...formErrors];
-                        updatedErrors[index].degree = "";
-                        setFormErrors(updatedErrors);
-                      }}
-                      placeholder="Degree"
-                      required
-                      error={formErrors[index]?.degree}
-                    />
-                  </Col>
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].field = "";
+                      setFormErrors(updatedErrors);
+                    }}
+                    placeholder="Field"
+                    required
+                    error={formErrors[index]?.field}
+                  />
+                </Col>
+              </Row>
 
-                  <Col md={6} className="mt-3">
-                    <InputFieldGroup
-                      label="Field of study"
-                      name="field"
-                      type="text"
-                      value={q.field}
-                      onChange={(e) => {
-                        const updatedQuals = [...qualifications];
-                        updatedQuals[index].field = e.target.value;
-                        setQualifications(updatedQuals);
+              <Row >
+                <Col className="mt-3">
+                  <InputFieldGroup
+                    label="University"
+                    name="university"
+                    type="text"
+                    value={q.university}
+                    onChange={(e) => {
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].university = e.target.value;
+                      setQualifications(updatedQuals);
 
-                        const updatedErrors = [...formErrors];
-                        updatedErrors[index].field = "";
-                        setFormErrors(updatedErrors);
-                      }}
-                      placeholder="Field"
-                      required
-                      error={formErrors[index]?.field}
-                    />
-                  </Col>
-                </Row>
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].university = "";
+                      setFormErrors(updatedErrors);
+                    }}
+                    placeholder="University"
+                    required
+                    error={formErrors[index]?.university}
+                  />
+                </Col>
+              </Row>
 
-                <Row >
-                  <Col className="mt-3">
-                    <InputFieldGroup
-                      label="University"
-                      name="university"
-                      type="text"
-                      value={q.university}
-                      onChange={(e) => {
-                        const updatedQuals = [...qualifications];
-                        updatedQuals[index].university = e.target.value;
-                        setQualifications(updatedQuals);
+              <Row>
+                <Col md={6} className="mt-3">
+                  <InputSelect
+                    label="Start Year"
+                    name="startYear"
+                    value={q.startYear}
+                    onChange={(e) => {
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].startYear = e.target.value;
+                      setQualifications(updatedQuals);
 
-                        const updatedErrors = [...formErrors];
-                        updatedErrors[index].university = "";
-                        setFormErrors(updatedErrors);
-                      }}
-                      placeholder="University"
-                      required
-                      error={formErrors[index]?.university}
-                    />
-                  </Col>
-                </Row>
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].startYear = "";
+                      setFormErrors(updatedErrors);
+                    }}
+                    options={yearOptions}
+                    error={formErrors[index]?.startYear}
+                    required
+                  />
+                </Col>
 
-                <Row>
-                  <Col md={6} className="mt-3">
-                    <InputSelect
-                      label="Start Year"
-                      name="startYear"
-                      value={q.startYear}
-                      onChange={(e) => {
-                        const updatedQuals = [...qualifications];
-                        updatedQuals[index].startYear = e.target.value;
-                        setQualifications(updatedQuals);
+                <Col md={6} className="mt-3">
+                  <InputSelect
+                    label="End Year"
+                    name="endYear"
+                    value={q.endYear}
+                    onChange={(e) => {
+                      const updatedQuals = [...qualifications];
+                      updatedQuals[index].endYear = e.target.value;
+                      setQualifications(updatedQuals);
 
-                        const updatedErrors = [...formErrors];
-                        updatedErrors[index].startYear = "";
-                        setFormErrors(updatedErrors);
-                      }}
-                      options={yearOptions}
-                      error={formErrors[index]?.startYear}
-                      required
-                    />
-                  </Col>
-
-                  <Col md={6} className="mt-3">
-                    <InputSelect
-                      label="End Year"
-                      name="endYear"
-                      value={q.endYear}
-                      onChange={(e) => {
-                        const updatedQuals = [...qualifications];
-                        updatedQuals[index].endYear = e.target.value;
-                        setQualifications(updatedQuals);
-
-                        const updatedErrors = [...formErrors];
-                        updatedErrors[index].endYear = "";
-                        setFormErrors(updatedErrors);
-                      }}
-                      options={yearOptions}
-                      error={formErrors[index]?.endYear}
-                      required
-                    />
-                  </Col>
-                </Row>
-              </div>
+                      const updatedErrors = [...formErrors];
+                      updatedErrors[index].endYear = "";
+                      setFormErrors(updatedErrors);
+                    }}
+                    options={yearOptions}
+                    error={formErrors[index]?.endYear}
+                    required
+                  />
+                </Col>
+              </Row>
             </div>
-          ))}
+          </div>
+        ))}
 
 
-          <Button
-            variant="dark"
-            className="maiacare-button"
-            onClick={handleAddQualification}
-          >
-            + Add Qualification
-          </Button>
-        </ContentContainer>
+        <Button
+          variant="dark"
+          className="maiacare-button"
+          onClick={handleAddQualification}
+        >
+          + Add Qualification
+        </Button>
+      </ContentContainer>
 
       {/* </div> */}
 

@@ -37,11 +37,12 @@ const ProfileBasicDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [endTime, setEndTime] = useState("");
 
-  const [defaultQualifications, setDefaultQualifications] = useState([
-    { title: 'MD Gynaecology', university: 'Medical University', years: '2015 - 2017' },
-    { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
-  ]);
-
+  // const [defaultQualifications, setDefaultQualifications] = useState([
+  //   { title: 'MD Gynaecology', university: 'Medical University', years: '2015 - 2017' },
+  //   { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
+  // ]);
+  
+const [defaultQualifications, setDefaultQualifications] = useState<any[]>([]);
 
 
   type FormData = {
@@ -115,16 +116,26 @@ const ProfileBasicDetails = () => {
 
   //================   Modal  no all data below =============//
 
+const handleOpen = () => {
+  // Modal open karta pela hamesha clean state set karo
+  setFormData(initialFormData);
+  setFormError(initialFormError);
+  setFormErrors([]);
+  setQualifications([{ ...initialFormData }]); // ek blank qualification row
 
-  const handleOpen = () => setShowModal(true);
+  setShowModal(true);
+};
 
-  const handleClose = () => {
-    setShowModal(false);
-    setFormData(initialFormData);
+const handleClose = () => {
+  setShowModal(false);
 
-    setFormError(initialFormError);
-    setFormErrors([]);
-  }
+  // Modal close par data clear karo
+  setFormData(initialFormData);
+  setFormError(initialFormError);
+  setFormErrors([]);
+  setQualifications([{ ...initialFormData }]); // reset to 1 blank
+};
+
 
   const yearOptions = Array.from({ length: 31 }, (_, i) => {
     const year = 2000 + i;
@@ -167,7 +178,7 @@ const ProfileBasicDetails = () => {
 
   // ✅ Function to add data
   const handleAddQualification = () => {
-    setQualifications([...qualifications, { ...initialFormData }]);
+    setQualifications([...qualifications, { ...initialFormData }]); 
     // ADDD Qualifications validtation msg 
     setFormErrors([
       ...formErrors,
@@ -181,30 +192,53 @@ const ProfileBasicDetails = () => {
     setQualifications(updated);
   };
 
-  const handleSave = () => {
-    const errors = validateForm(formData);          // single form
-    const qualErrors = validateForm1(qualifications); // multi rows
+const handleSave = () => {
+  // 🔹 Run validations
+  const errors = validateForm(formData);          // single form
+  const qualErrors = validateForm1(qualifications); // multi rows
 
-    setFormError(errors);
-    setFormErrors(qualErrors); // ✅ set array
+  setFormError(errors);
+  setFormErrors(qualErrors); // ✅ set array
 
-    const hasQualError = qualErrors.some((err) =>
-      Object.values(err).some((msg) => msg !== "")
-    );
+  const hasQualError = qualErrors.some((err) =>
+    Object.values(err).some((msg) => msg !== "")
+  );
 
-    if (Object.keys(errors).length === 0 && !hasQualError) {
-      console.log("Form submitted ✅", { formData, qualifications });
-      handleClose();
+  if (Object.keys(errors).length === 0 && !hasQualError) {
+    // 🔹 Convert filled qualifications into display format
+    const newItems = qualifications
+      .filter(
+        (q) =>
+          q.degree && q.field && q.university && q.startYear && q.endYear
+      )
+      .map((q) => ({
+        title: `${q.degree} - ${q.field}`,
+        university: q.university,
+        years: `${q.startYear} - ${q.endYear}`,
+      }));
 
-      // Reset form only after successful submit
-      setFormData(initialFormData);
-      setFormError(initialFormError);
-      setFormErrors([]);
-      setQualifications([]);
-    } else {
-      console.log("Form has errors ⚠️", { errors, qualErrors });
-    }
-  };
+    // if (newItems.length === 0) {
+    //   alert("Please fill all fields before saving.");
+    //   return;
+    // }
+
+    // 🔹 Update default qualifications
+    setDefaultQualifications((prev) => [...prev, ...newItems]);
+
+    console.log("Form submitted ✅", { formData, qualifications });
+
+    // 🔹 Success → close modal + reset data
+    setShowModal(false);
+    setFormData(initialFormData);
+    setFormError(initialFormError);
+    setFormErrors([]);
+    setQualifications([{ ...initialFormData }]); // reset one row
+  } else {
+    console.log("Form has errors ⚠️", { errors, qualErrors });
+  }
+};
+
+
 
   // + add Qualification button diable data show after unable
   const isQualificationComplete = (q: any) => {
@@ -253,6 +287,9 @@ const ProfileBasicDetails = () => {
                   <Image src={Add} alt="Add" />
                 </Button>
 
+
+
+
                 <Modal
                   show={showModal}
                   onHide={handleClose}
@@ -260,7 +297,6 @@ const ProfileBasicDetails = () => {
                   header="Qualification Details"
                   centered
                 >
-
 
 
 
@@ -275,7 +311,7 @@ const ProfileBasicDetails = () => {
                             </Accordion.Header>
 
                             <Accordion.Body>
-                              <div className="position-relative pt-3  p-3 modal-border-dashed">
+                              <div className="position-relative pt-3 p-3 modal-border-dashed">
 
                                 {/* ❌ Remove button - show only if NOT first item */}
                                 {index !== 0 && (
@@ -409,6 +445,8 @@ const ProfileBasicDetails = () => {
                         </div>
                       ))}
                     </Accordion>
+                    
+                    
                   </div>
 
                   <div className="d-flex justify-content-between mt-4">
@@ -435,7 +473,7 @@ const ProfileBasicDetails = () => {
 
               {defaultQualifications.length === 0 ? (
                 <div className="text-center text-muted p-4 border rounded-4">
-                  Data not found
+             "Data not found. Please Add Data"
                 </div>
               ) : (
                 defaultQualifications.map((item, idx) => (
@@ -483,7 +521,7 @@ const ProfileBasicDetails = () => {
                 I'm Dr. Riya Dharang, a fertility specialist with over 12 years of experience in reproductive medicine. I specialize in IVF, IUI, and fertility preservation, providing personalized, compassionate care to help individuals and couples achieve their parenthood dreams. Your well-being and trust are my top priorities.
               </p>
             </ContentContainer>
-          </div>
+          </div>  
 
           {/* Documents */}
           <div>
