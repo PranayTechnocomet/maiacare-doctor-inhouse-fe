@@ -63,3 +63,11 @@
   padding: 0;
 }
 
+.accordion-button:focus {
+  box-shadow: none !important;
+  outline: none !important;
+  
+}.accordion-button:focus:not(:focus-visible) {
+  box-shadow: none !important;
+  outline: none !important;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Container, Row, Col, Button, Form, Table, Accordion } from 'react-bootstrap';
 import Add from "../../assets/images/Add.png";
 import Delete from "../../assets/images/Delete.png";
@@ -37,12 +37,13 @@ const ProfileBasicDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [endTime, setEndTime] = useState("");
 
-  const [defaultQualifications, setDefaultQualifications] = useState([
-    { title: 'MD Gynaecology', university: 'Medical University', years: '2015 - 2017' },
-    { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
-  ]);
+  // const [defaultQualifications, setDefaultQualifications] = useState([
+  //   { title: 'MD Gynaecology', university: 'Medical University', years: '2015 - 2017' },
+  //   { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
+  // ]);
 
-
+  const [defaultQualifications, setDefaultQualifications] = useState<any[]>([]);
+  const [showQualificationModal, setShowQualificationModal] = useState(false);
 
   type FormData = {
     MF: string;
@@ -80,7 +81,7 @@ const ProfileBasicDetails = () => {
   const [formErrors, setFormErrors] = useState([
     { degree: "", field: "", university: "", startYear: "", endYear: "" }
   ]);
-
+  
 
 
   const documents = [
@@ -113,44 +114,46 @@ const ProfileBasicDetails = () => {
 
 
 
-  //================   Modal  no all data below =============//
+  //================  + add  Modal all data below ============= //
 
+  const handleOpen = () => {
+    // modal open in clean state and clear data 
+    setFormData(initialFormData);
+    setFormError(initialFormError);
+    setFormErrors([]);
+    setQualifications([{ ...initialFormData }]); // one  blank qualification row
 
-  const handleOpen = () => setShowModal(true);
+    setShowModal(true);
+  };
 
   const handleClose = () => {
     setShowModal(false);
-    setFormData(initialFormData);
 
+    // Modal close par data clear karo
+    setFormData(initialFormData);
     setFormError(initialFormError);
     setFormErrors([]);
-  }
+    setQualifications([{ ...initialFormData }]); // reset to 1 blank
+  };
+
 
   const yearOptions = Array.from({ length: 31 }, (_, i) => {
     const year = 2000 + i;
     return { id: year.toString(), value: year.toString(), label: year.toString() };
   });
 
-  // ✅ University list JSON
-  const universities = [
-    { id: "1", value: "Gujarat University", label: "Gujarat University" },
-    { id: "2", value: "Atmiya University", label: "Atmiya University" },
-    { id: "3", value: "Saurashtra University", label: "Saurashtra University" },
-    { id: "4", value: "Darshan University", label: "Darshan University" },
-  ];
 
-  const validateForm = (data: FormData): FormError => {
-    const errors: FormError = {};
+    const validateForm = (data: FormData): FormError => {
+      const errors: FormError = {};
 
-    // if (!data.qualification.trim()) errors.qualification = "Qualification is Required";
-    // if (!data.degree.trim()) errors.degree = "Degree is required";
-    // if (!data.field.trim()) errors.field = "Field is required";
-    // if (!data.university.trim()) errors.university = "University is required";
-    // if (!data.startYear.trim()) errors.startYear = "Start year is required";
-    // if (!data.endYear.trim()) errors.endYear = "End year is required";
+      // if (!data.degree.trim()) errors.degree = "Degree is required";
+      // if (!data.field.trim()) errors.field = "Field is required";
+      // if (!data.university.trim()) errors.university = "University is required";
+      // if (!data.startYear.trim()) errors.startYear = "Start year is required";
+      // if (!data.endYear.trim()) errors.endYear = "End year is required";
 
-    return errors;
-  };
+      return errors;
+    };
 
 
   const validateForm1 = (quals: typeof qualifications) => {
@@ -182,6 +185,7 @@ const ProfileBasicDetails = () => {
   };
 
   const handleSave = () => {
+    // 🔹 Run validations
     const errors = validateForm(formData);          // single form
     const qualErrors = validateForm1(qualifications); // multi rows
 
@@ -193,23 +197,109 @@ const ProfileBasicDetails = () => {
     );
 
     if (Object.keys(errors).length === 0 && !hasQualError) {
-      console.log("Form submitted ✅", { formData, qualifications });
-      handleClose();
+      // 🔹 Convert filled qualifications into display format
+      const newItems = qualifications
+        .filter(
+          (q) =>
+            q.degree && q.field && q.university && q.startYear && q.endYear
+        )
+        .map((q) => ({
+          title: `${q.degree} - ${q.field}`,
+          university: q.university,
+          years: `${q.startYear} - ${q.endYear}`,
+        }));
 
-      // Reset form only after successful submit
+      // if (newItems.length === 0) {
+      //   alert("Please fill all fields before saving.");
+      //   return;
+      // }
+
+      // 🔹 Update default qualifications
+      setDefaultQualifications((prev) => [...prev, ...newItems]);
+
+      console.log("Form submitted ✅", { formData, qualifications });
+
+      // 🔹 Success → close modal + reset data
+      setShowModal(false);
       setFormData(initialFormData);
       setFormError(initialFormError);
       setFormErrors([]);
-      setQualifications([]);
+      setQualifications([{ ...initialFormData }]); // reset one row
     } else {
       console.log("Form has errors ⚠️", { errors, qualErrors });
     }
   };
 
+
   // + add Qualification button diable data show after unable
   const isQualificationComplete = (q: any) => {
     return q.degree && q.field && q.university && q.startYear && q.endYear;
   };
+
+
+
+  // ===== Edit button click in modal open ================
+const openQualificationModal = (index: number) => {
+  setEditIndex(index); 
+  setFormData(defaultQualifications[index]); // je data show thayu e prefill karo
+  setShowQualificationModal(true); // modal open
+};
+
+  const closeQualificationModal = () => setShowQualificationModal(false);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormError((prev) => ({ ...prev, [name]: "" }));
+  };
+
+    const EditValidtation = (data: FormData): FormError => {
+      const errors: FormError = {};
+
+      if (!data.degree.trim()) errors.degree = "Degree is required";
+      if (!data.field.trim()) errors.field = "Field is required";
+      if (!data.university.trim()) errors.university = "University is required";
+      if (!data.startYear.trim()) errors.startYear = "Start year is required";
+      if (!data.endYear.trim()) errors.endYear = "End year is required";
+
+      return errors;
+    };
+
+
+const handleEditSave = () => {
+  const errors = EditValidtation(formData);
+  setFormError(errors);
+
+  if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
+
+  if (editIndex !== null) {
+    const updated = [...defaultQualifications];
+    updated[editIndex] = {
+      title: `${formData.degree} - ${formData.field}`,
+      university: formData.university,
+      years: `${formData.startYear} - ${formData.endYear}`,
+    };
+    setDefaultQualifications(updated);
+  }
+
+  console.log("Form updated:", formData);
+
+  closeQualificationModal();
+  setEditIndex(null);
+};  
+
+
+const [editIndex, setEditIndex] = useState<number | null>(null); // track current editing row
+
+
+
+
+
+
+
+
 
 
 
@@ -253,6 +343,9 @@ const ProfileBasicDetails = () => {
                   <Image src={Add} alt="Add" />
                 </Button>
 
+
+
+
                 <Modal
                   show={showModal}
                   onHide={handleClose}
@@ -260,9 +353,6 @@ const ProfileBasicDetails = () => {
                   header="Qualification Details"
                   centered
                 >
-
-
-
 
                   <div>
                     {/* 🔁 Loop through all qualifications */}
@@ -275,7 +365,7 @@ const ProfileBasicDetails = () => {
                             </Accordion.Header>
 
                             <Accordion.Body>
-                              <div className="position-relative pt-3  p-3 modal-border-dashed">
+                              <div className="position-relative pt-3 p-3 modal-border-dashed">
 
                                 {/* ❌ Remove button - show only if NOT first item */}
                                 {index !== 0 && (
@@ -409,6 +499,8 @@ const ProfileBasicDetails = () => {
                         </div>
                       ))}
                     </Accordion>
+
+
                   </div>
 
                   <div className="d-flex justify-content-between mt-4">
@@ -435,7 +527,7 @@ const ProfileBasicDetails = () => {
 
               {defaultQualifications.length === 0 ? (
                 <div className="text-center text-muted p-4 border rounded-4">
-                  Data not found
+                  "Data not found. Please Add Data"
                 </div>
               ) : (
                 defaultQualifications.map((item, idx) => (
@@ -450,10 +542,127 @@ const ProfileBasicDetails = () => {
                       <div className="card-year">{item.years}</div>
                     </div>
 
+
                     <div className="d-flex gap-2">
-                      <Button className="border p-2 rounded-3 edit-del-btn  bg-transparent">
+
+                      <Button onClick={() => openQualificationModal(idx)}className="border p-2 rounded-3 edit-del-btn  bg-transparent">
                         <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
                       </Button>
+
+
+                      <Modal
+                        show={showQualificationModal}
+                        onHide={closeQualificationModal}
+                        centered
+                        dialogClassName="custom-modal-width"
+                        header="Qualification Details"
+                      >
+                        <div>
+
+                          <Row >
+                            <Col md={6} className="mt-3">
+                              <InputFieldGroup
+                                label="Degree"
+                                name="degree"
+                                type="text"
+                                value={formData.degree}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                                placeholder="Enter degree"
+                                required={true}
+                                disabled={false}
+                                readOnly={false}   // ✅ remove or set false
+                                error={formError.degree}
+                              />
+                            </Col>
+
+
+                            <Col md={6} className="mt-3">
+                              <InputFieldGroup
+                                label="Field of study"
+                                name="field"
+                                type="text"
+                                value={formData.field}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                                placeholder="Enter field"
+                                required={true}
+                                disabled={false}
+                                readOnly={false}   // ✅ remove or set false
+                                error={formError.field}
+                              />
+                            </Col>
+
+                            <Col md={12} className="mt-3">
+                              <InputFieldGroup
+                                label="University"
+                                name="university"
+                                type="text"
+                                value={formData.university}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                                placeholder="Enter university"
+                                required={true}
+                                disabled={false}
+                                readOnly={false}   // ✅ remove or set false
+                                error={formError.university}
+                              />
+                            </Col>
+
+
+                            <Col md={6} className="mt-3">
+                              <InputSelect
+                                label="Start Year"
+                                name="startYear"
+                                value={formData.startYear}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+                                required={true}
+                                disabled={false}
+                                error={formError.startYear}
+                                options={yearOptions}
+                              />
+                            </Col>
+
+                            <Col md={6} className="mt-3">
+                              <InputSelect
+                                label="End Year"
+                                name="endYear"
+                                value={formData.endYear}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+                                required={true}
+                                disabled={false}
+                                error={formError.endYear}
+                                options={yearOptions}
+                              />
+                            </Col>
+                          </Row>
+
+
+                          {/* Save Button */}
+                          <Button onClick={handleEditSave} className="maiacare-button mt-4">
+                            Save
+                          </Button>
+
+                        </div>
+
+                      </Modal>
+
+
+
+
+
 
                       <Button className="border p-2 rounded-2 edit-del-btn  bg-transparent"
                         onClick={() => handleDelete(idx)} // 👈 click par delete
@@ -465,6 +674,8 @@ const ProfileBasicDetails = () => {
                   </div>
                 ))
               )}
+
+              
             </ContentContainer>
 
           </div>
