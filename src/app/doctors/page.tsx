@@ -12,7 +12,7 @@ function Page() {
   }, []);
   return (
     <div>
-      <h1>Doctors</h1>
+      <h1 className="font-geist-sans">a Doctors</h1>
     </div>
   );
 }

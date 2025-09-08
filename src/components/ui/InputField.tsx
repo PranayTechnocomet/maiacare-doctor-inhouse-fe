@@ -38,7 +38,9 @@ export const InputFieldGroup = ({
 }) => {
     return (
   <div className={`maiacare-input-field-container ${className}`}>
+    {label && (
     <InputFieldLabel label={label} required={required} />
+    )}
     <InputField name={name} type={type} value={value} onChange={onChange} onBlur={onBlur} onClick={onClick} placeholder={placeholder} disabled={disabled} readOnly={readOnly} children={children} {...rest} />
     {error && <InputFieldError error={error} />}
     {helperText && <InputFieldHelperText helperText={helperText} />}

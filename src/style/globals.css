@@ -3,25 +3,34 @@
   --color-white: #fff;
   --color-black: #000;
   --color-border: #e2e8f0;
-  --color-brand: #2b4360;    
-  --color-heading: #292929;  
-  --color-icon-border: #DDE1E8;   
-  --color-sidebar-icon: #8A8D93; 
+  --color-brand: #2b4360;
+  --color-heading: #292929;
+  --color-icon-border: #DDE1E8;
+  --color-sidebar-icon: #8A8D93;
   --sidebar-width: 225px;
   --sidebar-width-collapsed: 58px;
   --color-radio: #B0B4C1;
-  --color-subtitle-pink:#E29578;
+  --color-subtitle-pink: #E29578;
   --color-radio-lable: #3E4A57;
   --color-modal-heading: #E29578;
-  --color-modal-subheading:#94A3B8;
-  --color-modal-border:#CBD5E1;
+  --color-modal-subheading: #94A3B8;
+  --color-modal-border: #CBD5E1;
 }
 
 body {
   margin: 0;
   padding: 0;
   background-color: var(--color-bg);
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-popins) !important;
+}
+
+
+.font-geist-sans {
+  font-family: var(--font-geist-sans) !important;
+}
+
+.font-geist-mono {
+  font-family: var(--font-geist-mono) !important;
 }
 
 .test .maiacare-input-field {
@@ -43,17 +52,18 @@ body {
   padding: 0.5rem 1rem;
 }
 
-.lock-image{
-  height:50px;
+.lock-image {
+  height: 50px;
   width: 50px;
 }
+
 .custom-pagination .page-item .page-link {
   border: none;
   background: transparent;
   color: #8A8D93;
   padding: 4px 8px;
   font-size: 14px;
-   font-weight: 500;
+  font-weight: 500;
 }
 
 .custom-pagination .page-item.active .page-link {
@@ -64,7 +74,7 @@ body {
 
 .custom-pagination .page-item.disabled .page-link {
   color: #8A8D93;
-  
+
 }
 
 .custom-pagination .page-item:first-child .page-link,
@@ -74,21 +84,27 @@ body {
   justify-content: center;
 }
 
-.pagination-results{
+.pagination-results {
   color: #8A8D93;
   font-size: 14px;
   font-weight: 500;
 }
 
 body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
+  /* Chrome, Safari */
 }
+
 .patient-detail-page .overflow-auto {
-    scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
+  /* Firefox */
 }
+
 .patient-detail-page .overflow-auto::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
+  display: none;
+  /* Chrome, Safari */
 }
+
 .Assign-button {
   background-color: #2B4360 !important;
   border-color: #2B4360 !important;
