@@ -81,7 +81,7 @@ const ProfileBasicDetails = () => {
   const [formErrors, setFormErrors] = useState([
     { degree: "", field: "", university: "", startYear: "", endYear: "" }
   ]);
-  
+
 
 
   const documents = [
@@ -143,17 +143,17 @@ const ProfileBasicDetails = () => {
   });
 
 
-    const validateForm = (data: FormData): FormError => {
-      const errors: FormError = {};
+  const validateForm = (data: FormData): FormError => {
+    const errors: FormError = {};
 
-      // if (!data.degree.trim()) errors.degree = "Degree is required";
-      // if (!data.field.trim()) errors.field = "Field is required";
-      // if (!data.university.trim()) errors.university = "University is required";
-      // if (!data.startYear.trim()) errors.startYear = "Start year is required";
-      // if (!data.endYear.trim()) errors.endYear = "End year is required";
+    // if (!data.degree.trim()) errors.degree = "Degree is required";
+    // if (!data.field.trim()) errors.field = "Field is required";
+    // if (!data.university.trim()) errors.university = "University is required";
+    // if (!data.startYear.trim()) errors.startYear = "Start year is required";
+    // if (!data.endYear.trim()) errors.endYear = "End year is required";
 
-      return errors;
-    };
+    return errors;
+  };
 
 
   const validateForm1 = (quals: typeof qualifications) => {
@@ -207,6 +207,10 @@ const ProfileBasicDetails = () => {
           title: `${q.degree} - ${q.field}`,
           university: q.university,
           years: `${q.startYear} - ${q.endYear}`,
+          degree: q.degree,
+          field: q.field,
+          startYear: q.startYear,
+          endYear: q.endYear
         }));
 
       // if (newItems.length === 0) {
@@ -239,11 +243,11 @@ const ProfileBasicDetails = () => {
 
 
   // ===== Edit button click in modal open ================
-const openQualificationModal = (index: number) => {
-  setEditIndex(index); 
-  setFormData(defaultQualifications[index]); // je data show thayu e prefill karo
-  setShowQualificationModal(true); // modal open
-};
+  const openQualificationModal = (index: number) => {
+    setEditIndex(index);
+    setFormData(defaultQualifications[index]); // je data show thayu e prefill karo
+    setShowQualificationModal(true); // modal open
+  };
 
   const closeQualificationModal = () => setShowQualificationModal(false);
 
@@ -255,43 +259,47 @@ const openQualificationModal = (index: number) => {
     setFormError((prev) => ({ ...prev, [name]: "" }));
   };
 
-    const EditValidtation = (data: FormData): FormError => {
-      const errors: FormError = {};
+  const EditValidtation = (data: FormData): FormError => {
+    const errors: FormError = {};
 
-      if (!data.degree.trim()) errors.degree = "Degree is required";
-      if (!data.field.trim()) errors.field = "Field is required";
-      if (!data.university.trim()) errors.university = "University is required";
-      if (!data.startYear.trim()) errors.startYear = "Start year is required";
-      if (!data.endYear.trim()) errors.endYear = "End year is required";
+    if (!data.degree.trim()) errors.degree = "Degree is required";
+    if (!data.field.trim()) errors.field = "Field is required";
+    if (!data.university.trim()) errors.university = "University is required";
+    if (!data.startYear.trim()) errors.startYear = "Start year is required";
+    if (!data.endYear.trim()) errors.endYear = "End year is required";
 
-      return errors;
-    };
-
-
-const handleEditSave = () => {
-  const errors = EditValidtation(formData);
-  setFormError(errors);
-
-  if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
-
-  if (editIndex !== null) {
-    const updated = [...defaultQualifications];
-    updated[editIndex] = {
-      title: `${formData.degree} - ${formData.field}`,
-      university: formData.university,
-      years: `${formData.startYear} - ${formData.endYear}`,
-    };
-    setDefaultQualifications(updated);
-  }
-
-  console.log("Form updated:", formData);
-
-  closeQualificationModal();
-  setEditIndex(null);
-};  
+    return errors;
+  };
 
 
-const [editIndex, setEditIndex] = useState<number | null>(null); // track current editing row
+  const handleEditSave = () => {
+    const errors = EditValidtation(formData);
+    setFormError(errors);
+
+    if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
+
+    if (editIndex !== null) {
+      const updated = [...defaultQualifications];
+      updated[editIndex] = {
+        title: `${formData.degree} - ${formData.field}`,
+        university: formData.university,
+        years: `${formData.startYear} - ${formData.endYear}`,
+        degree: formData.degree,
+        field: formData.field,
+        startYear: formData.startYear,
+        endYear: formData.endYear
+      };
+      setDefaultQualifications(updated);
+    }
+
+    console.log("Form updated:", formData);
+
+    closeQualificationModal();
+    setEditIndex(null);
+  };
+
+
+  const [editIndex, setEditIndex] = useState<number | null>(null); // track current editing row
 
 
 
@@ -545,7 +553,7 @@ const [editIndex, setEditIndex] = useState<number | null>(null); // track curren
 
                     <div className="d-flex gap-2">
 
-                      <Button onClick={() => openQualificationModal(idx)}className="border p-2 rounded-3 edit-del-btn  bg-transparent">
+                      <Button onClick={() => openQualificationModal(idx)} className="border p-2 rounded-3 edit-del-btn  bg-transparent">
                         <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
                       </Button>
 
@@ -675,7 +683,7 @@ const [editIndex, setEditIndex] = useState<number | null>(null); // track curren
                 ))
               )}
 
-              
+
             </ContentContainer>
 
           </div>
