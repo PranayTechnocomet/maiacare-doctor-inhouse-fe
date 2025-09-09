@@ -121,3 +121,14 @@
     background-image: none !important;
     padding-right: 1rem;
 }
+
+@media (max-width: 525px) {
+
+  .custom-search-group {
+    max-width: 100% !important;
+  }
+
+  .custom-search-groups{
+    width: 100%;
+  }
+}

@@ -13,7 +13,7 @@ export default function inventoryDetailPage() {
         <>
             <div className="row mb-4">
                 <div className="col-md-6">
-                    <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Patient Details</h6>
+                    <h6 className="fw-semibold mb-3 Patient-Details">Patient Details</h6>
                     <ContentContainer className="shadow-sm border-0 h-75">
                         <Card.Body>
                             <div className="d-flex align-items-center mb-3">
@@ -55,7 +55,7 @@ export default function inventoryDetailPage() {
                 </div>
 
                 <div className="col-md-6">
-                    <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Consultation Type and Concerns</h6>
+                    <h6 className="fw-semibold mb-3 Patient-Details">Consultation Type and Concerns</h6>
                     <ContentContainer className="shadow-sm border-0 h-75">
                         <Card.Body>
                             <div className="mb-3">
@@ -72,7 +72,7 @@ export default function inventoryDetailPage() {
                                 </div>
                             </div>
 
-                            <div className="mt-1 mb-3">
+                            <div className="mt-1 mb-4">
                                 <strong className=" d-block mb-1 heading-patient">Concerns:</strong>
                                 <p className=" mb-0 Patient-review">
                                     Mild endometriosis and irregular periods has been an issue for 2 months.
