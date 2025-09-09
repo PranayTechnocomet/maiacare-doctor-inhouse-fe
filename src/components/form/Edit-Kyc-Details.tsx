@@ -73,19 +73,26 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
     // if (!data.Adcard.trim()) errors.Adcard = "Adcard  \number is required";
     if (!data.Adcard.trim()) {
-      errors.Adcard = "Aadhaar card number is required";
+      errors.Adcard = "Aadhar  card number is required";
     } else {
       const rawValue = data.Adcard.replace(/\s/g, ""); // remove spaces
 
       if (rawValue.length < 12) {
-        errors.Adcard = "Aadhaar card number must be 12 digits";
+        errors.Adcard = "Aadhar card number must be 12 digits";
       }
     }
 
-    if (!data.Adcard) errors.Adphoto = "Aadhar card photo is required";
-    if (!data.Pancard) errors.Panphoto = "Pancard photo is required";
-    // if (!data.Pancard.trim()) errors.Pancard = "Pancard is required";
+    // if (!data.Adcard) errors.Adphoto = "Aadhar card photo is required";
+    // Aadhaar photo
+    if (!aadharFile) {
+      errors.Adphoto = "Aadhaar card photo is required";
+    }
+    if (!panFile) {
+      errors.Panphoto = "PAN card photo is required";
+    }
 
+    // if (!data.Pancard) errors.Panphoto = "Pancard photo is required";
+    // if (!data.Pancard.trim()) errors.Pancard = "Pancard is required";
 
     if (!data.Pancard.trim()) {
       errors.Pancard = "Pancard  number is required";
@@ -101,7 +108,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     } else if (data.LicNumber.length !== 10) {
       errors.LicNumber = "Licence Number must be exactly 10 digits";
     }
-    if (!data.LicNumber) errors.Licphoto = "Licence photo is required";
+    // if (!data.LicNumber) errors.Licphoto = "Licence photo is required";
+    // Licence photo
+    if (!licenceFile) {
+      errors.Licphoto = "Licence photo is required";
+    }
 
     return errors;
   };
@@ -391,37 +402,92 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     <div>
       <ContentContainer className="mt-4">
         <div className=" p-4">
-          <h5 className="mb-3 profile-card-main-titile">KYC Details</h5>
+          <h5 className="mb-3 profile-card-main-titile">KYC Details</h5>  
 
-          {/* Aadhar & Pan Card Inputs */}
-          <Row >
+          {/* Aadhar & Pan Card Inputs + Uploads Responsive */}
+          <Row>
+            {/* Aadhaar Section */}
             <Col md={6} sm={12} className="mt-3">
               <InputFieldGroup
                 label="Aadhar Number"
-                name="field"
+                name="Aadhar"
                 type="text"
-                value={formatAadhaar(formData.Adcard)} // 👈 format while typing  
+                value={formatAadhaar(formData.Adcard)}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setFormData({ ...formData, Adcard: e.target.value });
-                  if (formError.Adcard) {  // msg type validtation msg hide 
+                  if (formError.Adcard) {
                     setFormError({ ...formError, Adcard: "" });
                   }
                 }}
-
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-
-                }}
                 placeholder="Aadhar Number"
-                required={true}
-                disabled={false}
-                readOnly={false}
+                required
                 error={formError.Adcard}
                 className="position-relative"
-              >
+              />
 
-              </InputFieldGroup>
+              {/* Aadhaar File Upload */}
+              <div className="mt-3">
+                <Form.Group>
+                  <Form.Label className="maiacare-input-field-label">
+                    Aadhar Card Photo <span className="text-danger">*</span>
+                  </Form.Label>
+
+                  <div
+                    className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (!aadharFile) aadharFileRef.current?.click();
+                    }}
+                  >
+                    {aadharFile ? (
+                      <>
+                        <Image
+                          src={aadharFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
+                          alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                          width={50}
+                          className="me-3"
+                        />
+                        <div className="flex-grow-1">
+                          <div className="card-feild">Aadhar Card</div>
+                          <div className="kyc-details file-name-ellipsis" title={aadharFile.name}>
+                            {aadharFile.name}
+                          </div>
+                          <div className="card-year">
+                            {aadharFile.size} - {aadharFile.date}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          className="btn rounded-2 d-inline-flex p-2 profile-card-boeder me-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setAadharFile(null);
+                          }}
+                        >
+                          <Image src={Trash} alt="delete" width={17} height={18} />
+                        </button>
+                      </>
+                    ) : (
+                      <div className="d-flex flex-column justify-content-center align-items-center w-100">
+                        <Image src={Add} alt="add" width={40} className="p-1" />
+                        <span className="about-text">Add Aadhar Card Photo</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    ref={aadharFileRef}
+                    style={{ display: "none" }}
+                    onChange={handleAadharFileChange}
+                  />
+                </Form.Group>
+                {formError?.Adphoto && <div className="text-danger small mt-1">{formError.Adphoto}</div>}
+              </div>
             </Col>
 
+            {/* Pan Section */}
             <Col md={6} sm={12} className="mt-3">
               <InputFieldGroup
                 label="Pan Card Number"
@@ -429,178 +495,81 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 type="text"
                 value={formData.Pancard}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // Restrict length to 10
                   if (e.target.value.length <= 10) {
                     setFormData({ ...formData, Pancard: e.target.value.toUpperCase() });
                   }
-
                   if (formError.Pancard) {
                     setFormError({ ...formError, Pancard: "" });
                   }
                 }}
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Pan Card Number"
-                required={true}
-                disabled={false}
-                readOnly={false}
+                required
                 error={formError.Pancard}
                 className="position-relative"
-                maxLength={10}  // 👈 This ensures user cannot type more than 10 characters
-              >
-              </InputFieldGroup>
-            </Col>
+                maxLength={10}
+              />
 
+              {/* Pan File Upload */}
+              <div className="mt-3">
+                <Form.Group>
+                  <Form.Label className="maiacare-input-field-label">
+                    Pan Card Photo <span className="text-danger">*</span>
+                  </Form.Label>
+
+                  <div
+                    className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (!panFile) panFileRef.current?.click();
+                    }}
+                  >
+                    {panFile ? (
+                      <>
+                        <Image
+                          src={panFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
+                          alt={panFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                          width={50}
+                          className="me-3"
+                        />
+                        <div className="flex-grow-1">
+                          <div className="card-feild">Pan Card</div>
+                          <div className="kyc-details file-name-ellipsis">{panFile.name}</div>
+                          <div className="card-year">
+                            {panFile.size} - {panFile.date}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          className="btn rounded-2 d-inline-flex p-2 profile-card-boeder me-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setPanFile(null);
+                          }}
+                        >
+                          <Image src={Trash} alt="delete" width={17} height={18} />
+                        </button>
+                      </>
+                    ) : (
+                      <div className="d-flex flex-column justify-content-center align-items-center w-100">
+                        <Image src={Add} alt="add" width={40} className="p-1" />
+                        <span className="about-text">Add Pan Card Photo</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    ref={panFileRef}
+                    style={{ display: "none" }}
+                    onChange={handlePanFileChange}
+                  />
+                </Form.Group>
+                {formError?.Panphoto && <div className="text-danger small mt-1">{formError.Panphoto}</div>}
+              </div>
+            </Col>
           </Row>
 
-          {/* Aadhar & Pan Card Upload Previews */}
-          <Row >
-
-
-            <Col md={6} sm={12} className="mt-3">
-              <Form.Group>
-                <Form.Label className="maiacare-input-field-label">
-                  Aadhar Card Photo <span className="text-danger">*</span>
-                </Form.Label>
-
-                <div
-                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (!aadharFile) {
-                      aadharFileRef.current?.click();
-                    }
-                  }}
-                >
-                  {aadharFile ? (
-                    <>
-                      <Image
-                        src={aadharFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
-                        alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
-                        width={50}
-                        className="me-3"
-                      />
-                      <div className="flex-grow-1">
-                        <div className="card-feild">Aadhar Card</div>
-                        <div
-                          className="kyc-details file-name-ellipsis "
-                          title={aadharFile.name} // show full name on hover
-                        >  {aadharFile.name}
-                        </div>
-                        <div className="card-year">
-                          {aadharFile.size} - {aadharFile.date}
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        className="btn  rounded-2 d-inline-flex p-2 profile-card-boeder me-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setAadharFile(null);
-                        }}
-                      >
-                        <Image src={Trash} alt="delete" width={17} height={18} />
-                      </button>
-                    </>
-                  ) : (
-                    <div
-                      className="d-flex flex-column justify-content-center align-items-center"
-                      style={{ height: "100%", width: "100%" }}
-                    >
-                      <Image src={Add} alt="add" width={40} className="p-1" />
-                      <span className="about-text">Add Aadhar Card Photo</span>
-                    </div>
-                  )}
-                </div>
-
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  ref={aadharFileRef}
-                  style={{ display: "none" }}
-                  onChange={handleAadharFileChange}
-                />
-              </Form.Group>
-              {formError?.Adphoto && (
-                <div className="text-danger small mt-1">{formError.Adphoto}</div>
-              )}
-            </Col>
-
-
-            <Col md={6} sm={12} className="mt-3">
-              <Form.Group>
-                <Form.Label className="maiacare-input-field-label">
-                  Pan Card Photo <span className="text-danger">*</span>
-                </Form.Label>
-
-
-                <div
-                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (!panFile) {
-                      panFileRef.current?.click(); // only open file manager if no file selected
-                    }
-                  }}
-                >
-                  {panFile ? (
-                    <>
-                      <Image
-                        src={panFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
-                        alt={panFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
-                        width={50}
-                        className="me-3"
-                      />
-                      <div className="flex-grow-1">
-                        <div className="card-feild  ">Pan Card</div>
-                        <div className="kyc-details file-name-ellipsis ">{panFile.name}</div>
-
-
-                        <div className="card-year">
-                          {panFile.size} - {panFile.date}
-                        </div>
-                      </div>
-
-                      {/* Delete Button */}
-                      <button
-                        type="button"
-                        className="btn  rounded-2 d-inline-flex p-2  profile-card-boeder me-2"
-                        onClick={(e) => {
-                          e.stopPropagation(); // prevent file manager opening
-                          setPanFile(null); // clear file
-                        }}
-                      >
-                        <Image src={Trash} alt="delete" width={17} height={18} />
-                      </button>
-                    </>
-                  ) : (
-                    <div
-                      className="d-flex flex-column justify-content-center align-items-center"
-                      style={{ height: "100%", width: "100%" }}
-                    >
-                      <Image src={Add} alt="add" width={40} className="p-1" />
-                      <span className="about-text">Add Pan Card Photo</span>
-                    </div>
-                  )}
-
-                </div>
-
-                {/* Hidden file input */}
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  ref={panFileRef}
-                  style={{ display: "none" }}
-                  onChange={handlePanFileChange}
-                />
-              </Form.Group>
-              {formError?.Panphoto && (
-                <div className="text-danger small mt-1">{formError.Panphoto}</div>
-              )}
-
-            </Col>
-
-          </Row>
 
 
           {/* Licence Number */}
@@ -899,12 +868,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                           <span className="profile-sub-title">{file.size}</span>
                           <span>•</span>
                           {file.status === "uploading" ? (
-                            <span className="d-flex align-items-center gap-1 upload-text">
+                            <span className="d-flex align-items-center gap-1 uploding-complete-text ">
                               <Image src={Loading} alt="loading" width={20} height={20} />
                               Uploading...
                             </span>
                           ) : (
-                            <span className="d-flex align-items-center gap-1 text-success">
+                            <span className="d-flex align-items-center gap-1 uploding-complete-text">
                               <Image src={Completed} alt="completed" width={20} height={20} />
                               Completed
                             </span>
@@ -946,10 +915,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 {/* Report Name Input */}
                 <div className="mt-4 mb-3">
-                  <label className="form-label fw-semibold">
+                  <label className="report-name">
                     Report Name <span className="text-danger">*</span>
                   </label>
-                  <div className="d-flex align-items-center">
+                  <div className="d-flex align-items-center mt-1">
                     <input
                       type="text"
                       className="form-control px-3 py-2 me-2 maiacare-input-field"

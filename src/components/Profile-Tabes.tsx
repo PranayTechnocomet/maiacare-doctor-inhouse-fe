@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 // import { Container} from 'react-bootstrap';
 import ProfileManageLeave from "@/components/form/Profile-Manage-Leave";
 import ProfileBasicDetails from "@/components/form/Profile-Basic-Details";
-import "../style/ProfileTabes.css";
+// import "../style/ProfileTabes.css";
 // import ContentContainer from './ui/ContentContainer';
 import CustomTabs from './ui/CustomTabs';
 

@@ -66,9 +66,9 @@ const NotificationScreen: React.FC = () => {
   return (
     <div className="notifications-page">
       {/* header */}
-      <div className="d-flex justify-content-between align-items-center flex-wrap mb-2">
+      <div className="d-flex justify-content-between searchbar-content align-items-center flex-wrap mb-2">
         {/* Search Input */}
-        <div>
+        <div className="custom-search-groups">
           <InputGroup className="mb-2 custom-search-group">
             <Form.Control
               placeholder=" Search History"
