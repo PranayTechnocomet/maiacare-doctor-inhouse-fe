@@ -29,13 +29,13 @@ const ManageLeave = () => {
       cell: ({ row }: any) => (
         <div className="d-flex gap-2">
           {/* Edit Button */}
-          <button className="btn btn-sm profile-card-boeder">
+          <button className="btn btn-sm profile-card-boeder rounded-2">
             <Image src={LightEditimg} alt="Edit" width={18} height={20} />
           </button>
 
           {/* Delete Button */}
           <button
-            className="btn btn-sm profile-card-boeder"
+            className="btn btn-sm profile-card-boeder rounded-2"
             onClick={() => handleDelete(row.original.id)}
           >
             <Image src={Trash} alt="Delete" width={18} height={20} />

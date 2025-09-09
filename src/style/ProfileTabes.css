@@ -1,48 +1,7 @@
 
 /* Tab bar  */
 
-.tab-scroll-container {
-  overflow-x: auto;
-  white-space: nowrap;
-
-  /* Hide scrollbar for WebKit browsers */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
-}
-
-.tab-scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-.custom-tab {
-  display: inline-flex;
-  flex-wrap: nowrap;
- 
-}
-
-.nav-item {
-  flex: 0 0 auto;
-}
-
-
-/* Document  */
-.document-main-border{
-  border-radius: 12px;
-}
-.Download-border{
-  width: 48px;
-  height: 50px;
-}
-
-
-
-@media (max-width: 425px) and (min-width: 320px) {
-.Download-border{
-  width: 42px;
-  height: 45px;
-}
 
 
 
 
-}

@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Tienne:wght@400;700;900&display=swap');
 
 
-*{
+* {
     font-family: 'Poppins', sans-serif !important;
 }
 
@@ -143,7 +143,7 @@
     height: 40px !important;
 }
 
-/* ======= Profile Componet css  =========== */
+/* ==================  Profile Componet css  =============== */
 
 .profile-name {
     color: var(--color-heading);
@@ -209,7 +209,7 @@
     color: var(--color-heading);
     font-size: 22px;
     font-weight: 600;
-    font-style: semi-bold; 
+    font-style: semi-bold;
 }
 
 .profile-card-boeder {
@@ -272,16 +272,11 @@
 
 .modal-border-color {
     border-color: var(--color-modal-border) !important;
-
 }
 
 .custom-progress {
     background-color: var(--color-brand) !important;
     /* green color */
-}
-
-.upload-text {
-    color: var(--color-radio-lable) !important;
 }
 
 .file-name {
@@ -290,16 +285,23 @@
     font-size: 14px;
 }
 
-
-
 .modal-border-dashed {
     border: 2px dashed !important;
     border-color: var(--color-icon-border) !important;
     border-radius: 16px !important;
-
-
 }
 
+.uploding-complete-text{
+       color: var(--color-radio-lable) !important;
+        font-size: 14px;
+    font-weight: 400;
+}
+
+.report-name {
+         color: var(--color-radio-lable) !important;
+        font-size: 14px;
+    font-weight: 600;
+}
 
 /* Media Query: Tablets (991px and below) */
 @media (max-width: 991px) {
@@ -360,6 +362,10 @@
     .about-text {
         font-size: 14px !important;
     }
+
+    .profile-card-main-titile {
+        font-size: 20px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -406,6 +412,10 @@
     .about-text {
         font-size: 14px !important;
     }
+    
+    .profile-card-main-titile {
+        font-size: 20px;
+    }
 }
 
 @media (max-width: 375px) {
@@ -451,9 +461,10 @@
     .about-text {
         font-size: 13px !important;
     }
+      .profile-card-main-titile {
+        font-size: 18px;
+    }
 }
-
-
 
 
 .modal-heading {
