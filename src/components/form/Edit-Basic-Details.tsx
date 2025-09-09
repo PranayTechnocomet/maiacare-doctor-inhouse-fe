@@ -360,7 +360,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
         <Row>
           <Col>
             <h5 className="profile-card-main-titile">Personal Details</h5>
-            <div className="d-flex align-items-center gap-4 mt-4 flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
+            <div className="d-flex align-items-center gap-4 mt-3 flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
               <div className="profile-wrapper">
                 {/* Profile image */}
                 <Image
@@ -611,6 +611,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               <PhoneNumberInput
                 label="Contact Number"
                 value={formData.Contact}
+                 inputMode="numeric"  
                 onChange={(phone: string) => {
                   // ✅ Remove any non-digit character
                   let value = phone.replace(/\D/g, "");
@@ -632,6 +633,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 error={formError.Contact}
               />
             </Col>
+
 
             <Col md={6} className="mt-3">
               <InputFieldGroup

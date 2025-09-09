@@ -352,8 +352,6 @@ const ProfileBasicDetails = () => {
                 </Button>
 
 
-
-
                 <Modal
                   show={showModal}
                   onHide={handleClose}
@@ -725,13 +723,12 @@ const ProfileBasicDetails = () => {
                       <div>
                         <div className="card-feild">{doc.name}</div>
                         <div className="card-year">{doc.date}</div>
-                      </div>
+                      </div>  
                     </div>
 
                     <button
-                      className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded  Download-border"
-                      onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}
-
+                      className="d-flex  bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border"
+                      onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}  
                     >
                       <Image src={Download} alt="experience" width={25} height={25} />
                     </button>
