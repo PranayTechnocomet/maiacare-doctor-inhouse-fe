@@ -24,6 +24,7 @@ import { tableResponse } from "@/utils/StaticData";
 import Textarea from "@/components/ui/Textarea";
 import CustomTabs from "@/components/ui/CustomTabs";
 import { TimePickerFieldGroup } from "@/components/ui/CustomTimePicker";
+import toast from "react-hot-toast";
 
 const data: Patient[] = [
   {
@@ -185,6 +186,8 @@ export default function Page() {
       setShowModal(true);
       setFormError(initialFormError);
     }
+    toast.success('Success message!');
+
   };
 
   const handleClose = () => {
