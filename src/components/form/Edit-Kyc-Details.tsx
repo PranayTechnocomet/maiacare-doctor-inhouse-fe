@@ -207,7 +207,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   };
 
   // licence image select//
-
   const handleLicenceFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -402,7 +401,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     <div>
       <ContentContainer className="mt-4">
         <div className=" p-4">
-          <h5 className="mb-3 profile-card-main-titile">KYC Details</h5>  
+          <h5 className="mb-3 profile-card-main-titile">KYC Details</h5>
 
           {/* Aadhar & Pan Card Inputs + Uploads Responsive */}
           <Row>
@@ -412,11 +411,25 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 label="Aadhar Number"
                 name="Aadhar"
                 type="text"
-                value={formatAadhaar(formData.Adcard)}
+                value={formatAadhaar(formData.Adcard)} // Aadhaar formatting (xxxx xxxx xxxx)
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFormData({ ...formData, Adcard: e.target.value });
-                  if (formError.Adcard) {
-                    setFormError({ ...formError, Adcard: "" });
+                  const rawValue = e.target.value;
+
+                  // only didgit type
+                  let value = rawValue.replace(/\D/g, "");
+
+                  // only 12 digit enter 
+                  if (value.length > 12) {
+                    value = value.slice(0, 12);
+                  }
+
+                  setFormData({ ...formData, Adcard: value });
+
+                 // only digit type validtation msg hide 
+                  if (/^\d+$/.test(rawValue)) {
+                    if (formError.Adcard) {
+                      setFormError({ ...formError, Adcard: "" });
+                    }
                   }
                 }}
                 placeholder="Aadhar Number"
@@ -424,6 +437,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 error={formError.Adcard}
                 className="position-relative"
               />
+
 
               {/* Aadhaar File Upload */}
               <div className="mt-3">
@@ -581,8 +595,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 type="text"
                 value={formData.LicNumber}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const rawValue = e.target.value;
+
                   // ✅ ફક્ત digits જ allow
-                  let value = e.target.value.replace(/\D/g, "");
+                  let value = rawValue.replace(/\D/g, "");
 
                   // ✅ 10 digit થી વધારે ન લખાય
                   if (value.length > 10) {
@@ -591,9 +607,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                   setFormData({ ...formData, LicNumber: value });
 
-                  // ✅ error remove while typing
-                  if (formError.LicNumber) {
-                    setFormError({ ...formError, LicNumber: "" });
+                  // ✅ Error remove ફક્ત ત્યારે જ થવું જોઈએ જયારે user digit type કરે
+                  if (/^\d+$/.test(rawValue)) {
+                    if (formError.LicNumber) {
+                      setFormError({ ...formError, LicNumber: "" });
+                    }
                   }
                 }}
                 placeholder="Licence Number"
@@ -604,6 +622,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 className="position-relative"
               />
             </Col>
+
           </Row>
 
 
@@ -687,35 +706,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       <ContentContainer className="mt-4">
-        <h6 className="profile-card-main-titile mb-3">Qualification Certificates</h6>
+        <h6 className="profile-card-main-titile mb-3">Other Documents</h6>
         <div>
           {/* Add New File */}
 
@@ -726,7 +718,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               <div
                 key={idx}
                 className="border rounded-3 p-3 text-center position-relative bg-white"
-                style={{ width: "160px", height: "160px" }} // thodu mota card maate
+                style={{ width: "160px", height: "160px" }} 
               >
                 {/* Delete Icon */}
                 <button
@@ -737,7 +729,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     cursor: "pointer",
                   }}
                   onClick={() =>
-                    setCompletedFiles((prev) => prev.filter((_, i) => i !== idx))
+                    setCompletedFiles((prev) => prev.filter((_, i) => i !== idx)) 
                   }
                 >
                   <div className="border profile-card-boeder rounded-2 d-inline-flex p-1">
@@ -812,7 +804,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             dialogClassName="custom-modal-width"
           >
             {/* Always show Browse UI */}
-            <div className="border modal-border-color rounded-3 p-4 text-center mb-4">
+            <div className="border modal-border-color rounded-4 p-4 text-center mb-4">
               <div className="mb-2">
                 <Image src={uplodimg} alt="upload" width={33} height={33} className="modal-bg p-1 rounded-2" />
               </div>
@@ -838,7 +830,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             {uploadedFiles.map((file, index) => (
               <div
                 key={index}
-                className="p-3 mb-4 bg-white modal-border-color rounded-3 border"
+                className="p-3 mb-4 bg-white modal-border-color rounded-4 border"
               >
                 <div className="modal-bg p-3 rounded-3 ">
                   <div className="d-flex justify-content-between align-items-start">
