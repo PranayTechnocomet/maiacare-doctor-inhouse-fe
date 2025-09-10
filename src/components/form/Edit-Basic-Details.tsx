@@ -155,7 +155,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       field: !q.field ? "Field is required" : "",
       university: !q.university ? "University is required" : "",
       startYear: !q.startYear ? "Start Year is required" : "",
-      endYear: !q.endYear ? "End Year is required" : "",
+      endYear: !q.endYear ? "End Year is required " : "",
     }));
     return errors;
   };
