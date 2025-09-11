@@ -143,12 +143,12 @@
     height: 40px !important;
 }
 
-/* ==================  Profile Componet css  =============== */
+/* ==================  Profile  / Edit Componet css  =============== */
 
-.profile-name {
+/* .profile-name {
     color: var(--color-heading);
     font-size: 20px;
-}
+} */
 
 .profile-verified-badge {
     font-size: 15px;
@@ -157,8 +157,9 @@
 }
 
 .profile-sub-title {
-    color: var(--color-sidebar-icon);
+    color: var(--color-sidebar-icon);       
     line-height: 0;
+    font-size: 17px !important;
 }
 
 .profile-member-since {
@@ -291,17 +292,33 @@
     border-radius: 16px !important;
 }
 
-.uploding-complete-text{
-       color: var(--color-radio-lable) !important;
-        font-size: 14px;
+.uploding-complete-text {
+    color: var(--color-radio-lable) !important;
+    font-size: 14px;
     font-weight: 400;
 }
 
 .report-name {
-         color: var(--color-radio-lable) !important;
-        font-size: 14px;
+    color: var(--color-radio-lable) !important;
+    font-size: 14px;
     font-weight: 600;
 }
+
+.Profilephoto-save-take {
+    color: var(--color-radio-lable) !important;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+
+
+
+
+
+
+
+
+
 
 /* Media Query: Tablets (991px and below) */
 @media (max-width: 991px) {
@@ -412,7 +429,7 @@
     .about-text {
         font-size: 14px !important;
     }
-    
+
     .profile-card-main-titile {
         font-size: 20px;
     }
@@ -461,8 +478,13 @@
     .about-text {
         font-size: 13px !important;
     }
-      .profile-card-main-titile {
+
+    .profile-card-main-titile {
         font-size: 18px;
+    }
+
+    .Profilephoto-save-take {
+        font-size: 12px;
     }
 }
 
