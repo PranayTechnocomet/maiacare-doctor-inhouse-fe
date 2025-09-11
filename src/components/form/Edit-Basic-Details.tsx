@@ -155,7 +155,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       field: !q.field ? "Field is required" : "",
       university: !q.university ? "University is required" : "",
       startYear: !q.startYear ? "Start Year is required" : "",
-      endYear: !q.endYear ? "End Year is required" : "",
+      endYear: !q.endYear ? "End Year is required " : "",
     }));
     return errors;
   };
@@ -224,7 +224,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-  const yearOptions = Array.from({ length: 31 }, (_, i) => {
+  const yearOptions = Array.from({ length: 51 }, (_, i) => {
     const year = 2000 + i;
     return { id: year.toString(), value: year.toString(), label: year.toString() };
   });
@@ -400,7 +400,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 dialogClassName="custom-modal-width"
 
               >
-                <div className="d-flex flex-column align-items-center ">
+                <div className="d-flex flex-column align-items-center">
                   <div
                     className="rounded overflow-hidden mb-3 mx-auto position-relative"
                     style={{ width: 160, height: 160, borderRadius: "16px" }}>
@@ -419,8 +419,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       {errorMessage}
                     </div>
                   )}
-                  <div className="w-100 border-top pt-3  d-flex justify-content-between align-items-center flex-wrap">
-                    <div className="d-flex gap-4 align-items-center flex-wrap">
+
+                  <div className="w-100 border-top pt-3 d-flex justify-content-between align-items-center flex-wrap">
+                    <div className="d-flex gap-2  align-items-center flex-wrap">
 
                       {/* Edit button  */}
 
@@ -438,7 +439,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
                       <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
                         <Image src={ImageSquare} alt="Add Photo" width={18} height={18} />
-                        <div className="small">Add Photo</div>
+                        <div className="Profilephoto-save-take">Add Photo</div>
 
                         <input
                           type="file"
@@ -452,7 +453,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       <div className="text-center" style={{ cursor: "pointer" }}>
                         {/* Camera button */}
                         <Image src={Camera} alt="Take Photo" width={18} height={18} onClick={openCamera} />
-                        <div className="small">Take Photo</div>
+                        <div className="Profilephoto-save-take">Take Photo</div>
 
                         {/* Hidden input for camera */}
                         <input
@@ -466,7 +467,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       </div>
                     </div>
 
-                    <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
+                    <div className="d-flex gap-2 mt-md-0 align-items-center">
                       <button className="btn p-0" onClick={handleDelete}>
                         <Image src={LightTrush} alt="Trash" width={22} height={22} />
                         <div className="maiacare-input-field-helper-text">Delete</div>
@@ -477,6 +478,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       </button>
                     </div>
                   </div>
+
+
                 </div>
               </Modal>
 
@@ -611,7 +614,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               <PhoneNumberInput
                 label="Contact Number"
                 value={formData.Contact}
-                 inputMode="numeric"  
+                inputMode="numeric"
                 onChange={(phone: string) => {
                   // ✅ Remove any non-digit character
                   let value = phone.replace(/\D/g, "");
@@ -629,8 +632,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     setFormError({ ...formError, Contact: "" });
                   }
                 }}
+
                 required
                 error={formError.Contact}
+            
               />
             </Col>
 
@@ -682,9 +687,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           </Row>
         </div>
       </ContentContainer>
-
-
-
 
 
 
@@ -885,12 +887,18 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       updatedErrors[index].endYear = "";
                       setFormErrors(updatedErrors);
                     }}
-                    options={yearOptions}
+                    options={yearOptions.filter((year) => {
+                      if (!q.startYear) return true;
+                      return Number(year.value) >= Number(q.startYear) + 1;
+                    })}
                     error={formErrors[index]?.endYear}
                     required
                   />
+
                 </Col>
               </Row>
+
+
             </div>
           </div>
         ))}

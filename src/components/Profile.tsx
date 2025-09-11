@@ -72,7 +72,7 @@ text-center text-md-start     ======= small screen all data center */}
                                         <span>
                                             <Image src={Expirence} alt="experience" width={16} height={15} /> {doctor.experience}</span>
                                     </div>
-                                    <div className="detail-row profile-sub-title">
+                                    <div className="     profile-sub-title">
                                         <span>
                                             <Image src={Bithdate} alt="dob" width={18} height={18} /> {doctor.dob}</span>
                                         <span>

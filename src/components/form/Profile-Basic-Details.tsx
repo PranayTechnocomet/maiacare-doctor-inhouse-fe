@@ -137,7 +137,7 @@ const ProfileBasicDetails = () => {
   };
 
 
-  const yearOptions = Array.from({ length: 31 }, (_, i) => {
+  const yearOptions = Array.from({ length: 51 }, (_, i) => {
     const year = 2000 + i;
     return { id: year.toString(), value: year.toString(), label: year.toString() };
   });
@@ -493,7 +493,10 @@ const ProfileBasicDetails = () => {
                                       }}
                                       required={true}
                                       error={formErrors[index]?.endYear}
-                                      options={yearOptions}
+                                      options={yearOptions.filter((year) => {
+                                        if (!q.startYear) return true;
+                                        return Number(year.value) >= Number(q.startYear)+1;
+                                      })}
                                     />
                                   </Col>
                                 </Row>
@@ -723,12 +726,12 @@ const ProfileBasicDetails = () => {
                       <div>
                         <div className="card-feild">{doc.name}</div>
                         <div className="card-year">{doc.date}</div>
-                      </div>  
+                      </div>
                     </div>
 
                     <button
                       className="d-flex  bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border"
-                      onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}  
+                      onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}
                     >
                       <Image src={Download} alt="experience" width={25} height={25} />
                     </button>
