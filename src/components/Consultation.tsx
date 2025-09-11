@@ -41,6 +41,7 @@ export default function Consultation() {
     const filter = searchParams.get("filter");
 
     const [filteredData, setFilteredData] = useState(consultationData);
+    const [searchQuery, setSearchQuery] = useState("");
 
     // const [leaveData, setLeaveData] = useState<LeaveEntry[]>(defaultLeaveData);
     const handleDownload = (url: string, name: string) => {
@@ -60,15 +61,38 @@ export default function Consultation() {
     };
 
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     if (filter === "completed") {
+    //         setFilteredData(consultationData.filter(item => item.status === "Completed"));
+    //     } else if (filter === "cancelled") {
+    //         setFilteredData(consultationData.filter(item => item.status === "Cancelled"));
+    //     } else {
+    //         setFilteredData(consultationData);
+    //     }
+    // }, [filter]);
+
+ useEffect(() => {
+        let data = consultationData;
+
+        // filter by status (from query param)
         if (filter === "completed") {
-            setFilteredData(consultationData.filter(item => item.status === "Completed"));
+            data = data.filter(item => item.status === "Completed");
         } else if (filter === "cancelled") {
-            setFilteredData(consultationData.filter(item => item.status === "Cancelled"));
-        } else {
-            setFilteredData(consultationData);
+            data = data.filter(item => item.status === "Cancelled");
         }
-    }, [filter]);
+
+        // filter by search
+        if (searchQuery.trim() !== "") {
+            const q = searchQuery.toLowerCase();
+            data = data.filter(item =>
+                item.name.toLowerCase().includes(q) ||
+                item.email.toLowerCase().includes(q) ||
+                item.mobile.toLowerCase().includes(q)
+            );
+        }
+
+        setFilteredData(data);
+    }, [filter, searchQuery]);
 
     const columns: ColumnDef<any>[] = [
         {
@@ -168,14 +192,16 @@ export default function Consultation() {
             {/* <AppointmentSummaryCards target="patients" /> */}
 
             {/* Search and Filter */}
-            <div className="d-flex justify-content-between align-items-center flex-wrap mb-3">
+            <div className="d-flex justify-content-between align-items-center flex-wrap mb-3 searchbar-content">
                 {/* Search Input */}
                 <div className="d-flex align-items-center gap-2 mb-1 Consultations-image">
                     {/* Search Input */}
-                    <InputGroup className=" custom-search-group">
+                     <InputGroup className="custom-search-group">
                         <Form.Control
                             placeholder="Search"
                             className="custom-search-input"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <InputGroup.Text className="custom-search-icon">
                             <IoSearch className="search-icon" />
