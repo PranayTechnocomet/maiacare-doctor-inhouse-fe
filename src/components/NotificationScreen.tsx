@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { InputGroup, Form } from "react-bootstrap";
 import { IoSearch } from "react-icons/io5";
 import { useRouter } from "next/navigation";
@@ -62,6 +62,19 @@ const notifications: NotificationItem[] = [
 
 const NotificationScreen: React.FC = () => {
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // filter notifications
+  const filteredNotifications = useMemo(() => {
+    if (!searchQuery.trim()) return notifications;
+    const q = searchQuery.toLowerCase();
+    return notifications.filter(
+      (n) =>
+        n.title.toLowerCase().includes(q) ||
+        n.description.toLowerCase().includes(q) ||
+        n.time.toLowerCase().includes(q)
+    );
+  }, [searchQuery]);
 
   return (
     <div className="notifications-page">
@@ -69,10 +82,12 @@ const NotificationScreen: React.FC = () => {
       <div className="d-flex justify-content-between searchbar-content align-items-center flex-wrap mb-2">
         {/* Search Input */}
         <div className="custom-search-groups">
-          <InputGroup className="mb-2 custom-search-group">
+         <InputGroup className="mb-2 custom-search-group">
             <Form.Control
-              placeholder=" Search History"
+              placeholder="Search History"
               className="custom-search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <InputGroup.Text className="custom-search-icon">
               <IoSearch className="search-icon" />
@@ -107,7 +122,8 @@ const NotificationScreen: React.FC = () => {
 
       {/* list */}
       <ContentContainer className="mt-3 notifications-list p-0">
-        {notifications.map((n, idx) => (
+          {filteredNotifications.length > 0 ? (
+        filteredNotifications.map((n, idx) => (
           <div
             key={idx}
             className={`notification-item d-flex justify-content-between align-items-start p-3  rounded ${n.unread ? "unread" : ""}`}
@@ -126,7 +142,10 @@ const NotificationScreen: React.FC = () => {
             </div>
             <div className="notification-time ms-1 ">{n.time}</div>
           </div>
-        ))}
+         ))
+        ) : (
+          <div className="p-3 text-muted">No notifications found</div>
+        )}
       </ContentContainer>
     </div>
   );

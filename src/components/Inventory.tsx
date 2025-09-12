@@ -43,16 +43,17 @@ export default function Inventory() {
     const filter = searchParams.get("filter");
 
     const [filteredData, setFilteredData] = useState(inventoryData);
+    const [searchQuery, setSearchQuery] = useState("");
 
     // const [leaveData, setLeaveData] = useState<LeaveEntry[]>(defaultLeaveData);
     const handleDownload = (url: string, name: string) => {
         const link = document.createElement("a");
         link.href = url;
-        link.download = name;
+        link.download = name;   
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    };
+    };  
 
 
     // delete function
@@ -69,15 +70,38 @@ export default function Inventory() {
         setShowAssign(true);
     };
 
+    // useEffect(() => {
+    //     if (filter === "completed") {
+    //         setFilteredData(inventoryData.filter(item => item.status === "Completed"));
+    //     } else if (filter === "cancelled") {
+    //         setFilteredData(inventoryData.filter(item => item.status === "Cancelled"));
+    //     } else {
+    //         setFilteredData(inventoryData);
+    //     }
+    // }, [filter]);
+
     useEffect(() => {
+        let data = inventoryData;
+
+        // filter by status (url query)
         if (filter === "completed") {
-            setFilteredData(inventoryData.filter(item => item.status === "Completed"));
+            data = data.filter(item => item.status === "Completed");
         } else if (filter === "cancelled") {
-            setFilteredData(inventoryData.filter(item => item.status === "Cancelled"));
-        } else {
-            setFilteredData(inventoryData);
+            data = data.filter(item => item.status === "Cancelled");
         }
-    }, [filter]);
+
+        // filter by search text
+        if (searchQuery.trim() !== "") {
+            const q = searchQuery.toLowerCase();
+            data = data.filter(item =>
+                item.name.toLowerCase().includes(q) ||
+                item.email.toLowerCase().includes(q) ||
+                item.mobile.toLowerCase().includes(q)
+            );
+        }
+
+        setFilteredData(data);
+    }, [filter, searchQuery]);
 
     const columns: ColumnDef<any>[] = [
         {
@@ -198,10 +222,23 @@ export default function Inventory() {
             <div className="d-flex justify-content-between align-items-center flex-wrap mb-3 searchbar-content">
                 <div className="d-flex align-items-center gap-2 mb-1 Consultations-image">
                     {/* Search Input */}
-                    <InputGroup className=" custom-search-group">
+                    {/* <InputGroup className=" custom-search-group">
                         <Form.Control
                             placeholder="Search"
                             className="custom-search-input"
+                        />
+                        <InputGroup.Text className="custom-search-icon">
+                            <IoSearch className="search-icon" />
+                        </InputGroup.Text>
+                    </InputGroup> */}
+
+
+                    <InputGroup className="custom-search-group">
+                        <Form.Control
+                            placeholder="Search"
+                            className="custom-search-input"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                         <InputGroup.Text className="custom-search-icon">
                             <IoSearch className="search-icon" />
