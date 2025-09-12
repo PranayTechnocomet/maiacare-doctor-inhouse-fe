@@ -71,7 +71,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
 
-    // if (!data.Adcard.trim()) errors.Adcard = "Adcard  \number is required";
+    // if (!data.Adcard.trim()) errors.Adcard = "Adcard \number is required";
     if (!data.Adcard.trim()) {
       errors.Adcard = "Aadhar  card number is required";
     } else {
@@ -168,7 +168,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     setFormError((prev) => ({ ...prev, Adphoto: "" }));
   };
 
-
+HTMLInputElement
   //PanCard image select //
   const handlePanFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -425,7 +425,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                   setFormData({ ...formData, Adcard: value });
 
-                 // only digit type validtation msg hide 
+                  // only digit type validtation msg hide 
                   if (/^\d+$/.test(rawValue)) {
                     if (formError.Adcard) {
                       setFormError({ ...formError, Adcard: "" });
@@ -718,7 +718,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               <div
                 key={idx}
                 className="border rounded-3 p-3 text-center position-relative bg-white"
-                style={{ width: "160px", height: "160px" }} 
+                style={{ width: "160px", height: "160px" }}
               >
                 {/* Delete Icon */}
                 <button
@@ -729,7 +729,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     cursor: "pointer",
                   }}
                   onClick={() =>
-                    setCompletedFiles((prev) => prev.filter((_, i) => i !== idx)) 
+                    setCompletedFiles((prev) => prev.filter((_, i) => i !== idx))
                   }
                 >
                   <div className="border profile-card-boeder rounded-2 d-inline-flex p-1">
@@ -832,7 +832,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 key={index}
                 className="p-3 mb-4 bg-white modal-border-color rounded-4 border"
               >
-                <div className="modal-bg p-3 rounded-3 ">
+                <div className="modal-bg p-3 rounded-3">
                   <div className="d-flex justify-content-between align-items-start">
                     {/* File Info */}
                     <div className="d-flex align-items-center gap-3">
@@ -956,12 +956,23 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
             <div className="row mt-4">
               <div className="col-6">
-                <Button variant="btn-border border" className="w-100" onClick={handleClose}>
+                <Button
+                  variant="btn-border border"
+                  className="w-100"
+                  onClick={handleClose}
+                >
                   Cancel
                 </Button>
               </div>
-              <div className="col-6 ">
-                <Button className=" maiacare-button w-100" onClick={handleSave}>
+              <div className="col-6">
+                <Button
+                  className="maiacare-button w-100"
+                  onClick={handleSave}
+                  disabled={
+                    uploadedFiles.length === 0 ||
+                    uploadedFiles.some((file) => file.status === "uploading")
+                  }
+                >
                   Save
                 </Button>
               </div>

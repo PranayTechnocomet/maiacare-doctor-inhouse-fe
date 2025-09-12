@@ -392,7 +392,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 show={showModal}
                 onHide={() => {
                   setShowModal(false);
-                  setErrorMessage(""); // 🔹 Reset error msg on modal close
+                  setErrorMessage(""); //🔹Reset error msg on modal close
                 }}
                 header="Profile Photo"
                 closeButton={true}
@@ -414,14 +414,14 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       style={{ objectFit: "cover" }}
                     />
                   </div>
-                  {errorMessage && (   // error msg only jpg/png image allow
+                  {errorMessage && ( // error msg only jpg/png image allow
                     <div className="text-danger mb-2" style={{ fontSize: "14px" }}>
                       {errorMessage}
                     </div>
                   )}
 
                   <div className="w-100 border-top pt-3 d-flex justify-content-between align-items-center flex-wrap">
-                    <div className="d-flex gap-2  align-items-center flex-wrap">
+                    <div className="d-flex gap-3 align-items-center flex-wrap">
 
                       {/* Edit button  */}
 
@@ -467,7 +467,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       </div>
                     </div>
 
-                    <div className="d-flex gap-2 mt-md-0 align-items-center">
+                    <div className="d-flex gap-3 mt-md-0 align-items-center">
                       <button className="btn p-0" onClick={handleDelete}>
                         <Image src={LightTrush} alt="Trash" width={22} height={22} />
                         <div className="maiacare-input-field-helper-text">Delete</div>
