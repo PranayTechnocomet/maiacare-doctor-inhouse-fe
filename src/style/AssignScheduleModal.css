@@ -87,3 +87,26 @@
   color: #B0B4C1 !important;
   cursor: not-allowed !important;
 }
+
+
+@media (max-width: 767px) {
+  .slot-btns {
+
+    width: 33% !important;
+  }
+}
+
+@media (max-width: 525px) {
+
+  .page-btn {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 425px) {
+
+  .page-btn {
+    padding: 2px;
+    font-size: 11px;
+  }
+}

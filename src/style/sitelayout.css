@@ -200,6 +200,12 @@
   color: var(--color-brand);
 }
 
+
+.header-icon-container.active {
+  background-color: #2B4360;
+  color: #fff;
+}
+
 .header-icon-container:hover {
   color: var(--color-white);
   background-color: var(--color-brand);

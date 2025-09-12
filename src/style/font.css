@@ -385,9 +385,16 @@
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 525px) {
     .Consultations-image {
         flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 767px) {
+    .Consultations-book {
+        font-size: 16px !important;
     }
 }
 

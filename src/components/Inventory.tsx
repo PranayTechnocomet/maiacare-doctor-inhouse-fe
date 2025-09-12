@@ -195,7 +195,7 @@ export default function Inventory() {
             {/* <AppointmentSummaryCards target="inventory" /> */}
 
             {/* Search and Filter */}
-            <div className="d-flex justify-content-between align-items-center flex-wrap mb-3">
+            <div className="d-flex justify-content-between align-items-center flex-wrap mb-3 searchbar-content">
                 <div className="d-flex align-items-center gap-2 mb-1 Consultations-image">
                     {/* Search Input */}
                     <InputGroup className=" custom-search-group">

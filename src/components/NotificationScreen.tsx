@@ -124,7 +124,7 @@ const NotificationScreen: React.FC = () => {
                 <div className="notification-description">{n.description}</div>
               </div>
             </div>
-            <div className="notification-time ms-3">{n.time}</div>
+            <div className="notification-time ms-1 ">{n.time}</div>
           </div>
         ))}
       </ContentContainer>

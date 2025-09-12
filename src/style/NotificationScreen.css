@@ -119,18 +119,74 @@
   transform: translateY(-50%);
 }
 
+
+/* Common truncate style */
+.notification-title,
+.notification-description {
+  white-space: nowrap;
+  /* Single line */
+  overflow: hidden;
+  /* Hide overflow */
+  text-overflow: ellipsis;
+  /* Show ... */
+  display: block;
+  max-width: 100%;
+}
+
+/* Title a little bolder */
 .notification-title {
   color: #292929;
   font-size: 16px;
   font-weight: 500;
 }
 
+/* Description slightly smaller */
 .notification-description {
   color: #8A8D93;
   font-size: 14px;
   font-weight: 400;
+}
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 525px) {
+
+  .notification-title,
+  .notification-description {
+    max-width: 180px;
+    /* Adjust width so ellipsis shows */
+  }
+}
+
+@media (max-width: 425px) {
+
+  .notification-title,
+  .notification-description {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 375px) {
+
+  .notification-title,
+  .notification-description {
+    max-width: 120px;
+  }
+
+  .notification-image {
+    height: 32px !important;
+    width: 32px !important;
+  }
 
 }
+
+@media (max-width: 320px) {
+
+  .notification-title,
+  .notification-description {
+    max-width: 100px;
+  }
+}
+
 
 .notification-time {
   color: #3E4A57;

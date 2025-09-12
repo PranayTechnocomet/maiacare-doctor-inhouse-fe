@@ -66,14 +66,14 @@ export default function AssignScheduleModal({ show, onHide }: Props) {
                         </div> */}
 
 
-  <div className="col-12 col-md-5 mt-3 mt-md-0">
+                        <div className="col-12 col-md-5 mt-3 mt-md-0">
                             <div className="row g-2">
                                 {(doctor.slots ?? []).map((slot, i) => {
                                     const isSelected = selected[doctor.id] === slot;
                                     const isDisabled = slot === "3:00 PM"; // 👈 Example condition
 
                                     return (
-                                        <div key={i} className="col-6 col-lg-4">
+                                        <div key={i} className="col-6 col-lg-4  slot-btns">
                                             <button
                                                 className={`slot-btn ${isSelected ? "selected" : ""}`}
                                                 disabled={isDisabled}
