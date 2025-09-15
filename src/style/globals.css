@@ -117,3 +117,12 @@ body::-webkit-scrollbar {
   height: 35px;
   width: 35px;
 }
+
+
+@media (max-width: 525px) {
+
+  .searchbar-content {
+    justify-content: center !important;
+  }
+
+}
