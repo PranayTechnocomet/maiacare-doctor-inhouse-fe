@@ -168,7 +168,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     setFormError((prev) => ({ ...prev, Adphoto: "" }));
   };
 
-HTMLInputElement
+  HTMLInputElement
   //PanCard image select //
   const handlePanFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -447,7 +447,7 @@ HTMLInputElement
                   </Form.Label>
 
                   <div
-                    className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
+                    className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
                     style={{ cursor: "pointer" }}
                     onClick={() => {
                       if (!aadharFile) aadharFileRef.current?.click();
@@ -491,13 +491,14 @@ HTMLInputElement
 
                   <input
                     type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept=".jpg,.jpeg,.png,.pdf,.image/*"
                     ref={aadharFileRef}
                     style={{ display: "none" }}
                     onChange={handleAadharFileChange}
                   />
                 </Form.Group>
-                {formError?.Adphoto && <div className="text-danger small mt-1">{formError.Adphoto}</div>}
+                {formError?.Adphoto && <div className="text-danger maiacare-input-field-error  mt-1">{formError.Adphoto}</div>}
+                
               </div>
             </Col>
 
@@ -573,13 +574,13 @@ HTMLInputElement
 
                   <input
                     type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept=".jpg,.jpeg,.png,.pdf,.image/*"
                     ref={panFileRef}
                     style={{ display: "none" }}
                     onChange={handlePanFileChange}
                   />
                 </Form.Group>
-                {formError?.Panphoto && <div className="text-danger small mt-1">{formError.Panphoto}</div>}
+                {formError?.Panphoto && <div className="text-danger maiacare-input-field-error  mt-1">{formError.Panphoto}</div>}
               </div>
             </Col>
           </Row>
@@ -685,14 +686,14 @@ HTMLInputElement
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept=".jpg,.jpeg,.png,.pdf,.image/*"
                   ref={licenceFileRef}
                   style={{ display: "none" }}
                   onChange={handleLicenceFileChange}
                 />
               </Form.Group>
               {formError?.Licphoto && (
-                <div className="text-danger small mt-1">{formError.Licphoto}</div>
+                <div className="text-danger maiacare-input-field-error  mt-1">{formError.Licphoto}</div>
               )}
 
             </Col>
@@ -814,7 +815,7 @@ HTMLInputElement
                 <input
                   type="file"
                   ref={fileInputRef}
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept=".jpg,.jpeg,.png,.pdf,.image/*"
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />

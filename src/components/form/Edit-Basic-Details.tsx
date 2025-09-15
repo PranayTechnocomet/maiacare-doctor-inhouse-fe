@@ -109,10 +109,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     if (!data.date.trim()) errors.date = "Date is required";
     if (!data.gender.trim()) errors.gender = "Gender is required";
 
-
-
+    
     const contactRegex = /^[0-9]{10}$/;
-
     if (!data.Contact.trim()) {
       errors.Contact = "Contact number is required";
     } else if (!contactRegex.test(data.Contact)) {
