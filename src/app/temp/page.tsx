@@ -187,7 +187,6 @@ export default function Page() {
       setFormError(initialFormError);
     }
     toast.success('Success message!');
-
   };
 
   const handleClose = () => {

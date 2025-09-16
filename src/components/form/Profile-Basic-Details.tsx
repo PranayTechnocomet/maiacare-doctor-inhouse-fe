@@ -13,6 +13,7 @@ import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
 import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
 import InputSelect from '../ui/InputSelect';
+import toast from 'react-hot-toast';
 
 
 const ProfileBasicDetails = () => {
@@ -190,7 +191,7 @@ const ProfileBasicDetails = () => {
     const qualErrors = validateForm1(qualifications); // multi rows
 
     setFormError(errors);
-    setFormErrors(qualErrors); // ✅ set array
+    setFormErrors(qualErrors); // ✅ set array  
 
     const hasQualError = qualErrors.some((err) =>
       Object.values(err).some((msg) => msg !== "")
@@ -229,9 +230,16 @@ const ProfileBasicDetails = () => {
       setFormError(initialFormError);
       setFormErrors([]);
       setQualifications([{ ...initialFormData }]); // reset one row
-    } else {
+      toast.success("Data saved successfully!", {
+        position: "top-right",
+        // autoClose: 3000,
+      });
+    }
+    else {
       console.log("Form has errors ⚠️", { errors, qualErrors });
     }
+
+
   };
 
 
@@ -495,7 +503,7 @@ const ProfileBasicDetails = () => {
                                       error={formErrors[index]?.endYear}
                                       options={yearOptions.filter((year) => {
                                         if (!q.startYear) return true;
-                                        return Number(year.value) >= Number(q.startYear)+1;
+                                        return Number(year.value) >= Number(q.startYear) + 1;
                                       })}
                                     />
                                   </Col>
