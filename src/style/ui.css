@@ -14,11 +14,35 @@
     outline: none;
 }
 
+.maiacare-input-field-container input[type="date"] {
+    cursor: pointer !important;
+}
+
+.maiacare-input-field-container select {
+    cursor: pointer !important;
+}
+
+.maiacare-phone-input-container input[type="tel"] {
+    box-shadow: none !important;
+}
+
+
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
 
 .maiacare-radio-group {
     display: flex;
     gap: 16px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .maiacare-radio-wrapper {
@@ -59,7 +83,8 @@
 }
 
 .maiacare-button {
-    padding: 6px 12px;
+    padding: 9px 18px !important;
+    /* padding: 6px 12px; */
     border-radius: 8px;
     background-color: var(--color-brand) !important;
     border: none !important;

@@ -9,8 +9,9 @@
 
 .maiacare-input-field-label {
     font-size: 14px;
-    font-weight: 600;
-    color: var(--color-brand);
+    font-weight: 700 !important;
+    /* color: var(--color-brand); */
+    color: var(--color-radio-lable);
 }
 
 .maiacare-input-field {
