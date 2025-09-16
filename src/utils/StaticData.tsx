@@ -17,6 +17,7 @@ export interface ConsultationEntry {
   pin: string;
   status: string;
   image: string | StaticImageData;
+  date?: string;  // ✅ optional date field
 }
 
 export interface InventoryEntry {
@@ -27,6 +28,7 @@ export interface InventoryEntry {
   pin: string;
   status: string;
   image: string | StaticImageData;
+  date?: string;  // ✅ optional date field
 }
 
 export type Doctor = {
@@ -46,6 +48,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Completed",
     image: RaniImg,
+    date: "2025-09-15"
   },
   {
     id: 2,
@@ -55,6 +58,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Pending",
     image: NinaImg,
+    date: "2025-09-16"
   },
   {
     id: 3,
@@ -64,6 +68,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Scheduled",
     image: HimariImg,
+    date: "2025-09-15"
   },
   {
     id: 4,
@@ -73,6 +78,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "No Response",
     image: AnjaliImg,
+    date: "2025-09-15"
   },
   {
     id: 5,
@@ -82,6 +88,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Cancelled",
     image: AnjaliImg,
+    date: "2025-09-15"
   },
   {
     id: 6,
@@ -91,6 +98,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Rescheduled",
     image: AasthaImg,
+    date: "2025-09-15"
   },
   {
     id: 7,
@@ -100,6 +108,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "No Response",
     image: AnjaliImg,
+    date: "2025-09-15"
   },
   {
     id: 8,
@@ -109,6 +118,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Completed",
     image: RaniImg,
+    date: "2025-09-15"
   },
   {
     id: 9,
@@ -118,6 +128,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Cancelled",
     image: AnjaliImg,
+    date: "2025-09-15"
   },
   {
     id: 10,
@@ -127,6 +138,7 @@ export const consultationData: ConsultationEntry[] = [
     pin: "400077",
     status: "Completed",
     image: RaniImg,
+    date: "2025-10-15"
   },
 ];
 
@@ -141,6 +153,7 @@ export const inventoryData: InventoryEntry[] = [
     pin: "400077",
     status: "Completed",
     image: RaniImg,
+    date: "2025-09-16"
   },
   {
     id: 2,
@@ -150,6 +163,7 @@ export const inventoryData: InventoryEntry[] = [
     pin: "400077",
     status: "Pending",
     image: NinaImg,
+    date: "2025-09-15"
   },
   {
     id: 3,
@@ -159,6 +173,7 @@ export const inventoryData: InventoryEntry[] = [
     pin: "400077",
     status: "Scheduled",
     image: HimariImg,
+    date: "2025-09-15"
   },
   {
     id: 4,
@@ -168,6 +183,7 @@ export const inventoryData: InventoryEntry[] = [
     pin: "400077",
     status: "No Response",
     image: AnjaliImg,
+    date: "2025-09-25"
   },
   {
     id: 5,
@@ -177,6 +193,7 @@ export const inventoryData: InventoryEntry[] = [
     pin: "400077",
     status: "Cancelled",
     image: AnjaliImg,
+    date: "2025-10-15"
   },
 
 ];
