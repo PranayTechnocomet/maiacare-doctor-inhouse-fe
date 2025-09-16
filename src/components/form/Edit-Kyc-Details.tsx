@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import { Row, Col, Form, Button, ProgressBar, Toast } from "react-bootstrap";
 import Jpgimg from "../../assets/images/Jpgimg.png";
 import ContentContainer from "../ui/ContentContainer";
@@ -20,6 +20,7 @@ import Completed from "../../assets/images/Completed.png";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void, onPrevious: () => void }) {
@@ -40,6 +41,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [fileError, setFileError] = useState<string>("");
+
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const panFileRef = useRef<HTMLInputElement | null>(null)
@@ -168,7 +170,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     setFormError((prev) => ({ ...prev, Adphoto: "" }));
   };
 
-HTMLInputElement
+  HTMLInputElement
   //PanCard image select //
   const handlePanFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -383,13 +385,19 @@ HTMLInputElement
     if (Object.keys(newErrors).length > 0) {
       return; // stop saving
     }
-
     // ✅ Move completed files
     const completed = uploadedFiles.filter((f) => f.status === "completed");
     setCompletedFiles((prev) => [...prev, ...completed]);
     setUploadedFiles([]);
     setShowModal(false);
+
+  // ✅ Toast success message
+  toast.success("Files saved successfully!", {
+  position: "top-right", // ✅ Right side 
+    // autoClose: 3000,
+  });
   };
+
 
   const handleClose = () => {
     setShowModal(false);
@@ -447,7 +455,7 @@ HTMLInputElement
                   </Form.Label>
 
                   <div
-                    className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
+                    className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
                     style={{ cursor: "pointer" }}
                     onClick={() => {
                       if (!aadharFile) aadharFileRef.current?.click();
@@ -491,13 +499,14 @@ HTMLInputElement
 
                   <input
                     type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept=".jpg,.jpeg,.png,.pdf,.image/*"
                     ref={aadharFileRef}
                     style={{ display: "none" }}
                     onChange={handleAadharFileChange}
                   />
                 </Form.Group>
-                {formError?.Adphoto && <div className="text-danger small mt-1">{formError.Adphoto}</div>}
+                {formError?.Adphoto && <div className="text-danger maiacare-input-field-error  mt-1">{formError.Adphoto}</div>}
+                
               </div>
             </Col>
 
@@ -573,13 +582,13 @@ HTMLInputElement
 
                   <input
                     type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
+                    accept=".jpg,.jpeg,.png,.pdf,.image/*"
                     ref={panFileRef}
                     style={{ display: "none" }}
                     onChange={handlePanFileChange}
                   />
                 </Form.Group>
-                {formError?.Panphoto && <div className="text-danger small mt-1">{formError.Panphoto}</div>}
+                {formError?.Panphoto && <div className="text-danger maiacare-input-field-error  mt-1">{formError.Panphoto}</div>}
               </div>
             </Col>
           </Row>
@@ -685,14 +694,14 @@ HTMLInputElement
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept=".jpg,.jpeg,.png,.pdf,.image/*"
                   ref={licenceFileRef}
                   style={{ display: "none" }}
                   onChange={handleLicenceFileChange}
                 />
               </Form.Group>
               {formError?.Licphoto && (
-                <div className="text-danger small mt-1">{formError.Licphoto}</div>
+                <div className="text-danger maiacare-input-field-error  mt-1">{formError.Licphoto}</div>
               )}
 
             </Col>
@@ -814,7 +823,7 @@ HTMLInputElement
                 <input
                   type="file"
                   ref={fileInputRef}
-                  accept=".jpg,.jpeg,.png,.pdf"
+                  accept=".jpg,.jpeg,.png,.pdf,.image/*"
                   onChange={handleFileChange}
                   style={{ display: "none" }}
                 />
@@ -977,13 +986,6 @@ HTMLInputElement
                 </Button>
               </div>
             </div>
-
-
-
-
-
-
-
           </Modal>
 
         </div>

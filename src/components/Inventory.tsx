@@ -44,16 +44,17 @@ export default function Inventory() {
 
     const [filteredData, setFilteredData] = useState(inventoryData);
     const [searchQuery, setSearchQuery] = useState("");
+        const [timeFilter, setTimeFilter] = useState("All Time");
 
     // const [leaveData, setLeaveData] = useState<LeaveEntry[]>(defaultLeaveData);
     const handleDownload = (url: string, name: string) => {
         const link = document.createElement("a");
         link.href = url;
-        link.download = name;   
+        link.download = name;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    };  
+    };
 
 
     // delete function
@@ -80,28 +81,92 @@ export default function Inventory() {
     //     }
     // }, [filter]);
 
+    // useEffect(() => {
+    //     let data = inventoryData;
+
+    //     // filter by status (url query)
+    //     if (filter === "completed") {
+    //         data = data.filter(item => item.status === "Completed");
+    //     } else if (filter === "cancelled") {
+    //         data = data.filter(item => item.status === "Cancelled");
+    //     }
+
+    //     // filter by search text
+    //     if (searchQuery.trim() !== "") {
+    //         const q = searchQuery.toLowerCase();
+    //         data = data.filter(item =>
+    //             item.name.toLowerCase().includes(q) ||
+    //             item.email.toLowerCase().includes(q) ||
+    //             item.mobile.toLowerCase().includes(q)
+    //         );
+    //     }
+
+    //     setFilteredData(data);
+    // }, [filter, searchQuery]);
+
     useEffect(() => {
         let data = inventoryData;
 
-        // filter by status (url query)
+        // 🔹 filter by status (url query)
         if (filter === "completed") {
-            data = data.filter(item => item.status === "Completed");
+            data = data.filter((item) => item.status === "Completed");
         } else if (filter === "cancelled") {
-            data = data.filter(item => item.status === "Cancelled");
+            data = data.filter((item) => item.status === "Cancelled");
         }
 
-        // filter by search text
+        // 🔹 filter by search text
         if (searchQuery.trim() !== "") {
             const q = searchQuery.toLowerCase();
-            data = data.filter(item =>
-                item.name.toLowerCase().includes(q) ||
-                item.email.toLowerCase().includes(q) ||
-                item.mobile.toLowerCase().includes(q)
+            data = data.filter(
+                (item) =>
+                    item.name.toLowerCase().includes(q) ||
+                    item.email.toLowerCase().includes(q) ||
+                    item.mobile.toLowerCase().includes(q)
             );
         }
 
+        // 🔹 filter by time
+        if (timeFilter !== "All Time") {
+            const now = new Date();
+
+            data = data.filter((item) => {
+                if (!item.date) return false;
+                const itemDate = new Date(item.date);
+                if (isNaN(itemDate.getTime())) return false;
+
+                // ✅ Today
+                if (timeFilter === "Today") {
+                    return itemDate.toDateString() === now.toDateString();
+                }
+
+                // ✅ This Week (Sunday → Saturday)
+                if (timeFilter === "This Week") {
+                    const weekStart = new Date(now);
+                    weekStart.setDate(now.getDate() - now.getDay()); // Sunday
+                    weekStart.setHours(0, 0, 0, 0);
+
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 7); // Next Sunday
+                    weekEnd.setHours(0, 0, 0, 0);
+
+                    return itemDate >= weekStart && itemDate < weekEnd;
+                }
+
+                // ✅ This Month
+                if (timeFilter === "This Month") {
+                    return (
+                        itemDate.getMonth() === now.getMonth() &&
+                        itemDate.getFullYear() === now.getFullYear()
+                    );
+                }
+
+                return true;
+            });
+        }
+
         setFilteredData(data);
-    }, [filter, searchQuery]);
+    }, [filter, searchQuery, timeFilter]);
+
 
     const columns: ColumnDef<any>[] = [
         {
@@ -256,12 +321,17 @@ export default function Inventory() {
                 {/* Sort + Filter */}
                 <div className="d-flex align-items-center gap-2">
                     <span className="text-muted small short-by">Sort by:</span>
-                    <Form.Select className="custom-sort-select">
+                    <Form.Select
+                        className="custom-sort-select"
+                        value={timeFilter}
+                        onChange={(e) => setTimeFilter(e.target.value)}
+                    >
                         <option>All Time</option>
                         <option>Today</option>
                         <option>This Week</option>
                         <option>This Month</option>
                     </Form.Select>
+
                     <Button variant="light" className="border custom-filter-button">
                         <PiSlidersDuotone />
                     </Button>

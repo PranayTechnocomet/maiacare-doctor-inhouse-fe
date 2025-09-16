@@ -126,3 +126,7 @@ body::-webkit-scrollbar {
   }
 
 }
+
+.patient-box {
+  height: 80%;
+}

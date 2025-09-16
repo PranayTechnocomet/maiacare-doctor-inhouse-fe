@@ -42,6 +42,8 @@ export default function Consultation() {
 
     const [filteredData, setFilteredData] = useState(consultationData);
     const [searchQuery, setSearchQuery] = useState("");
+    const [timeFilter, setTimeFilter] = useState("All Time");
+
 
     // const [leaveData, setLeaveData] = useState<LeaveEntry[]>(defaultLeaveData);
     const handleDownload = (url: string, name: string) => {
@@ -70,29 +72,66 @@ export default function Consultation() {
     //         setFilteredData(consultationData);
     //     }
     // }, [filter]);
-
- useEffect(() => {
+    useEffect(() => {
         let data = consultationData;
 
-        // filter by status (from query param)
+        // 🔹 filter by status (query param)
         if (filter === "completed") {
-            data = data.filter(item => item.status === "Completed");
+            data = data.filter((item) => item.status === "Completed");
         } else if (filter === "cancelled") {
-            data = data.filter(item => item.status === "Cancelled");
+            data = data.filter((item) => item.status === "Cancelled");
         }
 
-        // filter by search
+        // 🔹 filter by search
         if (searchQuery.trim() !== "") {
             const q = searchQuery.toLowerCase();
-            data = data.filter(item =>
-                item.name.toLowerCase().includes(q) ||
-                item.email.toLowerCase().includes(q) ||
-                item.mobile.toLowerCase().includes(q)
+            data = data.filter(
+                (item) =>
+                    item.name.toLowerCase().includes(q) ||
+                    item.email.toLowerCase().includes(q) ||
+                    item.mobile.toLowerCase().includes(q)
             );
         }
 
+        // 🔹 filter by time
+        if (timeFilter !== "All Time") {
+            const now = new Date();
+
+            data = data.filter((item) => {
+                if (!item.date) return false; // skip if no date
+                const itemDate = new Date(item.date);
+                if (isNaN(itemDate.getTime())) return false;
+
+                if (timeFilter === "Today") {
+                    return itemDate.toDateString() === now.toDateString();
+                }
+
+                if (timeFilter === "This Week") {
+                    const weekStart = new Date(now);
+                    weekStart.setDate(now.getDate() - now.getDay()); // Sunday
+                    weekStart.setHours(0, 0, 0, 0);
+
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 7); // Next Sunday
+
+                    return itemDate >= weekStart && itemDate < weekEnd;
+                }
+
+                if (timeFilter === "This Month") {
+                    return (
+                        itemDate.getMonth() === now.getMonth() &&
+                        itemDate.getFullYear() === now.getFullYear()
+                    );
+                }
+
+                return true;
+            });
+        }
+
         setFilteredData(data);
-    }, [filter, searchQuery]);
+    }, [filter, searchQuery, timeFilter]);
+
+
 
     const columns: ColumnDef<any>[] = [
         {
@@ -196,7 +235,7 @@ export default function Consultation() {
                 {/* Search Input */}
                 <div className="d-flex align-items-center gap-2 mb-1 Consultations-image">
                     {/* Search Input */}
-                     <InputGroup className="custom-search-group">
+                    <InputGroup className="custom-search-group">
                         <Form.Control
                             placeholder="Search"
                             className="custom-search-input"
@@ -219,7 +258,11 @@ export default function Consultation() {
                 {/* Sort + Filter */}
                 <div className="d-flex align-items-center gap-2 mb-2">
                     <span className="text-muted small short-by">Sort by:</span>
-                    <Form.Select className="custom-sort-select">
+                    <Form.Select
+                        className="custom-sort-select"
+                        value={timeFilter}
+                        onChange={(e) => setTimeFilter(e.target.value)} // ✅ update state
+                    >
                         <option>All Time</option>
                         <option>Today</option>
                         <option>This Week</option>
@@ -229,6 +272,7 @@ export default function Consultation() {
                         <PiSlidersDuotone />
                     </Button>
                 </div>
+
             </div>
 
             {/* Table */}
