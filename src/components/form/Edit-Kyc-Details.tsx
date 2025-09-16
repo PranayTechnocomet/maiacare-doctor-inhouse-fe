@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { FormEvent, useRef, useState } from "react";
 import { Row, Col, Form, Button, ProgressBar, Toast } from "react-bootstrap";
 import Jpgimg from "../../assets/images/Jpgimg.png";
 import ContentContainer from "../ui/ContentContainer";
@@ -20,6 +20,7 @@ import Completed from "../../assets/images/Completed.png";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 
 export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void, onPrevious: () => void }) {
@@ -40,6 +41,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [fileError, setFileError] = useState<string>("");
+
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const panFileRef = useRef<HTMLInputElement | null>(null)
@@ -383,13 +385,19 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     if (Object.keys(newErrors).length > 0) {
       return; // stop saving
     }
-
     // ✅ Move completed files
     const completed = uploadedFiles.filter((f) => f.status === "completed");
     setCompletedFiles((prev) => [...prev, ...completed]);
     setUploadedFiles([]);
     setShowModal(false);
+
+  // ✅ Toast success message
+  toast.success("Files saved successfully!", {
+  position: "top-right", // ✅ Right side 
+    // autoClose: 3000,
+  });
   };
+
 
   const handleClose = () => {
     setShowModal(false);
@@ -978,13 +986,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 </Button>
               </div>
             </div>
-
-
-
-
-
-
-
           </Modal>
 
         </div>

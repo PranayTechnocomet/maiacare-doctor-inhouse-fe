@@ -21,6 +21,7 @@ import Camera from "../../assets/images/Camera.png";
 import { TimePickerFieldGroup } from "../ui/CustomTimePicker";
 import { useSearchParams } from "next/navigation";
 import { PhoneNumberInput } from "../ui/PhoneNumberInput";
+import toast from "react-hot-toast";
 
 
 export default function PersonalDetails({ onNext }: { onNext: () => void }) {
@@ -109,7 +110,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     if (!data.date.trim()) errors.date = "Date is required";
     if (!data.gender.trim()) errors.gender = "Gender is required";
 
-    
+
     const contactRegex = /^[0-9]{10}$/;
     if (!data.Contact.trim()) {
       errors.Contact = "Contact number is required";
@@ -307,12 +308,22 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   };
 
 
-
   const handleSave = () => {
-    setSelectedImage(previewImage); // save modal preview to actual profile
-    setShowModal(false);
+    if (previewImage) {
+      // ✅ Only if image is uploaded
+      setSelectedImage(previewImage); // save modal preview to actual profile
+      setShowModal(false);
 
+      toast.success("Profile Photo saved successfully!", {
+        position: "top-right", // ✅ Right side
+        // autoClose: 3000,
+      });
+    } else {
+      // ❌ No image uploaded → nothing happens
+      setShowModal(false);
+    }
   };
+
 
   const handleDelete = () => {
     setPreviewImage(null); // delete only in modal
@@ -633,7 +644,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
                 required
                 error={formError.Contact}
-            
+
               />
             </Col>
 
