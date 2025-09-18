@@ -308,21 +308,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   };
 
 
-  const handleSave = () => {
-    if (previewImage) {
-      // ✅ Only if image is uploaded
-      setSelectedImage(previewImage); // save modal preview to actual profile
-      setShowModal(false);
 
-      toast.success("Profile Photo saved successfully!", {
-        position: "top-right", // ✅ Right side
-        // autoClose: 3000,
-      });
-    } else {
-      // ❌ No image uploaded → nothing happens
-      setShowModal(false);
-    }
+  const handleSave = () => {
+    setSelectedImage(previewImage); // save modal preview to actual profile
+    setShowModal(false);
+
   };
+
 
 
   const handleDelete = () => {
