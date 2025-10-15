@@ -1,18 +1,159 @@
-  .custom-modal-width {
-    max-width: 510px;
-  }
-
 .maiacare-input-field {
-    padding: 12px;
-    border: 1px solid var(--color-brand);
-    border-radius: 8px;
+    padding: 12px !important;
+    /* border: 1px solid var(--color-brand) !important; */
+    border-radius: 8px !important;
 }
 
 .maiacare-input-field:focus {
-    border-color: var(--color-brand);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border: 1px solid var(--color-brand) !important;
+
+}
+
+.maiacare-input-field:disabled,
+.maiacare-input-field[readonly] {
+    border-color: 2px solid var(--color-icon-border);
+    cursor: not-allowed;
+}
+
+.maiacare-input-field:focus {
+    border: 1px solid var(--color-brand) !important;
+}
+
+
+.maiacare-input-field:not(:placeholder-shown) {
+    border: 1px solid var(--color-brand) !important;
+}
+
+
+
+/* .maiacare-input-field:not([value=""]) {
+    border: 1px solid var(--color-brand) !important;
+  } */
+
+
+
+.maiacare-input-field:disabled,
+.maiacare-input-field[readonly] {
+    border: 2px solid var(--color-icon-border);
+    cursor: not-allowed;
+}
+
+
+
+/* Umesh Code Start */
+/* .maiacare-input-field-container {
+    position: relative;
+    width: 100%;    
+    margin-bottom: 16px;
+} */
+
+
+
+
+
+.input-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Trigger box */
+.input-select-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    min-height: 48px;
+    font-size: 16px;
+    background-color: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     outline: none;
 }
+
+.input-select-trigger:hover {
+    border-color: #2b4360;
+}
+
+.input-select-trigger:focus,
+.input-select-trigger:focus-visible {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.input-select-trigger.error {
+    border-color: #dc3545;
+}
+
+.input-select-trigger.disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Value / Placeholder */
+.input-select-value.placeholder {
+    color: #999;
+}
+
+.input-select-value.has-value {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Arrow */
+.input-select-arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #666;
+    transition: transform 0.3s ease;
+}
+
+.input-select-trigger.open .input-select-arrow {
+    transform: rotate(180deg);
+}
+
+/* Dropdown */
+.input-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+/* Options */
+.input-select-option {
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: white;
+    color: #333;
+}
+
+.input-select-option:last-child {
+    border-bottom: none;
+}
+
+.input-select-option:hover,
+.input-select-option.selected {
+    background-color: #2b4360;
+    color: white;
+    font-weight: 600;
+}
+
 
 .maiacare-input-field-container input[type="date"] {
     cursor: pointer !important;
@@ -37,6 +178,16 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+.partner-detail-main {
+    min-height: calc(100vh - 330px) !important;
+
+}
+
+
+
+
+/* Umesh Radadiya end */
 
 .maiacare-radio-group {
     display: flex;
@@ -82,17 +233,20 @@ input[type=number] {
     left: 4px;
 }
 
+
 .maiacare-button {
-    padding: 9px 18px !important;
-    /* padding: 6px 12px; */
+    padding: 9px 18px;
+    /* padding: 6px 12px !important; */
     border-radius: 8px;
-    background-color: var(--color-brand) !important;
+    /* border: none !important; */
+}
+
+.maiacare-button.default-layout {
     border: none !important;
-    color: var(--color-white) !important;
 }
 
 .content-layout {
-    padding: 32px 24px;
+    padding: 32px 32px;
     background-color: var(--color-white);
     border-radius: 12px;
     box-shadow: 0px 2px 10px 0px #2C313E0A;
@@ -132,26 +286,238 @@ input[type=number] {
     display: none !important;
 }
 
+.maiacare-modal {
+    padding-left: 0 !important;
+}
+
 .maiacare-modal .modal-content {
     border-radius: 24px;
     padding: 24px;
     box-shadow: 0px 2px 10px 0px #2C313E0A;
     background-color: var(--color-white);
+
 }
 
 .modal-close-icon {
     cursor: pointer;
     border: 1px solid #DDE1E8;
     border-radius: 8px;
-    padding: 8px;
+    padding: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.profile-card-radius {
-    border-radius: 12px !important;
+/* pankaj solanki start */
+
+.show-patient-box {
+    border: 1px solid var(--color-icon-border);
+    border-radius: 8px;
+    padding: 8px;
 }
+
+.show-patient-img {
+    border-radius: 4px;
+}
+
+.age-select-field .age-select-item {
+    border: 1px solid var(--color-age-select-item) !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
+    color: var(--color-sidebar-icon) !important;
+
+}
+
+.age-select-field .btn-link {
+    text-decoration: none;
+}
+
+.age-select-field .btn-check:checked+.age-select-item {
+    border-color: var(--border-box) !important;
+    color: var(--border-box) !important;
+}
+
+.age-select-field .btn-group-vertical>.btn,
+.btn-group>.btn {
+    flex: none !important;
+}
+
+.Quantity-box-show {
+    border: none !important;       
+    box-shadow: none !important;   
+    background: transparent;       
+    cursor: default;             
+  }
+  
+  /* Remove border/shadow on focus */
+  .Quantity-box-show:focus {
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  
+
+.Quantity-box {
+    border: 1px solid var(--color-icon-border);
+    border-radius: 8px;
+}
+
+.Quantity-box-minues {
+    background-color: var(--color-bg);
+    border-radius: 8px 0px 0px 8px;
+    padding: 23px 0px;
+    overflow: hidden;
+    cursor: pointer;
+
+}
+
+.Quantity-box-plus {
+    background-color: var(--color-bg);
+    border-radius: 0px 8px 8px 0px;
+    /* padding: 11px; */
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.timeslot-card {
+    border: 1px solid var(--border-check-box);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* .timeslot-card .form-check-input{
+    margin: 0;
+} 
+
+*/
+
+.timeslot-card .form-check-input:checked {
+    background-color: var(--login-font);
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.timeslot-card.selected {
+    border-color: var(--login-font);
+
+}
+
+.timeslot-card .form-check-input {
+    box-shadow: none !important;
+    margin: 0 !important;
+}
+
+.timeslot-card .form-check-input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+    /* border: none !important; */
+}
+
+.timeslot-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Medication-form-Prescription-wrapper {
+    border: 1px solid var(--color-radio);
+    border-radius: 16px;
+    padding: 12px;
+}
+
+.forgot-password-btn {
+    width: 100%;
+}
+
+.input-Amount-box {
+    background-color: var(--color-bg);
+    border-right: 1px solid var(--color-radio);
+    border-radius: 8px 0px 0px 8px;
+    padding: 12px;
+    position: absolute;
+    top: 69%;
+    left: 24px;
+    transform: translate(-50%, -50%);
+}
+
+/* input select item box none hide */
+.custom-react-dropdown .react-dropdown-select-option {
+    display: none !important;
+}
+
+.custom-react-dropdown .react-dropdown-select-input{
+    width: 100% !important;
+}
+
+.custom-react-dropdown .react-dropdown-select-item-selected {
+    background-color: var(--color-brand) !important;
+}
+
+.custom-react-dropdown .rotate-0 {
+    transform: rotate(0deg);
+}
+
+.custom-react-dropdown .rotate-180 {
+    transform: rotate(180deg);
+}
+
+.custom-react-dropdown .transition-transform {
+    transition: transform 0.3s ease;
+}
+
+.input-select-item-box {
+    border: 1px solid;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.custom-react-dropdown .react-dropdown-select-dropdown {
+    border-radius: 10px;
+    width: 100% !important;
+    top: 55px !important;
+    padding: 8px 8px 0px 8px !important;
+}
+
+.custom-react-dropdown .react-dropdown-select-item {
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+/* calender-timepicker-placeholder */
+/* calender-timepicker-icon */
+.calender-timepicker-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: var(--color-radio-lable);
+    pointer-events: none;
+    background-color: var(--color-white);
+
+    width: 79%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.calender-timepicker-icon {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--color-white);
+    pointer-events: none;
+
+}
+
+
+/* pankaj solanki end */
+
 
 @media (max-width: 991px) {
     .content-layout {
@@ -163,8 +529,15 @@ input[type=number] {
     }
 
     .modal-close-icon {
-        padding: 10px;
+        padding: 12px;
     }
+
+    .input-Amount-box {
+
+        padding: 10px;
+        left: 21px;
+    }
+
 }
 
 /* Optional: Smaller devices like phones (e.g., 575px and below) */
@@ -178,6 +551,16 @@ input[type=number] {
     }
 
     .modal-close-icon {
-        padding: 5px;
+        padding: 8px;
     }
+}
+
+
+.login-google-button {
+
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid var(--google-icon-border);
+    padding: 10px 16px;
+    background-color: var(--color-white);
 }

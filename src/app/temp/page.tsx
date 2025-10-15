@@ -80,13 +80,12 @@ const columns: ColumnDef<Patient>[] = [
       const status = info.getValue() as string;
       return (
         <span
-          className={`badge ${
-            status === "Active"
+          className={`badge ${status === "Active"
               ? "bg-primary"
               : status === "Discontinued"
-              ? "bg-warning"
-              : "bg-danger"
-          }`}
+                ? "bg-warning"
+                : "bg-danger"
+            }`}
         >
           {status}
         </span>
@@ -143,7 +142,7 @@ export default function Page() {
   const [formError, setFormError] = useState<FormError>(initialFormError);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  
+
 
   // Validation Function
   const validateForm = (data: FormData): FormError => {
@@ -296,7 +295,7 @@ export default function Page() {
             { id: "3", value: "3", label: "Doctor 3" },
           ]}
         />
-        
+
         <DatePickerFieldGroup
           label="Select Date"
           name="date"
@@ -353,7 +352,7 @@ export default function Page() {
           helperText="Enter a valid number including country code"
           error={formError.phone}
         />
-        
+
         <TimePickerFieldGroup
           label="Start Time"
           name="startTime"

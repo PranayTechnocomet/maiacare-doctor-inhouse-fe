@@ -26,9 +26,9 @@
   } 
   
   .table thead th{
-    font-weight: 400;
+    font-weight: 500;
     font-size: 14px;
-    color: #8A8D93;
+    color: #8A8D93 !important;
 }
   .table tbody tr {
     background-color: #ffffff;

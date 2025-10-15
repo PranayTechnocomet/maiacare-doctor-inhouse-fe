@@ -81,7 +81,7 @@ const ProfileBasicDetails = () => {
   const [formErrors, setFormErrors] = useState([
     { degree: "", field: "", university: "", startYear: "", endYear: "" }
   ]);
-  
+
 
 
   const documents = [
@@ -143,17 +143,17 @@ const ProfileBasicDetails = () => {
   });
 
 
-    const validateForm = (data: FormData): FormError => {
-      const errors: FormError = {};
+  const validateForm = (data: FormData): FormError => {
+    const errors: FormError = {};
 
-      // if (!data.degree.trim()) errors.degree = "Degree is required";
-      // if (!data.field.trim()) errors.field = "Field is required";
-      // if (!data.university.trim()) errors.university = "University is required";
-      // if (!data.startYear.trim()) errors.startYear = "Start year is required";
-      // if (!data.endYear.trim()) errors.endYear = "End year is required";
+    // if (!data.degree.trim()) errors.degree = "Degree is required";
+    // if (!data.field.trim()) errors.field = "Field is required";
+    // if (!data.university.trim()) errors.university = "University is required";
+    // if (!data.startYear.trim()) errors.startYear = "Start year is required";
+    // if (!data.endYear.trim()) errors.endYear = "End year is required";
 
-      return errors;
-    };
+    return errors;
+  };
 
 
   const validateForm1 = (quals: typeof qualifications) => {
@@ -239,11 +239,11 @@ const ProfileBasicDetails = () => {
 
 
   // ===== Edit button click in modal open ================
-const openQualificationModal = (index: number) => {
-  setEditIndex(index); 
-  setFormData(defaultQualifications[index]); // je data show thayu e prefill karo
-  setShowQualificationModal(true); // modal open
-};
+  const openQualificationModal = (index: number) => {
+    setEditIndex(index);
+    setFormData(defaultQualifications[index]); // je data show thayu e prefill karo
+    setShowQualificationModal(true); // modal open
+  };
 
   const closeQualificationModal = () => setShowQualificationModal(false);
 
@@ -255,43 +255,43 @@ const openQualificationModal = (index: number) => {
     setFormError((prev) => ({ ...prev, [name]: "" }));
   };
 
-    const EditValidtation = (data: FormData): FormError => {
-      const errors: FormError = {};
+  const EditValidtation = (data: FormData): FormError => {
+    const errors: FormError = {};
 
-      if (!data.degree.trim()) errors.degree = "Degree is required";
-      if (!data.field.trim()) errors.field = "Field is required";
-      if (!data.university.trim()) errors.university = "University is required";
-      if (!data.startYear.trim()) errors.startYear = "Start year is required";
-      if (!data.endYear.trim()) errors.endYear = "End year is required";
+    if (!data.degree.trim()) errors.degree = "Degree is required";
+    if (!data.field.trim()) errors.field = "Field is required";
+    if (!data.university.trim()) errors.university = "University is required";
+    if (!data.startYear.trim()) errors.startYear = "Start year is required";
+    if (!data.endYear.trim()) errors.endYear = "End year is required";
 
-      return errors;
-    };
-
-
-const handleEditSave = () => {
-  const errors = EditValidtation(formData);
-  setFormError(errors);
-
-  if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
-
-  if (editIndex !== null) {
-    const updated = [...defaultQualifications];
-    updated[editIndex] = {
-      title: `${formData.degree} - ${formData.field}`,
-      university: formData.university,
-      years: `${formData.startYear} - ${formData.endYear}`,
-    };
-    setDefaultQualifications(updated);
-  }
-
-  console.log("Form updated:", formData);
-
-  closeQualificationModal();
-  setEditIndex(null);
-};  
+    return errors;
+  };
 
 
-const [editIndex, setEditIndex] = useState<number | null>(null); // track current editing row
+  const handleEditSave = () => {
+    const errors = EditValidtation(formData);
+    setFormError(errors);
+
+    if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
+
+    if (editIndex !== null) {
+      const updated = [...defaultQualifications];
+      updated[editIndex] = {
+        title: `${formData.degree} - ${formData.field}`,
+        university: formData.university,
+        years: `${formData.startYear} - ${formData.endYear}`,
+      };
+      setDefaultQualifications(updated);
+    }
+
+    console.log("Form updated:", formData);
+
+    closeQualificationModal();
+    setEditIndex(null);
+  };
+
+
+  const [editIndex, setEditIndex] = useState<number | null>(null); // track current editing row
 
 
 
@@ -324,7 +324,7 @@ const [editIndex, setEditIndex] = useState<number | null>(null); // track curren
               </div>
               <div>
                 {operationalHours.map((item, idx) => (
-                  <p key={idx} className="mb-1 text-muted">
+                  <p key={idx} className="mb-1 basic-detail-text ">
                     <span className=" maiacare-radio-label">{item.days}:</span>{" "}
                     {item.time}
                   </p>
@@ -340,7 +340,12 @@ const [editIndex, setEditIndex] = useState<number | null>(null); // track curren
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="profile-card-main-titile">Qualification</h5>
                 <Button onClick={handleOpen} className="profile-card-boeder profile-card-button bg-transparent" >
-                  <Image src={Add} alt="Add" />
+                  {/* <Image src={Add} alt="Add" /> */}
+
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 9C18 9.19891 17.921 9.38968 17.7803 9.53033C17.6397 9.67098 17.4489 9.75 17.25 9.75H9.75V17.25C9.75 17.4489 9.67098 17.6397 9.53033 17.7803C9.38968 17.921 9.19891 18 9 18C8.80109 18 8.61032 17.921 8.46967 17.7803C8.32902 17.6397 8.25 17.4489 8.25 17.25V9.75H0.75C0.551088 9.75 0.360322 9.67098 0.21967 9.53033C0.0790178 9.38968 0 9.19891 0 9C0 8.80109 0.0790178 8.61032 0.21967 8.46967C0.360322 8.32902 0.551088 8.25 0.75 8.25H8.25V0.75C8.25 0.551088 8.32902 0.360322 8.46967 0.21967C8.61032 0.0790178 8.80109 0 9 0C9.19891 0 9.38968 0.0790178 9.53033 0.21967C9.67098 0.360322 9.75 0.551088 9.75 0.75V8.25H17.25C17.4489 8.25 17.6397 8.32902 17.7803 8.46967C17.921 8.61032 18 8.80109 18 9Z" fill="#2B4360" />
+                  </svg>
+
                 </Button>
 
 
@@ -545,7 +550,7 @@ const [editIndex, setEditIndex] = useState<number | null>(null); // track curren
 
                     <div className="d-flex gap-2">
 
-                      <Button onClick={() => openQualificationModal(idx)}className="border p-2 rounded-3 edit-del-btn  bg-transparent">
+                      <Button onClick={() => openQualificationModal(idx)} className="border p-2 rounded-3 edit-del-btn  bg-transparent">
                         <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
                       </Button>
 
@@ -675,7 +680,7 @@ const [editIndex, setEditIndex] = useState<number | null>(null); // track curren
                 ))
               )}
 
-              
+
             </ContentContainer>
 
           </div>
