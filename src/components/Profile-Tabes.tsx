@@ -5,6 +5,8 @@ import ProfileBasicDetails from "@/components/form/Profile-Basic-Details";
 // import "../style/ProfileTabes.css";
 // import ContentContainer from './ui/ContentContainer';
 import CustomTabs from './ui/CustomTabs';
+import Profile from './Profile';
+import ContentContainer from './ui/ContentContainer';
 
 const ProfileTabes = () => {
   const [activeTab, setActiveTab] = useState<string>("basic");
@@ -14,21 +16,29 @@ const ProfileTabes = () => {
       key: "basic",
       label: "Basic Details",
       content: (
-     <></>
+        <>
+          <ProfileBasicDetails />
+        </>
       ),
     },
     {
       key: "leaves",
       label: "Manage Leaves",
       content: (
-        <></>
+        <>
+          <ProfileManageLeave />
+        </>
       ),
     },
     {
       key: "reviews",
       label: "Reviews",
       content: (
-          <>Reviews</>
+        <>
+          <ContentContainer className="mt-5">
+            <h1>Reviews Content</h1>
+          </ContentContainer>
+        </>
       ),
     },
 
@@ -36,36 +46,39 @@ const ProfileTabes = () => {
 
 
   return (
-    <div className='mt-4'>
+    <>
+      <Profile />
+      <div className='mt-4'>
 
-      <CustomTabs
-        activeKey={activeTab}
-        setActiveKey={setActiveTab}
-        tabOptions={tabOptions}
-      />
+        <CustomTabs
+          activeKey={activeTab}
+          setActiveKey={setActiveTab}
+          tabOptions={tabOptions}
+        />
 
-    {activeTab === 'basic' && (
+        {/* {activeTab === 'basic' && (
           <div>
-       <ProfileBasicDetails/>
+
           </div>
         )}
 
-     {activeTab === 'leaves' && (
+        {activeTab === 'leaves' && (
           <div>
-            <ProfileManageLeave />
+            
           </div>
         )}
 
-    {activeTab === 'Reviews' && (
+        {activeTab === 'Reviews' && (
           <div>Reviews Content</div>
-        )}
+        )} */}
 
-    </div>
+      </div>
+    </>
 
 
 
 
-      
+
   );
 };
 

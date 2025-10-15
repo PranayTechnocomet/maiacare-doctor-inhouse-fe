@@ -1,6 +1,6 @@
 "use client";
 // import { useState } from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
+import { Form, Row, Col } from "react-bootstrap";
 import Simpleeditpro from "../../assets/images/Simpleeditpro.png";
 import Image from "next/image";
 import cameraicon from "../../assets/images/Cameraicon.png";
@@ -21,7 +21,7 @@ import Camera from "../../assets/images/Camera.png";
 import { TimePickerFieldGroup } from "../ui/CustomTimePicker";
 import { useSearchParams } from "next/navigation";
 import { PhoneNumberInput } from "../ui/PhoneNumberInput";
-import toast from "react-hot-toast";
+import Button from "../ui/Button";
 
 
 export default function PersonalDetails({ onNext }: { onNext: () => void }) {
@@ -496,8 +496,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
         </Row>
 
         <div>
-          <Row >
-            <Col className="mt-3 ">
+          <Row className="g-3">
+            <Col className="" md={12}>
               <InputFieldGroup
                 label="Name"
                 name="Name"
@@ -518,10 +518,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="position-relative ">
               </InputFieldGroup>
             </Col>
-          </Row>
 
-          <Row >
-            <Col md={6} className="mt-3">
+
+
+            <Col md={6} className="">
               <InputFieldGroup
                 label="Speciality"
                 name="Speciality"
@@ -544,7 +544,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             </Col>
 
 
-            <Col md={6} className="mt-3">
+            <Col md={6} className="">
               <InputFieldGroup
                 label="Year Of Experience"
                 name="Experience"
@@ -565,10 +565,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="position-relative">
               </InputFieldGroup>
             </Col>
-          </Row>
-
-          <Row >
-            <Col md={6} className="mt-3">
+          
+            <Col md={6} className="">
               <DatePickerFieldGroup
                 label="Select Date"
                 name="date"
@@ -586,7 +584,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               />
 
             </Col>
-            <Col md={6} className="mt-3 ">
+            <Col md={6} className=" ">
               <RadioButtonGroup
                 label="Gender"
                 name="gender"
@@ -606,12 +604,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 ]}
               />
             </Col>
-          </Row>
-
-          <Row >
+          
 
 
-            <Col md={6} className="mt-3">
+            <Col md={6} className="">
               <PhoneNumberInput
                 label="Contact Number"
                 value={formData.Contact}
@@ -640,8 +636,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               />
             </Col>
 
-
-            <Col md={6} className="mt-3">
+            <Col md={6} className="">
               <InputFieldGroup
                 label="Email"
                 name="Email"
@@ -663,10 +658,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               >
               </InputFieldGroup>
             </Col>
-          </Row>
-
-          <Row >
-            <Col className="mt-3">
+          
+            <Col className="">
               <Textarea
                 label="Description"
                 name="About"
@@ -704,7 +697,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           />
         </div>
 
-        <Row className="mb-3">
+        <Row className="mb-3  ">
           <Col md={6}>
             <TimePickerFieldGroup
               label="Monday-Friday"
@@ -906,7 +899,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
         <Button
-          variant="dark"
+          variant="default"
           className="maiacare-button"
           onClick={handleAddQualification}
         >
@@ -919,7 +912,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
       <div className="d-flex justify-content-end mt-4">
         <Button
-          variant="dark"
+          variant="default"
           className="maiacare-button"
           onClick={handleNextClick} // navigate 
         >

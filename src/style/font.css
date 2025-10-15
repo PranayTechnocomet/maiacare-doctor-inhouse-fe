@@ -9,9 +9,13 @@
 
 .maiacare-input-field-label {
     font-size: 14px;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     /* color: var(--color-brand); */
     color: var(--color-radio-lable);
+    font-style: semibold;
+}
+.maiacare-input-field-label::placeholder {
+    color: var(--color-radio) !important;
 }
 
 .maiacare-input-field {
@@ -42,8 +46,14 @@
 }
 
 .maiacare-radio-label {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
+    color: var(--color-radio-lable);
+}
+
+.basic-detail-text {
+    font-weight: 500;
+    font-size: 18px;
     color: var(--color-radio-lable);
 }
 
@@ -225,7 +235,7 @@
 
 .card-feild {
     color: var(--color-radio-lable) !important;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 16px;
 }
 
@@ -245,7 +255,7 @@
 .about-text {
     color: var(--color-radio-lable) !important;
     font-weight: 400;
-    font-size: 16px !important;
+    font-size: 18px !important;
 }
 
 .check-box input[type="checkbox"] {
@@ -337,7 +347,11 @@
     }
 
     .maiacare-radio-label {
-        font-size: 13px;
+        font-size: 14px;
+    }
+
+    .basic-detail-text {
+        font-size: 14px !important;
     }
 
     .modal-custom-header {
@@ -378,7 +392,7 @@
     }
 
     .about-text {
-        font-size: 14px !important;
+        font-size: 16px !important;
     }
 
     .profile-card-main-titile {
@@ -415,6 +429,10 @@
     }
 
     .maiacare-radio-label {
+        font-size: 12px;
+    }
+
+    .basic-detail-text {
         font-size: 12px;
     }
 

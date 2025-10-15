@@ -14,7 +14,7 @@ function Page() {
   }, []);
   return (
     <div>
-      <Profile/>
+      {/* <Profile/> */}
       <ProfileTabes/>
       </div>
   )

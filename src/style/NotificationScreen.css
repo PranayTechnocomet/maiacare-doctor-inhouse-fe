@@ -33,14 +33,19 @@
 
 .notifications-list {
   margin-top: 8px;
-  border-radius: 16px;
+  border-radius: 16px !important;
   box-shadow: 0px 2px 10px rgba(44, 49, 62, 0.04);
+  overflow: hidden;
 }
 
 .notification-item {
   background: #ffffff;
   border-bottom: 1px solid #DDE1E8;
+
 }
+
+
+
 
 .notification-item:hover {
   background: #f4f8ff;
@@ -212,13 +217,5 @@
   padding: 12px;
   /* text-align: center; */
   border-radius: 8px;
-  cursor: pointer;
-}
-
-@media (max-width: 525px) {
-
-  .searchbar-content {
-    justify-content: center !important;
-  }
-
+  cursor: pointer !important;
 }

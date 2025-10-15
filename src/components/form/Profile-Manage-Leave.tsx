@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Button } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import BookCalendar from "../../assets/images/BookCalendar.png";
 import Image from 'next/image';
 import {
@@ -10,6 +10,7 @@ import {
 import BaseTable from "@/components/ui/BaseTable";
 import Trash from "../../assets/images/Trash.png";
 import LightEditimg from "../../assets/images/LightEditimg.png";
+import Button from '../ui/Button';
 
 const ManageLeave = () => {
 
@@ -54,12 +55,12 @@ const ManageLeave = () => {
             <div className="d-flex align-items-center flex-wrap gap-2">
               <div className="d-flex align-items-center gap-2">
                 <span className="about-text ">Sort by:</span>
-                <Button className="last-month  ">
+                <Button className="last-month " variant="outline">
                   Last 6 Months
                 </Button>
               </div>
 
-              <Button className="d-flex align-items-center gap-2 px-2 py-2 maiacare-button">
+              <Button className="d-flex align-items-center gap-2 px-2 py-2 maiacare-button" variant="default">
                 <Image src={BookCalendar} alt="Specialization" width={22} height={22} />
                 Block Calendar
               </Button>
