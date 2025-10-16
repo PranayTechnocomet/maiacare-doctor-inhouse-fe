@@ -14,6 +14,7 @@
     color: var(--color-radio-lable);
     font-style: semibold;
 }
+
 .maiacare-input-field-label::placeholder {
     color: var(--color-radio) !important;
 }
@@ -206,6 +207,7 @@
 
 .custom-tab {
     border-bottom: 1px solid var(--color-icon-border);
+    cursor: pointer;
 }
 
 .custom-tab .nav-link {
@@ -254,11 +256,13 @@
 .about-text {
     color: var(--color-radio-lable) !important;
     font-weight: 400;
-    font-size: 18px !important;
+    font-size: 16px !important;
 }
 
 .check-box input[type="checkbox"] {
-    border: 2px solid var(--color-radio);
+    border: 1px solid var(--color-radio);
+    box-shadow: none;
+    cursor: pointer;
 }
 
 .kyc-details {
@@ -283,7 +287,10 @@
 
 .modal-border-color {
     border-color: var(--color-modal-border) !important;
+}
 
+.upload-report-data {
+    border: 2px dotted var(--color-modal-border) !important;
 }
 
 .custom-progress {
@@ -309,6 +316,14 @@
     border-radius: 16px !important;
 
 
+}
+
+.modal-custom-header {
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: var(--color-modal-heading);
 }
 
 

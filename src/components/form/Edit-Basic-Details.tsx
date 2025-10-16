@@ -107,7 +107,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     if (!data.Name.trim()) errors.Name = "Name is required";
     if (!data.Speciality.trim()) errors.Speciality = "Speciality is required";
     if (!data.Experience.trim()) errors.Experience = "Experience is required";
-    if (!data.date.trim()) errors.date = "Date is required";
+    if (!data.date.trim()) errors.date = "DOB is required";
     if (!data.gender.trim()) errors.gender = "Gender is required";
 
 
@@ -376,7 +376,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   className="camera-icon"
                   // onClick={() => setShowModal(true)}  onClick={handleOpenModal} style={{ cursor: "pointer" }}
                   onClick={handleOpenModal}
-                  style={{ cursor: "pointer" }}
+
                 >
                   <Image
                     src={cameraicon}
@@ -395,6 +395,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   setShowModal(false);
                   setErrorMessage(""); // 🔹 Reset error msg on modal close
                 }}
+                size="lg"
                 header="Profile Photo"
                 closeButton={true}
                 className="text-pink"
@@ -403,8 +404,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               >
                 <div className="d-flex flex-column align-items-center ">
                   <div
-                    className="rounded overflow-hidden mb-3 mx-auto position-relative"
-                    style={{ width: 160, height: 160, borderRadius: "16px" }}>
+                    className="rounded overflow-hidden mb-3 mx-auto position-relative edit-basic-details-modal">
 
                     {/* Defult Profile Image */}
                     <Image
@@ -412,11 +412,11 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                       alt="Simpleeditpro"
                       width={160}
                       height={160}
-                      style={{ objectFit: "cover" }}
+                      className="edit-basic-details-image"
                     />
                   </div>
                   {errorMessage && (   // error msg only jpg/png image allow
-                    <div className="text-danger mb-2" style={{ fontSize: "14px" }}>
+                    <div className="text-danger mb-2 edit-basic-details-error-font">
                       {errorMessage}
                     </div>
                   )}
@@ -437,8 +437,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                           />
                         </div> */}
 
-                      <div className="text-center" style={{ cursor: 'pointer' }} onClick={handleEditClick}>
-                        <Image src={ImageSquare} alt="Add Photo" width={18} height={18} />
+                      <div className="text-center edit-basic-details-edit-button" onClick={handleEditClick}>
+                        <Image src={ImageSquare} alt="Add Photo" width={21} height={21} />
                         <div className="small">Add Photo</div>
 
                         <input
@@ -446,13 +446,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                           accept="image/*"
                           ref={fileInputRef}
                           onChange={handleFileChange}
-                          style={{ display: 'none' }}
+                          className="edit-basic-details-edit-input"
                         />
                       </div>
 
-                      <div className="text-center" style={{ cursor: "pointer" }}>
+                      <div className="text-center edit-basic-camera-icon" >
                         {/* Camera button */}
-                        <Image src={Camera} alt="Take Photo" width={18} height={18} onClick={openCamera} />
+                        <Image src={Camera} alt="Take Photo" width={21} height={21} onClick={openCamera} />
                         <div className="small">Take Photo</div>
 
                         {/* Hidden input for camera */}
@@ -461,7 +461,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                           accept="image/*"
                           capture="user" // front camera
                           ref={cameraInputRef}
-                          style={{ display: "none" }}
+                          className="edit-basic-details-edit-input"
                           onChange={handleFileCamera}
                         />
                       </div>
@@ -469,13 +469,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
                     <div className="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                       <button className="btn p-0" onClick={handleDelete}>
-                        <Image src={LightTrush} alt="Trash" width={22} height={22} />
+                        <Image src={LightTrush} alt="Trash" width={21} height={21} />
                         <div className="maiacare-input-field-helper-text">Delete</div>
                       </button>
 
-                      <button className="btn px-4 py-2 maiacare-button" onClick={handleSave}>
+                      <Button variant="default" className="btn px-4 py-2" onClick={handleSave}>
                         Save
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -519,7 +519,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
             <Col md={6} className="">
-              <InputFieldGroup
+              {/* <InputFieldGroup
                 label="Speciality"
                 name="Speciality"
                 type="text"
@@ -537,7 +537,26 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 readOnly={false}
                 error={formError.Speciality}
                 className="position-relative">
-              </InputFieldGroup>
+              </InputFieldGroup> */}
+
+              <InputSelect
+                label="Speciality"
+                name="Speciality"
+                value={formData.Speciality}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  handleChange(e);
+                }}
+                onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+                required={true}
+                disabled={false}
+                error={formError.Speciality}
+               
+                options={[
+                  { id: "1", value: "1", label: "Speciality 1" },
+                  { id: "2", value: "2", label: "Speciality 2" },
+                  { id: "3", value: "3", label: "Speciality 3" },
+                ]}
+              />
             </Col>
 
 
@@ -562,10 +581,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="position-relative">
               </InputFieldGroup>
             </Col>
-          
+
             <Col md={6} className="">
               <DatePickerFieldGroup
-                label="Select Date"
+                label="DOB"
                 name="date"
                 value={formData.date}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -581,7 +600,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               />
 
             </Col>
-            <Col md={6} className=" ">
+            <Col md={6} className="mt-4  ">
               <RadioButtonGroup
                 label="Gender"
                 name="gender"
@@ -601,7 +620,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 ]}
               />
             </Col>
-          
+
 
 
             <Col md={6} className="">
@@ -632,7 +651,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
             <Col md={6} className="">
               <InputFieldGroup
-                label="Email"
+                label="Email ID"
                 name="Email"
                 type="text"
                 value={formData.Email}
@@ -652,10 +671,10 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               >
               </InputFieldGroup>
             </Col>
-          
+
             <Col className="">
               <Textarea
-                label="Description"
+                label="About"
                 name="About"
                 value={formData.About}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -695,7 +714,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
         </div>
 
         <Row className="mb-3  ">
-          <Col md={6}>
+          <Col md={6} className="edit-basic-detail-timepicker">
             <TimePickerFieldGroup
               label="Monday-Friday"
               name="MF"
@@ -706,7 +725,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             />
           </Col>
 
-          <Col md={6} className="mt-2">
+          <Col md={6} className="mt-2 edit-basic-detail-timepicker">
             <TimePickerFieldGroup
               name="Time"
               value={formData.Time}
@@ -717,8 +736,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           </Col>
         </Row>
 
-        <Row className="mb-3">
-          <Col md={6}>
+        <Row className="mb-3 edit-basic-detail-timepicker">
+          <Col md={6} className="edit-basic-detailsat-sun">
             <TimePickerFieldGroup
               label="Saturday-Sunday"
               name="SS"
@@ -729,7 +748,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             />
           </Col>
 
-          <Col md={6} className="mt-2">
+          <Col md={6} className="mt-2 edit-basic-detail-timepicker">
             <TimePickerFieldGroup
               name="Timer"
               value={formData.Timer}
@@ -759,8 +778,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 <Button
                   variant="danger"
                   size="sm"
-                  className="d-flex align-items-center justify-content-center"
-                  style={{ width: "32px", height: "32px", padding: 0 }}
+                  className="d-flex align-items-center justify-content-center edit-basic-qualification-button"
+
                   onClick={() => {
                     const updatedQuals = qualifications.filter((_, i) => i !== index);
                     const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
@@ -774,9 +793,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             )}
 
             {/* Qualification Box */}
-            <div className="border rounded p-3">
-              <Row>
-                <Col md={6} className="mt-3">
+            <div className=" p-3">
+              <Row className="g-3">
+                <Col md={6} className="">
                   <InputFieldGroup
                     label="Degree"
                     name="degree"
@@ -798,7 +817,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   />
                 </Col>
 
-                <Col md={6} className="mt-3">
+                <Col md={6} className="">
                   <InputFieldGroup
                     label="Field of study"
                     name="field"
@@ -818,10 +837,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     error={formErrors[index]?.field}
                   />
                 </Col>
-              </Row>
 
-              <Row >
-                <Col className="mt-3">
+                <Col className="" md={12}>
                   <InputFieldGroup
                     label="University"
                     name="university"
@@ -841,10 +858,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                     error={formErrors[index]?.university}
                   />
                 </Col>
-              </Row>
 
-              <Row>
-                <Col md={6} className="mt-3">
+                <Col md={6} className="">
                   <InputSelect
                     label="Start Year"
                     name="startYear"
@@ -864,7 +879,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   />
                 </Col>
 
-                <Col md={6} className="mt-3">
+                <Col md={6} className="">
                   <InputSelect
                     label="End Year"
                     name="endYear"

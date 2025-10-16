@@ -181,7 +181,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
             <span className="header-icon-container">
               <RiChat3Line size={18} />
             </span>
-            <Link href="/notifications" className="header-icon-container" style={{ cursor: "pointer" }}>
+            <Link href="/notifications" className="header-icon-container sitelayout-header-icon" >
               <RiNotificationLine size={18} />
             </Link>
           </div>

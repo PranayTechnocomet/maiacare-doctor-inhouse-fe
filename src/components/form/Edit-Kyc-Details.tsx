@@ -1,11 +1,12 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { Row, Col, Form, Button, ProgressBar, Toast } from "react-bootstrap";
+import { Row, Col, Form, ProgressBar, Toast } from "react-bootstrap";
 import Jpgimg from "../../assets/images/Jpgimg.png";
 import ContentContainer from "../ui/ContentContainer";
 import { InputFieldGroup } from "../ui/InputField";
 import Image from "next/image";
 import PdfWhite from "../../assets/images/Pdf-White.png";
+import PDFAddhar from "../../assets/images/PDFAddhar.png";
 import pdfimg from "../../assets/images/Pdfimg.png";
 import uplodimg from "../../assets/images/Upload.png";
 import EditProfile from "../../assets/images/EditProfile.png";
@@ -20,6 +21,7 @@ import Completed from "../../assets/images/Completed.png";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
+import Button from "../ui/Button";
 
 
 export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void, onPrevious: () => void }) {
@@ -391,11 +393,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     <div>
       <ContentContainer className="mt-4">
         <div className=" p-4">
-          <h5 className="mb-3 profile-card-main-titile">KYC Details</h5>
+          <h5 className="mb-4 mb-xxl-2 profile-card-main-titile">KYC Details</h5>
 
           {/* Aadhar & Pan Card Inputs */}
-          <Row >
-            <Col md={6} sm={12} className="mt-3">
+          <Row className="g-3" >
+            <Col md={6} sm={12} className="">
               <InputFieldGroup
                 label="Aadhar Number"
                 name="field"
@@ -422,7 +424,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               </InputFieldGroup>
             </Col>
 
-            <Col md={6} sm={12} className="mt-3">
+            <Col md={6} sm={12} className="">
               <InputFieldGroup
                 label="Pan Card Number"
                 name="Pancard"
@@ -450,13 +452,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
               </InputFieldGroup>
             </Col>
 
-          </Row>
-
-          {/* Aadhar & Pan Card Upload Previews */}
-          <Row >
 
 
-            <Col md={6} sm={12} className="mt-3">
+
+            <Col md={6} sm={12} className="">
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Aadhar Card Photo <span className="text-danger">*</span>
@@ -464,7 +463,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 <div
                   className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
-                  style={{ cursor: "pointer" }}
+
                   onClick={() => {
                     if (!aadharFile) {
                       aadharFileRef.current?.click();
@@ -474,7 +473,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   {aadharFile ? (
                     <>
                       <Image
-                        src={aadharFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
+                        src={aadharFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
                         alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
                         width={50}
                         className="me-3"
@@ -504,10 +503,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     </>
                   ) : (
                     <div
-                      className="d-flex flex-column justify-content-center align-items-center"
-                      style={{ height: "100%", width: "100%" }}
+                      className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
+
                     >
-                      <Image src={Add} alt="add" width={40} className="p-1" />
+                      <Image src={Add} alt="add" width={36} height={36} className="p-1" />
                       <span className="about-text">Add Aadhar Card Photo</span>
                     </div>
                   )}
@@ -517,7 +516,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   type="file"
                   accept=".jpg,.jpeg,.png,.pdf"
                   ref={aadharFileRef}
-                  style={{ display: "none" }}
+                  className="kyc-edit-aadhar-photo"
                   onChange={handleAadharFileChange}
                 />
               </Form.Group>
@@ -527,7 +526,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             </Col>
 
 
-            <Col md={6} sm={12} className="mt-3">
+            <Col md={6} sm={12} className="">
               <Form.Group>
                 <Form.Label className="maiacare-input-field-label">
                   Pan Card Photo <span className="text-danger">*</span>
@@ -536,7 +535,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 <div
                   className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
-                  style={{ cursor: "pointer" }}
+
                   onClick={() => {
                     if (!panFile) {
                       panFileRef.current?.click(); // only open file manager if no file selected
@@ -575,10 +574,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     </>
                   ) : (
                     <div
-                      className="d-flex flex-column justify-content-center align-items-center"
-                      style={{ height: "100%", width: "100%" }}
+                      className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
+
                     >
-                      <Image src={Add} alt="add" width={40} className="p-1" />
+                      <Image src={Add} alt="add" width={36} height={36} className="p-1" />
                       <span className="about-text">Add Pan Card Photo</span>
                     </div>
                   )}
@@ -590,7 +589,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   type="file"
                   accept=".jpg,.jpeg,.png,.pdf"
                   ref={panFileRef}
-                  style={{ display: "none" }}
+                  className="kyc-edit-aadhar-photo"
                   onChange={handlePanFileChange}
                 />
               </Form.Group>
@@ -612,17 +611,19 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 type="text"
                 value={formData.LicNumber}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // ✅ ફક્ત digits જ allow
-                  let value = e.target.value.replace(/\D/g, "");
 
-                  // ✅ 10 digit થી વધારે ન લખાય
+                  let value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
+
+
+
+
                   if (value.length > 10) {
                     value = value.slice(0, 10);
                   }
 
                   setFormData({ ...formData, LicNumber: value });
 
-                  // ✅ error remove while typing
+
                   if (formError.LicNumber) {
                     setFormError({ ...formError, LicNumber: "" });
                   }
@@ -647,8 +648,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 </Form.Label>
 
                 <div
-                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
-                  style={{ cursor: "pointer" }}
+                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 licence-data"
                   onClick={() => {
                     if (!licenceFile) {
                       licenceFileRef.current?.click(); // only open if no file selected
@@ -685,10 +685,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     </>
                   ) : (
                     <div
-                      className="d-flex flex-column justify-content-center align-items-center"
-                      style={{ height: "100%", width: "100%" }}
+                      className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
+
                     >
-                      <Image src={Add} alt="add" width={40} className="p-1 " />
+                      <Image src={Add} alt="add" width={36} height={36} className="p-1 " />
                       <span className="about-text">Add Licence Photo</span>
                     </div>
                   )}
@@ -699,7 +699,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   type="file"
                   accept=".jpg,.jpeg,.png,.pdf"
                   ref={licenceFileRef}
-                  style={{ display: "none" }}
+                  className="kyc-edit-aadhar-photo"
                   onChange={handleLicenceFileChange}
                 />
               </Form.Group>
@@ -756,17 +756,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             {completedFiles.map((file, idx) => (
               <div
                 key={idx}
-                className="border rounded-3 p-3 text-center position-relative bg-white"
-                style={{ width: "160px", height: "160px" }} // thodu mota card maate
+                className="border rounded-3 p-3 text-center position-relative bg-white qualification-certificates-data"
+
               >
                 {/* Delete Icon */}
                 <button
-                  className="btn p-0 position-absolute top-0 end-0 m-2"
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
+                  className="btn p-0 position-absolute top-0 end-0 m-2 qualification-certificates-btn"
                   onClick={() =>
                     setCompletedFiles((prev) => prev.filter((_, i) => i !== idx))
                   }
@@ -793,8 +788,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 {/* File Title */}
                 <div
-                  className="mt-2 card-feild text-truncate d-block"
-                  style={{ maxWidth: "100%" }}
+                  className="mt-2 card-feild text-truncate d-block qualification-certificates-file-title"
                   title={file.reportName || file.name}
                 >
                   {file.reportName || file.name}
@@ -802,8 +796,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 {/* File Name */}
                 <div
-                  className="card-year text-truncate d-block"
-                  style={{ maxWidth: "100%" }}
+                  className="card-year text-truncate d-block qualification-certificates-file-title"
+
                 >
                   {file.name}
                 </div>
@@ -825,8 +819,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
             {/* Add New File Button */}
             <div
-              className="add-file-box rounded-3 border  d-flex flex-column align-items-center justify-content-center text-center bg-white"
-              style={{ width: "160px", height: "160px", cursor: "pointer" }} // same size as uploaded files
+              className="add-file-box rounded-3 border  d-flex flex-column align-items-center justify-content-center text-center bg-white qualification-certificates-add-new-file"
+
               onClick={handleOpenModal}
             >
               <Image src={Pluslight} alt="add" width={65} className="my-custom-icon" />
@@ -838,12 +832,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           <Modal
             show={showModal}
             onHide={handleClose}
-            header="Upload Report"
+            header="Upload Documents"
             closeButton
             dialogClassName="custom-modal-width"
           >
             {/* Always show Browse UI */}
-            <div className="border modal-border-color rounded-3 p-4 text-center mb-4">
+            <div className=" modal-border-color rounded-4 p-4 text-center mb-4 upload-report-data">
               <div className="mb-2">
                 <Image src={uplodimg} alt="upload" width={33} height={33} className="modal-bg p-1 rounded-2" />
               </div>
@@ -855,9 +849,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   ref={fileInputRef}
                   accept=".jpg,.jpeg,.png,.pdf"
                   onChange={handleFileChange}
-                  style={{ display: "none" }}
+                  className="kyc-edit-aadhar-photo"
                 />
-                <Button variant="borde edit-profile-btn" onClick={handleButtonClick}>
+                <Button variant="outline" onClick={handleButtonClick}>
                   Browse File
                 </Button>
               </div>
@@ -869,7 +863,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             {uploadedFiles.map((file, index) => (
               <div
                 key={index}
-                className="p-3 mb-4 bg-white modal-border-color rounded-3 border"
+                className="p-3 mb-4 bg-white modal-border-color rounded-4 border"
               >
                 <div className="modal-bg p-3 rounded-3 ">
                   <div className="d-flex justify-content-between align-items-start">
@@ -933,7 +927,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   {/* Progress Bar */}
                   {file.status === "uploading" && (
                     <div className="mt-3">
-                      <div className="progress rounded-pill" style={{ height: "8px" }}>
+                      <div className="progress rounded-pill qualification-certificates-progress-bar">
                         <div
                           className="progress-bar rounded-pill custom-progress"
                           role="progressbar"
@@ -970,11 +964,15 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       }}
                     />
                     <div
-                      className="d-flex align-items-center justify-content-center border rounded-3 p-2 bg-white"
-                      style={{ width: "42px", height: "42px" }}
+                      className="d-flex align-items-center justify-content-center border rounded-3 p-2 bg-white qualification-certificates-edit-btn"
+
                     >
                       {file.status === "completed" ? (
-                        <Image src={EditProfile} alt="edit" width={20} height={20} />
+                        // <Image src={EditProfile} alt="edit" width={20} height={20} />
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M15.2594 4.23184L11.768 0.741217C11.6519 0.625114 11.5141 0.533014 11.3624 0.470178C11.2107 0.407342 11.0482 0.375 10.884 0.375C10.7198 0.375 10.5572 0.407342 10.4056 0.470178C10.2539 0.533014 10.1161 0.625114 10 0.741217L0.366412 10.3748C0.249834 10.4905 0.157407 10.6281 0.0945056 10.7798C0.0316038 10.9315 -0.000518312 11.0942 6.32418e-06 11.2584V14.7498C6.32418e-06 15.0813 0.131702 15.3993 0.366123 15.6337C0.600543 15.8681 0.918486 15.9998 1.25001 15.9998H14.375C14.5408 15.9998 14.6997 15.934 14.8169 15.8168C14.9342 15.6995 15 15.5406 15 15.3748C15 15.2091 14.9342 15.0501 14.8169 14.9329C14.6997 14.8157 14.5408 14.7498 14.375 14.7498H6.50938L15.2594 5.99981C15.3755 5.88373 15.4676 5.74592 15.5304 5.59425C15.5933 5.44257 15.6256 5.28 15.6256 5.11583C15.6256 4.95165 15.5933 4.78908 15.5304 4.63741C15.4676 4.48573 15.3755 4.34792 15.2594 4.23184ZM4.74141 14.7498H1.25001V11.2584L8.12501 4.3834L11.6164 7.87481L4.74141 14.7498ZM12.5 6.99122L9.00938 3.49981L10.8844 1.62481L14.375 5.11622L12.5 6.99122Z" fill="#2B4360" />
+                        </svg>
+
                       ) : (
                         <Image src={GreenRight} alt="editing" width={20} height={20} />
                       )}
@@ -993,18 +991,20 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             {/* Action Buttons */}
 
 
-            <div className="row mt-4">
-              <div className="col-6">
-                <Button variant="btn-border border" className="w-100" onClick={handleClose}>
-                  Cancel
-                </Button>
-              </div>
-              <div className="col-6 ">
-                <Button className=" maiacare-button w-100" onClick={handleSave}>
-                  Save
-                </Button>
-              </div>
+            <div className="d-flex mt-3 gap-3">
+
+
+              <Button variant="outline" className="w-100" onClick={handleClose}>
+                Cancel
+              </Button>
+
+
+              <Button className="w-100" variant="default" onClick={handleSave}>
+                Save
+              </Button>
+
             </div>
+
 
 
 
@@ -1015,18 +1015,19 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           </Modal>
 
         </div>
-      </ContentContainer>
+      </ContentContainer >
 
 
       <div className="d-flex justify-content-end gap-3 mt-4">
         {/* Previous Button */}
-        <button
-          className="btn-border border d-flex align-items-center gap-2 px-4 py-2 rounded-3"
+        <Button
+          variant="outline"
+
           onClick={onPrevious}
         >
-          <ArrowLeft size={16} />
+          <ArrowLeft size={16} className="me-2" />
           Previous
-        </button>
+        </Button>
 
         {/* Next Button */}
         {/* 
@@ -1039,13 +1040,13 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
         <Button variant="default" disabled={false} type="submit" className=" maiacare-button" onClick={handleSaveChnage}>
-          Save Changes
+          Save
         </Button>
 
       </div>
 
 
-    </div>
+    </div >
 
 
 

@@ -101,8 +101,8 @@ export default function inventoryDetailPage() {
                                     required
                                     // maxLength={300}
                                     rows={5}
-                                    className="review-area"
-                                    style={{ border: "1px solid #DDE1E8" }}
+                                    className="review-area inventory-detail-page-textarea"
+
                                 />
                             </div>
 
@@ -117,13 +117,8 @@ export default function inventoryDetailPage() {
             </div>
 
             <div
-                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100"
-                style={{
-                    position: "fixed",
-                    bottom: 0,
-                    right: 0,
-                    zIndex: 1050
-                }}
+                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100 inventory-detail-page-button"
+
             >
                 <Button variant="light" className="edit-profile-btn">Cancel</Button>
                 <Button className="Button-login" variant="primary">Mark as Complete</Button>

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import { Container, Row, Col, Button, Form, Table, Accordion } from 'react-bootstrap';
+import { Container, Row, Col,  Form, Table, Accordion } from 'react-bootstrap';
 import Add from "../../assets/images/Add.png";
 import Delete from "../../assets/images/Delete.png";
 import LightEditimg from "../../assets/images/LightEditimg.png";
@@ -13,6 +13,7 @@ import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
 import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
 import InputSelect from '../ui/InputSelect';
+import Button from '../ui/Button';
 
 
 const ProfileBasicDetails = () => {
@@ -376,7 +377,7 @@ const ProfileBasicDetails = () => {
                                 {index !== 0 && (
                                   <button
                                     type="button"
-                                    className="btn-close position-absolute"
+                                    className="btn-close position-absolute profile-basic-details-remove-button"
                                     style={{ top: "10px", right: "10px" }}
                                     onClick={() => handleRemoveQualification(index)}
                                   />
@@ -510,17 +511,17 @@ const ProfileBasicDetails = () => {
 
                   <div className="d-flex justify-content-between mt-4">
                     {/* Add Qualification Button */}
-                    <Button onClick={handleAddQualification}
+                    <Button onClick={handleAddQualification} variant='default'
                       disabled={
                         qualifications.length > 0 &&
                         !isQualificationComplete(qualifications[qualifications.length - 1])
                       }
-                      className="maiacare-button">
+                     >
                       + Add Qualification
                     </Button>
 
                     {/* Save Button */}
-                    <Button onClick={handleSave} className="maiacare-button">
+                    <Button onClick={handleSave} variant='default'>
                       Save
                     </Button>
                   </div>

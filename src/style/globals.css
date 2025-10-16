@@ -117,3 +117,185 @@ body::-webkit-scrollbar {
   height: 35px;
   width: 35px;
 }
+
+/* Edit-Kyc-Details Start */
+.kyc-edit-aadhar {
+  height: 100%;
+  width: 100%;
+}
+
+.kyc-edit-aadhar-photo {
+  display: none;
+}
+
+.licence-data {
+  cursor: pointer;
+}
+
+.qualification-certificates-data {
+  height: 160px;
+  width: 160px;
+}
+
+.qualification-certificates-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.qualification-certificates-file-title {
+  max-width: 100%;
+}
+
+.qualification-certificates-add-new-file {
+  width: 160px;
+  height: 160px;
+  cursor: pointer;
+}
+
+.qualification-certificates-progress-bar {
+  height: 8px;
+}
+
+.qualification-certificates-edit-btn {
+  width: 42px;
+  height: 42px;
+}
+
+/* Edit-Kyc-Details-End */
+/* Edit-Basic-Details-Start */
+.edit-basic-details-modal {
+  width: 160px;
+  height: 160px;
+  border-radius: 16px;
+}
+
+.edit-basic-details-image {
+  object-fit: cover !important;
+}
+
+.edit-basic-details-error-font {
+  font-size: 14px !important;
+}
+
+.edit-basic-details-edit-button {
+  cursor: pointer;
+}
+
+.edit-basic-details-edit-input {
+  display: none;
+}
+
+.edit-basic-camera-icon {
+  cursor: pointer !important;
+}
+
+.edit-basic-qualification-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+/* Edit-Basic-Details-End */
+/* Appointment Patient Detail Page Start*/
+.appointment-patient-detail-image {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+/* Appointment Patient Detail Page End */
+
+/* Consultation-Start */
+.consultations-image-summary-cards {
+  display: flex;
+  gap: 10px;
+}
+
+.consultations-image-book {
+  display: flex;
+  align-items: center;
+  width: 190px;
+}
+
+/* Consultation-End */
+/* Inventory Start */
+.inventory-serach-fillter {
+  display: flex;
+  gap: 10px;
+}
+
+.inventory-serach-consulations {
+  display: flex;
+  align-items: center;
+  width: 190px;
+}
+
+/* Inventory End */
+/* Inventory Detail Page Start */
+.inventory-detail-page-textarea {
+  border: 1px solid #DDE1E8;
+}
+
+.inventory-detail-page-button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+/* Inventory Detail Page End */
+
+/* AppointmentSummaryCards Start */
+.appointment-summary-cards {
+  cursor: pointer !important;
+}
+
+/* AppointmentSummaryCards End */
+
+/* SiteLayout Start */
+.sitelayout-header-icon {
+  cursor: pointer !important;
+}
+
+/* SiteLayout End */
+
+
+
+
+/* Scroall Bar Hide Start */
+/* Hide scrollbar globally */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* Prevent scroll still works */
+body {
+  overflow: auto;
+}
+
+/* Scroall Bar Hide End */
+
+/* Hide default time picker icon for Chrome, Edge, and Safari */
+.edit-basic-detail-timepicker input[type="time"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Optional: For Firefox */
+.edit-basic-detail-timepicker input[type="time"] {
+  -moz-appearance: textfield;
+}
+
+@media screen and (max-width: 376px) {
+  .edit-basic-detailsat-sun{
+    margin-top: 5px !important;
+  }
+}

@@ -32,9 +32,9 @@ export default function AppointmentSummaryCards({ target }: AppointmentSummaryCa
       <div className="col-md-4">
         <ContentContainer className={`p-2 card-container ${selected === "all" ? "selected-all" : ""}`}>
           <div
-            className="border-0"
+            className="border-0 appointment-summary-cards"
             onClick={() => handleCardClick("all")}
-            style={{ cursor: "pointer" }}
+           
           >
             <Card.Body className="d-flex gap-2 align-items-center">
               <Image src={Frame1} alt="Total" className="img-fluid lock-image" />
@@ -51,9 +51,9 @@ export default function AppointmentSummaryCards({ target }: AppointmentSummaryCa
       <div className="col-md-4">
         <ContentContainer className={`p-2 card-container ${selected === "completed" ? "selected-completed" : ""}`}>
           <div
-            className="border-0"
+            className="border-0  appointment-summary-cards"
             onClick={() => handleCardClick("completed")}
-            style={{ cursor: "pointer" }}
+           
           >
             <Card.Body className="d-flex gap-2 align-items-center">
               <Image src={Frame2} alt="Complete" className="img-fluid lock-image" />
@@ -70,9 +70,9 @@ export default function AppointmentSummaryCards({ target }: AppointmentSummaryCa
       <div className="col-md-4">
         <ContentContainer className={`p-2 card-container ${selected === "cancelled" ? "selected-cancelled" : ""}`}>
           <div
-            className="border-0"
+            className="border-0  appointment-summary-cards"
             onClick={() => handleCardClick("cancelled")}
-            style={{ cursor: "pointer" }}
+           
           >
             <Card.Body className="d-flex gap-2 align-items-center">
               <Image src={Frame3} alt="Cancelled" className="img-fluid lock-image" />
