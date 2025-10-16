@@ -96,7 +96,7 @@ const NotificationScreen: React.FC = () => {
         </div>
 
         {/* Sort + Filter */}
-        <div className="d-flex align-items-center gap-2 mb-2">
+        <div className="d-flex align-items-center gap-2 ">
           <span className="text-muted small short-by">Sort by:</span>
           <Form.Select className="custom-filter-select">
             <option>All Time</option>
@@ -126,7 +126,7 @@ const NotificationScreen: React.FC = () => {
         filteredNotifications.map((n, idx) => (
           <div
             key={idx}
-            className={`notification-item d-flex justify-content-between align-items-start p-3  rounded ${n.unread ? "unread" : ""}`}
+            className={`notification-item d-flex justify-content-between align-items-start p-xxl-3 p-4  ${n.unread ? "unread" : ""}`}
             role="button"
           >
             <div className="d-flex align-items-start">

@@ -247,9 +247,9 @@ export default function Consultation() {
                         </InputGroup.Text>
                     </InputGroup>
 
-                    <div className="border custom-filter-button p-2" style={{ display: "flex", gap: "10px", }}>
+                    <div className="border custom-filter-button p-2 consultations-image-summary-cards">
                         <Image src={woman} alt="Total" className="img-fluid women-image" />
-                        <div style={{ display: 'flex', alignItems: 'center', width: '190px' }}>
+                        <div  className="consultations-image-book">
                             <div className="Consultations-book">98 Consultations</div>
                         </div>
                     </div>
