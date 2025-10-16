@@ -177,25 +177,14 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
               <h4 className="layout__subtitle mt-1">{subtitle}</h4>
             </div>
           </div>
-           <div className="d-flex align-items-center gap-2">
-      {/* Chat */}
-      <Link
-        href="/chat"
-        className={`header-icon-container ${pathname === "/chat" ? "active" : ""}`}
-        style={{ cursor: "pointer" }}
-      >
-        <RiChat3Line size={18} />
-      </Link>
-
-      {/* Notification */}
-      <Link
-        href="/notifications"
-        className={`header-icon-container ${pathname === "/notifications" ? "active" : ""}`}
-        style={{ cursor: "pointer" }}
-      >
-        <RiNotificationLine size={18} />
-      </Link>
-    </div>
+          <div className="d-flex align-items-center gap-2">
+            <span className="header-icon-container">
+              <RiChat3Line size={18} />
+            </span>
+            <Link href="/notifications" className="header-icon-container sitelayout-header-icon" >
+              <RiNotificationLine size={18} />
+            </Link>
+          </div>
         </header>
         <div className="layout__body">{children}</div>
       </main>

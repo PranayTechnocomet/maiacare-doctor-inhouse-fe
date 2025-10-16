@@ -124,13 +124,8 @@ export default function AppointmentPatientDetailPage() {
             </div>
 
             <div
-                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100 "
-                style={{
-                    position: "fixed",
-                    bottom: 0,
-                    right: 0,
-                    zIndex: 1050
-                }}
+                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100 appointment-patient-detail-image"
+                
             >
                 <Button variant="light" className="edit-profile-btn">Cancel</Button>
                 <Button className="Button-login" variant="primary">Mark as Complete</Button>
