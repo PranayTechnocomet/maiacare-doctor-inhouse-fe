@@ -22,7 +22,6 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
 import Button from "../ui/Button";
-import toast from "react-hot-toast";
 
 
 export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void, onPrevious: () => void }) {
@@ -43,7 +42,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [fileError, setFileError] = useState<string>("");
-
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const panFileRef = useRef<HTMLInputElement | null>(null)
@@ -75,28 +73,21 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
 
-    // if (!data.Adcard.trim()) errors.Adcard = "Adcard \number is required";
+    // if (!data.Adcard.trim()) errors.Adcard = "Adcard  \number is required";
     if (!data.Adcard.trim()) {
-      errors.Adcard = "Aadhar  card number is required";
+      errors.Adcard = "Aadhaar card number is required";
     } else {
       const rawValue = data.Adcard.replace(/\s/g, ""); // remove spaces
 
       if (rawValue.length < 12) {
-        errors.Adcard = "Aadhar card number must be 12 digits";
+        errors.Adcard = "Aadhaar card number must be 12 digits";
       }
     }
 
-    // if (!data.Adcard) errors.Adphoto = "Aadhar card photo is required";
-    // Aadhaar photo
-    if (!aadharFile) {
-      errors.Adphoto = "Aadhaar card photo is required";
-    }
-    if (!panFile) {
-      errors.Panphoto = "PAN card photo is required";
-    }
-
-    // if (!data.Pancard) errors.Panphoto = "Pancard photo is required";
+    if (!data.Adcard) errors.Adphoto = "Aadhar card photo is required";
+    if (!data.Pancard) errors.Panphoto = "Pancard photo is required";
     // if (!data.Pancard.trim()) errors.Pancard = "Pancard is required";
+
 
     if (!data.Pancard.trim()) {
       errors.Pancard = "Pancard  number is required";
@@ -112,11 +103,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     } else if (data.LicNumber.length !== 10) {
       errors.LicNumber = "Licence Number must be exactly 10 digits";
     }
-    // if (!data.LicNumber) errors.Licphoto = "Licence photo is required";
-    // Licence photo
-    if (!licenceFile) {
-      errors.Licphoto = "Licence photo is required";
-    }
+    if (!data.LicNumber) errors.Licphoto = "Licence photo is required";
 
     return errors;
   };
@@ -172,7 +159,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     setFormError((prev) => ({ ...prev, Adphoto: "" }));
   };
 
-  HTMLInputElement
+
   //PanCard image select //
   const handlePanFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -211,6 +198,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   };
 
   // licence image select//
+
   const handleLicenceFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -387,19 +375,13 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     if (Object.keys(newErrors).length > 0) {
       return; // stop saving
     }
+
     // ✅ Move completed files
     const completed = uploadedFiles.filter((f) => f.status === "completed");
     setCompletedFiles((prev) => [...prev, ...completed]);
     setUploadedFiles([]);
     setShowModal(false);
-
-  // ✅ Toast success message
-  toast.success("Files saved successfully!", {
-  position: "top-right", // ✅ Right side 
-    // autoClose: 3000,
-  });
   };
-
 
   const handleClose = () => {
     setShowModal(false);
@@ -418,97 +400,28 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             <Col md={6} sm={12} className="">
               <InputFieldGroup
                 label="Aadhar Number"
-                name="Aadhar"
+                name="field"
                 type="text"
-                value={formatAadhaar(formData.Adcard)} // Aadhaar formatting (xxxx xxxx xxxx)
+                value={formatAadhaar(formData.Adcard)} // 👈 format while typing  
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const rawValue = e.target.value;
-
-                  // only didgit type
-                  let value = rawValue.replace(/\D/g, "");
-
-                  // only 12 digit enter 
-                  if (value.length > 12) {
-                    value = value.slice(0, 12);
-                  }
-
-                  setFormData({ ...formData, Adcard: value });
-
-                  // only digit type validtation msg hide 
-                  if (/^\d+$/.test(rawValue)) {
-                    if (formError.Adcard) {
-                      setFormError({ ...formError, Adcard: "" });
-                    }
+                  setFormData({ ...formData, Adcard: e.target.value });
+                  if (formError.Adcard) {  // msg type validtation msg hide 
+                    setFormError({ ...formError, Adcard: "" });
                   }
                 }}
+
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+
+                }}
                 placeholder="Aadhar Number"
-                required
+                required={true}
+                disabled={false}
+                readOnly={false}
                 error={formError.Adcard}
                 className="position-relative"
-              />
+              >
 
-
-              {/* Aadhaar File Upload */}
-              <div className="mt-3">
-                <Form.Group>
-                  <Form.Label className="maiacare-input-field-label">
-                    Aadhar Card Photo <span className="text-danger">*</span>
-                  </Form.Label>
-
-                  <div
-                    className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      if (!aadharFile) aadharFileRef.current?.click();
-                    }}
-                  >
-                    {aadharFile ? (
-                      <>
-                        <Image
-                          src={aadharFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
-                          alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
-                          width={50}
-                          className="me-3"
-                        />
-                        <div className="flex-grow-1">
-                          <div className="card-feild">Aadhar Card</div>
-                          <div className="kyc-details file-name-ellipsis" title={aadharFile.name}>
-                            {aadharFile.name}
-                          </div>
-                          <div className="card-year">
-                            {aadharFile.size} - {aadharFile.date}
-                          </div>
-                        </div>
-                        <button
-                          type="button"
-                          className="btn rounded-2 d-inline-flex p-2 profile-card-boeder me-2"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setAadharFile(null);
-                          }}
-                        >
-                          <Image src={Trash} alt="delete" width={17} height={18} />
-                        </button>
-                      </>
-                    ) : (
-                      <div className="d-flex flex-column justify-content-center align-items-center w-100">
-                        <Image src={Add} alt="add" width={40} className="p-1" />
-                        <span className="about-text">Add Aadhar Card Photo</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.pdf,.image/*"
-                    ref={aadharFileRef}
-                    style={{ display: "none" }}
-                    onChange={handleAadharFileChange}
-                  />
-                </Form.Group>
-                {formError?.Adphoto && <div className="text-danger maiacare-input-field-error  mt-1">{formError.Adphoto}</div>}
-                
-              </div>
+              </InputFieldGroup>
             </Col>
 
             <Col md={6} sm={12} className="">
@@ -518,19 +431,26 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 type="text"
                 value={formData.Pancard}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  // Restrict length to 10
                   if (e.target.value.length <= 10) {
                     setFormData({ ...formData, Pancard: e.target.value.toUpperCase() });
                   }
+
                   if (formError.Pancard) {
                     setFormError({ ...formError, Pancard: "" });
                   }
                 }}
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                 placeholder="Pan Card Number"
-                required
+                required={true}
+                disabled={false}
+                readOnly={false}
                 error={formError.Pancard}
                 className="position-relative"
-                maxLength={10}
-              />
+                maxLength={10}  // 👈 This ensures user cannot type more than 10 characters
+              >
+              </InputFieldGroup>
+            </Col>
 
 
 
@@ -716,7 +636,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 className="position-relative"
               />
             </Col>
-
           </Row>
 
 
@@ -778,14 +697,14 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  accept=".jpg,.jpeg,.png,.pdf,.image/*"
+                  accept=".jpg,.jpeg,.png,.pdf"
                   ref={licenceFileRef}
                   className="kyc-edit-aadhar-photo"
                   onChange={handleLicenceFileChange}
                 />
               </Form.Group>
               {formError?.Licphoto && (
-                <div className="text-danger maiacare-input-field-error  mt-1">{formError.Licphoto}</div>
+                <div className="text-danger small mt-1">{formError.Licphoto}</div>
               )}
 
             </Col>
@@ -799,8 +718,35 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <ContentContainer className="mt-4">
-        <h6 className="profile-card-main-titile mb-3">Other Documents</h6>
+        <h6 className="profile-card-main-titile mb-3">Qualification Certificates</h6>
         <div>
           {/* Add New File */}
 
@@ -901,7 +847,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 <input
                   type="file"
                   ref={fileInputRef}
-                  accept=".jpg,.jpeg,.png,.pdf,.image/*"
+                  accept=".jpg,.jpeg,.png,.pdf"
                   onChange={handleFileChange}
                   className="kyc-edit-aadhar-photo"
                 />
@@ -919,7 +865,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 key={index}
                 className="p-3 mb-4 bg-white modal-border-color rounded-4 border"
               >
-                <div className="modal-bg p-3 rounded-3">
+                <div className="modal-bg p-3 rounded-3 ">
                   <div className="d-flex justify-content-between align-items-start">
                     {/* File Info */}
                     <div className="d-flex align-items-center gap-3">
@@ -947,12 +893,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                           <span className="profile-sub-title">{file.size}</span>
                           <span>•</span>
                           {file.status === "uploading" ? (
-                            <span className="d-flex align-items-center gap-1 uploding-complete-text ">
+                            <span className="d-flex align-items-center gap-1 upload-text">
                               <Image src={Loading} alt="loading" width={20} height={20} />
                               Uploading...
                             </span>
                           ) : (
-                            <span className="d-flex align-items-center gap-1 uploding-complete-text">
+                            <span className="d-flex align-items-center gap-1 text-success">
                               <Image src={Completed} alt="completed" width={20} height={20} />
                               Completed
                             </span>
@@ -994,10 +940,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 {/* Report Name Input */}
                 <div className="mt-4 mb-3">
-                  <label className="report-name">
+                  <label className="form-label fw-semibold">
                     Report Name <span className="text-danger">*</span>
                   </label>
-                  <div className="d-flex align-items-center mt-1">
+                  <div className="d-flex align-items-center">
                     <input
                       type="text"
                       className="form-control px-3 py-2 me-2 maiacare-input-field"

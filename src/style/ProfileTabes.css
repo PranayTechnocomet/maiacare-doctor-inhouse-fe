@@ -1,4 +1,3 @@
-
 /* Tab bar  */
 
 .tab-scroll-container {
@@ -6,19 +5,22 @@
   white-space: nowrap;
 
   /* Hide scrollbar for WebKit browsers */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 .tab-scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 .custom-tab {
   display: inline-flex;
   flex-wrap: nowrap;
-  
- 
+
+
 }
 
 .nav-item {
@@ -27,10 +29,11 @@
 
 
 /* Document  */
-.document-main-border{
+.document-main-border {
   border-radius: 12px;
 }
-.Download-border{
+
+.Download-border {
   width: 48px;
   height: 50px;
 }
@@ -38,11 +41,9 @@
 
 
 @media (max-width: 425px) and (min-width: 320px) {
-.Download-border{
-  width: 42px;
-  height: 45px;
+  .Download-border {
+    width: 42px;
+    height: 45px;
+  }
+
 }
-
-
-
-
