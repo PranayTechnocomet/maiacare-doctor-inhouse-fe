@@ -295,7 +295,18 @@ body {
 }
 
 @media screen and (max-width: 376px) {
-  .edit-basic-detailsat-sun{
+  .edit-basic-detailsat-sun {
     margin-top: 5px !important;
   }
+}
+
+/* Remove background and shadow on accordion expansion  FOR ALL ACCORDION*/
+.accordion-button:not(.collapsed) {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.accordion-button:focus {
+  box-shadow: none !important;
+  outline: none !important;
 }

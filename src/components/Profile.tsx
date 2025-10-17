@@ -55,7 +55,7 @@ const Profile = () => {
                             {/* col-md-9 col-lg-9 col-xl-9    nedd to  above div */}
                             <div>
                                 <div className="d-flex flex-md-row align-items-start align-items-md-center gap-1 ">
-                                    <strong>{doctor.name}</strong>
+                                    <div className='profile-name-font'>{doctor.name}</div>
                                     <div className="d-flex align-items-center gap-1">
                                         <Image src={MaiaVerify} alt="Specialization" width={18} height={18} />
                                         <span className="profile-verified-badge">Maia Verified</span>

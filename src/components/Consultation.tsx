@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
     Form,
     InputGroup,
-    Button,
+    
     Pagination,
 } from "react-bootstrap";
 import { consultationData } from "@/utils/StaticData";
@@ -19,6 +19,7 @@ import { LuTrash2, LuArrowDown } from "react-icons/lu";
 import AppointmentSummaryCards from "@/components/layout/AppointmentSummaryCards";
 import Link from "next/link";
 import woman from "@/assets/images/woman.png";
+import Button from "./ui/Button";
 
 // const statusColor: Record<string, string> = {
 //     Completed: "success",
@@ -143,6 +144,7 @@ export default function Consultation() {
                 return (
                     <div className="text-center d-flex">
                         <Button
+                            variant="light"
                             size="sm"
                             className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border me-2"
                             onClick={() => handleDownload(`/files/${name}.pdf`, `${name}.pdf`)}
@@ -150,6 +152,7 @@ export default function Consultation() {
                             <LuArrowDown className="arrow-down" />
                         </Button>
                         <Button
+                            variant="light"
                             size="sm"
                             className="btn btn-sm profile-card-boeder border bg-white"
                             onClick={() => handleDelete(id)} // <-- pass id

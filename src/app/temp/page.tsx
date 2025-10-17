@@ -81,10 +81,10 @@ const columns: ColumnDef<Patient>[] = [
       return (
         <span
           className={`badge ${status === "Active"
-              ? "bg-primary"
-              : status === "Discontinued"
-                ? "bg-warning"
-                : "bg-danger"
+            ? "bg-primary"
+            : status === "Discontinued"
+              ? "bg-warning"
+              : "bg-danger"
             }`}
         >
           {status}
@@ -295,11 +295,12 @@ export default function Page() {
             { id: "3", value: "3", label: "Doctor 3" },
           ]}
         />
-        
+
 
         <DatePickerFieldGroup
           label="Select Date"
           name="date"
+          placeholder="Select Date"
           value={formData.date}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleChange(e);
@@ -357,6 +358,16 @@ export default function Page() {
         <TimePickerFieldGroup
           label="Start Time"
           name="startTime"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+          required
+          error={formError.startTime}
+        />
+
+        <TimePickerFieldGroup
+          label="Start Time"
+          name="startTime"
+          placeholder="Select Start Time121212121212121212121212"
           value={startTime}
           onChange={(e) => setStartTime(e.target.value)}
           required

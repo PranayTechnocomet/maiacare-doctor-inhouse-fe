@@ -586,6 +586,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
               <DatePickerFieldGroup
                 label="DOB"
                 name="date"
+                placeholder="Select DOB"
                 value={formData.date}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   handleChange(e);
@@ -718,6 +719,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             <TimePickerFieldGroup
               label="Monday-Friday"
               name="MF"
+              placeholder="Select Time"
               value={formData.MF}
               onChange={(e) => {
                 setFormData({ ...formData, MF: e.target.value });
@@ -728,6 +730,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           <Col md={6} className="mt-2 edit-basic-detail-timepicker">
             <TimePickerFieldGroup
               name="Time"
+              placeholder="Select Time"
               value={formData.Time}
               onChange={(e) => {
                 setFormData({ ...formData, Time: e.target.value });
@@ -741,6 +744,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             <TimePickerFieldGroup
               label="Saturday-Sunday"
               name="SS"
+              placeholder="Select Time"
               value={formData.SS}
               onChange={(e) => {
                 setFormData({ ...formData, SS: e.target.value });
@@ -751,6 +755,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           <Col md={6} className="mt-2 edit-basic-detail-timepicker">
             <TimePickerFieldGroup
               name="Timer"
+              placeholder="Select Time"
               value={formData.Timer}
               onChange={(e) => {
                 setFormData({ ...formData, Timer: e.target.value });
