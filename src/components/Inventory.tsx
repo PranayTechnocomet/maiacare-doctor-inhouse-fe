@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
     Form,
     InputGroup,
-    Button,
+
     Pagination,
 } from "react-bootstrap";
 import { inventoryData } from "@/utils/StaticData";
@@ -20,6 +20,7 @@ import AppointmentSummaryCards from "@/components/layout/AppointmentSummaryCards
 import Link from "next/link";
 import AssignScheduleModal from "@/components/layout/AssignScheduleModal"; // adjust path
 import woman from "@/assets/images/woman.png";
+import Button from "./ui/Button";
 
 
 // const statusColor: Record<string, string> = {
@@ -240,8 +241,7 @@ export default function Inventory() {
                 return (
                     <div>
                         <Button
-                            className="maiacare-button-small Assign-button"
-                            variant="primary"
+                            variant="default"
                             onClick={() => handleAssignClick(doctor)}
                         >
                             Assign
@@ -258,6 +258,7 @@ export default function Inventory() {
                 return (
                     <div className="text-center d-flex">
                         <Button
+                            variant="light"
                             size="sm"
                             className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border me-2"
                             onClick={() => handleDownload(`/files/${name}.pdf`, `${name}.pdf`)}
@@ -265,6 +266,7 @@ export default function Inventory() {
                             <LuArrowDown className="arrow-down" />
                         </Button>
                         <Button
+                            variant="light"
                             size="sm"
                             className="btn btn-sm profile-card-boeder border bg-white"
                             onClick={() => handleDelete(id)} // <-- pass id
