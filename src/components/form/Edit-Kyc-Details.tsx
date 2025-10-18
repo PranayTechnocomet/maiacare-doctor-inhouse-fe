@@ -392,7 +392,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   return (
     <div>
       <ContentContainer className="mt-4">
-        <div className=" p-4">
+        {/* <div className=" p-4"> */}
           <h5 className="mb-4 mb-xxl-2 profile-card-main-titile">KYC Details</h5>
 
           {/* Aadhar & Pan Card Inputs */}
@@ -710,7 +710,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             </Col>
 
           </Row>
-        </div>
+        {/* </div> */}
       </ContentContainer>
 
 
@@ -751,12 +751,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           {/* Add New File */}
 
           {/* modal save button click in add data  */}
-          <div className="d-flex gap-3 flex-wrap">
+          <div className="d-flex gap-3 flex-wrap ">
 
             {completedFiles.map((file, idx) => (
               <div
                 key={idx}
-                className="border rounded-3 p-3 text-center position-relative bg-white qualification-certificates-data"
+                className="qualification-certificates rounded-3 p-4 text-center position-relative bg-white qualification-certificates-data"
 
               >
                 {/* Delete Icon */}
@@ -766,7 +766,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     setCompletedFiles((prev) => prev.filter((_, i) => i !== idx))
                   }
                 >
-                  <div className="border profile-card-boeder rounded-2 d-inline-flex p-1">
+                  <div className=" profile-card-boeder rounded-2 d-inline-flex p-1">
                     <Image src={Trash} alt="delete" width={18} height={18} />
                   </div>
                 </button>

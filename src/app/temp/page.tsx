@@ -404,11 +404,15 @@ export default function Page() {
       </div>
 
       <InputFieldHelperText helperText="Helper Text" />
+      <Button variant="default" onClick={() => setShowModal(true)}>
+        Open Modal
+      </Button>
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
         header="Modal Header"
         closeButton={true}
+        size="lg"
       >
         <h2 className="mb-0 text-center">Form Submitted Successfully</h2>
       </Modal>

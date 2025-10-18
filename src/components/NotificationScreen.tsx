@@ -77,7 +77,7 @@ const NotificationScreen: React.FC = () => {
   }, [searchQuery]);
 
   return (
-    <div className="notifications-page">
+    <div className="notifications-page ">
       {/* header */}
       <div className="d-flex justify-content-between searchbar-content align-items-center flex-wrap mb-2">
         {/* Search Input */}
