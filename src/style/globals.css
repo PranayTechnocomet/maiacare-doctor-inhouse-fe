@@ -3,7 +3,7 @@
   --color-white: #fff;
   --color-black: #000;
   --color-border: #e2e8f0;
-  --color-brand: #2b4360;
+  --color-brand: #2B4360;
   --color-heading: #292929;
   --color-icon-border: #DDE1E8;
   --color-sidebar-icon: #8A8D93;
@@ -130,6 +130,7 @@ body::-webkit-scrollbar {
 .patient-box {
   height: 80%;
 }
+
 /* Edit-Kyc-Details Start */
 .kyc-edit-aadhar {
   height: 100%;
@@ -147,6 +148,10 @@ body::-webkit-scrollbar {
 .qualification-certificates-data {
   height: 160px;
   width: 160px;
+}
+
+.qualification-certificates {
+  border: 2px dotted #DDE1E8 !important;
 }
 
 .qualification-certificates-btn {
@@ -295,7 +300,7 @@ body {
 /* Scroall Bar Hide End */
 
 /* Hide default time picker icon for Chrome, Edge, and Safari */
-.edit-basic-detail-timepicker input[type="time"]::-webkit-calendar-picker-indicator {
+input[type="time"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
   appearance: none;
@@ -321,4 +326,19 @@ body {
 .accordion-button:focus {
   box-shadow: none !important;
   outline: none !important;
+}
+.form-select {
+  --bs-form-select-bg-img: url(../assets/images/Arrow.png);
+  width: 100%;
+  color: var(--bs-body-color);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--bs-body-bg);
+  background-image: var(--bs-form-select-bg-img), var(--bs-form-select-bg-icon, none);
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  background-position: right .75rem center;
+  background-repeat: no-repeat;
+  background-size: 17px 9px;
 }
