@@ -29,6 +29,7 @@
     font-weight: 500;
     font-size: 14px;
     color: #8A8D93 !important;
+    border-bottom: 1px solid #DDE1E8;
 }
   .table tbody tr {
     background-color: #ffffff;
@@ -109,4 +110,7 @@
 .badge {
     font-size: 13px;
     font-weight: 600;
+}
+.leave-history-table{
+  background-color: yellow !important;
 }

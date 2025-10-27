@@ -120,12 +120,12 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!data.Email.trim()) {
-      errors.Email = "Email is required";
-    } else if (!emailRegex.test(data.Email)) {
-      errors.Email = "Enter a valid email address";
-    }
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!data.Email.trim()) {
+    //   errors.Email = "Email is required";
+    // } else if (!emailRegex.test(data.Email)) {
+    //   errors.Email = "Enter a valid email address";
+    // }
 
 
     if (!data.About.trim()) errors.About = "About is required";
@@ -402,7 +402,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 dialogClassName="custom-modal-width"
 
               >
-                <div className="d-flex flex-column align-items-center">
+
+                <div className="d-flex flex-column align-items-center" >
                   <div
                     className="rounded overflow-hidden mb-3 mx-auto position-relative edit-basic-details-modal">
 
@@ -553,7 +554,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 required={true}
                 disabled={false}
                 error={formError.Speciality}
-               
+
                 options={[
                   { id: "1", value: "1", label: "Speciality 1" },
                   { id: "2", value: "2", label: "Speciality 2" },

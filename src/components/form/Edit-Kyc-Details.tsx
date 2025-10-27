@@ -746,7 +746,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
       <ContentContainer className="mt-4">
-        <h6 className="profile-card-main-titile mb-3">Qualification Certificates</h6>
+        <h6 className="profile-card-main-titile mb-3">Other Documents</h6>
         <div>
           {/* Add New File */}
 
@@ -839,7 +839,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             {/* Always show Browse UI */}
             <div className=" modal-border-color rounded-4 p-4 text-center mb-4 upload-report-data">
               <div className="mb-2">
-                <Image src={uplodimg} alt="upload" width={33} height={33} className="modal-bg p-1 rounded-2" />
+                <Image src={uplodimg} alt="upload" width={35} height={35} className="modal-bg p-1 rounded-2" />
               </div>
               <div>Click here to upload your file or drag.</div>
               <small className="kyc-modal-subheading">Supported Format: SVG, JPG, PNG (10mb each)</small>

@@ -23,10 +23,10 @@ export default function CommonTable<TData>({ data, columns }: CommonTableProps<T
 
   return (
     <div className="table-responsive">
-      <table className="table table-hover table-bordered">
-        <thead className="thead-light">
+      <table className="table table-hover table-bordered ">
+        <thead className="thead-light ">
           {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
+            <tr key={headerGroup.id} className="leave-history-table">
               {headerGroup.headers.map(header => (
                 <th key={header.id}>
                   {flexRender(header.column.columnDef.header, header.getContext())}
