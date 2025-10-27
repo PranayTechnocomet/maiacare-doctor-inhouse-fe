@@ -356,7 +356,7 @@ const ProfileBasicDetails = () => {
             <ContentContainer className='mt-4' >
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="profile-card-main-titile">Qualification</h5>
-                <Button onClick={handleOpen} className="profile-card-boeder profile-card-button bg-transparent" >
+                <Button onClick={handleOpen} className="profile-card-boeder profile-card-button bg-transparent" variant="outline">
                   {/* <Image src={Add} alt="Add" /> */}
 
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -568,7 +568,7 @@ const ProfileBasicDetails = () => {
 
                     <div className="d-flex gap-2">
 
-                      <Button onClick={() => openQualificationModal(idx)} className="border p-2 rounded-3 edit-del-btn  bg-transparent">
+                      <Button onClick={() => openQualificationModal(idx)} className="border p-2 rounded-3 edit-del-btn  bg-transparent" variant='outline'>
                         <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
                       </Button>
 
@@ -688,7 +688,7 @@ const ProfileBasicDetails = () => {
 
 
                       <Button className="border p-2 rounded-2 edit-del-btn  bg-transparent"
-                        onClick={() => handleDelete(idx)} // 👈 click par delete
+                        onClick={() => handleDelete(idx)} variant='outline' //click par delete
                       >
                         <Image src={Delete} alt="Specialization" width={18} height={18} />
                       </Button>

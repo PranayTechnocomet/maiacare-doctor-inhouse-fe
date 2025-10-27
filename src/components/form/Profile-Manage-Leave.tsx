@@ -52,15 +52,15 @@ const ManageLeave = () => {
           {/* Header Row */}
           <div className="d-flex justify-content-between align-items-center flex-wrap">
             <h4 className="mb-2 mb-md-0 profile-card-main-titile">Leave History</h4>
-            <div className="d-flex align-items-center flex-wrap gap-2">
+            <div className="d-flex align-items-center flex-wrap gap-2 maiacare-button-large">
               <div className="d-flex align-items-center gap-2">
                 <span className="about-text ">Sort by:</span>
-                <Button className="last-month " variant="outline">
+                <Button className="" variant="outline">
                   Last 6 Months
                 </Button>
               </div>
 
-              <Button className="d-flex align-items-center gap-2 px-2 py-2 maiacare-button" variant="default">
+              <Button className="d-flex align-items-center gap-2 " variant="default">
                 <Image src={BookCalendar} alt="Specialization" width={22} height={22} />
                 Block Calendar
               </Button>
