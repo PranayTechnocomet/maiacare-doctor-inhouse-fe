@@ -342,4 +342,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-repeat: no-repeat;
   background-size: 17px 9px;
 }
-
+.profile-icon-border .maiacare-button{
+  padding: 9px 10px !important;
+}
+.profile-icon-border .outline-layout{
+ border: 1px solid #DDE1E8 !important;
+}
