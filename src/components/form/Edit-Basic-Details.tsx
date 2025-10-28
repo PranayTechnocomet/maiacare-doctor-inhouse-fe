@@ -395,7 +395,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   setShowModal(false);
                   setErrorMessage(""); //🔹Reset error msg on modal close
                 }}
-                size="md"
+                size="lg"
                 header="Profile Photo"
                 closeButton={true}
                 className="text-pink"
