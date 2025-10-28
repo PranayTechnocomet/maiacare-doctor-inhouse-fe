@@ -20,7 +20,7 @@
   }
   
   .table thead th {
-    background-color: #f9fafb;
+    background-color: #F5F7FA;
     border: none;
     padding: 12px 16px;
   } 
@@ -110,7 +110,4 @@
 .badge {
     font-size: 13px;
     font-weight: 600;
-}
-.leave-history-table{
-  background-color: yellow !important;
 }

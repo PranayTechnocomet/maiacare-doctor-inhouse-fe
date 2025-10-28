@@ -329,7 +329,7 @@ const ProfileBasicDetails = () => {
         {/* =====LEFT COLUMN PART ======== */}
 
 
-        <Col lg={8}>
+        <Col xl={8} md={7}>
 
           {/* Operational hours & Days */}
           <div>
@@ -709,7 +709,7 @@ const ProfileBasicDetails = () => {
         {/* ======RIGHT COLUMN =========== */}
         {/* About */}
 
-        <Col lg={4}>
+        <Col xl={4} md={5}>
           <div>
             <ContentContainer className="mt-4">
               <h5 className="profile-card-main-titile">About</h5>

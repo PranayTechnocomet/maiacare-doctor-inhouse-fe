@@ -28,19 +28,16 @@ const ManageLeave = () => {
     {
       header: "Action",
       cell: ({ row }: any) => (
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 profile-icon-border">
           {/* Edit Button */}
-          <button className="btn btn-sm profile-card-boeder rounded-2">
+          <Button className="btn btn-sm profile-card-boeder " variant='outline' contentSize="small">
             <Image src={LightEditimg} alt="Edit" width={18} height={20} />
-          </button>
+          </Button>
 
           {/* Delete Button */}
-          <button
-            className="btn btn-sm profile-card-boeder rounded-2"
-            onClick={() => handleDelete(row.original.id)}
-          >
+          <Button className="btn btn-sm profile-card-boeder " variant='outline' contentSize="small" onClick={() => handleDelete(row.original.id)}>
             <Image src={Trash} alt="Delete" width={18} height={20} />
-          </button>
+          </Button>
         </div>
       ),
     },
@@ -53,14 +50,14 @@ const ManageLeave = () => {
           <div className="d-flex justify-content-between align-items-center flex-wrap">
             <h4 className="mb-2 mb-md-0 profile-card-main-titile">Leave History</h4>
             <div className="d-flex align-items-center flex-wrap gap-2 maiacare-button-large">
-              <div className="d-flex align-items-center gap-2">
+              <div className="d-flex align-items-center gap-2 profile-icon-border">
                 <span className="about-text ">Sort by:</span>
-                <Button className="" variant="outline">
+                <Button className="" variant="outline" contentSize="medium">
                   Last 6 Months
                 </Button>
               </div>
 
-              <Button className="d-flex align-items-center gap-2 " variant="default">
+              <Button className="d-flex align-items-center gap-2 " variant="default" contentSize="medium">
                 <Image src={BookCalendar} alt="Specialization" width={22} height={22} />
                 Block Calendar
               </Button>
