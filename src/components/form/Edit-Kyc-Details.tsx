@@ -392,7 +392,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   return (
     <div>
       <ContentContainer className="mt-4">
-        <div className=" p-4">
+        {/* <div className=" p-4"> */}
           <h5 className="mb-4 mb-xxl-2 profile-card-main-titile">KYC Details</h5>
 
           {/* Aadhar & Pan Card Inputs */}
@@ -710,7 +710,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             </Col>
 
           </Row>
-        </div>
+        {/* </div> */}
       </ContentContainer>
 
 
@@ -746,17 +746,17 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
 
       <ContentContainer className="mt-4">
-        <h6 className="profile-card-main-titile mb-3">Qualification Certificates</h6>
+        <h6 className="profile-card-main-titile mb-3">Other Documents</h6>
         <div>
           {/* Add New File */}
 
           {/* modal save button click in add data  */}
-          <div className="d-flex gap-3 flex-wrap">
+          <div className="d-flex gap-3 flex-wrap ">
 
             {completedFiles.map((file, idx) => (
               <div
                 key={idx}
-                className="border rounded-3 p-3 text-center position-relative bg-white qualification-certificates-data"
+                className="qualification-certificates rounded-3 p-4 text-center position-relative bg-white qualification-certificates-data"
 
               >
                 {/* Delete Icon */}
@@ -766,7 +766,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     setCompletedFiles((prev) => prev.filter((_, i) => i !== idx))
                   }
                 >
-                  <div className="border profile-card-boeder rounded-2 d-inline-flex p-1">
+                  <div className=" profile-card-boeder rounded-2 d-inline-flex p-1">
                     <Image src={Trash} alt="delete" width={18} height={18} />
                   </div>
                 </button>
@@ -839,7 +839,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
             {/* Always show Browse UI */}
             <div className=" modal-border-color rounded-4 p-4 text-center mb-4 upload-report-data">
               <div className="mb-2">
-                <Image src={uplodimg} alt="upload" width={33} height={33} className="modal-bg p-1 rounded-2" />
+                <Image src={uplodimg} alt="upload" width={35} height={35} className="modal-bg p-1 rounded-2" />
               </div>
               <div>Click here to upload your file or drag.</div>
               <small className="kyc-modal-subheading">Supported Format: SVG, JPG, PNG (10mb each)</small>
