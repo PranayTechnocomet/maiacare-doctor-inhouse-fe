@@ -327,6 +327,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   box-shadow: none !important;
   outline: none !important;
 }
+
 .form-select {
   --bs-form-select-bg-img: url(../assets/images/Arrow.png);
   width: 100%;
@@ -342,9 +343,22 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-repeat: no-repeat;
   background-size: 17px 9px;
 }
-.profile-icon-border .maiacare-button{
+
+.profile-icon-border .maiacare-button {
   padding: 9px 10px !important;
 }
-.profile-icon-border .outline-layout{
- border: 1px solid #DDE1E8 !important;
+
+.profile-icon-border .outline-layout {
+  border: 1px solid #DDE1E8 !important;
+}
+
+.profile-card-boeder:hover {
+  background-color: white !important;
+}
+
+.pation-profile-data .content-layout {
+  padding: 16px !important;
+}
+.pation-profile-dataa .content-layout {
+  padding: 30px !important;
 }

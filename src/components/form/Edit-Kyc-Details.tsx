@@ -545,7 +545,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   {panFile ? (
                     <>
                       <Image
-                        src={panFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
+                        src={panFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
                         alt={panFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
                         width={50}
                         className="me-3"
@@ -658,7 +658,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   {licenceFile ? (
                     <>
                       <Image
-                        src={licenceFile.name.endsWith(".pdf") ? PdfWhite : Jpgimg}
+                        src={licenceFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
                         alt={licenceFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
                         width={50}
                         className="me-3"
@@ -873,12 +873,12 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       <Image
                         src={
                           file.name.toLowerCase().endsWith(".pdf")
-                            ? PdfWhite
+                            ? PDFAddhar
                             : [".jpg", ".jpeg", ".png", ".gif"].some((ext) =>
                               file.name.toLowerCase().endsWith(ext)
                             )
                               ? Jpgimg
-                              : PdfWhite // fallback = pdf icon
+                              : PDFAddhar // fallback = pdf icon
                         }
                         alt={file.name}
                         width={45}
