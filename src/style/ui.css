@@ -273,7 +273,7 @@ input[type=number] {
 }
 
 .maiacare-phone-button .selected-flag:hover {
-    background-color: transparent !important;
+    background-color: #F5F7FA !important;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
