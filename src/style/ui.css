@@ -298,6 +298,10 @@ input[type=number] {
 
 }
 
+.maiacare-modal-md .modal-dialog{
+    max-width: 600px;
+}
+
 .modal-close-icon {
     cursor: pointer;
     border: 1px solid #DDE1E8;
