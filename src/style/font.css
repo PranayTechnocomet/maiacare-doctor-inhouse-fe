@@ -172,7 +172,8 @@
 .profile-sub-title {
     color: var(--color-sidebar-icon);       
     line-height: 0;
-    font-size: 17px !important;
+    font-size: 16px !important;
+    font-weight: 400;
 }
 
 .profile-member-since {
@@ -238,7 +239,7 @@
 
 .card-feild {
     color: var(--color-radio-lable) !important;
-    font-weight: 500;
+    font-weight: 6  00;
     font-size: 16px;
 }
 
@@ -258,7 +259,7 @@
 .about-text {
     color: var(--color-radio-lable) !important;
     font-weight: 400;
-    font-size: 16px !important;
+    font-size: 17px !important;
 }
 
 .check-box input[type="checkbox"] {
@@ -445,9 +446,9 @@
         font-size: 12px;
     }
 
-    .maiacare-radio-label {
+    /* .maiacare-radio-label {
         font-size: 12px;
-    }
+    } */
 
     .basic-detail-text {
         font-size: 12px;
@@ -470,7 +471,7 @@
     }
 
     .about-text {
-        font-size: 14px !important;
+        font-size: 15px !important;
     }
 
     .profile-card-main-titile {
@@ -519,7 +520,7 @@
     }
 
     .about-text {
-        font-size: 13px !important;
+        font-size: 14px !important;
     }
 
     .profile-card-main-titile {
