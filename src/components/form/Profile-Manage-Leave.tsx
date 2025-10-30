@@ -58,7 +58,7 @@ const ManageLeave = () => {
               </div>
 
               <Button className="d-flex align-items-center gap-2 " variant="default" contentSize="medium">
-                <Image src={BookCalendar} alt="Specialization" width={22} height={22} />
+                <Image src={BookCalendar} alt="Specialization" width={20} height={20} />
                 Block Calendar
               </Button>
             </div>
