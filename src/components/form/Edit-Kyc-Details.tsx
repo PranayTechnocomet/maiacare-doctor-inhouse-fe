@@ -393,323 +393,323 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     <div>
       <ContentContainer className="mt-4">
         {/* <div className=" p-4"> */}
-          <h5 className="mb-4 mb-xxl-2 profile-card-main-titile">KYC Details</h5>
+        <h5 className="mb-4 mb-xxl-2 profile-card-main-titile">KYC Details</h5>
 
-          {/* Aadhar & Pan Card Inputs */}
-          <Row className="g-3" >
-            <Col md={6} sm={12} className="">
-              <InputFieldGroup
-                label="Aadhar Number"
-                name="field"
-                type="text"
-                value={formatAadhaar(formData.Adcard)} // 👈 format while typing  
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setFormData({ ...formData, Adcard: e.target.value });
-                  if (formError.Adcard) {  // msg type validtation msg hide 
-                    setFormError({ ...formError, Adcard: "" });
+        {/* Aadhar & Pan Card Inputs */}
+        <Row className="g-3" >
+          <Col md={6} sm={12} className="">
+            <InputFieldGroup
+              label="Aadhar Number"
+              name="field"
+              type="text"
+              value={formatAadhaar(formData.Adcard)} // 👈 format while typing  
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFormData({ ...formData, Adcard: e.target.value });
+                if (formError.Adcard) {  // msg type validtation msg hide 
+                  setFormError({ ...formError, Adcard: "" });
+                }
+              }}
+
+              onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+
+              }}
+              placeholder="Aadhar Number"
+              required={true}
+              disabled={false}
+              readOnly={false}
+              error={formError.Adcard}
+              className="position-relative"
+            >
+
+            </InputFieldGroup>
+          </Col>
+
+          <Col md={6} sm={12} className="">
+            <InputFieldGroup
+              label="Pan Card Number"
+              name="Pancard"
+              type="text"
+              value={formData.Pancard}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                // Restrict length to 10
+                if (e.target.value.length <= 10) {
+                  setFormData({ ...formData, Pancard: e.target.value.toUpperCase() });
+                }
+
+                if (formError.Pancard) {
+                  setFormError({ ...formError, Pancard: "" });
+                }
+              }}
+              onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+              placeholder="Pan Card Number"
+              required={true}
+              disabled={false}
+              readOnly={false}
+              error={formError.Pancard}
+              className="position-relative"
+              maxLength={10}  // 👈 This ensures user cannot type more than 10 characters
+            >
+            </InputFieldGroup>
+          </Col>
+
+
+
+
+          <Col md={6} sm={12} className="">
+            <Form.Group>
+              <Form.Label className="maiacare-input-field-label">
+                Aadhar Card Photo <span className="text-danger">*</span>
+              </Form.Label>
+
+              <div
+                className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
+
+                onClick={() => {
+                  if (!aadharFile) {
+                    aadharFileRef.current?.click();
                   }
                 }}
-
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-
-                }}
-                placeholder="Aadhar Number"
-                required={true}
-                disabled={false}
-                readOnly={false}
-                error={formError.Adcard}
-                className="position-relative"
               >
-
-              </InputFieldGroup>
-            </Col>
-
-            <Col md={6} sm={12} className="">
-              <InputFieldGroup
-                label="Pan Card Number"
-                name="Pancard"
-                type="text"
-                value={formData.Pancard}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  // Restrict length to 10
-                  if (e.target.value.length <= 10) {
-                    setFormData({ ...formData, Pancard: e.target.value.toUpperCase() });
-                  }
-
-                  if (formError.Pancard) {
-                    setFormError({ ...formError, Pancard: "" });
-                  }
-                }}
-                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                placeholder="Pan Card Number"
-                required={true}
-                disabled={false}
-                readOnly={false}
-                error={formError.Pancard}
-                className="position-relative"
-                maxLength={10}  // 👈 This ensures user cannot type more than 10 characters
-              >
-              </InputFieldGroup>
-            </Col>
-
-
-
-
-            <Col md={6} sm={12} className="">
-              <Form.Group>
-                <Form.Label className="maiacare-input-field-label">
-                  Aadhar Card Photo <span className="text-danger">*</span>
-                </Form.Label>
-
-                <div
-                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 "
-
-                  onClick={() => {
-                    if (!aadharFile) {
-                      aadharFileRef.current?.click();
-                    }
-                  }}
-                >
-                  {aadharFile ? (
-                    <>
-                      <Image
-                        src={aadharFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
-                        alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
-                        width={50}
-                        className="me-3"
-                      />
-                      <div className="flex-grow-1">
-                        <div className="card-feild">Aadhar Card</div>
-                        <div
-                          className="kyc-details file-name-ellipsis "
-                          title={aadharFile.name} // show full name on hover
-                        >  {aadharFile.name}
-                        </div>
-                        <div className="card-year">
-                          {aadharFile.size} - {aadharFile.date}
-                        </div>
+                {aadharFile ? (
+                  <>
+                    <Image
+                      src={aadharFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
+                      alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                      width={50}
+                      className="me-3"
+                    />
+                    <div className="flex-grow-1">
+                      <div className="card-feild">Aadhar Card</div>
+                      <div
+                        className="kyc-details file-name-ellipsis "
+                        title={aadharFile.name} // show full name on hover
+                      >  {aadharFile.name}
                       </div>
-
-                      <button
-                        type="button"
-                        className="btn  rounded-2 d-inline-flex p-2 profile-card-boeder me-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setAadharFile(null);
-                        }}
-                      >
-                        <Image src={Trash} alt="delete" width={17} height={18} />
-                      </button>
-                    </>
-                  ) : (
-                    <div
-                      className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
-
-                    >
-                      <Image src={Add} alt="add" width={36} height={36} className="p-1" />
-                      <span className="about-text">Add Aadhar Card Photo</span>
-                    </div>
-                  )}
-                </div>
-
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  ref={aadharFileRef}
-                  className="kyc-edit-aadhar-photo"
-                  onChange={handleAadharFileChange}
-                />
-              </Form.Group>
-              {formError?.Adphoto && (
-                <div className="text-danger small mt-1">{formError.Adphoto}</div>
-              )}
-            </Col>
-
-
-            <Col md={6} sm={12} className="">
-              <Form.Group>
-                <Form.Label className="maiacare-input-field-label">
-                  Pan Card Photo <span className="text-danger">*</span>
-                </Form.Label>
-
-
-                <div
-                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
-
-                  onClick={() => {
-                    if (!panFile) {
-                      panFileRef.current?.click(); // only open file manager if no file selected
-                    }
-                  }}
-                >
-                  {panFile ? (
-                    <>
-                      <Image
-                        src={panFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
-                        alt={panFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
-                        width={50}
-                        className="me-3"
-                      />
-                      <div className="flex-grow-1">
-                        <div className="card-feild  ">Pan Card</div>
-                        <div className="kyc-details file-name-ellipsis ">{panFile.name}</div>
-
-
-                        <div className="card-year">
-                          {panFile.size} - {panFile.date}
-                        </div>
+                      <div className="card-year">
+                        {aadharFile.size} - {aadharFile.date}
                       </div>
-
-                      {/* Delete Button */}
-                      <button
-                        type="button"
-                        className="btn  rounded-2 d-inline-flex p-2  profile-card-boeder me-2"
-                        onClick={(e) => {
-                          e.stopPropagation(); // prevent file manager opening
-                          setPanFile(null); // clear file
-                        }}
-                      >
-                        <Image src={Trash} alt="delete" width={17} height={18} />
-                      </button>
-                    </>
-                  ) : (
-                    <div
-                      className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
-
-                    >
-                      <Image src={Add} alt="add" width={36} height={36} className="p-1" />
-                      <span className="about-text">Add Pan Card Photo</span>
                     </div>
-                  )}
 
-                </div>
+                    <button
+                      type="button"
+                      className="btn  rounded-2 d-inline-flex p-2 profile-card-boeder me-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setAadharFile(null);
+                      }}
+                    >
+                      <Image src={Trash} alt="delete" width={17} height={18} />
+                    </button>
+                  </>
+                ) : (
+                  <div
+                    className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
 
-                {/* Hidden file input */}
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  ref={panFileRef}
-                  className="kyc-edit-aadhar-photo"
-                  onChange={handlePanFileChange}
-                />
-              </Form.Group>
-              {formError?.Panphoto && (
-                <div className="text-danger small mt-1">{formError.Panphoto}</div>
-              )}
+                  >
+                    <Image src={Add} alt="add" width={36} height={36} className="p-1" />
+                    <span className="about-text">Add Aadhar Card Photo</span>
+                  </div>
+                )}
+              </div>
 
-            </Col>
-
-          </Row>
-
-
-          {/* Licence Number */}
-          <Row>
-            <Col md={6} sm={12} className="mt-3">
-              <InputFieldGroup
-                label="Licence Number"
-                name="LicNumber"
-                type="text"
-                value={formData.LicNumber}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-
-                  let value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
-
-
-
-
-                  if (value.length > 10) {
-                    value = value.slice(0, 10);
-                  }
-
-                  setFormData({ ...formData, LicNumber: value });
-
-
-                  if (formError.LicNumber) {
-                    setFormError({ ...formError, LicNumber: "" });
-                  }
-                }}
-                placeholder="Licence Number"
-                required={true}
-                disabled={false}
-                readOnly={false}
-                error={formError.LicNumber}
-                className="position-relative"
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
+                ref={aadharFileRef}
+                className="kyc-edit-aadhar-photo"
+                onChange={handleAadharFileChange}
               />
-            </Col>
-          </Row>
+            </Form.Group>
+            {formError?.Adphoto && (
+              <div className="text-danger small mt-1">{formError.Adphoto}</div>
+            )}
+          </Col>
 
 
-          {/* Licence Upload Preview */}
-          <Row>
-            <Col md={6} sm={12} className="mt-3">
-              <Form.Group>
-                <Form.Label className="maiacare-input-field-label">
-                  Licence Photo <span className="text-danger">*</span>
-                </Form.Label>
+          <Col md={6} sm={12} className="">
+            <Form.Group>
+              <Form.Label className="maiacare-input-field-label">
+                Pan Card Photo <span className="text-danger">*</span>
+              </Form.Label>
 
-                <div
-                  className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 licence-data"
-                  onClick={() => {
-                    if (!licenceFile) {
-                      licenceFileRef.current?.click(); // only open if no file selected
-                    }
-                  }}
-                >
-                  {licenceFile ? (
-                    <>
-                      <Image
-                        src={licenceFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
-                        alt={licenceFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
-                        width={50}
-                        className="me-3"
-                      />
-                      <div className="flex-grow-1">
-                        <div className="card-feild">License</div>
-                        <div className="kyc-details file-name-ellipsis  ">{licenceFile.name}</div>
-                        <div className="card-year">
-                          {licenceFile.size} - {licenceFile.date}
-                        </div>
+
+              <div
+                className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2"
+
+                onClick={() => {
+                  if (!panFile) {
+                    panFileRef.current?.click(); // only open file manager if no file selected
+                  }
+                }}
+              >
+                {panFile ? (
+                  <>
+                    <Image
+                      src={panFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
+                      alt={panFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                      width={50}
+                      className="me-3"
+                    />
+                    <div className="flex-grow-1">
+                      <div className="card-feild  ">Pan Card</div>
+                      <div className="kyc-details file-name-ellipsis ">{panFile.name}</div>
+
+
+                      <div className="card-year">
+                        {panFile.size} - {panFile.date}
                       </div>
-
-                      {/* Delete Button */}
-                      <button
-                        type="button"
-                        className="btn  rounded-2 d-inline-flex p-2  profile-card-boeder me-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setLicenceFile(null);
-                        }}
-                      >
-                        <Image src={Trash} alt="delete" width={17} height={18} />
-                      </button>
-                    </>
-                  ) : (
-                    <div
-                      className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
-
-                    >
-                      <Image src={Add} alt="add" width={36} height={36} className="p-1 " />
-                      <span className="about-text">Add Licence Photo</span>
                     </div>
-                  )}
-                </div>
 
-                {/* Hidden file input */}
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  ref={licenceFileRef}
-                  className="kyc-edit-aadhar-photo"
-                  onChange={handleLicenceFileChange}
-                />
-              </Form.Group>
-              {formError?.Licphoto && (
-                <div className="text-danger small mt-1">{formError.Licphoto}</div>
-              )}
+                    {/* Delete Button */}
+                    <button
+                      type="button"
+                      className="btn  rounded-2 d-inline-flex p-2  profile-card-boeder me-2"
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent file manager opening
+                        setPanFile(null); // clear file
+                      }}
+                    >
+                      <Image src={Trash} alt="delete" width={17} height={18} />
+                    </button>
+                  </>
+                ) : (
+                  <div
+                    className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
 
-            </Col>
+                  >
+                    <Image src={Add} alt="add" width={36} height={36} className="p-1" />
+                    <span className="about-text">Add Pan Card Photo</span>
+                  </div>
+                )}
 
-          </Row>
+              </div>
+
+              {/* Hidden file input */}
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
+                ref={panFileRef}
+                className="kyc-edit-aadhar-photo"
+                onChange={handlePanFileChange}
+              />
+            </Form.Group>
+            {formError?.Panphoto && (
+              <div className="text-danger small mt-1">{formError.Panphoto}</div>
+            )}
+
+          </Col>
+
+        </Row>
+
+
+        {/* Licence Number */}
+        <Row>
+          <Col md={6} sm={12} className="mt-3">
+            <InputFieldGroup
+              label="Licence Number"
+              name="LicNumber"
+              type="text"
+              value={formData.LicNumber}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+
+                let value = e.target.value.replace(/[^a-zA-Z0-9]/g, "");
+
+
+
+
+                if (value.length > 10) {
+                  value = value.slice(0, 10);
+                }
+
+                setFormData({ ...formData, LicNumber: value });
+
+
+                if (formError.LicNumber) {
+                  setFormError({ ...formError, LicNumber: "" });
+                }
+              }}
+              placeholder="Licence Number"
+              required={true}
+              disabled={false}
+              readOnly={false}
+              error={formError.LicNumber}
+              className="position-relative"
+            />
+          </Col>
+        </Row>
+
+
+        {/* Licence Upload Preview */}
+        <Row>
+          <Col md={6} sm={12} className="mt-3">
+            <Form.Group>
+              <Form.Label className="maiacare-input-field-label">
+                Licence Photo <span className="text-danger">*</span>
+              </Form.Label>
+
+              <div
+                className="custom-tab border rounded-3 d-flex align-items-center p-1 gap-2 licence-data"
+                onClick={() => {
+                  if (!licenceFile) {
+                    licenceFileRef.current?.click(); // only open if no file selected
+                  }
+                }}
+              >
+                {licenceFile ? (
+                  <>
+                    <Image
+                      src={licenceFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
+                      alt={licenceFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                      width={50}
+                      className="me-3"
+                    />
+                    <div className="flex-grow-1">
+                      <div className="card-feild">License</div>
+                      <div className="kyc-details file-name-ellipsis  ">{licenceFile.name}</div>
+                      <div className="card-year">
+                        {licenceFile.size} - {licenceFile.date}
+                      </div>
+                    </div>
+
+                    {/* Delete Button */}
+                    <button
+                      type="button"
+                      className="btn  rounded-2 d-inline-flex p-2  profile-card-boeder me-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setLicenceFile(null);
+                      }}
+                    >
+                      <Image src={Trash} alt="delete" width={17} height={18} />
+                    </button>
+                  </>
+                ) : (
+                  <div
+                    className="d-flex flex-column justify-content-center align-items-center kyc-edit-aadhar"
+
+                  >
+                    <Image src={Add} alt="add" width={36} height={36} className="p-1 " />
+                    <span className="about-text">Add Licence Photo</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Hidden file input */}
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
+                ref={licenceFileRef}
+                className="kyc-edit-aadhar-photo"
+                onChange={handleLicenceFileChange}
+              />
+            </Form.Group>
+            {formError?.Licphoto && (
+              <div className="text-danger small mt-1">{formError.Licphoto}</div>
+            )}
+
+          </Col>
+
+        </Row>
         {/* </div> */}
       </ContentContainer>
 
@@ -940,7 +940,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                 {/* Report Name Input */}
                 <div className="mt-4 mb-3">
-                  <label className="form-label fw-semibold">
+                  {/* <label className="form-label fw-semibold">
                     Report Name <span className="text-danger">*</span>
                   </label>
                   <div className="d-flex align-items-center">
@@ -962,6 +962,48 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                           return updated;
                         });
                       }}
+                    />
+                    <div
+                      className="d-flex align-items-center justify-content-center border rounded-3 p-2 bg-white qualification-certificates-edit-btn"
+
+                    >
+                      {file.status === "completed" ? (
+                        // <Image src={EditProfile} alt="edit" width={20} height={20} />
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M15.2594 4.23184L11.768 0.741217C11.6519 0.625114 11.5141 0.533014 11.3624 0.470178C11.2107 0.407342 11.0482 0.375 10.884 0.375C10.7198 0.375 10.5572 0.407342 10.4056 0.470178C10.2539 0.533014 10.1161 0.625114 10 0.741217L0.366412 10.3748C0.249834 10.4905 0.157407 10.6281 0.0945056 10.7798C0.0316038 10.9315 -0.000518312 11.0942 6.32418e-06 11.2584V14.7498C6.32418e-06 15.0813 0.131702 15.3993 0.366123 15.6337C0.600543 15.8681 0.918486 15.9998 1.25001 15.9998H14.375C14.5408 15.9998 14.6997 15.934 14.8169 15.8168C14.9342 15.6995 15 15.5406 15 15.3748C15 15.2091 14.9342 15.0501 14.8169 14.9329C14.6997 14.8157 14.5408 14.7498 14.375 14.7498H6.50938L15.2594 5.99981C15.3755 5.88373 15.4676 5.74592 15.5304 5.59425C15.5933 5.44257 15.6256 5.28 15.6256 5.11583C15.6256 4.95165 15.5933 4.78908 15.5304 4.63741C15.4676 4.48573 15.3755 4.34792 15.2594 4.23184ZM4.74141 14.7498H1.25001V11.2584L8.12501 4.3834L11.6164 7.87481L4.74141 14.7498ZM12.5 6.99122L9.00938 3.49981L10.8844 1.62481L14.375 5.11622L12.5 6.99122Z" fill="#2B4360" />
+                        </svg>
+
+                      ) : (
+                        <Image src={GreenRight} alt="editing" width={20} height={20} />
+                      )}
+                    </div>
+                  </div> */}
+                  <div className="d-flex align-items-center gap-2">
+                    <InputFieldGroup
+                      label="Report Name"
+                      name="university"
+                      className="w-100"
+                      type="text"
+                      value={file.reportName}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setUploadedFiles((prev) =>
+                          prev.map((f, i) =>
+                            i === index ? { ...f, reportName: value } : f
+                          )
+                        );
+                        setErrors((prev) => {
+                          const updated = { ...prev };
+                          delete updated[index];
+                          return updated;
+                        });
+                      }}
+                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                      placeholder="Enter Report Name"
+                      required={true}
+                      disabled={false}
+                      readOnly={false}   // ✅ remove or set false
+                      error={formError.university}
                     />
                     <div
                       className="d-flex align-items-center justify-content-center border rounded-3 p-2 bg-white qualification-certificates-edit-btn"

@@ -175,8 +175,9 @@ body::-webkit-scrollbar {
 }
 
 .qualification-certificates-edit-btn {
-  width: 42px;
-  height: 42px;
+  width: 49px;
+  height: 49px;
+  margin-top: 27px;
 }
 
 /* Edit-Kyc-Details-End */
