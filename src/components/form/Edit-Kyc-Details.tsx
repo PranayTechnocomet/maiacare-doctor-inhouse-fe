@@ -393,10 +393,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     <div>
       <ContentContainer className="mt-4">
         {/* <div className=" p-4"> */}
-        <h5 className="mb-4 mb-xxl-2 profile-card-main-titile">KYC Details</h5>
+        <h5 className="mb-5 mb-xxl-2 profile-card-main-titile">KYC Details</h5>
 
         {/* Aadhar & Pan Card Inputs */}
-        <Row className="g-3" >
+        <Row className="g-3 mt-2  " >
           <Col md={6} sm={12} className="">
             <InputFieldGroup
               label="Aadhar Number"
@@ -917,9 +917,9 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       }}
                     >
                       {file.status === "uploading" ? (
-                        <Image src={Cross} alt="edit" width={20} height={20} />
+                        <Image src={Cross} alt="edit" width={22} height={22} />
                       ) : (
-                        <Image src={Delete} alt="edit" width={20} height={20} />
+                        <Image src={Delete} alt="edit" width={22} height={22} />
                       )}
                     </button>
                   </div>
