@@ -185,7 +185,7 @@ body::-webkit-scrollbar {
 .edit-basic-details-modal {
   width: 160px;
   height: 160px;
-  border-radius: 16px;
+  border-radius: 16px;  
 }
 
 .edit-basic-details-image {
