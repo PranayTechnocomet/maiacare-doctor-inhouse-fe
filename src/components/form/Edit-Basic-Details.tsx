@@ -381,8 +381,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                   <Image
                     src={cameraicon}
                     alt="Upload"
-                    width={40}
-                    height={40}
+                    width={44}
+                    height={44}
                   />
                 </div>
               </div>
@@ -474,7 +474,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                         <div className="maiacare-input-field-helper-text">Delete</div>
                       </button>
 
-                      <Button variant="default" className="btn px-4 py-2" onClick={handleSave}>
+                      <Button variant="default" contentSize="small" onClick={handleSave}>
                         Save
                       </Button>
                     </div>
@@ -497,7 +497,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
         <div>
           <Row className="g-3">
-            <Col className="" md={12}>
+            <Col className="mt-3" md={12}>
               <InputFieldGroup
                 label="Name"
                 name="Name"
@@ -706,7 +706,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
       <ContentContainer className="mt-4">
-        <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
+        <div className="d-flex flex-column flex-md-row justify-content-md-between  text-md-start mb-3">
           <h5 className="profile-card-main-titile mb-2 mb-md-0">
             Operational hours & Days
           </h5>
