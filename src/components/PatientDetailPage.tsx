@@ -8,6 +8,7 @@ import EditProfile from "../assets/images/EditProfile-2.png";
 import "../style/ProfileTabes.css";
 // import ContentContainer from './ui/ContentContainer';
 import CustomTabs from './ui/CustomTabs';
+import PatientBasicDetail from './PatientBasicDetail';
 
 
 export default function PatientDetailPageComponent() {
@@ -19,14 +20,20 @@ export default function PatientDetailPageComponent() {
             key: "basic",
             label: "Basic Details",
             content: (
-                <></>
+                <>
+                    <PatientBasicDetail />
+                </>
             ),
         },
         {
             key: "Details",
             label: "Partner Details",
             content: (
-                <></>
+                <>
+                    <div className="mt-4 mb-5">
+                        ProfileManageLeave  111
+                    </div>
+                </>
             ),
         },
     ];
@@ -150,23 +157,13 @@ export default function PatientDetailPageComponent() {
                 <Button variant="light" className="edit-profile-btn">Cancel</Button>
                 <Button className="Button-login" variant="primary">Mark as Complete</Button>
             </div> */}
+
             <div className="mt-1">
                 <CustomTabs
                     activeKey={activeTab}
                     setActiveKey={setActiveTab}
                     tabOptions={tabOptions}
                 />
-                {activeTab === 'basic' && (
-                    <div className="mt-4 mb-5">
-                        ProfileBasicDetails
-                    </div>
-                )}
-
-                {activeTab === 'Details' && (
-                    <div className="mt-4 mb-5">
-                        ProfileManageLeave
-                    </div>
-                )}
             </div>
 
         </>

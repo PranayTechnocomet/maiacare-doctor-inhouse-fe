@@ -170,7 +170,7 @@
 }
 
 .profile-sub-title {
-    color: var(--color-sidebar-icon);       
+    color: var(--color-sidebar-icon);
     line-height: 0;
     font-size: 16px !important;
     font-weight: 400;
@@ -239,7 +239,7 @@
 
 .card-feild {
     color: var(--color-radio-lable) !important;
-    font-weight: 6  00;
+    font-weight: 6 00;
     font-size: 16px;
 }
 
@@ -642,9 +642,391 @@
     font-size: 18px;
     color: #292929;
 }
-.profile-name-font{
+
+.profile-name-font {
     font-size: 20px;
     font-weight: 600;
     color: var(--color-heading);
     line-height: 21px;
 }
+
+.image-overlay-text {
+    font-size: 35px;
+    font-weight: 600;
+    color: #223142;
+    line-height: 44px;
+}
+
+@media screen and (max-width: 1024px) {
+    .image-overlay-text {
+        font-size: 33px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .image-overlay-text {
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .image-overlay-text {
+        font-size: 28px;
+    }
+}
+
+
+/* code from doctor start */
+
+.login-title {
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 44px;
+    font-style: SemiBold;
+    color: var(--login-font);
+}
+
+.login-subtitle {
+    font-weight: 400;
+    font-size: 18px;
+    font-style: Regular;
+    line-height: 160%;
+    color: var(--font-subtitle);
+}
+
+.input-forrgot-password {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--input-forgot-password);
+    font-style: bold;
+    cursor: pointer;
+}
+
+/* setting accordion */
+.accordion-title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 26px;
+    font-style: 'SemiBold';
+    color: var(--color-heading);
+}
+
+.settings-accordion-subtitle {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--color-radio-lable);
+}
+
+.password-requirements {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 17px;
+    color: var(--color-radio-lable);
+
+}
+
+.password-requirements.active {
+    color: var(--color-profile-name);
+}
+
+.forgate-password {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+    color: var(--color-brand);
+    cursor: pointer;
+}
+
+.your-device-box-title {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    color: #1E293B;
+}
+
+.your-device-box-subtitle {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--color-heading);
+    width: 90%;
+}
+
+.support-faqs-title {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    color: #1E293B;
+
+}
+
+.support-faqs-desc {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--color-heading);
+}
+
+.contact-detail {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 22px;
+    color: #1E293B;
+}
+
+/* support accordion */
+.support-accordion-header {
+    font-size: 16px;
+    font-weight: 550;
+    line-height: 20px;
+    color: var(--color-radio-lable);
+    padding: 0 10px;
+}
+
+.support-accordion-content {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #858B95;
+    padding: 20px !important;
+}
+
+.contact-details-heading {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 26px;
+    font-style: SemiBold;
+    color: var(--color-heading);
+}
+
+.patient-accordion-content-subtitle {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    font-style: italic;
+    color: #B0B4C1;
+
+}
+
+@media screen and (max-width: 1391px) {
+    .contact-detail {
+        font-size: 13px;
+    }
+
+    .support-accordion-header {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    .login-title {
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 1327px) {
+    .contact-detail {
+        font-size: 12px;
+    }
+}
+
+
+@media screen and (max-width: 1250px) {
+    .contact-detail {
+        font-size: 11px;
+    }
+
+    .support-accordion-header {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .login-title {
+        font-size: 32px;
+    }
+
+    .your-device-box-title {
+        font-size: 17px;
+    }
+
+    .your-device-box-subtitle {
+        font-size: 15px;
+
+    }
+
+    .contact-detail {
+        font-size: 12px;
+    }
+
+    .support-accordion-header {
+        font-size: 15px;
+    }
+
+}
+
+@media screen and (max-width: 1032px) {
+    .your-device-box-title {
+        font-size: 16px;
+    }
+
+    .your-device-box-subtitle {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .login-title {
+        font-size: 30px;
+        line-height: 40px;
+    }
+
+    .login-subtitle {
+        font-size: 17px;
+        line-height: 20px;
+    }
+
+    .accordion-title {
+        font-size: 20px;
+    }
+
+    .settings-accordion-subtitle {
+        font-size: 13px;
+    }
+
+    .forgate-password {
+        font-size: 15px;
+    }
+
+    .support-faqs-desc {
+        font-size: 13px;
+    }
+
+    .contact-detail {
+        font-size: 11px;
+    }
+
+    .support-accordion-header {
+        font-size: 13px;
+    }
+    .support-accordion-content {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 991px) {
+    .login-title {
+        font-size: 30px;
+        line-height: 35px;
+    }
+
+    .contact-detail {
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .login-title {
+        font-size: 29px;
+        line-height: 30px;
+    }
+
+    .login-subtitle {
+        font-size: 16px;
+        line-height: 20px;
+    }
+    .contact-details-heading {
+        font-size: 19px;
+    }
+
+    .patient-accordion-content-subtitle {
+        font-size: 19px;
+
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+    .accordion-title {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 575px) {
+
+    .login-title {
+        font-size: 27px;
+        line-height: 30px;
+    }
+
+    .login-subtitle {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .accordion-title {
+        font-size: 17px;
+    }
+
+    .settings-accordion-subtitle {
+        font-size: 12px;
+
+    }
+
+    .forgate-password {
+        font-size: 14px;
+    }
+    .support-accordion-content {
+        font-size: 12px;
+    }
+    .contact-details-heading {
+        font-size: 17px;
+    }
+     .patient-accordion-content-subtitle {
+        font-size: 18px;
+
+    }
+}
+
+@media screen and (max-width: 426px) {
+    .login-title {
+        font-size: 25px;
+        line-height: 25px;
+    }
+
+    .login-subtitle {
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+}
+
+@media screen and (max-width: 425px) {
+    .accordion-title {
+        font-size: 16px;
+    }
+
+    .forgate-password {
+        font-size: 13px;
+    }
+
+      .contact-details-heading {
+        font-size: 16px;
+    }
+    .patient-accordion-content-subtitle {
+        font-size: 16px;
+
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .accordion-title {
+        font-size: 15px;
+    }
+}
+
+
+/* code from doctor end */

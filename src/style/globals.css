@@ -15,6 +15,9 @@
   --color-modal-heading: #E29578;
   --color-modal-subheading: #94A3B8;
   --color-modal-border: #CBD5E1;
+
+  --font-subtitle: #8A8D93;
+  --login-font: #E29578;
 }
 
 body {
@@ -175,9 +178,9 @@ body::-webkit-scrollbar {
 }
 
 .qualification-certificates-edit-btn {
-    width: 50px;
-    height: 49px;
-    margin-top: 30px;
+  width: 50px;
+  height: 49px;
+  margin-top: 30px;
 }
 
 /* Edit-Kyc-Details-End */
@@ -360,6 +363,31 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .pation-profile-data .content-layout {
   padding: 16px !important;
 }
+
 .pation-profile-dataa .content-layout {
   padding: 30px !important;
 }
+
+/* code form doctor start*/
+
+.cursor-pointer-custom {
+  cursor: pointer !important;
+}
+
+.input-email-data {
+  position: absolute;
+  top: 55%;
+  left: 2%;
+}
+
+.passwored-btn-icon {
+  top: 69% !important;
+}
+
+.eye-color {
+  color: #B0B4C1 !important;
+}
+
+
+
+/* code form doctor end*/
