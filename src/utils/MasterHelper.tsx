@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 function MasterHelper({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(true);
-const authPages = ["/login", "/register", "/forgot-password","/reset-password","/verification"];
+const authPages = ["/login", "/register", "/forgotppassword","/resetpassword","/verification"];
   const pathName = usePathname();
   
   return (

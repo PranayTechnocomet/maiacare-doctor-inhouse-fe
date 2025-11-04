@@ -1,14 +1,12 @@
 "use client";
 
-import LoginScreenContainer from '@/components/LoginScreenContainer'
+import ForgotPasswordScreen from '@/components/ForgotPasswordScreen';
 import React from 'react'
 
 export default function page() {
   return (
     <div>
-      <LoginScreenContainer/>
+      <ForgotPasswordScreen />
     </div>
   )
 }
-
-
