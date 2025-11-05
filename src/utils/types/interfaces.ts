@@ -1,5 +1,5 @@
 import  "../StaticData";
-
+import { StaticImageData } from "next/image";
 
 export interface User {
     id: string;
@@ -21,6 +21,9 @@ export interface User {
 
   export type OptionType = { value: string; label: string };
 
+
+
+  //Patients basic details  interface  
   export interface MedicalHistoryType {
   medication: string,
   surgeries: string,
@@ -56,4 +59,71 @@ export interface FertilityAssessmentFormType {
   pregnancy: string;
   timeduration: string;
   ectopicpregnancy: string;
+}
+
+
+
+export interface EditFertilityAssessment {
+  semenAnalysis: string;
+  semenAnalysisContent: string;
+  fertilityIssues: string;
+  fertilityIssuesContent: string;
+  fertilityTreatment: string;
+  fertilityTreatmentContent: string;
+  surgeries: string;
+  surgeriesContent: string;
+}
+
+export interface FertilityAssessmentType {
+  height: string;
+  weight: string;
+  bmi: string;
+  bloodGroup: string;
+  systolic: string;
+  diastolic: string;
+  heartRate: string;
+  semenAnalysis: string;
+  semenAnalysisContent: string;
+  fertilityIssues: string;
+  fertilityIssuesContent: string;
+  fertilityTreatment: string;
+  fertilityTreatmentContent: string;
+  surgeries: string;
+  surgeriesContent: string;
+}
+
+export interface PhysicalAssessmentData {
+  date: string;
+  height: string;
+  weight: string;
+  bmi: string;
+  bloodGroup: string;
+  bloodPressure: string;
+  heartRate: string;
+}
+
+export interface BookAppointmentForm {
+  //Appointment Details
+
+  appointmentId: string;
+  type: string;
+  reasonForVisit: [];
+  appointmentDate: string;
+  appointmentTime: string;
+  forTime: string;
+  additionalNote: string;
+
+  //Patient Details
+  // patientName: SelectPatientType | null;
+  patientName: any;
+  phone: string;
+  email: string;
+  patientAge: string;
+  gender: string;
+}
+
+export interface SelectPatientType {
+  id: string;
+  ProfilePhoto: StaticImageData;
+  name: string;
 }

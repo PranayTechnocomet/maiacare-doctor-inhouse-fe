@@ -4,6 +4,11 @@ import { FertilityAssessmentFormType, MedicalHistoryType, PhysicalAssessmentData
 import { useState } from "react";
 import Button from "./ui/Button";
 import { Accordion, Col, Row } from "react-bootstrap";
+import Modal from './ui/Modal';
+import PhisicalAssessmentForm from './form/PhisicalAssessmentForm';
+import { FertilityAssessmentForm } from './form/FertilityAssessmentForm';
+import MedicalHistory from './form/MedicalHistory';
+import "@/style/PatientBasicDetail.css"
 
 export default function PatientBasicDetail() {
 
@@ -88,6 +93,90 @@ export default function PatientBasicDetail() {
 
         return '';
     };
+
+
+
+    // const [activeAccordion, setActiveAccordion] = useState<string[]>(['0', '1', '2']);
+    // const [showPhisicalAssessment, setShowPhisicalAssessment] = useState<boolean>(false);
+    // const [showFertilityAssessment, setShowFertilityAssessment] = useState<boolean>(false);
+
+    // const [showModal, setShowModal] = useState<boolean>(false);
+    // const [medicalHistoryFormData, setMedicalHistoryFormData] = useState<MedicalHistoryType | any>([]);
+
+    // const [editingMedicalHistory, setEditingMedicalHistory] = useState<any>(null);
+
+    // const [modalFormPhisicalData, setModalFormPhisicalData] = useState<PhysicalAssessmentDataModel[]>([]);
+    // const [modalFormFertilityData, setModalFormFertilityData] = useState<FertilityAssessmentFormType | any>([]);
+
+
+    // const [editFertilityAssessment, setEditFertilityAssessment] = useState<FertilityAssessmentFormType>({
+    //     ageAtFirstMenstruation: "",
+    //     cycleLength: "",
+    //     periodLength: "",
+    //     date: "",
+    //     isCycleRegular: "Regular",
+    //     menstrualIssues: "yes",
+    //     pregnancy: "yes",
+    //     timeduration: "",
+    //     ectopicpregnancy: "yes"
+    // });
+
+    // const initialFormData: PhysicalAssessmentDataModel = {
+    //     id: "",
+    //     height: "",
+    //     weight: "",
+    //     bmi: "",
+    //     bloodGroup: "",
+    //     systolic: "",
+    //     diastolic: "",
+    //     heartRate: ""
+
+    // };
+    // const [editPhysicalAssessment, setEditPhysicalAssessment] = useState<PhysicalAssessmentDataModel>(initialFormData);
+
+    // const convertHeightToCm = (heightStr: string): string => {
+    //     if (!heightStr) return '';
+
+    //     // Remove any whitespace
+    //     const cleanHeight = heightStr.trim();
+
+    //     // Check if it's already in cm
+    //     if (cleanHeight.toLowerCase().includes('cm')) {
+    //         return cleanHeight.replace(/[^\d.]/g, '');
+    //     }
+
+    //     // Match feet and inches format (e.g., "5'8", "5'8"", "5 ft 8 in")
+    //     const feetInchesMatch = cleanHeight.match(/(\d+)['′]?\s*(\d+)["″]?/);
+    //     if (feetInchesMatch) {
+    //         const feet = parseInt(feetInchesMatch[1], 10);
+    //         const inches = parseInt(feetInchesMatch[2], 10);
+    //         const totalInches = feet * 12 + inches;
+    //         return (totalInches * 2.54).toFixed(0);
+    //     }
+
+    //     // Match feet only format (e.g., "5'", "5 ft")
+    //     const feetOnlyMatch = cleanHeight.match(/(\d+)['′]?\s*(ft|feet)?$/i);
+    //     if (feetOnlyMatch) {
+    //         const feet = parseInt(feetOnlyMatch[1], 10);
+    //         const totalInches = feet * 12;
+    //         return (totalInches * 2.54).toFixed(0);
+    //     }
+
+    //     // Check if it's just inches (numeric value)
+    //     const numericValue = parseFloat(cleanHeight);
+    //     if (!isNaN(numericValue)) {
+    //         // Assume it's inches if it's a reasonable height value (24-96 inches)
+    //         if (numericValue >= 24 && numericValue <= 96) {
+    //             return (numericValue * 2.54).toFixed(0);
+    //         }
+    //         // If it's a small number, assume it's already in feet (convert to inches first)
+    //         if (numericValue >= 3 && numericValue <= 8) {
+    //             return (numericValue * 12 * 2.54).toFixed(0);
+    //         }
+    //     }
+
+    //     return '';
+    // };
 
     const accordionData = [
         {
@@ -644,21 +733,78 @@ export default function PatientBasicDetail() {
 
     return (
         <>
-        <div className="mt-3">
-            <Accordion className="mb-3" alwaysOpen activeKey={activeAccordion}>
-                {accordionData.map((item) => (
-                    <Accordion.Item eventKey={item.id} key={item.id} className='patient-accordion-item shadow-sm mb-3'>
-                        <Accordion.Header onClick={() => setActiveAccordion(prev =>
-                            prev.includes(item.id)
-                                ? prev.filter(id => id !== item.id)
-                                : [...prev, item.id]
-                        )} >
-                            <p className='contact-details-heading m-0'>{item.title}</p>
-                        </Accordion.Header>
-                        <Accordion.Body className='pt-0'>{item.content}</Accordion.Body>
-                    </Accordion.Item>
-                ))}
-            </Accordion>
+            <div className="mt-3">
+                <Accordion className="mb-3" alwaysOpen activeKey={activeAccordion}>
+                    {accordionData.map((item) => (
+                        <Accordion.Item eventKey={item.id} key={item.id} className='patient-accordion-item shadow-sm mb-3'>
+                            <Accordion.Header onClick={() => setActiveAccordion(prev =>
+                                prev.includes(item.id)
+                                    ? prev.filter(id => id !== item.id)
+                                    : [...prev, item.id]
+                            )} >
+                                <p className='contact-details-heading m-0'>{item.title}</p>
+                            </Accordion.Header>
+                            <Accordion.Body className='pt-0'>{item.content}</Accordion.Body>
+                        </Accordion.Item>
+                    ))}
+                </Accordion>
+                <Modal
+                    show={showPhisicalAssessment}
+                    onHide={() => { setShowPhisicalAssessment(false); setEditPhysicalAssessment(initialFormData) }}
+                    header={
+                        editPhysicalAssessment && editPhysicalAssessment.id
+                            ? "Edit Physical Assessment"
+                            : modalFormPhisicalData.length === 0
+                                ? "Physical Assessment"
+                                : "Add New Physical Assessment"
+                    }
+                    closeButton={true}
+                    size="lg"
+                >
+                    <div className="mb-0 ">
+                        <PhisicalAssessmentForm
+                            setModalFormPhisicalData={setModalFormPhisicalData}
+                            setShowPhisicalAssessment={setShowPhisicalAssessment}
+                            editPhysicalAssessment={editPhysicalAssessment}
+                            setEditPhysicalAssessment={setEditPhysicalAssessment}
+                            modalFormPhisicalData={modalFormPhisicalData}
+                        />
+                    </div>
+                </Modal>
+
+  <Modal
+                        show={showFertilityAssessment}
+                        onHide={() => { setShowFertilityAssessment(false) }}
+                        header={Object.keys(modalFormFertilityData).length === 0 ? "Fertility Assessment" : "Edit Fertility Assessment"}
+                        closeButton={true}
+                        size="lg"
+                    >
+                        <div className="mb-0">
+                            <FertilityAssessmentForm
+                                setShowFertilityAssessment={setShowFertilityAssessment}
+                                setModalFormFertilityData={setModalFormFertilityData}
+                                editFertilityAssessment={editFertilityAssessment}
+                            />
+                        </div>
+                    </Modal>
+                    <Modal
+                        className=""
+                        show={showModal}
+                        onHide={() => setShowModal(false)}
+                        header={Object.keys(medicalHistoryFormData).length === 0 ? "Add Medical History" : "Edit Medical History"}
+                        size="lg"
+                        closeButton={true}
+                    >
+                        <div className="mb-0">
+                            <MedicalHistory
+                                setMedicalHistoryFormData={setMedicalHistoryFormData}
+                                setShowModal={setShowModal}
+                                initialData={editingMedicalHistory}
+                                onClose={() => setEditingMedicalHistory(null)}
+                            />
+                        </div>
+                    </Modal>
+
             </div>
         </>
     );

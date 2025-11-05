@@ -9,6 +9,7 @@ import "../style/ProfileTabes.css";
 // import ContentContainer from './ui/ContentContainer';
 import CustomTabs from './ui/CustomTabs';
 import PatientBasicDetail from './PatientBasicDetail';
+import PartnerDetail from './PartnerDetail';
 
 
 export default function PatientDetailPageComponent() {
@@ -30,9 +31,7 @@ export default function PatientDetailPageComponent() {
             label: "Partner Details",
             content: (
                 <>
-                    <div className="mt-4 mb-5">
-                        ProfileManageLeave  111
-                    </div>
+                 <PartnerDetail setActiveTab={setActiveTab} />
                 </>
             ),
         },
@@ -41,6 +40,7 @@ export default function PatientDetailPageComponent() {
     return (
         <>
             <div className="row mb-4">
+
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Patient Details</h6>
                     <div className="pation-profile-data">

@@ -234,19 +234,12 @@ export const doctorsData: Doctor[] = [
 ];
 
 
-
-
-
-
-
 import { ColumnDef } from '@tanstack/react-table';
 // import { LeaveEntry } from "../utils/types/interfaces";
 import Trash from "../assets/images/Trash.png";
 import LightEditimg from "../assets/images/LightEditimg.png";
 import Image from 'next/image';
-import { Patient } from "./types/interfaces";
-
-
+import { Patient, SelectPatientType } from "./types/interfaces";
 
 
 export type LeaveEntry = {
@@ -374,3 +367,162 @@ export const tableResponse: Patient[] = [
   },
   // ...add more rows
 ];
+
+
+
+
+
+export const partnerDetailData = {
+  profile: {
+    basic_detail_name: "Raj Desai",
+    basic_detail_gender: "Male",
+    basic_detail_age: "31",
+    basic_detail_phone: "12345 67890",
+    basic_detail_email: "riyadharang@miacare.com",
+
+  },
+  medicalHistory: {
+    medication: "yes",
+    medicationcontent: "This is Medical Condition",
+    surgeriesContent: "This is Medical Condition",
+    currentMedication: "CureAll 5000, HealMax Plus",
+    surgeries: "no",
+    MedicalconditionAllergies: ["PCOS", "Thyroid Disorder", "Peanut Allergy", "Lactose Intolerant"],
+    familyMedicalHistory: ["Mother had endometriosis", "Father had thyroid"],
+    lifestyle: ["Non-smoker", "Occasional alcohol", "Vegetarian diet"],
+    exercise: "rarely",
+    stress: "high",
+  },
+  PhysicalAssessmentData: [
+    // {
+    //   date: "Wed, 19 Feb 2024",
+    //   height: "5'4'",
+    //   weight: "58",
+    //   bmi: "22.1",
+    //   bloodGroup: "O+",
+    //   systolic: "120",
+    //   diastolic: "80",
+
+    //   heartRate: "72",
+    // },
+    // {
+    //   date: "Mon, 22 Feb 2024",
+    //   height: "5'4'",
+    //   weight: "58",
+    //   bmi: "22.1",
+    //   bloodGroup: "O+",
+    //   systolic: "120",
+    //   diastolic: "80",
+    //   heartRate: "72",
+    // },
+  ],
+  fertilityAssessment: {
+    semenAnalysis: "Yes | Healthy Semen",
+    semenAnalysisContent: "This Is Seema Analys Content",
+    fertilityIssues: "No",
+    fertilityIssuesContent: "This is Fertility Issue Content",
+    fertilityTreatment: "No",
+    fertilityTreatmentContent: "This Is fertilityTreatmentContent Contet",
+    surgeries: "No",
+    surgeriesContent: "This Is surgeriesContent Content"
+  }
+}
+
+export const AppointmentData = [
+  {
+    id: 1,
+    reason: "Ultrasound scan",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    payment: "Pending",
+    status: "Upcoming",
+    prescription: "N/A",
+    invoice: "N/A",
+    actions: "View"
+  },
+  {
+    id: 2,
+    reason: "Blood Test Review",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    payment: "Done",
+    status: "Completed",
+    prescription: "file",
+    invoice: "file",
+    actions: "View"
+  },
+  {
+    id: 3,
+    reason: "Physical Check-up",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    payment: "Done",
+    status: "Completed",
+    prescription: "viewfile",
+    invoice: "viewfile",
+    actions: "View"
+  },
+  {
+    id: 4,
+    reason: "Initial Consultation",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    payment: "Done",
+    status: "Completed",
+    prescription: "viewfile",
+    invoice: "viewfile",
+    actions: "View"
+  },
+
+];
+
+export const PatientsDetails: SelectPatientType[] = [
+  { id: "1", ProfilePhoto: Doctor4, name: "Nisha S" },
+  { id: "2", ProfilePhoto: Doctor4, name: "Kavita Sharma" },
+  { id: "3", ProfilePhoto: Doctor4, name: "Anjali Rao" },
+  { id: "4", ProfilePhoto: Doctor4, name: "Priya Desai" },
+];
+
+
+export const PaymentHistoryData = [
+  {
+    transactionId: "TXN1234567890",
+    serviceType: "Treatment",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    paymentMode: "UPI",
+    amount: "₹1,200",
+    status: "Pending",
+    actions: "View"
+  },
+  {
+    transactionId: "TXN1234567890",
+    serviceType: "Treatment",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    paymentMode: "UPI",
+    amount: "₹1,200",
+    status: "Paid",
+    actions: "View"
+  },
+  {
+    transactionId: "TXN1234567890",
+    serviceType: "Lab Test",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    paymentMode: "UPI",
+    amount: "₹1,200",
+    status: "Paid",
+    actions: "View"
+  },
+  {
+    transactionId: "TXN1234567890",
+    serviceType: "Consultation",
+    date: "11 Feb 2025",
+    time: "3 PM",
+    paymentMode: "UPI",
+    amount: "₹1,200",
+    status: "Refunded",
+    actions: "View"
+  },
+]

@@ -9,7 +9,6 @@ import ContentContainer from './ui/ContentContainer';
 
 
 
-
 const EditProfile = () => {
   const [activeTab, setActiveTab] = useState<string>("basic");
 

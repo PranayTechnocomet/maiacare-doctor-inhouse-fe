@@ -12,9 +12,10 @@ import ContentContainer from '../ui/ContentContainer';
 import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
 import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
-import InputSelect from '../ui/InputSelect';
+
 import Button from '../ui/Button';
 import toast from 'react-hot-toast';
+import { InputSelect } from '../ui/InputSelect';
 
 
 const ProfileBasicDetails = () => {
@@ -387,7 +388,7 @@ const ProfileBasicDetails = () => {
                             <Accordion.Body>
                               <div className="position-relative pt-3 p-3 modal-border-dashed">
 
-                                {/* ❌ Remove button - show only if NOT first item */}
+                                {/* Remove button - show only if NOT first item */}
                                 {index !== 0 && (
                                   <button
                                     type="button"
