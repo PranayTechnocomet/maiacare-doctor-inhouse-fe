@@ -912,6 +912,7 @@
     .support-accordion-header {
         font-size: 13px;
     }
+
     .support-accordion-content {
         font-size: 13px;
     }
@@ -938,6 +939,7 @@
         font-size: 16px;
         line-height: 20px;
     }
+
     .contact-details-heading {
         font-size: 19px;
     }
@@ -979,15 +981,25 @@
     .forgate-password {
         font-size: 14px;
     }
+
     .support-accordion-content {
         font-size: 12px;
     }
+
     .contact-details-heading {
         font-size: 17px;
     }
-     .patient-accordion-content-subtitle {
+
+    .patient-accordion-content-subtitle {
         font-size: 18px;
 
+    }
+
+    .phisical-assessment-accordion-title-showData {
+        font-size: 18px;
+    }
+    .patient-report-box-title {
+        font-size: 17px;
     }
 }
 
@@ -1001,6 +1013,9 @@
         font-size: 13px;
         line-height: 20px;
     }
+  .patient-report-box-title {
+        font-size: 16px;
+    }
 
 }
 
@@ -1013,9 +1028,10 @@
         font-size: 13px;
     }
 
-      .contact-details-heading {
+    .contact-details-heading {
         font-size: 16px;
     }
+
     .patient-accordion-content-subtitle {
         font-size: 16px;
 
@@ -1030,3 +1046,75 @@
 
 
 /* code from doctor end */
+
+
+
+
+.phisical-assessment-accordion-title-showData {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20px;
+    font-style: Medium;
+    color: var(--color-radio-lable);
+}
+
+.contact-details-emergency {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    font-style: SemiBold;
+    color: var(--font-subtitle);
+}
+
+@media screen and (max-width: 1366px) {
+
+    .contact-details-emergency {
+        font-size: 13px;
+    }
+    
+    .phisical-assessment-accordion-showData-box-subtitle {
+        font-size: 15px;
+    }
+    
+    .accordion-title-detail {
+        font-size: 15px;
+    }
+}
+
+.phisical-assessment-accordion-showData-box-subtitle {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    font-style: Medium;
+    color: var(--color-radio-lable);
+}
+
+.accordion-title-detail {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    font-style: SemiBold;
+    color: var(--color-radio-lable);
+}
+
+.fertilitiy-assement-accodion-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    color: var(--color-brand);
+}
+
+.patient-report-box-title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 22px;
+    font-style: SemiBold;
+    color: var(--color-radio-lable);
+}
+.phisical-assessment-accordion-item-edit {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    font-style: medium;
+    color: var(--color-brand);
+}
