@@ -332,14 +332,6 @@
 }
 
 
-
-
-
-
-
-
-
-
 .modal-custom-header {
     font-weight: 700;
     font-style: Bold;
@@ -676,7 +668,8 @@
 }
 
 
-/* code from doctor start */
+/****************************************** code from doctor start *********************************
+**************************************************************************************************************/
 
 .login-title {
     font-weight: 600;
@@ -811,6 +804,30 @@
 
 }
 
+.accordion-title-detail {
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    font-style: SemiBold !important;
+    color: var(--color-radio-lable) !important;
+}
+
+.select-profile-subtitle {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    font-style: Regular;
+    color: var(--color-sidebar-icon);
+}
+
+.fertilitiy-assement-accodion-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    color: var(--color-brand) !important;
+}
+
+
 @media screen and (max-width: 1391px) {
     .contact-detail {
         font-size: 13px;
@@ -824,6 +841,9 @@
 @media screen and (max-width: 1366px) {
     .login-title {
         font-size: 32px;
+    }
+     .accordion-title-detail {
+        font-size: 15px;
     }
 }
 
@@ -1118,3 +1138,5 @@
     font-style: medium;
     color: var(--color-brand);
 }
+/************************************************** code from doctor end *****************************************
+**************************************************************************************************************/

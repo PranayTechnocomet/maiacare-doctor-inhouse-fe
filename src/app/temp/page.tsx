@@ -8,7 +8,7 @@ import {
   InputFieldGroup,
   InputFieldHelperText,
 } from "@/components/ui/InputField";
-import InputSelect from "@/components/ui/InputSelect";
+
 import { DatePickerFieldGroup } from "@/components/ui/CustomDatePicker";
 import { RadioButtonGroup } from "@/components/ui/RadioField";
 
@@ -25,6 +25,7 @@ import Textarea from "@/components/ui/Textarea";
 import CustomTabs from "@/components/ui/CustomTabs";
 import { TimePickerFieldGroup } from "@/components/ui/CustomTimePicker";
 import toast from "react-hot-toast";
+import { InputSelect } from "@/components/ui/InputSelect";
 
 const data: Patient[] = [
   {

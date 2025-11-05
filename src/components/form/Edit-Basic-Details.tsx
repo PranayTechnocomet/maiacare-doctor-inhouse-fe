@@ -6,7 +6,7 @@ import Image from "next/image";
 import cameraicon from "../../assets/images/Cameraicon.png";
 import { InputFieldGroup } from "../ui/InputField";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import InputSelect from "../ui/InputSelect";
+
 import { DatePickerFieldGroup } from "../ui/CustomDatePicker";
 import { RadioButtonGroup } from "../ui/RadioField";
 import Textarea from "../ui/Textarea";
@@ -22,6 +22,7 @@ import { TimePickerFieldGroup } from "../ui/CustomTimePicker";
 import { useSearchParams } from "next/navigation";
 import { PhoneNumberInput } from "../ui/PhoneNumberInput";
 import Button from "../ui/Button";
+import { InputSelect } from "../ui/InputSelect";
 
 
 export default function PersonalDetails({ onNext }: { onNext: () => void }) {
