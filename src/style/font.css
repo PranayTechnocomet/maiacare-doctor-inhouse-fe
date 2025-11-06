@@ -842,7 +842,8 @@
     .login-title {
         font-size: 32px;
     }
-     .accordion-title-detail {
+
+    .accordion-title-detail {
         font-size: 15px;
     }
 }
@@ -1018,6 +1019,7 @@
     .phisical-assessment-accordion-title-showData {
         font-size: 18px;
     }
+
     .patient-report-box-title {
         font-size: 17px;
     }
@@ -1033,7 +1035,8 @@
         font-size: 13px;
         line-height: 20px;
     }
-  .patient-report-box-title {
+
+    .patient-report-box-title {
         font-size: 16px;
     }
 
@@ -1091,11 +1094,11 @@
     .contact-details-emergency {
         font-size: 13px;
     }
-    
+
     .phisical-assessment-accordion-showData-box-subtitle {
         font-size: 15px;
     }
-    
+
     .accordion-title-detail {
         font-size: 15px;
     }
@@ -1131,6 +1134,7 @@
     font-style: SemiBold;
     color: var(--color-radio-lable);
 }
+
 .phisical-assessment-accordion-item-edit {
     font-size: 14px;
     font-weight: 500;
@@ -1138,5 +1142,71 @@
     font-style: medium;
     color: var(--color-brand);
 }
+
 /************************************************** code from doctor end *****************************************
 **************************************************************************************************************/
+.dashboard-subheader {
+    font-size: 31px;
+    font-weight: 600;
+    line-height: 33px;
+    font-style: SemiBold;
+    color: var(--color-heading);
+}
+
+.dashboard-card-green {
+    font-size: 14px !important;
+    font-weight: 600;
+    line-height: 20px;
+    font-style: SemiBold;
+    color: var(--dashboard-card-green);
+}
+
+
+.dashboard-card-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    font-style: SemiBold;
+    color: var(--color-radio-lable);
+}
+
+.dashboard-card-orange {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    font-style: SemiBold;
+    color: var(--login-font);
+}
+
+.Upcoming-Consultations-title {
+    color: var(--color-heading) !important;
+    font-weight: 600;
+}
+
+.Upcoming-Consultations {
+    color: var(--color-heading) !important;
+    font-size: 22px !important;
+    font-weight: 500;
+}
+
+.consultation-icon-image {
+    justify-content: space-between;
+}
+
+.btn-outline-success {
+    color: #2CB79A !important;
+    border-color: #2CB79A !important;
+}
+
+.btn-outline-success:hover{
+    color: white !important;
+}
+
+.btn-outline-danger {
+    color: #E85966 !important;
+    border-color: #E85966 !important;
+}
+
+.btn-outline-danger:hover{
+    color: white !important;
+}

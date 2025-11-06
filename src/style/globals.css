@@ -19,8 +19,9 @@
   --font-subtitle: #8A8D93;
   --login-font: #E29578;
   --border-box: #FF8A4C;
-    --border-box-blue: #3F83F8;
+  --border-box-blue: #3F83F8;
   --border-box-red: #F05252;
+  --dashboard-card-green: #2ECF98;
 }
 
 body {
@@ -191,7 +192,7 @@ body::-webkit-scrollbar {
 .edit-basic-details-modal {
   width: 160px;
   height: 160px;
-  border-radius: 16px;  
+  border-radius: 16px;
 }
 
 .edit-basic-details-image {
@@ -433,37 +434,44 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .border-box-orange-font {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    font-style: medium;
-    color: var(--border-box);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  font-style: medium;
+  color: var(--border-box);
 }
 
 .border-box-blue-font {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    font-style: medium;
-    color: var(--border-box-blue);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  font-style: medium;
+  color: var(--border-box-blue);
 }
 
 .border-box-red-font {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    font-style: medium;
-    color: var(--border-box-red);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  font-style: medium;
+  color: var(--border-box-red);
 }
 
 .accordion-form-physical-assessment .input-custom-width {
-    width: 47.83% !important;
+  width: 47.83% !important;
 }
 
-.input-custom-data{
-    margin-top: 30px !important;
+.input-custom-data {
+  margin-top: 30px !important;
 }
+
 .accordion-form-physical-assessment .or-custom-width {
-    width: 4.3% !important;
-    padding: 0 !important;
+  width: 4.3% !important;
+  padding: 0 !important;
+}
+
+.btn-outline-danger {
+  padding: 9px 18px;
+  font-size: 18px;
+  font-weight: 500;
 }
