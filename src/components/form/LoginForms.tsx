@@ -71,6 +71,7 @@ export function LoginForms() {
             alert("Form Submitted");
             setFormError(defaultFormError);
             // router.push("/selectprofile");
+           router.push("/"); // set route in success model
         }
     };
 
@@ -171,6 +172,7 @@ export function ForgotPassword() {
             errors.email = "Invalid email format";
             isValid = false;
         }
+        
 
         setFormError(errors);
         return isValid;
@@ -219,7 +221,9 @@ export function ForgotPassword() {
     )
 }
 
-export function ResetPasswordScreen() {
+export function ResetPasswordScreen({ setPasswordChangedSuccessModel }: {
+    setPasswordChangedSuccessModel: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
 
     const [newshowPassword, setNewShowPassword] = useState(false);
     const [confirmshowPassword, setConfirmShowPassword] = useState(false);
@@ -290,7 +294,7 @@ export function ResetPasswordScreen() {
             alert("Form Submitted");
             //  router.push("/"); // set route in success model
             setFormError(defaultFormError);
-
+      setPasswordChangedSuccessModel(true)
         }
     };
     return (
@@ -382,13 +386,19 @@ export function VerifyOtp() {
         const errors: typeof defaultFormError = { ...defaultFormError };
         let isValid = true;
 
-        if (!formData.number) {
-            errors.number = "Verification Code is required";
-            isValid = false;
-        }else if (formData.number.length !== 123456) {
+        // if (!formData.number) {
+        //     errors.number = "Verification Code is required";
+        //     isValid = false;
+        // }else if (formData.number.length !== 123456) {
+        //     errors.number = "Please enter valid code";
+        //     isValid = false;
+        // }
+
+        if (formData.number.length !== 6) {
             errors.number = "Please enter valid code";
             isValid = false;
         }
+
         setFormError(errors);
         return isValid;
     };
@@ -398,7 +408,7 @@ export function VerifyOtp() {
 
         if (validateForm()) {
             
-            if (formData.number !== "123456") {
+            if (formData.number.length !== 6)  {
                 alert("Please enter valid code");
                 return;
             }
