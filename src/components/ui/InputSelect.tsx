@@ -280,7 +280,7 @@ export function MultiSelectWithCheckbox({
       <div className={`maiacare-input-field-container custom-react-dropdown ${className}`}>
         {label && <InputFieldLabel label={label} required={required} />}
 
-        <MultiSelect
+        {/* <MultiSelect
           // className="maiacare-input-field"
           options={options}
           value={values}
@@ -301,7 +301,7 @@ export function MultiSelectWithCheckbox({
             }
             return values.map((s) => s.label).join(", "); // show selected when closed
           }}
-        />
+        /> */}
       </div>
 
       {error && <InputFieldError error={error} />}
