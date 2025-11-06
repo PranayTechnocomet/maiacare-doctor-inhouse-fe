@@ -69,7 +69,7 @@ import React, { useState } from 'react'
 import { Form } from 'react-bootstrap'
 import { InputFieldLabel, InputFieldError, InputFieldHelperText } from './InputField';
 import Select from 'react-dropdown-select';
-import  MultiSelect  from 'react-multi-select-component';
+import { MultiSelect } from 'react-multi-select-component';
 
 type OptionType = { value: string; label: string };
 
