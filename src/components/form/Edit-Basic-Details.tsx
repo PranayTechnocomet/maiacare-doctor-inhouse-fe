@@ -91,7 +91,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   type Qualification = {
     degree: string;
     field: string;
-    university: string;
+    university: string; 
     startYear: string;
     endYear: string;
   };
@@ -121,12 +121,12 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // if (!data.Email.trim()) {
-    //   errors.Email = "Email is required";
-    // } else if (!emailRegex.test(data.Email)) {
-    //   errors.Email = "Enter a valid email address";
-    // }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!data.Email.trim()) {
+      errors.Email = "Email is required";
+    } else if (!emailRegex.test(data.Email)) {
+      errors.Email = "Enter a valid email address";
+    }
 
 
     if (!data.About.trim()) errors.About = "About is required";
@@ -269,6 +269,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     const allowedTypes = ["image/jpeg", "image/png"];
     if (!allowedTypes.includes(selectedFile.type)) {
       setErrorMessage("Only JPG and PNG images are allowed.");
+      setPreviewImage(null); // remove previous preview
       event.target.value = ""; // reset input
       return;
     }
@@ -277,6 +278,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (selectedFile.size > maxSize) {
       setErrorMessage("File size must be less than 5MB.");
+      setPreviewImage(null); // remove previous preview
       event.target.value = ""; // reset input
       return;
     }
@@ -291,23 +293,35 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   // camera image select 
   const handleFileCamera = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      // Allowed image types
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
 
-      if (!allowedTypes.includes(file.type)) {
-        setErrorMessage("Only JPG and PNG images are allowed.");
-        setPreviewImage(null);
-        event.target.value = ""; // Reset input
-        return;
-      }
+    if (!file) return;
 
-      setErrorMessage(""); // clear error if valid
-      const imageURL = URL.createObjectURL(file);
-      setPreviewImage(imageURL); // show preview
+    // Allowed image types
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    // Max file size = 5MB
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
+    // Type validation
+    if (!allowedTypes.includes(file.type)) {
+      setErrorMessage("Only JPG and PNG images are allowed.");
+      setPreviewImage(null); // remove previous preview
+      event.target.value = ""; // Reset input
+      return;
     }
-  };
 
+    // Size validation
+    if (file.size > maxSize) {
+      setErrorMessage("File size must be less than 5MB.");
+      setPreviewImage(null); // remove previous preview
+      event.target.value = ""; // Reset input
+      return;
+    }
+
+    // ✅ If valid image
+    setErrorMessage(""); // Clear error
+    const imageURL = URL.createObjectURL(file);
+    setPreviewImage(imageURL); // Show preview
+  };
 
 
   const handleSave = () => {
