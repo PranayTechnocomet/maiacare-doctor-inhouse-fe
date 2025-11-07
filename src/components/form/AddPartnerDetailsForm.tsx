@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'reac
 import ContentContainer from '../ui/ContentContainer';
 import CustomTabs from '../ui/CustomTabs';
 import Image from 'next/image';
+import "../../style/Edit-Profile.css";
 import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
 import { Accordion, Col, Row } from 'react-bootstrap';
@@ -209,13 +210,13 @@ export function BasicDetailsForm({
                                 <Image
                                     src={profileImage || Simpleeditpro}
                                     alt="Profile"
-                                    className="object-fit-cover rounded-2"
+                                    className="profile-image"
                                     width={100}
                                     height={100}
 
                                 />
                                 <div
-                                    className="camera-icon position-absolute bottom-0 end-0 cursor-pointer"
+                                    className="camera-icon"
                                     onClick={handleImageClick}
                                 >
                                     <Image src={cameraicon} alt="Upload" width={48} height={48} />
@@ -224,10 +225,9 @@ export function BasicDetailsForm({
                                     type="file"
                                     accept="image/png, image/jpeg"
                                     ref={fileInputRef}
-                                    className="image-formate"
+                                    className="image-formate d-none"
                                     onChange={(event) => handleFileChange(event)}
                                     name="profileImage"
-
                                 />
                             </div>
 
