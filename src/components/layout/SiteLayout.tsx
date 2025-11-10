@@ -17,7 +17,7 @@ import Logo from "../../assets/images/logo.png";
 import Maia from "../../assets/images/maia.png";
 import UserProfileIcon from "../../assets/images/user-icon.png";
 import { useSelector } from "react-redux";
-import { RootState } from "@/utils/redux/store";
+import { RootState } from "@/Hook/Redux/Store/store";
 import { FaBoxesStacked } from "react-icons/fa6";
 
 interface Props {
@@ -29,10 +29,13 @@ interface Props {
 const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
   const pathname = usePathname();
   const navRef = useRef<HTMLDivElement | null>(null);
-  const { title, subtitle } = useSelector((state: RootState) => state.header.value);
+  const authData = useSelector((state: RootState) => state.auth);
+  const { title, subtitle } = useSelector((state: RootState) => state.header);
 
   // 🔥 Offcanvas state
   const [showOffcanvas, setShowOffcanvas] = useState(false);
+
+  console.log("authData", authData);
 
   const navItems = [
     { label: "Profile", href: "/profile", icon: <MdWindow size={22} /> },
@@ -103,7 +106,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
               alt="User"
               className="sidebar__user-avatar"
             />
-            <span className="sidebar__text">John Doe</span>
+            <span className="sidebar__text">{authData.user?.name || "John Doe"}</span>
           </div>
         </div>
       </aside>
@@ -157,7 +160,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
               alt="User"
               className="sidebar__user-avatar"
             />
-            <span className="sidebar__text">John Doe</span>
+            <span className="sidebar__text">{authData.user?.name || "John Doe"}</span>
           </div>
         </div>
       </aside>
