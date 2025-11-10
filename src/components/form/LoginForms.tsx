@@ -395,7 +395,7 @@ export function VerifyOtp() {
         // }
 
         if (formData.number.length !== 6) {
-            errors.number = "Please enter valid code";
+            errors.number = "Please Enter Verification Code";
             isValid = false;
         }
 
@@ -409,7 +409,7 @@ export function VerifyOtp() {
         if (validateForm()) {
             
             if (formData.number.length !== 6)  {
-                alert("Please enter valid code");
+                alert("Please Enter Verification Code");
                 return;
             }
             alert("Form Submitted");

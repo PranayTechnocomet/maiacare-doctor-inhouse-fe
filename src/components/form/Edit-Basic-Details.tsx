@@ -161,8 +161,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   };
 
 
-
-
   // const handleNextClick = () => {
   //   const errors = validateForm(formData);
   //   setFormError(errors);
