@@ -12,7 +12,7 @@ import {
     XAxis,
     YAxis,
     CartesianGrid,
-    Tooltip,
+    // Tooltip,
     ResponsiveContainer,
 } from "recharts";
 import { ArrowUpRight } from "lucide-react";
@@ -32,6 +32,7 @@ import {
     ArcElement,
     ChartOptions,
     ChartData,
+    Tooltip,
 } from "chart.js";
 import Image from "next/image";
 import { InputSelect } from "./ui/InputSelect";
@@ -53,7 +54,8 @@ ChartJS.register(
     Legend,
     Filler,
     BarElement,
-    ArcElement
+    ArcElement,
+    Tooltip,
 );
 interface TreatmentData {
     id: string;
@@ -773,7 +775,7 @@ const Dashboard: React.FC = () => {
                                             />
 
                                             {/* Tooltip */}
-                                            <Tooltip
+                                            {/* <Tooltip
                                                 cursor={false}
                                                 contentStyle={{
                                                     backgroundColor: "#FFFFFF",
@@ -781,7 +783,7 @@ const Dashboard: React.FC = () => {
                                                     borderRadius: "8px",
                                                     fontSize: "12px",
                                                 }}
-                                            />
+                                            /> */}
 
                                             {/* Area Lines */}
                                             <Area
