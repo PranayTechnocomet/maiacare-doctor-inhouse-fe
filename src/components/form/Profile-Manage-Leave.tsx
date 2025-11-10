@@ -8,7 +8,7 @@ import {
   LeaveEntry,
 } from "@/utils/StaticData";
 import BaseTable from "@/components/ui/BaseTable";
-import Trash from "../../assets/images/Trash.png";
+import Delete from "../../assets/images/Delete.png";
 import LightEditimg from "../../assets/images/LightEditimg.png";
 import Button from '../ui/Button';
 
@@ -36,7 +36,7 @@ const ManageLeave = () => {
 
           {/* Delete Button */}
           <Button className="btn btn-sm profile-card-boeder " variant='outline' contentSize="small" onClick={() => handleDelete(row.original.id)}>
-            <Image src={Trash} alt="Delete" width={18} height={20} />
+            <Image src={Delete} alt="Delete" width={18} height={20} />
           </Button>
         </div>
       ),

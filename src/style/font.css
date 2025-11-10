@@ -827,6 +827,12 @@
     color: var(--color-brand) !important;
 }
 
+.dashboard-sub-title {
+    color: var(--color-sidebar-icon) !important;
+    line-height: 0;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+}
 
 @media screen and (max-width: 1391px) {
     .contact-detail {
@@ -866,6 +872,12 @@
 }
 
 @media screen and (max-width: 1199px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 12px !important;
+
+    }
+
     .login-title {
         font-size: 32px;
     }
@@ -890,6 +902,12 @@
 }
 
 @media screen and (max-width: 1032px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 12px !important;
+
+    }
+
     .your-device-box-title {
         font-size: 16px;
     }
@@ -900,6 +918,12 @@
 }
 
 @media screen and (max-width: 1024px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 11px !important;
+
+    }
+
     .login-title {
         font-size: 30px;
         line-height: 40px;
@@ -940,6 +964,12 @@
 }
 
 @media (max-width: 991px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 14px !important;
+
+    }
+
     .login-title {
         font-size: 30px;
         line-height: 35px;
@@ -979,6 +1009,11 @@
 }
 
 @media (max-width: 575px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 12px !important;
+
+    }
 
     .login-title {
         font-size: 27px;
@@ -1026,6 +1061,12 @@
 }
 
 @media screen and (max-width: 426px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 12px !important;
+
+    }
+
     .login-title {
         font-size: 25px;
         line-height: 25px;
@@ -1043,6 +1084,12 @@
 }
 
 @media screen and (max-width: 425px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 11px !important;
+
+    }
+
     .accordion-title {
         font-size: 16px;
     }
@@ -1062,11 +1109,28 @@
 }
 
 @media screen and (max-width: 375px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 11px !important;
+
+    }
+
     .accordion-title {
         font-size: 15px;
     }
 }
 
+@media screen and (max-width: 320px) {
+    .dashboard-sub-title {
+        line-height: 0;
+        font-size: 11px !important;
+
+    }
+
+    .accordion-title {
+        font-size: 15px;
+    }
+}
 
 /* code from doctor end */
 
@@ -1198,7 +1262,7 @@
     border-color: #2CB79A !important;
 }
 
-.btn-outline-success:hover{
+.btn-outline-success:hover {
     color: white !important;
 }
 
@@ -1207,6 +1271,6 @@
     border-color: #E85966 !important;
 }
 
-.btn-outline-danger:hover{
+.btn-outline-danger:hover {
     color: white !important;
 }

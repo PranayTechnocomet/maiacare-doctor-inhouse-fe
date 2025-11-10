@@ -889,7 +889,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         <div className="fw-semibold file-name-ellipsis">
                           {file.name}
                         </div>
-                        <div className="d-flex align-items-center gap-2">
+                        <div className="d-flex align-items-center gap-1">
                           <span className="profile-sub-title">{file.size}</span>
                           <span>•</span>
                           {file.status === "uploading" ? (
@@ -909,7 +909,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
                     {/* Close/Delete Icon */}
                     <button
-                      className="btn border-0 bg-transparent"
+                      className="border-0 bg-transparent"
                       onClick={() => {
                         setUploadedFiles((prev) =>
                           prev.filter((_, i) => i !== index)
