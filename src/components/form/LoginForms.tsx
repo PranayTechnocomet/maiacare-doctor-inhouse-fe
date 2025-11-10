@@ -92,7 +92,7 @@ export function LoginForms() {
         });
       setFormError(defaultFormError);
       // router.push("/selectprofile");
-      //    router.push("/"); // set route in success model
+         router.push("/"); // set route in success model
     }
   };
 
@@ -474,7 +474,7 @@ export function VerifyOtp() {
     // }
 
     if (formData.number.length !== 6) {
-      errors.number = "Please enter valid code";
+      errors.number = "Please enter Verification code";
       isValid = false;
     }
 
@@ -487,7 +487,7 @@ export function VerifyOtp() {
 
     if (validateForm()) {
       if (formData.number.length !== 6) {
-        alert("Please enter valid code");
+        alert("Please enter Verification code");
         return;
       }
       alert("Form Submitted");
