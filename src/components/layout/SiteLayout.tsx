@@ -102,7 +102,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
           </div>
           <div className="sidebar__user">
             <img
-              src={UserProfileIcon.src}
+              src={authData.user?.profilePicture || UserProfileIcon.src}
               alt="User"
               className="sidebar__user-avatar"
             />
@@ -156,7 +156,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
           </div>
           <div className="sidebar__user">
             <img
-              src={UserProfileIcon.src}
+              src={authData.user?.profilePicture || UserProfileIcon.src}
               alt="User"
               className="sidebar__user-avatar"
             />
