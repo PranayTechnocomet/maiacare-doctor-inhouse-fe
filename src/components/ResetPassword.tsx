@@ -55,7 +55,8 @@ export default function ResetPassword() {
                             <p className="login-subtitle text-start">Secure your account by setting a new password.</p>
 
 
-                            <ResetPasswordScreen />
+                             <ResetPasswordScreen setPasswordChangedSuccessModel={setPasswordChangedSuccessModel}
+                            />
 
                         </div>
                     </Col>
@@ -76,7 +77,32 @@ export default function ResetPassword() {
                     </Col>
 
                 </Row>
+   <Modal
+                    show={PasswordChangedSuccessModel}
+                    onHide={() => setPasswordChangedSuccessModel(false)}
+                    closeButton={true}
+                    size="md"
+                >
+                    <div className="text-center">
+                        <Image src={SuccessImage} alt="successImg" width={280} height={200} />
+                        <h3 className="modal-custom-header mt-4">
+                            Password Changed Successfully!
+                        </h3>
+                        <p className="modal-custom-content">
+                            Your Account is secured now
+                        </p>
+                    </div>
 
+                    <div className="d-flex justify-content-center gap-3">
+                        <Button
+                            variant="default"
+                            className="w-100"
+                            onClick={() => { setPasswordChangedSuccessModel(false); router.push("/"); }}
+                        >
+                            Okay
+                        </Button>
+                    </div>
+                </Modal>
             </Container>
         </>
 
