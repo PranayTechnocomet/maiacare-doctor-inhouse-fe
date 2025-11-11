@@ -286,7 +286,7 @@ export default function Consultation() {
             <CommonTable data={filteredData} columns={columns} />
 
             {/* Pagination */}
-            <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+            {/* <div className="d-flex justify-content-between align-items-center mt-3 flex-wrap">
                 <small className="text-muted">Showing {filteredData.length} of {consultationData.length} results</small>
                 <Pagination size="sm" className="mb-0">
                     <Pagination.Prev disabled />
@@ -299,7 +299,7 @@ export default function Consultation() {
                     <Pagination.Item>99</Pagination.Item>
                     <Pagination.Next />
                 </Pagination>
-            </div>
+            </div> */}
         </div>
     );
 }

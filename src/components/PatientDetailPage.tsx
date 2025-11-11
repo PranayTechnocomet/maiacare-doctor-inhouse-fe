@@ -31,7 +31,7 @@ export default function PatientDetailPageComponent() {
             label: "Partner Details",
             content: (
                 <>
-                 <PartnerDetail setActiveTab={setActiveTab} />
+                    <PartnerDetail setActiveTab={setActiveTab} />
                 </>
             ),
         },
@@ -119,8 +119,29 @@ export default function PatientDetailPageComponent() {
                 </div>
             </div>
 
-            {/* <div className="row mb-5">
-                <div className="col-md-6">
+          
+            <div
+                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100"
+                style={{
+                    position: "fixed",
+                    bottom: 0,
+                    right: 0,
+                    zIndex: 1050
+                }}
+            >
+                <Button variant="light" className="edit-profile-btn">Cancel</Button>
+                <Button className="Button-login" variant="primary">Mark as Complete</Button>
+            </div>
+
+            <div className="mt-1">
+                <CustomTabs
+                    activeKey={activeTab}
+                    setActiveKey={setActiveTab}
+                    tabOptions={tabOptions}
+                />
+            </div>
+  <div className="row mb-5">
+                <div className="">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
                     <ContentContainer className="shadow-sm border-0 mb-4">
                         <Card.Body>
@@ -136,36 +157,15 @@ export default function PatientDetailPageComponent() {
                             <div className="d-flex justify-content-end mt-3">
                                 <Button className="edit-profile-btn d-flex align-items-center">
                                     <span className="me-2">
-                                        <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} />
+                                        {/* <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} /> */}
                                     </span>
-                                    Edit
+                                   Save Review
                                 </Button>
                             </div>
                         </Card.Body>
                     </ContentContainer>
                 </div>
-            </div> */}
-            {/* <div
-                className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100"
-                style={{
-                    position: "fixed",
-                    bottom: 0,
-                    right: 0,
-                    zIndex: 1050
-                }}
-            >
-                <Button variant="light" className="edit-profile-btn">Cancel</Button>
-                <Button className="Button-login" variant="primary">Mark as Complete</Button>
-            </div> */}
-
-            <div className="mt-1">
-                <CustomTabs
-                    activeKey={activeTab}
-                    setActiveKey={setActiveTab}
-                    tabOptions={tabOptions}
-                />
             </div>
-
         </>
     );
 }
