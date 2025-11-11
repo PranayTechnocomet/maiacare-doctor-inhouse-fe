@@ -171,7 +171,13 @@
 
 .profile-sub-title {
     color: var(--color-sidebar-icon);
+    font-size: 16px !important;
     line-height: 0;
+    font-weight: 400;
+}
+
+.profile-title {
+    color: var(--color-sidebar-icon);
     font-size: 16px !important;
     font-weight: 400;
 }

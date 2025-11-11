@@ -40,11 +40,11 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
   const navItems = [
     { label: "Profile", href: "/profile", icon: <MdWindow size={22} /> },
     // { label: "EditProfile", href: "/EditProfile"},
-    { label: "Doctors", href: "/doctors", icon: <MdWindow size={22} /> },
+    { label: "Doctors", href: "/doctors", icon: <FaBoxesStacked size={22} /> },
     { label: "Patients", href: "/patients", icon: <BsPeople size={22} /> },
-    { label: "Inventory", href: "/inventory", icon: <FaBoxesStacked size={22} /> },
-    { label: "Appointments", href: "/appointments", icon: <MdOutlineCalendarToday size={22} />, },
-    { label: "Treatment Plan", href: "/treatment-plan", icon: <IoBagAddOutline size={22} />, },
+    // { label: "Inventory", href: "/inventory", icon: <FaBoxesStacked size={22} /> },
+    // { label: "Appointments", href: "/appointments", icon: <MdOutlineCalendarToday size={22} />, },
+    // { label: "Treatment Plan", href: "/treatment-plan", icon: <IoBagAddOutline size={22} />, },
     { label: "Settings", href: "/settings", icon: <MdSettings size={22} /> },
   ];
 
