@@ -8,3 +8,15 @@ export const login = (data: LoginRequest) => {
 export const getLoginUser = () => {
   return apiClient.get("/profile/get/login-user");
 }
+
+export const forgotPassword = (data: {email: string}) => {
+  return apiClient.post("/auth/forgot-password", data);
+}
+
+export const forgotPasswordVerify = (data: {token: string, otp: number | string}) => {
+  return apiClient.post("/auth/forgot-password-verify", data);
+}
+
+export const newPassword = (data: {token: string|null, password: string}) => {
+  return apiClient.post("/auth/new-password", data);
+}
