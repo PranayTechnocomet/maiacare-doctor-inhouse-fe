@@ -473,10 +473,13 @@ export function VerifyOtp() {
     //     isValid = false;
     // }
 
-    if (formData.number.length !== 6) {
-      errors.number = "Please enter Verification code";
-      isValid = false;
-    }
+  if (!formData.number) {
+  errors.number = "Please enter Verification code";
+  isValid = false;
+} else if (formData.number.length !== 6) {
+  errors.number = "Please enter valid number";
+  isValid = false;
+}
 
     setFormError(errors);
     return isValid;
