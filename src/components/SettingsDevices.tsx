@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from './ui/Button'
 import Image from 'next/image'
 import { FiLogOut } from "react-icons/fi";
@@ -7,6 +7,11 @@ import deviceWindowsImg from "@/assets/images/device-windows.png";
 import deviceMobileImg from "@/assets/images/device-mobile.png";
 
 const SettingsDevices = () => {
+    useEffect(() => {
+        console.log("Token",localStorage.getItem("token"));
+        
+    }, [])
+    
     return (
         <>
             <p className="settings-accordion-subtitle my-4">Where you're signed in</p>

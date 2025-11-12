@@ -20,3 +20,11 @@ export const forgotPasswordVerify = (data: {token: string, otp: number | string}
 export const newPassword = (data: {token: string|null, password: string}) => {
   return apiClient.post("/auth/new-password", data);
 }
+
+export const changePassword = (data: {oldPassword: string, newPassword: string}) => {
+  return apiClient.post("/profile/change-password", data);
+}
+
+export const getLoggedInDevice = (data: {oldPassword: string, newPassword: string}) => {
+  return apiClient.post("/profile/list-login-device", data);
+}
