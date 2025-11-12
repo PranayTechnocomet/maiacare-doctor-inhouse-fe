@@ -2,7 +2,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import { getTokenFromCookie } from "../Helper";
 import { headers } from "next/headers";
 
-const baseURL = process.env.API_BASE_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const apiCommonServer = axios.create({
   baseURL: baseURL + "/api",
