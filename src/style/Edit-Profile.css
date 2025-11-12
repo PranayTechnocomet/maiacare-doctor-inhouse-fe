@@ -104,7 +104,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: block;      /* important for ellipsis */
-  max-width: 100px;    /* 👈 tamara layout अनुसार adjust karjo */
+  display: block;  
+  max-width: 100px;    
 }
 
