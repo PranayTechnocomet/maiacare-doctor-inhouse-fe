@@ -92,7 +92,6 @@ export function LoginForms() {
         });
       setFormError(defaultFormError);
       // router.push("/selectprofile");
-         router.push("/"); // set route in success model
     }
   };
 
