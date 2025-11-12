@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function POST(req: {token:string}) {
-  const API_BASE_URL = "/profile/list-login-device";
+export async function GET(req: Request) {
+  const API_BASE_URL = "/profile/get";
 
   try {
-    const response = await apiServer.post(API_BASE_URL);
+    const response = await apiServer.get(API_BASE_URL);
 
     return new NextResponse(JSON.stringify(response.data), {
       headers: { "Content-Type": "application/json" },

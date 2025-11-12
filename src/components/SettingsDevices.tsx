@@ -5,13 +5,27 @@ import { FiLogOut } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import deviceWindowsImg from "@/assets/images/device-windows.png";
 import deviceMobileImg from "@/assets/images/device-mobile.png";
+import { getLoggedInDevice } from '@/utils/apis/apiHelper';
 
 const SettingsDevices = () => {
     useEffect(() => {
-        console.log("Token",localStorage.getItem("token"));
         
+        const token = localStorage.getItem("token")
+        getLoggedInDevice({token})
+            .then((response) => {
+
+                if (response.status == 200) {
+                    console.log("response", response.data);
+                } else {
+                    console.log("Error");
+                }
+
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, [])
-    
+
     return (
         <>
             <p className="settings-accordion-subtitle my-4">Where you're signed in</p>
@@ -44,11 +58,11 @@ const SettingsDevices = () => {
 
                 <div className="your-device-box d-flex flex-column flex-lg-row flex-md-column flex-sm-row justify-content-between gap-3 align-items-start align-items-lg-center ">
                     <div className="d-flex justify-content-center align-items-center gap-xl-3 gap-2 ">
-                        <Image src={deviceMobileImg} 
-                        width={70} 
-                        height={70} 
-                        alt="device-window"
-                        className="your-device-box-img"
+                        <Image src={deviceMobileImg}
+                            width={70}
+                            height={70}
+                            alt="device-window"
+                            className="your-device-box-img"
                         />
                         <div>
                             <h6 className="your-device-box-title mb-1">Redmi Note 13 Pro</h6>

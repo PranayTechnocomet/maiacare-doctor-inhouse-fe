@@ -25,6 +25,35 @@ export const changePassword = (data: {oldPassword: string, newPassword: string})
   return apiClient.post("/profile/change-password", data);
 }
 
-export const getLoggedInDevice = (data: {oldPassword: string, newPassword: string}) => {
-  return apiClient.post("/profile/list-login-device", data);
+export const getLoggedInDevice = (data: {token: string|null}) => {
+  return apiClient.post("/profile/list-login-device", {} , {
+    headers : {
+      Authorization: `Bearer ${data.token}`,
+    }
+  });
+}
+
+export const getLoggedInUser = () => {
+  const token = localStorage.getItem("token");
+  return apiClient.get("/profile/get", {
+    headers : {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+}
+type QualificationType = {
+  degree: string;
+  fieldOfStudy: string;
+  university: string;
+  startYear: number;
+  endYear: number;
+};
+
+export const addQualification = (data:QualificationType) => {
+  const token = localStorage.getItem("token");
+  return apiClient.post("/profile/qualifications/add", data, {
+    headers : {
+      Authorization: `Bearer ${token}`,
+    }
+  });
 }

@@ -125,7 +125,7 @@ function PasswordSettings() {
 
                 console.log("response", response.data);
                 if (response.status == 200) {
-                    router.push("/login");
+                    router.push("/profile");
                     console.log("Password changed successfully");
                 } else {
                     const errors = validateForm(formData);
