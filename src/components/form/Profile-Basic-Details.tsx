@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Container, Row, Col,  Form, Table, Accordion } from 'react-bootstrap';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Container, Row, Col, Form, Table, Accordion } from 'react-bootstrap';
 import Add from "../../assets/images/Add.png";
 import Delete from "../../assets/images/Delete.png";
 import LightEditimg from "../../assets/images/LightEditimg.png";
@@ -16,6 +16,7 @@ import { InputFieldGroup } from '../ui/InputField';
 import Button from '../ui/Button';
 import toast from 'react-hot-toast';
 import { InputSelect } from '../ui/InputSelect';
+import { addQualification, getLoggedInUser } from '@/utils/apis/apiHelper';
 
 
 const ProfileBasicDetails = () => {
@@ -45,6 +46,14 @@ const ProfileBasicDetails = () => {
   //   { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
   // ]);
 
+  interface qualificationType {
+    degree: string,
+    fieldOfStudy: string,
+    university: string,
+    startYear: string | number,
+    endYear: string | number,
+    _id: string
+  }
   const [defaultQualifications, setDefaultQualifications] = useState<any[]>([]);
   const [showQualificationModal, setShowQualificationModal] = useState(false);
 
@@ -55,7 +64,7 @@ const ProfileBasicDetails = () => {
     Timer: string;
 
     degree: string;
-    field: string;
+    fieldOfStudy: string;
     university: string;
     startYear: string;
     endYear: string;
@@ -70,7 +79,7 @@ const ProfileBasicDetails = () => {
 
 
     degree: "",
-    field: "",
+    fieldOfStudy: "",
     university: "",
     startYear: "",
     endYear: ""
@@ -82,17 +91,18 @@ const ProfileBasicDetails = () => {
     { ...initialFormData },
   ]);
   const [formErrors, setFormErrors] = useState([
-    { degree: "", field: "", university: "", startYear: "", endYear: "" }
+    { degree: "", fieldOfStudy: "", university: "", startYear: "", endYear: "" }
   ]);
 
 
 
-  const documents = [
-    { name: 'Certificate.pdf', date: 'October 20, 2024' },
-    { name: 'Aadhar Card.pdf', date: 'October 20, 2024' },
-    { name: 'License.pdf', date: 'October 20, 2024' },
-    { name: 'Certificate.pdf', date: 'October 20, 2024' },
-  ];
+  // const documents = [
+  //   { name: 'Certificate.pdf', date: 'October 20, 2024' },
+  //   { name: 'Aadhar Card.pdf', date: 'October 20, 2024' },
+  //   { name: 'License.pdf', date: 'October 20, 2024' },
+  //   { name: 'Certificate.pdf', date: 'October 20, 2024' },
+  // ];
+  const [documents, setDocuments] = useState<{ name: string; date: string }[]>([]);
 
   const handleDelete = (index: number) => {
     const updated = defaultQualifications.filter((_, i) => i !== index);
@@ -163,7 +173,7 @@ const ProfileBasicDetails = () => {
     const errors = quals.map((q) => ({
 
       degree: !q.degree ? "Degree is required" : "",
-      field: !q.field ? "Field is required" : "",
+      fieldOfStudy: !q.fieldOfStudy ? "fieldOfStudy is required" : "",
       university: !q.university ? "University is required" : "",
       startYear: !q.startYear ? "Start Year is required" : "",
       endYear: !q.endYear ? "End Year is required" : "",
@@ -177,8 +187,10 @@ const ProfileBasicDetails = () => {
     // ADDD Qualifications validtation msg 
     setFormErrors([
       ...formErrors,
-      { degree: "", field: "", university: "", startYear: "", endYear: "" }
+      { degree: "", fieldOfStudy: "", university: "", startYear: "", endYear: "" }
     ]);
+
+
   };
 
   const handleRemoveQualification = (index: number) => {
@@ -204,14 +216,14 @@ const ProfileBasicDetails = () => {
       const newItems = qualifications
         .filter(
           (q) =>
-            q.degree && q.field && q.university && q.startYear && q.endYear
+            q.degree && q.fieldOfStudy && q.university && q.startYear && q.endYear
         )
         .map((q) => ({
-          title: `${q.degree} - ${q.field}`,
+          title: `${q.degree} - ${q.fieldOfStudy}`,
           university: q.university,
           years: `${q.startYear} - ${q.endYear}`,
           degree: q.degree,
-          field: q.field,
+          fieldOfStudy: q.fieldOfStudy,
           startYear: q.startYear,
           endYear: q.endYear
         }));
@@ -227,15 +239,51 @@ const ProfileBasicDetails = () => {
       console.log("Form submitted ✅", { formData, qualifications });
 
       // 🔹 Success → close modal + reset data
-      setShowModal(false);
-      setFormData(initialFormData);
-      setFormError(initialFormError);
-      setFormErrors([]);
-      setQualifications([{ ...initialFormData }]); // reset one row
-      toast.success("Data saved successfully!", {
-        position: "top-right",
-        // autoClose: 3000,
-      });
+      // const passData = {
+      //   qualifications: qualifications.map(q => ({
+      //     degree: q.degree,
+      //     fieldOfStudy: q.fieldOfStudy,
+      //     university: q.university,
+      //     startYear: q.startYear,
+      //     endYear: q.endYear
+      //   }))
+      // };
+      for (const q of qualifications) {
+        const passData = {
+          degree: q.degree,
+          fieldOfStudy: q.fieldOfStudy,
+          university: q.university,
+          startYear: Number(q.startYear),
+          endYear: Number(q.endYear),
+        };
+
+        console.log("Send data:", passData);
+
+
+        addQualification(passData)
+          .then((response) => {
+
+            if (response.status == 200) {
+              console.log("Qualification Added: ", response.data);
+              setShowModal(false);
+              setFormData(initialFormData);
+              setFormError(initialFormError);
+              setFormErrors([]);
+              setQualifications([{ ...initialFormData }]);
+              toast.success("Data saved successfully!", {
+                position: "top-right",
+                // autoClose: 3000,
+              });
+            } else {
+              console.log("Error");
+            }
+
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
     }
     else {
       console.log("Form has errors ⚠️", { errors, qualErrors });
@@ -247,7 +295,7 @@ const ProfileBasicDetails = () => {
 
   // + add Qualification button diable data show after unable
   const isQualificationComplete = (q: any) => {
-    return q.degree && q.field && q.university && q.startYear && q.endYear;
+    return q.degree && q.fieldOfStudy && q.university && q.startYear && q.endYear;
   };
 
 
@@ -273,7 +321,7 @@ const ProfileBasicDetails = () => {
     const errors: FormError = {};
 
     if (!data.degree.trim()) errors.degree = "Degree is required";
-    if (!data.field.trim()) errors.field = "Field is required";
+    if (!data.fieldOfStudy.trim()) errors.fieldOfStudy = "fieldOfStudy is required";
     if (!data.university.trim()) errors.university = "University is required";
     if (!data.startYear.trim()) errors.startYear = "Start year is required";
     if (!data.endYear.trim()) errors.endYear = "End year is required";
@@ -291,11 +339,11 @@ const ProfileBasicDetails = () => {
     if (editIndex !== null) {
       const updated = [...defaultQualifications];
       updated[editIndex] = {
-        title: `${formData.degree} - ${formData.field}`,
+        title: `${formData.degree} - ${formData.fieldOfStudy}`,
         university: formData.university,
         years: `${formData.startYear} - ${formData.endYear}`,
         degree: formData.degree,
-        field: formData.field,
+        fieldOfStudy: formData.fieldOfStudy,
         startYear: formData.startYear,
         endYear: formData.endYear
       };
@@ -316,8 +364,70 @@ const ProfileBasicDetails = () => {
 
 
 
+  interface OperationalHour {
+    day: string;
+    openTime: string;
+    closeTime: string;
+    _id: string;
+  }
+
+  interface Qualification {
+    degree: string;
+    fieldOfStudy: string;
+    university: string;
+    startYear: number;
+    endYear: number;
+    _id: string;
+  }
+
+  interface DoctorDataType {
+    _id: string;
+    name: string;
+    profilePicture: string;
+    specialty: string;
+    yearsOfExperience: number;
+    dob: string;
+    gender: string;
+    contactNumber: string;
+    email: string;
+    about: string;
+    servicesOffered: string[];
+    operationalHours: OperationalHour[];
+    qualifications: Qualification[];
+    fees: number;
+    clinicIds: string[];
+    doctorType: string;
+    doctor_id_other: string;
+    other_type_flag: string;
+    memberSince: string;
+    documents: any[];
+  }
 
 
+  const [user, setUser] = useState<DoctorDataType | null>(null)
+  console.log("State", user);
+
+  useEffect(() => {
+    getLoggedInUser()
+      .then((response) => {
+
+        if (response.status == 200) {
+          console.log("Profile fetched", response.data);
+          setUser(response.data.data)
+          setDocuments(response.data.data.documents)
+          setDefaultQualifications(response.data.data.qualifications)
+        } else {
+          console.log("Error");
+        }
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+
+
+  }, [])
 
 
 
@@ -427,21 +537,21 @@ const ProfileBasicDetails = () => {
                                       label="Field of study"
                                       name="field"
                                       type="text"
-                                      value={q.field}
+                                      value={q.fieldOfStudy}
                                       onChange={(e) => {
                                         const updated = [...qualifications];
-                                        updated[index].field = e.target.value;
+                                        updated[index].fieldOfStudy = e.target.value;
                                         setQualifications(updated);
 
                                         const updatedErrors = [...formErrors];
                                         if (updatedErrors[index]) {
-                                          updatedErrors[index].field = "";
+                                          updatedErrors[index].fieldOfStudy = "";
                                         }
                                         setFormErrors(updatedErrors);
                                       }}
                                       placeholder="Select Field"
                                       required={true}
-                                      error={formErrors[index]?.field}
+                                      error={formErrors[index]?.fieldOfStudy}
                                     />
                                   </Col>
 
@@ -534,7 +644,7 @@ const ProfileBasicDetails = () => {
                         qualifications.length > 0 &&
                         !isQualificationComplete(qualifications[qualifications.length - 1])
                       }
-                     >
+                    >
                       + Add Qualification
                     </Button>
 
@@ -561,9 +671,9 @@ const ProfileBasicDetails = () => {
                     className="d-flex justify-content-between align-items-start p-3 mb-3 bg-white border rounded-4 profile-card-boeder"
                   >
                     <div>
-                      <div className="card-feild">{item.title}</div>
+                      <div className="card-feild">{item.degree}</div>
                       <div className="card-university-text">{item.university}</div>
-                      <div className="card-year">{item.years}</div>
+                      <div className="card-year">{`${item.startYear} - ${item.endYear}`}</div>
                     </div>
 
 
@@ -608,7 +718,7 @@ const ProfileBasicDetails = () => {
                                 label="Field of study"
                                 name="field"
                                 type="text"
-                                value={formData.field}
+                                value={formData.fieldOfStudy}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                   handleChange(e);
                                 }}
@@ -617,7 +727,7 @@ const ProfileBasicDetails = () => {
                                 required={true}
                                 disabled={false}
                                 readOnly={false}   // ✅ remove or set false
-                                error={formError.field}
+                                error={formError.fieldOfStudy}
                               />
                             </Col>
 
@@ -715,7 +825,7 @@ const ProfileBasicDetails = () => {
             <ContentContainer className="mt-4">
               <h5 className="profile-card-main-titile">About</h5>
               <p className="mb-0 about-text" >
-                I'm Dr. Riya Dharang, a fertility specialist with over 12 years of experience in reproductive medicine. I specialize in IVF, IUI, and fertility preservation, providing personalized, compassionate care to help individuals and couples achieve their parenthood dreams. Your well-being and trust are my top priorities.
+                {user ? user.about : ""}
               </p>
             </ContentContainer>
           </div>
