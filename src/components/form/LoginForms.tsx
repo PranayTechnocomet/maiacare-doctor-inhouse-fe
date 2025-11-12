@@ -71,30 +71,29 @@ export function LoginForms() {
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (validateForm()) {
-            login(formData)
-                .then((response) => {
-                    if (response.status) {
-                        toast.success(response?.data?.message || "Login successful!");
-                        console.log("response", response);
-
-                        // Save token
-                        const token = response?.data?.token;
-                        localStorage.setItem("token", token);
-                        setTokenInCookie(token);
-                        dispatch(setToken(token));
-                        dispatch(setAuthData(response?.data?.data.doctor));
-                        router.push("/profile");
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-            setFormError(defaultFormError);
-            // router.push("/selectprofile");
-            router.push("/"); // set route in success model
-        }
-    };
+    if (validateForm()) {
+      login(formData)
+        .then((response) => {
+          if (response.status) {
+            toast.success(response?.data?.message || "Login successful!");
+            console.log("response", response);
+            
+            // Save token
+            const token = response?.data?.token;
+            localStorage.setItem("token", token);
+            setTokenInCookie(token);
+            dispatch(setToken(token));
+            dispatch(setAuthData(response?.data?.data.doctor));
+            router.push("/profile");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setFormError(defaultFormError);
+      // router.push("/selectprofile");
+    }
+  };
 
     return (
         <div>
@@ -515,10 +514,13 @@ export function VerifyOtp() {
         //     isValid = false;
         // }
 
-        if (formData.number.length !== 6) {
-            errors.number = "Please enter Verification code";
-            isValid = false;
-        }
+  if (!formData.number) {
+  errors.number = "Please enter Verification code";
+  isValid = false;
+} else if (formData.number.length !== 6) {
+  errors.number = "Please enter valid number";
+  isValid = false;
+}
 
         setFormError(errors);
         return isValid;

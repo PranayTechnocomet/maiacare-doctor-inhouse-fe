@@ -54,7 +54,7 @@ const authPages = ["/login", "/register", "/forgotppassword","/resetpassword","/
       getUser();
     } else {
       if (pathname == "/profile") {
-        router.push("/");
+        // router.push("/");
       }
     }
   }, [pathname, token]);  

@@ -179,7 +179,12 @@ export function BasicDetailsForm({
         //     errors.profileImage = "Profile Image is required";
         // }
 
-        if (!data.basic_detail_email.trim()) errors.basic_detail_email = "Email is required";
+        if (!data.basic_detail_email.trim()) {
+            errors.basic_detail_email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.basic_detail_email)) {
+            errors.basic_detail_email = "Enter a valid email address";
+        }
+
 
         return errors;
     };
@@ -335,21 +340,22 @@ export function BasicDetailsForm({
 
 
                     <Col md={6}>
+                    
                         <InputFieldGroup
                             label="Email ID"
                             name="basic_detail_email"
-                            type="email"
+                            type="text"
                             value={formData.basic_detail_email}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 handleChange(e);
                             }}
                             onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                             placeholder="Enter Email ID"
-                            required={true}
-
+                            required={false}
                             error={formError.basic_detail_email}
                             className="position-relative "
                         ></InputFieldGroup>
+
                     </Col>
                     <div className='d-flex gap-3'>
                         <Button className="w-100" variant="outline" disabled={false} onClick={() => setAddPartner(false)}>

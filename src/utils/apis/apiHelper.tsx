@@ -13,7 +13,7 @@ export const forgotPassword = (data: {email: string}) => {
   return apiClient.post("/auth/forgot-password", data);
 }
 
-export const forgotPasswordVerify = (data: {token: string, otp: number | string}) => {
+export const forgotPasswordVerify = (data: {token: string | null, otp: number | string}) => {
   return apiClient.post("/auth/forgot-password-verify", data);
 }
 
