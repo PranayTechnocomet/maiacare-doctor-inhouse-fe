@@ -614,9 +614,11 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 required={true}
                 disabled={false}
                 error={formError.date}
+                max={new Date().toISOString().split("T")[0]} // Prevent future dates
               />
 
             </Col>
+
             <Col md={6} className="mt-4  ">
               <RadioButtonGroup
                 label="Gender"

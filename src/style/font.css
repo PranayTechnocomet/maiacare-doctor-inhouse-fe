@@ -247,6 +247,8 @@
     color: var(--color-radio-lable) !important;
     font-weight: 6 00;
     font-size: 16px;
+    word-break: break-all !important;
+    /* Add this line */
 }
 
 .card-university-text {
@@ -254,12 +256,14 @@
     /* color: red !important; */
     font-weight: 400;
     font-size: 15px;
+    word-break: break-all !important;
 }
 
 .card-year {
     color: var(--color-sidebar-icon);
     font-weight: 400;
     font-size: 14px;
+    word-break: break-all !important;
 }
 
 .about-text {
