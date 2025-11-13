@@ -5,7 +5,7 @@ import { parseRequestBody } from "@/utils/apis/requestHandler";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
 export async function POST(req: Request) {
-  const API_BASE_URL = "/patient/physical-assessment";
+  const API_BASE_URL = "/patient/medical-history";
 
   try {
     const body = await parseRequestBody(req);
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
 
 export async function GET() {
-  const API_BASE_URL = "/patient/physical-assessment";
+  const API_BASE_URL = "/patient/medical-history";
 
   try {
     const response = await apiServer.get(API_BASE_URL);
@@ -43,7 +43,7 @@ export async function GET() {
 
 
 export async function PUT(req: Request) {
-  const BASE_URL = "/patient/physical-assessment";
+  const BASE_URL = "/patient/medical-history";
 
   try {
     // ✅ Parse the body once (let parseRequestBody handle it)
