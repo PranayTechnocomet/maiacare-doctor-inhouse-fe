@@ -20,3 +20,7 @@ export const forgotPasswordVerify = (data: {token: string | null, otp: number | 
 export const newPassword = (data: {token: string|null, password: string}) => {
   return apiClient.post("/auth/new-password", data);
 }
+
+export const changePassword = (data: {token: string|null, oldPassword: string|null, newPassword: string}) => {
+  return apiClient.post("/auth/change-password", data);
+}
