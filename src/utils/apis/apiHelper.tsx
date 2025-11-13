@@ -56,11 +56,11 @@ type QualificationType = {
   degree: string;
   fieldOfStudy: string;
   university: string;
-  startYear: number;
-  endYear: number;
+  startYear: number | string;
+  endYear: number | string;
 };
 
-export const addQualification = (data: QualificationType) => {
+export const addQualification = (data: QualificationType[]) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/profile/qualifications/add", data, {
     headers: {
@@ -70,18 +70,18 @@ export const addQualification = (data: QualificationType) => {
 }
 
 
-export const editQualification = (data: QualificationType) => {
+export const editQualification = (data: QualificationType, id:string) => {
   const token = localStorage.getItem("token");
-  return apiClient.put("/profile/qualifications/edit", data, {
+  return apiClient.put(`/profile/qualifications/edit/${id}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
   });
 }
 
-export const deleteQualification = () => {
+export const deleteQualification = (id:string) => {
   const token = localStorage.getItem("token");
-  return apiClient.delete("/profile/qualifications/delete", {
+  return apiClient.delete(`/profile/qualifications/delete/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -98,7 +98,12 @@ export const uploadkycdetails = () => {
 };
 
 export const getAll = () => {
-  return apiClient.post("/patient/getAll");
+  const token = localStorage.getItem("token");
+  return apiClient.get("/patient/getAll", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const patientdelete = () => {

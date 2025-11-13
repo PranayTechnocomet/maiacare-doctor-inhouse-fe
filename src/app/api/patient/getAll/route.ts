@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function GET(req: Request) {
+export async function GET() {
   const API_BASE_URL = "/profile//getAll";
 
   try {
