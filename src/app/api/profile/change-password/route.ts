@@ -5,7 +5,7 @@ import { parseRequestBody } from "@/utils/apis/requestHandler";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
 export async function POST(req: Request) {
-  const API_BASE_URL = "/profile/change-password";
+  const API_BASE_URL = "/auth/change-password";
 
   try {
     const body = await parseRequestBody(req);
