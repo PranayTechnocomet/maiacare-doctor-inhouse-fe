@@ -372,6 +372,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   padding: 30px !important;
 }
 
+@media (max-width: 991px) and (min-width: 768px) {
+
+.pation-profile-dataa .content-layout {
+ padding: 16px !important;
+}
+}
+
 /* code form doctor start*/
 
 .cursor-pointer-custom {
