@@ -1,5 +1,6 @@
 import { LoginRequest } from "../types/requestInterface";
 import apiClient from "./axiosInstance";
+import api from "./axiosInstance";
 
 export const login = (data: LoginRequest) => {
   return apiClient.post("/auth/login", data);
@@ -109,15 +110,21 @@ export const getAll = () => {
     },
   });
 };
+export const getOne = async (id: string | number) => {
+    return await api.get(`/patient/${id}`);   // FIXED ✔
+};
 
-export const patientdelete = () => {
+
+export const patientDelete = (id: string) => {
   const token = localStorage.getItem("token");
-  return apiClient.delete("/patient/delete", {
+
+  return apiClient.delete(`/patient/delete/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 };
+
 
 
 export const addphysicalassessment = () => {
