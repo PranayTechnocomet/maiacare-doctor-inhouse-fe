@@ -18,6 +18,7 @@ import { partnerDetailData } from '@/utils/StaticData';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
 import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl } from '@/utils/apis/apiHelper';
+import { useParams } from 'next/navigation';
 // import '../../style/PartnerDetails.css'
 
 
@@ -122,8 +123,11 @@ export function BasicDetailsForm({
     const handleFileChange = (
         event: React.ChangeEvent<HTMLInputElement> | undefined
     ) => {
+        console.log("comes in this stage")
         if (event) {
             const file = event.target.files?.[0];
+            console.log("file",file);
+            
             if (file) {
                 const allowedTypes = ["image/jpeg", "image/png"];
 
@@ -213,13 +217,19 @@ export function BasicDetailsForm({
             partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
             partnerAge: formData.basic_detail_age
         }
+        const formDataImage = {
+            type: "doctor",
+            files: formData.profileImage
+        }
         const formDataToSend = new FormData();
         formDataToSend.append("type", "doctor");
         formDataToSend.append("files", formData.profileImage);
+        console.log("formDataToSend", formDataImage);
 
-        getProfileImageUrl(formDataToSend)
+
+        getProfileImageUrl(formDataImage)
             .then((response) => {
-                    console.log("getImageUrl: ", response.data);
+                console.log("getImageUrl: ", response.data);
             })
             .catch((err) => {
                 console.log("getImageUrl", err);
@@ -466,36 +476,42 @@ export function MedicalHistoryForm({
         setMedicalHistoryFormError((prev) => ({ ...prev, [name]: "" }));
 
     };
-
+    const params = useParams();
+    const id = params?.id?.toString();
+    
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
+
+
         const errors = validateForm(FormData);
         setMedicalHistoryFormError(errors);
         const passData = {
-            medications : {
-                status: FormData.medication.charAt(0).toUpperCase() + FormData.medication.slice(1)
+            patientId: id,
+            medications: {
+                status: FormData.medication.charAt(0).toUpperCase() + FormData.medication.slice(1),
+                medicationsDetails: FormData.medicationcontent
             },
-            medicationsDetails: FormData.medicationcontent,
             surgeries: {
-                status: FormData.surgeries.charAt(0).toUpperCase() + FormData.surgeries.slice(1)
+                status: FormData.surgeries.charAt(0).toUpperCase() + FormData.surgeries.slice(1),
+                surgeriesDetails: FormData.surgeriescontent
             },
             conditions: FormData.medicalCondition.map((e) => e.value),
             familyHistory: FormData.familyMedicalHistory,
-            lifestyle: FormData.lifestyle.map((e)=>e.value),
-            exerciseFrequency: FormData.exercise.charAt(0).toUpperCase()+FormData.exercise.slice(1),
+            lifestyle: FormData.lifestyle.map((e) => e.value),
+            exerciseFrequency: FormData.exercise.charAt(0).toUpperCase() + FormData.exercise.slice(1),
             stressLevel: FormData.stress.charAt(0).toUpperCase() + FormData.stress.slice(1)
 
         }
-        
-         addPartnerMedicalHistory(passData)
+
+        addPartnerMedicalHistory(passData)
             .then((response) => {
-                    console.log("partner medical history: ", response.data);
+                console.log("partner medical history: ", response.data);
             })
             .catch((err) => {
                 console.log("partner medical history", err);
             });
-        
+
         if (Object.keys(errors).length === 0) {
 
             if (formDataMedicalHistory) {

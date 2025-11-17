@@ -227,7 +227,7 @@ export const basicDetails = (data: {
   });
 }
 
-export const addPartnerMedicalHistory = (data: { medications: { status: string; }; surgeries: { status: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
+export const addPartnerMedicalHistory = (data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/partner/medicalHistory",data, {
     headers: {
@@ -236,7 +236,16 @@ export const addPartnerMedicalHistory = (data: { medications: { status: string; 
   });
 }
 
-export const getProfileImageUrl = (formData: FormData) => {
+export const addPartnerPhysicalAssesment = (data) => {
+  const token = localStorage.getItem("token");
+  return apiClient.post("/patient/partner/physicalAssessment",data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+}
+
+export const getProfileImageUrl = (formData: any) => {
   const token = localStorage.getItem("token");
 
   return apiClient.post("/update-images", formData, {

@@ -30,6 +30,8 @@ import { AddPartnerDetails } from './AddPartnerDetails';
 import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, PhysicalAssessmentData, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
+import { useParams } from 'next/navigation';
+import { getOne } from '@/utils/apis/apiHelper';
 
 export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
 
@@ -211,6 +213,8 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         return '';
     };
     // console.log("showData.medicalHistory", showData.medicalHistory);
+
+
 
     return (
         <>
