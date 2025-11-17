@@ -469,7 +469,7 @@ export default function Consultation() {
             header: "Name",
             cell: (info) => {
                 const row = info.row.original;
-                const id = info.row.original.id; // <-- Make sure you have an `id`
+                const id = info.row.original.patient_id; // <-- Make sure you have an `id`
 
                 return (
                  <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
