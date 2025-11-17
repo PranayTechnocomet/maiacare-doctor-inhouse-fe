@@ -157,7 +157,7 @@ const ProfileBasicDetails = () => {
   const handleClose = () => {
     setShowModal(false);
 
-    // Modal close par data clear karo
+    // Modal close data clear
     setFormData(initialFormData);
     setFormError(initialFormError);
     setFormErrors([]);
