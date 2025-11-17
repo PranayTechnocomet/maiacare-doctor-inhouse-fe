@@ -204,16 +204,41 @@ export const updatemedicalhistory = () => {
   });
 }
 
-export const basicDetails = () => {
+export const basicDetails = (data: {
+  partnerImage: string | File,
+  partnerName: string,
+  partnerContactNumber: string | number,
+  partnerEmail: string,
+  partnerGender: string,
+  partnerAge: string | number
+}) => {
   const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/basicDetails", {
+  return apiClient.post("/patient/partner/basicDetails",data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
   });
 }
 
+export const addPartnerMedicalHistory = (data: { medications: { status: string; }; surgeries: { status: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
+  const token = localStorage.getItem("token");
+  return apiClient.post("/patient/partner/medicalHistory",data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+}
 
+export const getProfileImageUrl = (formData: FormData) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.post("/update-images", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 
 
