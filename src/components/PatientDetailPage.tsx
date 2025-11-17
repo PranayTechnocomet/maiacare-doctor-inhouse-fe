@@ -10,12 +10,29 @@ import "../style/ProfileTabes.css";
 import CustomTabs from './ui/CustomTabs';
 import PatientBasicDetail from './PatientBasicDetail';
 import PartnerDetail from './PartnerDetail';
-
-
+import { getOne } from "@/utils/apis/apiHelper"; // <-- You MUST create this
+import { useParams } from "next/navigation";
 export default function PatientDetailPageComponent() {
 
     const [activeTab, setActiveTab] = useState<string>("basic");
+  const params = useParams();
+    const id = params?.id?.toString();   // <-- FIXED ✔✔✔
 
+    const [patient, setPatient] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchPatient = async () => {
+            try {
+                if (!id) return;
+                const res = await getOne(id);    // now correct type
+                setPatient(res?.data?.data || res?.data);
+            } catch (error) {
+                console.error("Error fetching patient:", error);
+            }
+        };
+
+        fetchPatient();
+    }, [id]);
     const tabOptions = [
         {
             key: "basic",
@@ -140,32 +157,7 @@ export default function PatientDetailPageComponent() {
                     tabOptions={tabOptions}
                 />
             </div>
-  <div className="row mb-5">
-                <div className="">
-                    <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
-                    <ContentContainer className="shadow-sm border-0 mb-4">
-                        <Card.Body>
-                            <strong className=" d-block mb-2 heading-patient">Consultation Review *</strong>
-                            <p className=" border rounded p-3 Patient-review">
-                                Patient presented for an IVF consultation due to [reason, e.g., infertility, recurrent pregnancy loss].
-                                History reviewed, including obstetric, menstrual, and medical background, along with partner’s fertility evaluation.
-                                Recommended investigations include a hormonal panel, ultrasound, and genetic screening if needed.
-                                The IVF process, success rates, potential risks, and next steps were discussed.
-                                Patient was advised on pre-treatment preparation, and a follow-up was scheduled.
-                            </p>
-
-                            <div className="d-flex justify-content-end mt-3">
-                                <Button className="edit-profile-btn d-flex align-items-center">
-                                    <span className="me-2">
-                                        {/* <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} /> */}
-                                    </span>
-                                   Save Review
-                                </Button>
-                            </div>
-                        </Card.Body>
-                    </ContentContainer>
-                </div>
-            </div>
+ 
         </>
     );
 }

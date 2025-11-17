@@ -3,12 +3,14 @@
 import { FertilityAssessmentFormType, MedicalHistoryType, PhysicalAssessmentDataModel } from "@/utils/types/interfaces";
 import { useState } from "react";
 import Button from "./ui/Button";
+import {  Card } from "react-bootstrap";
 import { Accordion, Col, Row } from "react-bootstrap";
 import Modal from './ui/Modal';
 import PhisicalAssessmentForm from './form/PhisicalAssessmentForm';
 import { FertilityAssessmentForm } from './form/FertilityAssessmentForm';
 import MedicalHistory from './form/MedicalHistory';
 import "@/style/PatientBasicDetail.css"
+import ContentContainer from "@/components/ui/ContentContainer";
 
 export default function PatientBasicDetail() {
 
@@ -93,90 +95,6 @@ export default function PatientBasicDetail() {
 
         return '';
     };
-
-
-
-    // const [activeAccordion, setActiveAccordion] = useState<string[]>(['0', '1', '2']);
-    // const [showPhisicalAssessment, setShowPhisicalAssessment] = useState<boolean>(false);
-    // const [showFertilityAssessment, setShowFertilityAssessment] = useState<boolean>(false);
-
-    // const [showModal, setShowModal] = useState<boolean>(false);
-    // const [medicalHistoryFormData, setMedicalHistoryFormData] = useState<MedicalHistoryType | any>([]);
-
-    // const [editingMedicalHistory, setEditingMedicalHistory] = useState<any>(null);
-
-    // const [modalFormPhisicalData, setModalFormPhisicalData] = useState<PhysicalAssessmentDataModel[]>([]);
-    // const [modalFormFertilityData, setModalFormFertilityData] = useState<FertilityAssessmentFormType | any>([]);
-
-
-    // const [editFertilityAssessment, setEditFertilityAssessment] = useState<FertilityAssessmentFormType>({
-    //     ageAtFirstMenstruation: "",
-    //     cycleLength: "",
-    //     periodLength: "",
-    //     date: "",
-    //     isCycleRegular: "Regular",
-    //     menstrualIssues: "yes",
-    //     pregnancy: "yes",
-    //     timeduration: "",
-    //     ectopicpregnancy: "yes"
-    // });
-
-    // const initialFormData: PhysicalAssessmentDataModel = {
-    //     id: "",
-    //     height: "",
-    //     weight: "",
-    //     bmi: "",
-    //     bloodGroup: "",
-    //     systolic: "",
-    //     diastolic: "",
-    //     heartRate: ""
-
-    // };
-    // const [editPhysicalAssessment, setEditPhysicalAssessment] = useState<PhysicalAssessmentDataModel>(initialFormData);
-
-    // const convertHeightToCm = (heightStr: string): string => {
-    //     if (!heightStr) return '';
-
-    //     // Remove any whitespace
-    //     const cleanHeight = heightStr.trim();
-
-    //     // Check if it's already in cm
-    //     if (cleanHeight.toLowerCase().includes('cm')) {
-    //         return cleanHeight.replace(/[^\d.]/g, '');
-    //     }
-
-    //     // Match feet and inches format (e.g., "5'8", "5'8"", "5 ft 8 in")
-    //     const feetInchesMatch = cleanHeight.match(/(\d+)['′]?\s*(\d+)["″]?/);
-    //     if (feetInchesMatch) {
-    //         const feet = parseInt(feetInchesMatch[1], 10);
-    //         const inches = parseInt(feetInchesMatch[2], 10);
-    //         const totalInches = feet * 12 + inches;
-    //         return (totalInches * 2.54).toFixed(0);
-    //     }
-
-    //     // Match feet only format (e.g., "5'", "5 ft")
-    //     const feetOnlyMatch = cleanHeight.match(/(\d+)['′]?\s*(ft|feet)?$/i);
-    //     if (feetOnlyMatch) {
-    //         const feet = parseInt(feetOnlyMatch[1], 10);
-    //         const totalInches = feet * 12;
-    //         return (totalInches * 2.54).toFixed(0);
-    //     }
-
-    //     // Check if it's just inches (numeric value)
-    //     const numericValue = parseFloat(cleanHeight);
-    //     if (!isNaN(numericValue)) {
-    //         // Assume it's inches if it's a reasonable height value (24-96 inches)
-    //         if (numericValue >= 24 && numericValue <= 96) {
-    //             return (numericValue * 2.54).toFixed(0);
-    //         }
-    //         // If it's a small number, assume it's already in feet (convert to inches first)
-    //         if (numericValue >= 3 && numericValue <= 8) {
-    //             return (numericValue * 12 * 2.54).toFixed(0);
-    //         }
-    //     }
-
-    //     return '';
-    // };
 
     const accordionData = [
         {
@@ -748,6 +666,34 @@ export default function PatientBasicDetail() {
                         </Accordion.Item>
                     ))}
                 </Accordion>
+                
+ <div className="row mb-5">
+                <div className="">
+                    <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
+                    <ContentContainer className="shadow-sm border-0 mb-4">
+                        <Card.Body>
+                            <strong className=" d-block mb-2 heading-patient">Consultation Review *</strong>
+                            <p className=" border rounded p-3 Patient-review">
+                                Patient presented for an IVF consultation due to [reason, e.g., infertility, recurrent pregnancy loss].
+                                History reviewed, including obstetric, menstrual, and medical background, along with partner’s fertility evaluation.
+                                Recommended investigations include a hormonal panel, ultrasound, and genetic screening if needed.
+                                The IVF process, success rates, potential risks, and next steps were discussed.
+                                Patient was advised on pre-treatment preparation, and a follow-up was scheduled.
+                            </p>
+
+                            <div className="d-flex justify-content-end mt-3">
+                                <Button className="edit-profile-btn d-flex align-items-center">
+                                    <span className="me-2">
+                                        {/* <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} /> */}
+                                    </span>
+                                   Save Review
+                                </Button>
+                            </div>
+                        </Card.Body>
+                    </ContentContainer>
+                </div>
+            </div>
+
                 <Modal
                     show={showPhisicalAssessment}
                     onHide={() => { setShowPhisicalAssessment(false); setEditPhysicalAssessment(initialFormData) }}
