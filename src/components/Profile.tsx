@@ -78,8 +78,7 @@ const Profile = () => {
 
 
     const [user, setUser] = useState<DoctorDataType | null>(null)
-    console.log("State", user);
-
+    
     useEffect(() => {
         getLoggedInUser()
             .then((response) => {

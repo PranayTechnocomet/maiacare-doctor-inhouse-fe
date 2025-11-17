@@ -16,7 +16,7 @@ import { InputFieldGroup } from '../ui/InputField';
 import Button from '../ui/Button';
 import toast from 'react-hot-toast';
 import { InputSelect } from '../ui/InputSelect';
-import { addQualification, getLoggedInUser } from '@/utils/apis/apiHelper';
+import { addQualification, deleteQualification, editQualification, getLoggedInUser } from '@/utils/apis/apiHelper';
 
 
 const ProfileBasicDetails = () => {
@@ -104,9 +104,24 @@ const ProfileBasicDetails = () => {
   // ];
   const [documents, setDocuments] = useState<{ name: string; date: string }[]>([]);
 
-  const handleDelete = (index: number) => {
-    const updated = defaultQualifications.filter((_, i) => i !== index);
-    setDefaultQualifications(updated);
+  const handleDelete = (id: string) => {
+    // const updated = defaultQualifications.filter((_, i) => i !== index);
+    // setDefaultQualifications(updated);
+
+    deleteQualification(id)
+      .then((response) => {
+
+        if (response.status == 200) {
+          console.log("Response from delete qualifications");
+          getUser()
+        } else {
+          console.log("Error");
+        }
+
+      })
+      .catch((err) => {
+        console.log("Qualification adding error", err);
+      });
   };
 
   const handleDownload = (url: string, name: string) => {
@@ -239,54 +254,46 @@ const ProfileBasicDetails = () => {
       console.log("Form submitted ✅", { formData, qualifications });
 
       // 🔹 Success → close modal + reset data
-      // const passData = {
-      //   qualifications: qualifications.map(q => ({
-      //     degree: q.degree,
-      //     fieldOfStudy: q.fieldOfStudy,
-      //     university: q.university,
-      //     startYear: q.startYear,
-      //     endYear: q.endYear
-      //   }))
-      // };
-      for (const q of qualifications) {
-        const passData = {
-          degree: q.degree,
-          fieldOfStudy: q.fieldOfStudy,
-          university: q.university,
-          startYear: Number(q.startYear),
-          endYear: Number(q.endYear),
-        };
-
-        console.log("Send data:", passData);
 
 
-        addQualification(passData)
-          .then((response) => {
 
-            if (response.status == 200) {
-              console.log("Qualification Added: ", response.data);
-              setShowModal(false);
-              setFormData(initialFormData);
-              setFormError(initialFormError);
-              setFormErrors([]);
-              setQualifications([{ ...initialFormData }]);
-              toast.success("Data saved successfully!", {
-                position: "top-right",
-                // autoClose: 3000,
-              });
-            } else {
-              console.log("Error");
-            }
+      const passData = qualifications.map((q) => ({
+        degree: q.degree,
+        fieldOfStudy: q.fieldOfStudy,
+        university: q.university,
+        startYear: Number(q.startYear),
+        endYear: Number(q.endYear),
+      }));
 
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      console.log("Send data:", passData);
+
+
+      addQualification(passData)
+        .then((response) => {
+
+          if (response.status == 200) {
+            console.log("Qualification Added: ", response.data);
+            setShowModal(false);
+            setFormData(initialFormData);
+            setFormError(initialFormError);
+            setFormErrors([]);
+            setQualifications([{ ...initialFormData }]);
+            toast.success("Data saved successfully!", {
+              position: "top-right",
+              // autoClose: 3000,
+            });
+          } else {
+            console.log("Error");
+          }
+
+        })
+        .catch((err) => {
+          console.log("Qualification adding error", err);
+        });
 
     }
     else {
-      console.log("Form has errors ⚠️", { errors, qualErrors });
+      console.log("Form has errors : ", { errors, qualErrors });
     }
 
 
@@ -323,32 +330,48 @@ const ProfileBasicDetails = () => {
     if (!data.degree.trim()) errors.degree = "Degree is required";
     if (!data.fieldOfStudy.trim()) errors.fieldOfStudy = "fieldOfStudy is required";
     if (!data.university.trim()) errors.university = "University is required";
-    if (!data.startYear.trim()) errors.startYear = "Start year is required";
-    if (!data.endYear.trim()) errors.endYear = "End year is required";
+    if (!data.startYear) errors.startYear = "Start year is required";
+    if (!data.endYear) errors.endYear = "End year is required";
 
     return errors;
   };
 
 
-  const handleEditSave = () => {
+  const handleEditSave = (id:string) => {
     const errors = EditValidtation(formData);
     setFormError(errors);
 
     if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
 
-    if (editIndex !== null) {
-      const updated = [...defaultQualifications];
-      updated[editIndex] = {
-        title: `${formData.degree} - ${formData.fieldOfStudy}`,
-        university: formData.university,
-        years: `${formData.startYear} - ${formData.endYear}`,
-        degree: formData.degree,
-        fieldOfStudy: formData.fieldOfStudy,
-        startYear: formData.startYear,
-        endYear: formData.endYear
-      };
-      setDefaultQualifications(updated);
-    }
+    // if (editIndex !== null) {
+    //   const updated = [...defaultQualifications];
+    //   updated[editIndex] = {
+    //     title: `${formData.degree} - ${formData.fieldOfStudy}`,
+    //     university: formData.university,
+    //     years: `${formData.startYear} - ${formData.endYear}`,
+    //     degree: formData.degree,
+    //     fieldOfStudy: formData.fieldOfStudy,
+    //     startYear: formData.startYear,
+    //     endYear: formData.endYear
+    //   };
+    //   setDefaultQualifications(updated);
+    // }
+    console.log("formData", formData);
+    
+    editQualification(formData, id)
+      .then((response) => {
+
+        if (response.status == 200) {
+          console.log("Qualification Edited : ", response.data);
+          getUser()
+        } else {
+          console.log("Error");
+        }
+
+      })
+      .catch((err) => {
+        console.log("Qualification adding error", err);
+      });
 
     console.log("Form updated:", formData);
 
@@ -405,14 +428,11 @@ const ProfileBasicDetails = () => {
 
 
   const [user, setUser] = useState<DoctorDataType | null>(null)
-  console.log("State", user);
-
-  useEffect(() => {
+  const getUser = () => {
     getLoggedInUser()
       .then((response) => {
 
         if (response.status == 200) {
-          console.log("Profile fetched", response.data);
           setUser(response.data.data)
           setDocuments(response.data.data.documents)
           setDefaultQualifications(response.data.data.qualifications)
@@ -424,9 +444,10 @@ const ProfileBasicDetails = () => {
       .catch((err) => {
         console.log(err);
       });
+  }
 
-
-
+  useEffect(() => {
+    getUser()
   }, [])
 
 
@@ -785,7 +806,7 @@ const ProfileBasicDetails = () => {
 
 
                           {/* Save Button */}
-                          <Button onClick={handleEditSave} className="maiacare-button mt-4">
+                          <Button onClick={()=>handleEditSave(item._id)} className="maiacare-button mt-4">
                             Save
                           </Button>
 
@@ -799,7 +820,7 @@ const ProfileBasicDetails = () => {
 
 
                       <Button className="border p-2 rounded-2 edit-del-btn  bg-transparent"
-                        onClick={() => handleDelete(idx)} variant='outline' //click par delete
+                        onClick={() => handleDelete(item._id)} variant='outline' //click par delete
                       >
                         <Image src={Delete} alt="Specialization" width={18} height={18} />
                       </Button>

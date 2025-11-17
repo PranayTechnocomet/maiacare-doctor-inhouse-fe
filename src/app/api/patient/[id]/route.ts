@@ -1,15 +1,12 @@
-// app/api/auth/login/route.ts
 import { NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { handleApiError } from "@/utils/apis/errorHandler";
-import { parseRequestBody } from "@/utils/apis/requestHandler";
 
-export async function POST(req: Request) {
-  const API_BASE_URL = "/profile/qualifications/add";
-  const body = await parseRequestBody(req);
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+  const { id } = params;
 
   try {
-    const response = await apiServer.post(API_BASE_URL, body);
+    const response = await apiServer.get(`/patient/${id}`);
 
     return new NextResponse(JSON.stringify(response.data), {
       headers: { "Content-Type": "application/json" },

@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function GET(req: Request) {
-  const API_BASE_URL = "/profile//getAll";
+export async function GET() {
+  const API_BASE_URL = "/patient/getAll";
 
   try {
     const response = await apiServer.get(API_BASE_URL);
