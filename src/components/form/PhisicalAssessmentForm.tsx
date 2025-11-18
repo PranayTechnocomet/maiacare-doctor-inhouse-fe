@@ -19,6 +19,7 @@ interface PropsPhisicalAssessmentForm {
     editPhysicalAssessment?: PhysicalAssessmentDataModel,
     setEditPhysicalAssessment?: React.Dispatch<React.SetStateAction<PhysicalAssessmentDataModel>>,
     modalFormPhisicalData?: PhysicalAssessmentDataModel[],
+    handleSavePhysicalAssessment?: (data: PhysicalAssessmentDataModel) => void;
 }
 
 // React.Dispatch<React.SetStateAction<PhysicalAssessmentDataModel>>  PhysicalAssessmentDataModel
@@ -28,8 +29,8 @@ const PhisicalAssessmentForm = ({
     setModalFormPhisicalData,
     editPhysicalAssessment,
     setEditPhysicalAssessment,
-    modalFormPhisicalData
-
+    modalFormPhisicalData,
+  handleSavePhysicalAssessment   // ⭐ add this
 }: PropsPhisicalAssessmentForm) => {
 
     type FormError = Partial<Record<keyof PhysicalAssessmentDataModel, string>>;
@@ -133,16 +134,20 @@ const PhisicalAssessmentForm = ({
                     icon: <BsInfoCircle size={22} color="white" />,
                 });
 
-            } else {
-                setModalFormPhisicalData((prev) => [...prev, updatedFormData]);
-                setShowPhisicalAssessment(false);
-                setFormError(initialFormError);
-                setFormData(initialFormData);
-                toast.success('Physical assessment added successfully', {
-                    icon: <BsInfoCircle size={22} color="white" />,
-                });
+           } else {
+    setModalFormPhisicalData((prev) => [...prev, updatedFormData]);
 
-            }
+    // ⭐ CALL API HERE
+    handleSavePhysicalAssessment?.(updatedFormData);
+
+    setShowPhisicalAssessment(false);
+    setFormError(initialFormError);
+    setFormData(initialFormData);
+    toast.success('Physical assessment added successfully', {
+        icon: <BsInfoCircle size={22} color="white" />,
+    });
+}
+
 
         }
     };

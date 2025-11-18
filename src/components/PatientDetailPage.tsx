@@ -12,7 +12,7 @@ import PartnerDetail from './PartnerDetail';
 import { getOne } from "@/utils/apis/apiHelper";
 import { useParams } from "next/navigation";
 
-export default function PatientDetailPageComponent({ onPatientLoaded }: any) {
+export default function PatientDetailPageComponent({ onPatientLoaded ,}: any) {
 
     const [activeTab, setActiveTab] = useState<string>("basic");
     const params = useParams();
@@ -48,7 +48,7 @@ export default function PatientDetailPageComponent({ onPatientLoaded }: any) {
             label: "Basic Details",
             content: (
                 <>
-                    <PatientBasicDetail />
+                    <PatientBasicDetail patientId={id}  patient={patient} />
                 </>
             ),
         },

@@ -1,7 +1,7 @@
 "use client"
 
 import { FertilityAssessmentFormType, MedicalHistoryType, PhysicalAssessmentDataModel } from "@/utils/types/interfaces";
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import Button from "./ui/Button";
 import {  Card } from "react-bootstrap";
 import { Accordion, Col, Row } from "react-bootstrap";
@@ -11,8 +11,9 @@ import { FertilityAssessmentForm } from './form/FertilityAssessmentForm';
 import MedicalHistory from './form/MedicalHistory';
 import "@/style/PatientBasicDetail.css"
 import ContentContainer from "@/components/ui/ContentContainer";
-
-export default function PatientBasicDetail() {
+import { addphysicalassessment } from "@/utils/apis/apiHelper";
+import { useParams } from "next/navigation";
+export default function PatientBasicDetail({ patient, patientId }: any) {
 
     const [activeAccordion, setActiveAccordion] = useState<string[]>(['0', '1', '2']);
     const [showPhisicalAssessment, setShowPhisicalAssessment] = useState<boolean>(false);
@@ -25,6 +26,59 @@ export default function PatientBasicDetail() {
 
     const [modalFormPhisicalData, setModalFormPhisicalData] = useState<PhysicalAssessmentDataModel[]>([]);
     const [modalFormFertilityData, setModalFormFertilityData] = useState<FertilityAssessmentFormType | any>([]);
+
+  const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
+
+        if (!patientId) {
+            alert("❌ Patient ID missing!");
+            return;
+        }
+
+        const payload = {
+            ...data,
+            patientId,
+            height: convertHeightToCm(data.height),
+            bloodPressureSystolic: data.systolic,
+            bloodPressureDiastolic: data.diastolic
+        };
+
+        try {
+            const res = await addphysicalassessment(payload);
+            console.log("Saved:", res.data);
+
+            // Update UI
+            setModalFormPhisicalData((prev) => [...prev, payload]);
+
+            setShowPhisicalAssessment(false);
+        } catch (e) {
+            console.error("API error:", e);
+        }
+    };
+
+useEffect(() => {
+    if (!patient) return;
+
+    // 1️⃣ Physical Assessment
+if (Array.isArray(patient.physicalAssesment)) {
+    const mapped = patient.physicalAssesment.map((item: any) => ({
+        ...item,
+        systolic: item?.bloodPressure?.systolic  ,
+        diastolic: item?.bloodPressure?.diastolic ,
+    }));
+
+    setModalFormPhisicalData(mapped);
+}
+
+    // 2️⃣ Fertility Assessment
+    if (patient.fertilityassessment) {
+        setModalFormFertilityData(patient.fertilityassessment);
+    }
+
+    // 3️⃣ Medical History
+    if (patient.medicalhistories) {
+        setMedicalHistoryFormData(patient.medicalhistories);
+    }
+}, [patient]);
 
 
     const [editFertilityAssessment, setEditFertilityAssessment] = useState<FertilityAssessmentFormType>({
@@ -52,49 +106,50 @@ export default function PatientBasicDetail() {
     };
     const [editPhysicalAssessment, setEditPhysicalAssessment] = useState<PhysicalAssessmentDataModel>(initialFormData);
 
-    const convertHeightToCm = (heightStr: string): string => {
-        if (!heightStr) return '';
+ const convertHeightToCm = (heightStr: any): string => {
+    if (!heightStr) return '';
 
-        // Remove any whitespace
-        const cleanHeight = heightStr.trim();
+    // Force into string safely
+    const cleanHeight = String(heightStr).trim();
 
-        // Check if it's already in cm
-        if (cleanHeight.toLowerCase().includes('cm')) {
-            return cleanHeight.replace(/[^\d.]/g, '');
+    // Check if it's already in cm
+    if (cleanHeight.toLowerCase().includes('cm')) {
+        return cleanHeight.replace(/[^\d.]/g, '');
+    }
+
+    // Match feet and inches format (e.g., "5'8", "5'8\"", "5 ft 8 in")
+    const feetInchesMatch = cleanHeight.match(/(\d+)['′]?\s*(\d+)["″]?/);
+    if (feetInchesMatch) {
+        const feet = parseInt(feetInchesMatch[1], 10);
+        const inches = parseInt(feetInchesMatch[2], 10);
+        const totalInches = feet * 12 + inches;
+        return (totalInches * 2.54).toFixed(0);
+    }
+
+    // Match feet only format (e.g., "5'", "5 ft")
+    const feetOnlyMatch = cleanHeight.match(/(\d+)['′]?\s*(ft|feet)?$/i);
+    if (feetOnlyMatch) {
+        const feet = parseInt(feetOnlyMatch[1], 10);
+        const totalInches = feet * 12;
+        return (totalInches * 2.54).toFixed(0);
+    }
+
+    // Numeric inputs (could be inches or feet)
+    const numericValue = parseFloat(cleanHeight);
+    if (!isNaN(numericValue)) {
+        // Assume inches if in typical height range
+        if (numericValue >= 24 && numericValue <= 96) {
+            return (numericValue * 2.54).toFixed(0);
         }
-
-        // Match feet and inches format (e.g., "5'8", "5'8"", "5 ft 8 in")
-        const feetInchesMatch = cleanHeight.match(/(\d+)['′]?\s*(\d+)["″]?/);
-        if (feetInchesMatch) {
-            const feet = parseInt(feetInchesMatch[1], 10);
-            const inches = parseInt(feetInchesMatch[2], 10);
-            const totalInches = feet * 12 + inches;
-            return (totalInches * 2.54).toFixed(0);
+        // Assume feet if between 3 and 8
+        if (numericValue >= 3 && numericValue <= 8) {
+            return (numericValue * 12 * 2.54).toFixed(0);
         }
+    }
 
-        // Match feet only format (e.g., "5'", "5 ft")
-        const feetOnlyMatch = cleanHeight.match(/(\d+)['′]?\s*(ft|feet)?$/i);
-        if (feetOnlyMatch) {
-            const feet = parseInt(feetOnlyMatch[1], 10);
-            const totalInches = feet * 12;
-            return (totalInches * 2.54).toFixed(0);
-        }
+    return '';
+};
 
-        // Check if it's just inches (numeric value)
-        const numericValue = parseFloat(cleanHeight);
-        if (!isNaN(numericValue)) {
-            // Assume it's inches if it's a reasonable height value (24-96 inches)
-            if (numericValue >= 24 && numericValue <= 96) {
-                return (numericValue * 2.54).toFixed(0);
-            }
-            // If it's a small number, assume it's already in feet (convert to inches first)
-            if (numericValue >= 3 && numericValue <= 8) {
-                return (numericValue * 12 * 2.54).toFixed(0);
-            }
-        }
-
-        return '';
-    };
 
     const accordionData = [
         {
@@ -714,6 +769,7 @@ export default function PatientBasicDetail() {
                             editPhysicalAssessment={editPhysicalAssessment}
                             setEditPhysicalAssessment={setEditPhysicalAssessment}
                             modalFormPhisicalData={modalFormPhisicalData}
+                            handleSavePhysicalAssessment={handleSavePhysicalAssessment} // ⭐ ADDED
                         />
                     </div>
                 </Modal>

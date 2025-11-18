@@ -127,14 +127,16 @@ export const patientDelete = (id: string) => {
 
 
 
-export const addphysicalassessment = () => {
+export const addphysicalassessment = (data: any) => {
   const token = localStorage.getItem("token");
-  return apiClient.post("/patient/physical-assessment", {
+
+  return apiClient.post("/patient/physical-assessment", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
   });
-}
+};
+
 
 
 export const getphysicalassessment = () => {
@@ -146,14 +148,16 @@ export const getphysicalassessment = () => {
   });
 }
 
-export const updatephysicalassessment = () => {
+export const updatephysicalassessment = (data: any) => {
   const token = localStorage.getItem("token");
-  return apiClient.put("/patient/physical-assessment", {
+
+  return apiClient.put("/patient/physical-assessment", data, {
     headers: {
       Authorization: `Bearer ${token}`,
-    }
+    },
   });
-}
+};
+
 
 export const addfertilityassessment = () => {
   const token = localStorage.getItem("token");
@@ -236,9 +240,9 @@ export const addPartnerMedicalHistory = (data: { patientId: string | undefined; 
   });
 }
 
-export const addPartnerPhysicalAssesment = (data) => {
+export const addPartnerPhysicalAssesment = () => {
   const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/physicalAssessment",data, {
+  return apiClient.post("/patient/partner/physicalAssessment", {
     headers: {
       Authorization: `Bearer ${token}`,
     }
