@@ -107,12 +107,13 @@ const ProfileBasicDetails = () => {
   const handleDelete = (id: string) => {
     // const updated = defaultQualifications.filter((_, i) => i !== index);
     // setDefaultQualifications(updated);
-
+    console.log("ID: ", id);
+    
     deleteQualification(id)
       .then((response) => {
 
         if (response.status == 200) {
-          console.log("Response from delete qualifications");
+          console.log("qualifications deleted");
           getUser()
         } else {
           console.log("Error");
@@ -120,7 +121,7 @@ const ProfileBasicDetails = () => {
 
       })
       .catch((err) => {
-        console.log("Qualification adding error", err);
+        console.log("Qualification deleting error", err);
       });
   };
 
@@ -278,6 +279,7 @@ const ProfileBasicDetails = () => {
             setFormError(initialFormError);
             setFormErrors([]);
             setQualifications([{ ...initialFormData }]);
+            getUser()
             toast.success("Data saved successfully!", {
               position: "top-right",
               // autoClose: 3000,
