@@ -56,6 +56,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         systolic: "",
         diastolic: "",
         heartRate: "",
+         date: ""
 
     };
     const initialFormDataEditFertilityAssessment: EditFertilityAssessment = {

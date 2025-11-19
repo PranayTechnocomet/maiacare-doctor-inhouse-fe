@@ -27,27 +27,85 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
     const [modalFormPhisicalData, setModalFormPhisicalData] = useState<PhysicalAssessmentDataModel[]>([]);
     const [modalFormFertilityData, setModalFormFertilityData] = useState<FertilityAssessmentFormType | any>([]);
 
-  const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
+//   const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
+
+//         if (!patientId) {
+//             alert("❌ Patient ID missing!");
+//             return;
+//         }
+
+//         const payload = {
+//             ...data,
+//             patientId,
+//             height: convertHeightToCm(data.height),
+//             bloodPressureSystolic: data.systolic,
+//             bloodPressureDiastolic: data.diastolic
+//         };
+
+//         try {
+//             const res = await addphysicalassessment(payload);
+//             console.log("Saved:", res.data);
+
+//             // Update UI
+//             setModalFormPhisicalData((prev) => [...prev, payload]);
+
+//             setShowPhisicalAssessment(false);
+//         } catch (e) {
+//             console.error("API error:", e);
+//         }
+//     };
+
+// useEffect(() => {
+//     if (!patient) return;
+
+//     // 1️⃣ Physical Assessment
+// if (Array.isArray(patient.physicalAssesment)) {
+//     const mapped = patient.physicalAssesment.map((item: any) => ({
+//         ...item,
+//         systolic: item?.bloodPressure?.systolic  ,
+//         diastolic: item?.bloodPressure?.diastolic ,
+//     }));
+
+//     setModalFormPhisicalData(mapped);
+// }
+
+//     // 2️⃣ Fertility Assessment
+//     if (patient.fertilityassessment) {
+//         setModalFormFertilityData(patient.fertilityassessment);
+//     }
+
+//     // 3️⃣ Medical History
+//     if (patient.medicalhistories) {
+//         setMedicalHistoryFormData(patient.medicalhistories);
+//     }
+// }, [patient]);
+
+const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
 
         if (!patientId) {
             alert("❌ Patient ID missing!");
             return;
         }
 
+        const today = new Date().toISOString().split("T")[0];
+
         const payload = {
             ...data,
             patientId,
             height: convertHeightToCm(data.height),
+            bloodGroup: data.bloodGroup || "Unknown",     // ⭐ FIXED HERE
             bloodPressureSystolic: data.systolic,
-            bloodPressureDiastolic: data.diastolic
+            bloodPressureDiastolic: data.diastolic,
+            date: data.date || today
         };
+
 
         try {
             const res = await addphysicalassessment(payload);
             console.log("Saved:", res.data);
 
-            // Update UI
-            setModalFormPhisicalData((prev) => [...prev, payload]);
+            // ⭐ USE API RESPONSE (it contains correct date)
+            setModalFormPhisicalData((prev) => [...prev, res.data]);
 
             setShowPhisicalAssessment(false);
         } catch (e) {
@@ -55,32 +113,39 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
         }
     };
 
-useEffect(() => {
-    if (!patient) return;
+    useEffect(() => {
+        if (!patient) return;
 
-    // 1️⃣ Physical Assessment
-if (Array.isArray(patient.physicalAssesment)) {
-    const mapped = patient.physicalAssesment.map((item: any) => ({
-        ...item,
-        systolic: item?.bloodPressure?.systolic  ,
-        diastolic: item?.bloodPressure?.diastolic ,
-    }));
+        // 1️⃣ Physical Assessment
+        if (Array.isArray(patient.physicalAssesment)) {
 
-    setModalFormPhisicalData(mapped);
-}
+            const mapped = patient.physicalAssesment.map((item: any) => ({
+                ...item,
+                systolic: item?.bloodPressure?.systolic || "",
+                diastolic: item?.bloodPressure?.diastolic || "",
 
-    // 2️⃣ Fertility Assessment
-    if (patient.fertilityassessment) {
-        setModalFormFertilityData(patient.fertilityassessment);
-    }
+                // ⭐ Date Formatting (converted from ISO → readable)
+                date: new Date(item.createdAt).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                }),
+            }));
 
-    // 3️⃣ Medical History
-    if (patient.medicalhistories) {
-        setMedicalHistoryFormData(patient.medicalhistories);
-    }
-}, [patient]);
+            setModalFormPhisicalData(mapped);
+        }
 
+        // 2️⃣ Fertility Assessment
+        if (patient.fertilityassessment) {
+            setModalFormFertilityData(patient.fertilityassessment);
+        }
 
+        // 3️⃣ Medical History
+        if (patient.medicalhistories) {
+            setMedicalHistoryFormData(patient.medicalhistories);
+        }
+    }, [patient]);
     const [editFertilityAssessment, setEditFertilityAssessment] = useState<FertilityAssessmentFormType>({
         ageAtFirstMenstruation: "",
         cycleLength: "",
@@ -101,7 +166,8 @@ if (Array.isArray(patient.physicalAssesment)) {
         bloodGroup: "",
         systolic: "",
         diastolic: "",
-        heartRate: ""
+        heartRate: "",
+           date:"",
 
     };
     const [editPhysicalAssessment, setEditPhysicalAssessment] = useState<PhysicalAssessmentDataModel>(initialFormData);

@@ -44,6 +44,7 @@ const PhisicalAssessmentForm = ({
         systolic: editPhysicalAssessment?.systolic || "",
         diastolic: editPhysicalAssessment?.diastolic || "",
         heartRate: editPhysicalAssessment?.heartRate || "",
+          date: editPhysicalAssessment?.heartRate || "",
     };
     const initialFormDataForClear: PhysicalAssessmentDataModel = {
         id: "",
@@ -53,7 +54,8 @@ const PhisicalAssessmentForm = ({
         bloodGroup: "",
         systolic: "",
         diastolic: "",
-        heartRate: ""
+        heartRate: "",
+           date:"",
     };
     const [formData, setFormData] = useState<PhysicalAssessmentDataModel>(initialFormData);
     const [formError, setFormError] = useState<FormError>(initialFormError);
@@ -100,57 +102,63 @@ const PhisicalAssessmentForm = ({
     };
 
     // Submit Handler
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const errors = validateForm(formData);
-        setFormError(errors);
-        console.log("errors", errors);
+const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errors = validateForm(formData);
+    setFormError(errors);
 
-        if (Object.keys(errors).length === 0) {
+    if (Object.keys(errors).length === 0) {
 
-            const formattedDate = new Date().toLocaleDateString('en-GB', {
-                weekday: 'short',
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric'
-            }).replace(/^(\w+)/, '$1'); // Adds comma after weekday
+        const formattedDate = new Date().toLocaleDateString('en-GB', {
+            weekday: 'short',
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }).replace(/^(\w+)/, '$1');
 
-            const updatedFormData = {
-                ...formData,
-                date: formattedDate,
-                id: generateRandomId(),
-            };
+        const updatedFormData = {
+            ...formData,
+            date: formattedDate,
+            id: editPhysicalAssessment?.id || generateRandomId(),
+        };
 
-            if (editPhysicalAssessment && editPhysicalAssessment.id) {
-                setModalFormPhisicalData((prev) =>
-                    prev.map((item) =>
-                        item.id === editPhysicalAssessment.id ? { ...item, ...formData } : item
-                    )
-                );
-                setShowPhisicalAssessment(false);
-                setFormError(initialFormError);
-                setEditPhysicalAssessment?.(initialFormDataForClear);
-                toast.success('Changes saved successfully', {
-                    icon: <BsInfoCircle size={22} color="white" />,
-                });
+        // ⭐ EDIT MODE
+        if (editPhysicalAssessment && editPhysicalAssessment.id) {
 
-           } else {
-    setModalFormPhisicalData((prev) => [...prev, updatedFormData]);
+            setModalFormPhisicalData(prev =>
+                prev.map(item =>
+                    item.id === editPhysicalAssessment.id
+                        ? { ...item, ...updatedFormData }
+                        : item
+                )
+            );
 
-    // ⭐ CALL API HERE
-    handleSavePhysicalAssessment?.(updatedFormData);
+            setEditPhysicalAssessment?.(initialFormDataForClear);
+            setShowPhisicalAssessment(false);
+            setFormError(initialFormError);
 
-    setShowPhisicalAssessment(false);
-    setFormError(initialFormError);
-    setFormData(initialFormData);
-    toast.success('Physical assessment added successfully', {
-        icon: <BsInfoCircle size={22} color="white" />,
-    });
-}
+            toast.success("Changes saved successfully", {
+                icon: <BsInfoCircle size={22} color="white" />
+            });
 
+        } else {
+            // ⭐ ADD MODE
+            setModalFormPhisicalData(prev => [...prev, updatedFormData]);
 
+            // API callback
+            handleSavePhysicalAssessment?.(updatedFormData);
+
+            setShowPhisicalAssessment(false);
+            setFormError(initialFormError);
+            setFormData(initialFormDataForClear);
+
+            toast.success("Physical assessment added successfully", {
+                icon: <BsInfoCircle size={22} color="white" />
+            });
         }
-    };
+    }
+};
+
 
     return (
         <>
