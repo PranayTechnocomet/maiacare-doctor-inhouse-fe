@@ -1,3 +1,4 @@
+import { FertilityAssessmentType } from "../types/interfaces";
 import { LoginRequest } from "../types/requestInterface";
 import apiClient from "./axiosInstance";
 import api from "./axiosInstance";
@@ -240,9 +241,18 @@ export const addPartnerMedicalHistory = (data: { patientId: string | undefined; 
   });
 }
 
-export const addPartnerPhysicalAssesment = () => {
+export const addPartnerPhysicalAssesment = (data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; }) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/partner/physicalAssessment", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+}
+
+export const addPartnerfertilityAssessment = (data: { patientId: string | undefined; semenAnalysis: { status: string; semenAnalysisDetails: string; }; fertilityIssues: { status: string; fertilityIssuesDetails: string; }; fertilityTreatments: { status: string; fertilityTreatmentsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; }) => {
+  const token = localStorage.getItem("token");
+  return apiClient.post("/patient/partner/fertilityAssessment",data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }

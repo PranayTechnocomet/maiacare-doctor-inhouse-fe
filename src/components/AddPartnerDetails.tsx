@@ -9,6 +9,8 @@ import Button from "./ui/Button";
 import { FertilityAssessmentType } from "@/utils/types/interfaces";
 import toast from "react-hot-toast";
 import { BsInfoCircle } from "react-icons/bs";
+import { addPartnerfertilityAssessment, addPartnerPhysicalAssesment } from "@/utils/apis/apiHelper";
+import { useParams } from "next/navigation";
 
 interface AddPartnerDetailsProps {
     setAddPartner: (value: boolean) => void;
@@ -49,7 +51,7 @@ export function AddPartnerDetails({
                 </div>
             ),
         },
-        
+
         {
             key: "medical history",
             label: "Medical History",
@@ -151,29 +153,79 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
         return errors;
     };
 
+    const params = useParams();
+    const id = params?.id?.toString();
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        
+
         e.preventDefault();
         const errors = validateForm(formData);
         console.log("Form submitted", formData);
         setFormError(errors);
 
-        if (Object.keys(errors).length === 0) {
-            // Handle form submission
-            setFormError(initialFormError);
-            setAddPartner(false);
-            setShowPartnerDetail(false);
-            setShowContent(true);
-
-            setShowData((prev: any) => ({ ...prev, PhysicalAssessmentData: [...prev.PhysicalAssessmentData, formData] }));
-            setShowData((prev: any) => ({ ...prev, fertilityAssessment: { ...prev.fertilityAssessment, ...formData } }));
-
-            toast.success('Partner added successfully', {
-                icon: <BsInfoCircle size={22} color="white" />,
-            });
+        // Handle form submission
+        const passData = {
+            patientId: id,
+            height: formData.height,
+            weight: formData.weight,
+            bmi: formData.bmi,
+            bloodGroup: formData.bloodGroup,
+            bloodPressureSystolic: formData.systolic,
+            bloodPressureDiastolic: formData.diastolic,
+            heartRate: formData.heartRate
         }
-        // setShowData((prev: any) => ({ ...prev, PhysicalAssessmentData: [...prev.PhysicalAssessmentData, formData] }));
-        // setShowData((prev: any) => ({ ...prev, fertilityAssessment: { ...prev.fertilityAssessment, ...formData } }));
+        addPartnerPhysicalAssesment(passData)
+            .then(() => {
+                setFormError(initialFormError);
+                setAddPartner(false);
+                setShowPartnerDetail(false);
+                setShowContent(true);
+
+                // setShowData((prev: any) => ({ ...prev, PhysicalAssessmentData: [...prev.PhysicalAssessmentData, formData] }));
+                // setShowData((prev: any) => ({ ...prev, fertilityAssessment: { ...prev.fertilityAssessment, ...formData } }));
+
+                toast.success('Partner added successfully', {
+                    icon: <BsInfoCircle size={22} color="white" />,
+                });
+            })
+            .catch((err) => {
+                console.log("PartnerPhysicalAssesment: ", err);
+            });
+
+        const passFertilityAssessmentData = {
+            patientId: id,
+            semenAnalysis : {
+                status: formData.semenAnalysis.charAt(0).toUpperCase() + formData.semenAnalysis.slice(1),
+                semenAnalysisDetails: formData.semenAnalysisContent
+            },
+            fertilityIssues : {
+                status: formData.fertilityIssues.charAt(0).toUpperCase() + formData.fertilityIssues.slice(1),
+                fertilityIssuesDetails: formData.fertilityIssuesContent
+            },
+            fertilityTreatments : {
+                status: formData.fertilityTreatment.charAt(0).toUpperCase() + formData.fertilityTreatment.slice(1),
+                fertilityTreatmentsDetails: formData.fertilityTreatmentContent
+            },
+            surgeries : {
+                status: formData.surgeries.charAt(0).toUpperCase() + formData.surgeries.slice(1),
+                surgeriesDetails: formData.surgeriesContent
+            }
+        }
+
+        addPartnerfertilityAssessment(passFertilityAssessmentData)
+            .then(() => {
+                setFormError(initialFormError);
+                setAddPartner(false);
+                setShowPartnerDetail(false);
+                setShowContent(true);
+
+                toast.success('Partner added successfully', {
+                    icon: <BsInfoCircle size={22} color="white" />,
+                });
+            })
+            .catch((err) => {
+                console.log("PartnerfertilityAssessment: ", err);
+            });
 
     };
     return (
