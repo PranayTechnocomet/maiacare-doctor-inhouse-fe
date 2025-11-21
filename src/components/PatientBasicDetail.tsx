@@ -1,9 +1,9 @@
 "use client"
 
 import { FertilityAssessmentFormType, MedicalHistoryType, PhysicalAssessmentDataModel } from "@/utils/types/interfaces";
-import { useState ,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "./ui/Button";
-import {  Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { Accordion, Col, Row } from "react-bootstrap";
 import Modal from './ui/Modal';
 import PhisicalAssessmentForm from './form/PhisicalAssessmentForm';
@@ -11,7 +11,7 @@ import { FertilityAssessmentForm } from './form/FertilityAssessmentForm';
 import MedicalHistory from './form/MedicalHistory';
 import "@/style/PatientBasicDetail.css"
 import ContentContainer from "@/components/ui/ContentContainer";
-import { addphysicalassessment } from "@/utils/apis/apiHelper";
+import { addphysicalassessment, addFertilityAssessment } from "@/utils/apis/apiHelper";
 import { useParams } from "next/navigation";
 export default function PatientBasicDetail({ patient, patientId }: any) {
 
@@ -27,60 +27,60 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
     const [modalFormPhisicalData, setModalFormPhisicalData] = useState<PhysicalAssessmentDataModel[]>([]);
     const [modalFormFertilityData, setModalFormFertilityData] = useState<FertilityAssessmentFormType | any>([]);
 
-//   const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
+    //   const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
 
-//         if (!patientId) {
-//             alert("❌ Patient ID missing!");
-//             return;
-//         }
+    //         if (!patientId) {
+    //             alert("❌ Patient ID missing!");
+    //             return;
+    //         }
 
-//         const payload = {
-//             ...data,
-//             patientId,
-//             height: convertHeightToCm(data.height),
-//             bloodPressureSystolic: data.systolic,
-//             bloodPressureDiastolic: data.diastolic
-//         };
+    //         const payload = {
+    //             ...data,
+    //             patientId,
+    //             height: convertHeightToCm(data.height),
+    //             bloodPressureSystolic: data.systolic,
+    //             bloodPressureDiastolic: data.diastolic
+    //         };
 
-//         try {
-//             const res = await addphysicalassessment(payload);
-//             console.log("Saved:", res.data);
+    //         try {
+    //             const res = await addphysicalassessment(payload);
+    //             console.log("Saved:", res.data);
 
-//             // Update UI
-//             setModalFormPhisicalData((prev) => [...prev, payload]);
+    //             // Update UI
+    //             setModalFormPhisicalData((prev) => [...prev, payload]);
 
-//             setShowPhisicalAssessment(false);
-//         } catch (e) {
-//             console.error("API error:", e);
-//         }
-//     };
+    //             setShowPhisicalAssessment(false);
+    //         } catch (e) {
+    //             console.error("API error:", e);
+    //         }
+    //     };
 
-// useEffect(() => {
-//     if (!patient) return;
+    // useEffect(() => {
+    //     if (!patient) return;
 
-//     // 1️⃣ Physical Assessment
-// if (Array.isArray(patient.physicalAssesment)) {
-//     const mapped = patient.physicalAssesment.map((item: any) => ({
-//         ...item,
-//         systolic: item?.bloodPressure?.systolic  ,
-//         diastolic: item?.bloodPressure?.diastolic ,
-//     }));
+    //     // 1️⃣ Physical Assessment
+    // if (Array.isArray(patient.physicalAssesment)) {
+    //     const mapped = patient.physicalAssesment.map((item: any) => ({
+    //         ...item,
+    //         systolic: item?.bloodPressure?.systolic  ,
+    //         diastolic: item?.bloodPressure?.diastolic ,
+    //     }));
 
-//     setModalFormPhisicalData(mapped);
-// }
+    //     setModalFormPhisicalData(mapped);
+    // }
 
-//     // 2️⃣ Fertility Assessment
-//     if (patient.fertilityassessment) {
-//         setModalFormFertilityData(patient.fertilityassessment);
-//     }
+    //     // 2️⃣ Fertility Assessment
+    //     if (patient.fertilityassessment) {
+    //         setModalFormFertilityData(patient.fertilityassessment);
+    //     }
 
-//     // 3️⃣ Medical History
-//     if (patient.medicalhistories) {
-//         setMedicalHistoryFormData(patient.medicalhistories);
-//     }
-// }, [patient]);
+    //     // 3️⃣ Medical History
+    //     if (patient.medicalhistories) {
+    //         setMedicalHistoryFormData(patient.medicalhistories);
+    //     }
+    // }, [patient]);
 
-const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
+    const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) => {
 
         if (!patientId) {
             alert("❌ Patient ID missing!");
@@ -108,6 +108,33 @@ const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) =
             setModalFormPhisicalData((prev) => [...prev, res.data]);
 
             setShowPhisicalAssessment(false);
+        } catch (e) {
+            console.error("API error:", e);
+        }
+    };
+    const handleSaveFertilityAssessment = async (data: FertilityAssessmentFormType) => {
+        if (!patientId) {
+            alert("❌ Patient ID missing!");
+            return;
+        }
+
+        const today = new Date().toISOString().split("T")[0];
+
+        const payload = {
+            ...data,
+            patientId,
+            lastPeriodDate: data.date || today,
+            menstrualIssues: data.menstrualIssues === "yes" ? "Yes" : "No",
+            pregnantBefore: data.pregnancy === "yes" ? "Yes" : "No",
+            miscarriageOrEctopicHistory: data.ectopicpregnancy === "yes" ? "Yes" : "No",
+            tryingToConceiveDuration: data.timeduration
+        };
+
+        try {
+            const res = await addFertilityAssessment(payload);
+            console.log("Fertility Assessment Saved:", res.data);
+            setModalFormFertilityData(res.data);
+            setShowFertilityAssessment(false);
         } catch (e) {
             console.error("API error:", e);
         }
@@ -167,54 +194,54 @@ const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) =
         systolic: "",
         diastolic: "",
         heartRate: "",
-           date:"",
+        date: "",
 
     };
     const [editPhysicalAssessment, setEditPhysicalAssessment] = useState<PhysicalAssessmentDataModel>(initialFormData);
 
- const convertHeightToCm = (heightStr: any): string => {
-    if (!heightStr) return '';
+    const convertHeightToCm = (heightStr: any): string => {
+        if (!heightStr) return '';
 
-    // Force into string safely
-    const cleanHeight = String(heightStr).trim();
+        // Force into string safely
+        const cleanHeight = String(heightStr).trim();
 
-    // Check if it's already in cm
-    if (cleanHeight.toLowerCase().includes('cm')) {
-        return cleanHeight.replace(/[^\d.]/g, '');
-    }
-
-    // Match feet and inches format (e.g., "5'8", "5'8\"", "5 ft 8 in")
-    const feetInchesMatch = cleanHeight.match(/(\d+)['′]?\s*(\d+)["″]?/);
-    if (feetInchesMatch) {
-        const feet = parseInt(feetInchesMatch[1], 10);
-        const inches = parseInt(feetInchesMatch[2], 10);
-        const totalInches = feet * 12 + inches;
-        return (totalInches * 2.54).toFixed(0);
-    }
-
-    // Match feet only format (e.g., "5'", "5 ft")
-    const feetOnlyMatch = cleanHeight.match(/(\d+)['′]?\s*(ft|feet)?$/i);
-    if (feetOnlyMatch) {
-        const feet = parseInt(feetOnlyMatch[1], 10);
-        const totalInches = feet * 12;
-        return (totalInches * 2.54).toFixed(0);
-    }
-
-    // Numeric inputs (could be inches or feet)
-    const numericValue = parseFloat(cleanHeight);
-    if (!isNaN(numericValue)) {
-        // Assume inches if in typical height range
-        if (numericValue >= 24 && numericValue <= 96) {
-            return (numericValue * 2.54).toFixed(0);
+        // Check if it's already in cm
+        if (cleanHeight.toLowerCase().includes('cm')) {
+            return cleanHeight.replace(/[^\d.]/g, '');
         }
-        // Assume feet if between 3 and 8
-        if (numericValue >= 3 && numericValue <= 8) {
-            return (numericValue * 12 * 2.54).toFixed(0);
-        }
-    }
 
-    return '';
-};
+        // Match feet and inches format (e.g., "5'8", "5'8\"", "5 ft 8 in")
+        const feetInchesMatch = cleanHeight.match(/(\d+)['′]?\s*(\d+)["″]?/);
+        if (feetInchesMatch) {
+            const feet = parseInt(feetInchesMatch[1], 10);
+            const inches = parseInt(feetInchesMatch[2], 10);
+            const totalInches = feet * 12 + inches;
+            return (totalInches * 2.54).toFixed(0);
+        }
+
+        // Match feet only format (e.g., "5'", "5 ft")
+        const feetOnlyMatch = cleanHeight.match(/(\d+)['′]?\s*(ft|feet)?$/i);
+        if (feetOnlyMatch) {
+            const feet = parseInt(feetOnlyMatch[1], 10);
+            const totalInches = feet * 12;
+            return (totalInches * 2.54).toFixed(0);
+        }
+
+        // Numeric inputs (could be inches or feet)
+        const numericValue = parseFloat(cleanHeight);
+        if (!isNaN(numericValue)) {
+            // Assume inches if in typical height range
+            if (numericValue >= 24 && numericValue <= 96) {
+                return (numericValue * 2.54).toFixed(0);
+            }
+            // Assume feet if between 3 and 8
+            if (numericValue >= 3 && numericValue <= 8) {
+                return (numericValue * 12 * 2.54).toFixed(0);
+            }
+        }
+
+        return '';
+    };
 
 
     const accordionData = [
@@ -495,68 +522,57 @@ const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) =
                                         <Row className='g-2'>
                                             <Col sm={6}>
                                                 <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Age at first menstruation
-                                                    </span>
+                                                    <span className="contact-details-emergency">Age at first menstruation</span>
                                                     <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.ageAtFirstMenstruation}
-                                                    </span>
-                                                </div>
-
-                                            </Col>
-                                            <Col sm={6}>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Cycle Length
-                                                    </span>
-                                                    <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.cycleLength}
+                                                        {modalFormFertilityData.menstrualCycle?.ageAtFirstMenstruation}
                                                     </span>
                                                 </div>
                                             </Col>
 
                                             <Col sm={6}>
                                                 <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Period Length
-                                                    </span>
+                                                    <span className="contact-details-emergency">Cycle Length</span>
                                                     <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.periodLength}
-                                                    </span>
-                                                </div>
-
-                                            </Col>
-                                            <Col sm={6}>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Last Period Date
-                                                    </span>
-                                                    <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.date}
-                                                    </span>
-                                                </div>
-                                            </Col>
-                                            <Col sm={6}>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Is your cycle regular?
-                                                    </span>
-                                                    <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.isCycleRegular}
-                                                    </span>
-                                                </div>
-                                            </Col>
-                                            <Col sm={6}>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Do you experience menstrual issues?
-                                                    </span>
-                                                    <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.menstrualIssues}
+                                                        {modalFormFertilityData.menstrualCycle?.cycleLength}
                                                     </span>
                                                 </div>
                                             </Col>
 
+                                            <Col sm={6}>
+                                                <div className="d-flex flex-column gap-1">
+                                                    <span className="contact-details-emergency">Period Length</span>
+                                                    <span className="accordion-title-detail">
+                                                        {modalFormFertilityData.menstrualCycle?.periodLength}
+                                                    </span>
+                                                </div>
+                                            </Col>
+
+                                            <Col sm={6}>
+                                                <div className="d-flex flex-column gap-1">
+                                                    <span className="contact-details-emergency">Last Period Date</span>
+                                                    <span className="accordion-title-detail">
+                                                        {modalFormFertilityData.menstrualCycle?.lastPeriodDate}
+                                                    </span>
+                                                </div>
+                                            </Col>
+
+                                            <Col sm={6}>
+                                                <div className="d-flex flex-column gap-1">
+                                                    <span className="contact-details-emergency">Is your cycle regular?</span>
+                                                    <span className="accordion-title-detail">
+                                                        {modalFormFertilityData.menstrualCycle?.isCycleRegular}
+                                                    </span>
+                                                </div>
+                                            </Col>
+
+                                            <Col sm={6}>
+                                                <div className="d-flex flex-column gap-1">
+                                                    <span className="contact-details-emergency">Do you experience menstrual issues?</span>
+                                                    <span className="accordion-title-detail">
+                                                        {modalFormFertilityData.menstrualCycle?.menstrualIssues}
+                                                    </span>
+                                                </div>
+                                            </Col>
                                         </Row>
 
                                     </Accordion.Body>
@@ -583,37 +599,35 @@ const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) =
                                     </Accordion.Header>
                                     <Accordion.Body className='pt-0'>
                                         <Row className='g-3'>
-                                            <Col sm={6}>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Have you been pregnant before?
-                                                    </span>
-                                                    <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.pregnancy}
-                                                    </span>
+                                            <Col sm={12}>
+                                                <div className="accordion-title-detail">
+                                                    <p>
+                                                        <div className="contact-details-emergency">Pregnant Before:</div>{" "}
+                                                        {modalFormFertilityData.pregnancy?.pregnantBefore}
+                                                    </p>
+                                                    {modalFormFertilityData.pregnancy?.pregnantBeforeDetails && (
+                                                        <p>
+                                                            <div className="contact-details-emergency">Details:</div>{" "}
+                                                            {modalFormFertilityData.pregnancy?.pregnantBeforeDetails}
+                                                        </p>
+                                                    )}
+                                                    <p>
+                                                        <div className="contact-details-emergency">Trying to Conceive:</div>{" "}
+                                                        {modalFormFertilityData.pregnancy?.tryingToConceiveDuration}
+                                                    </p>
+                                                    <p>
+                                                        <div className="contact-details-emergency">Miscarriage/Ectopic History:</div>{" "}
+                                                        {modalFormFertilityData.pregnancy?.miscarriageOrEctopicHistory}
+                                                    </p>
+                                                    {modalFormFertilityData.pregnancy?.miscarriageOrEctopicDetails && (
+                                                        <p>
+                                                            <div className="contact-details-emergency">Details:</div>{" "}
+                                                            {modalFormFertilityData.pregnancy?.miscarriageOrEctopicDetails}
+                                                        </p>
+                                                    )}
                                                 </div>
+                                            </Col>
 
-                                            </Col>
-                                            <Col sm={6}>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        How long have you been trying to conceive?
-                                                    </span>
-                                                    <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.timeduration}
-                                                    </span>
-                                                </div>
-                                            </Col>
-                                            <Col sm={6}>
-                                                <div className="d-flex flex-column gap-1">
-                                                    <span className="contact-details-emergency">
-                                                        Any history of miscarriage or ectopic pregnancy?
-                                                    </span>
-                                                    <span className="accordion-title-detail">
-                                                        {modalFormFertilityData.ectopicpregnancy}
-                                                    </span>
-                                                </div>
-                                            </Col>
                                         </Row>
                                     </Accordion.Body>
                                 </Accordion.Item>
@@ -787,33 +801,33 @@ const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) =
                         </Accordion.Item>
                     ))}
                 </Accordion>
-                
- <div className="row mb-5">
-                <div className="">
-                    <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
-                    <ContentContainer className="shadow-sm border-0 mb-4">
-                        <Card.Body>
-                            <strong className=" d-block mb-2 heading-patient">Consultation Review *</strong>
-                            <p className=" border rounded p-3 Patient-review">
-                                Patient presented for an IVF consultation due to [reason, e.g., infertility, recurrent pregnancy loss].
-                                History reviewed, including obstetric, menstrual, and medical background, along with partner’s fertility evaluation.
-                                Recommended investigations include a hormonal panel, ultrasound, and genetic screening if needed.
-                                The IVF process, success rates, potential risks, and next steps were discussed.
-                                Patient was advised on pre-treatment preparation, and a follow-up was scheduled.
-                            </p>
 
-                            <div className="d-flex justify-content-end mt-3">
-                                <Button className="edit-profile-btn d-flex align-items-center">
-                                    <span className="me-2">
-                                        {/* <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} /> */}
-                                    </span>
-                                   Save Review
-                                </Button>
-                            </div>
-                        </Card.Body>
-                    </ContentContainer>
+                <div className="row mb-5">
+                    <div className="">
+                        <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
+                        <ContentContainer className="shadow-sm border-0 mb-4">
+                            <Card.Body>
+                                <strong className=" d-block mb-2 heading-patient">Consultation Review *</strong>
+                                <p className=" border rounded p-3 Patient-review">
+                                    Patient presented for an IVF consultation due to [reason, e.g., infertility, recurrent pregnancy loss].
+                                    History reviewed, including obstetric, menstrual, and medical background, along with partner’s fertility evaluation.
+                                    Recommended investigations include a hormonal panel, ultrasound, and genetic screening if needed.
+                                    The IVF process, success rates, potential risks, and next steps were discussed.
+                                    Patient was advised on pre-treatment preparation, and a follow-up was scheduled.
+                                </p>
+
+                                <div className="d-flex justify-content-end mt-3">
+                                    <Button className="edit-profile-btn d-flex align-items-center">
+                                        <span className="me-2">
+                                            {/* <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} /> */}
+                                        </span>
+                                        Save Review
+                                    </Button>
+                                </div>
+                            </Card.Body>
+                        </ContentContainer>
+                    </div>
                 </div>
-            </div>
 
                 <Modal
                     show={showPhisicalAssessment}
@@ -840,38 +854,39 @@ const handleSavePhysicalAssessment = async (data: PhysicalAssessmentDataModel) =
                     </div>
                 </Modal>
 
-  <Modal
-                        show={showFertilityAssessment}
-                        onHide={() => { setShowFertilityAssessment(false) }}
-                        header={Object.keys(modalFormFertilityData).length === 0 ? "Fertility Assessment" : "Edit Fertility Assessment"}
-                        closeButton={true}
-                        size="lg"
-                    >
-                        <div className="mb-0">
-                            <FertilityAssessmentForm
-                                setShowFertilityAssessment={setShowFertilityAssessment}
-                                setModalFormFertilityData={setModalFormFertilityData}
-                                editFertilityAssessment={editFertilityAssessment}
-                            />
-                        </div>
-                    </Modal>
-                    <Modal
-                        className=""
-                        show={showModal}
-                        onHide={() => setShowModal(false)}
-                        header={Object.keys(medicalHistoryFormData).length === 0 ? "Add Medical History" : "Edit Medical History"}
-                        size="lg"
-                        closeButton={true}
-                    >
-                        <div className="mb-0">
-                            <MedicalHistory
-                                setMedicalHistoryFormData={setMedicalHistoryFormData}
-                                setShowModal={setShowModal}
-                                initialData={editingMedicalHistory}
-                                onClose={() => setEditingMedicalHistory(null)}
-                            />
-                        </div>
-                    </Modal>
+                <Modal
+                    show={showFertilityAssessment}
+                    onHide={() => { setShowFertilityAssessment(false) }}
+                    header={Object.keys(modalFormFertilityData).length === 0 ? "Fertility Assessment" : "Edit Fertility Assessment"}
+                    closeButton={true}
+                    size="lg"
+                >
+                    <div className="mb-0">
+                        <FertilityAssessmentForm
+                            setShowFertilityAssessment={setShowFertilityAssessment}
+                            setModalFormFertilityData={setModalFormFertilityData}
+                            editFertilityAssessment={editFertilityAssessment}
+                            handleSaveFertilityAssessment={handleSaveFertilityAssessment} // ⭐ add this
+                        />
+                    </div>
+                </Modal>
+                <Modal
+                    className=""
+                    show={showModal}
+                    onHide={() => setShowModal(false)}
+                    header={Object.keys(medicalHistoryFormData).length === 0 ? "Add Medical History" : "Edit Medical History"}
+                    size="lg"
+                    closeButton={true}
+                >
+                    <div className="mb-0">
+                        <MedicalHistory
+                            setMedicalHistoryFormData={setMedicalHistoryFormData}
+                            setShowModal={setShowModal}
+                            initialData={editingMedicalHistory}
+                            onClose={() => setEditingMedicalHistory(null)}
+                        />
+                    </div>
+                </Modal>
 
             </div>
         </>

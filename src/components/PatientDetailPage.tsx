@@ -77,7 +77,7 @@ export default function PatientDetailPageComponent({ onPatientLoaded ,}: any) {
                         <ContentContainer className="shadow-sm border-0 patient-box">
                             <Card.Body>
                                 <div className="d-flex align-items-center mb-3">
-                                    <Image
+                                    <img
                                         src={p?.profileImage ? p.profileImage : patientImage}
                                         alt="Patient"
                                         width={60}
@@ -138,8 +138,8 @@ export default function PatientDetailPageComponent({ onPatientLoaded ,}: any) {
 
                                     <div className="d-flex gap-3 flex-wrap mb-4">
                                         {patient?.concerns?.length > 0 ? (
-                                            patient.concerns.map((tag: string) => (
-                                                <span key={tag} className="sub-patient bg-white">
+                                            patient.concerns.map((tag: string, index:number) => (
+                                                <span key={`${tag}-${index}`} className="sub-patient bg-white">
                                                     {tag}
                                                 </span>
                                             ))
