@@ -717,9 +717,9 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
                                         <div className="">
                                             <h6 className=" contact-details-emergency">Medical condition / Allergies</h6>
 
-                                            {medicalHistoryFormData.medicalCondition.map((item: any) => {
+                                            {medicalHistoryFormData.medicalCondition.map((item: any, i:number) => {
                                                 return (
-                                                    <p key={item.id} className="accordion-title-detail d-inline-block border-box-orange-font box-border-orange me-2 mb-2">
+                                                    <p key={i} className="accordion-title-detail d-inline-block border-box-orange-font box-border-orange me-2 mb-2">
                                                         {item.value}
                                                     </p>
                                                 )

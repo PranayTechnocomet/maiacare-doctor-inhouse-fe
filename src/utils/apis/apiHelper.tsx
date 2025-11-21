@@ -76,7 +76,7 @@ export const addQualification = (data: QualificationType[]) => {
 }
 
 
-export const editQualification = (data: QualificationType, id:string) => {
+export const editQualification = (data: QualificationType, id:string|null) => {
   const token = localStorage.getItem("token");
   return apiClient.put(`/profile/qualifications/edit/${id}`, data, {
     headers: {
