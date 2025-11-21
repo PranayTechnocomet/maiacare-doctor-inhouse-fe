@@ -283,9 +283,13 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                     ...mappedData
                 }));
 
-
-                setShowContent(true);
-                setShowPartnerDetail(false);
+                if(mappedData.profile.basic_detail_name != "" || null){
+                    setShowContent(true);
+                    setShowPartnerDetail(false);
+                } else {
+                setShowContent(false);
+                setShowPartnerDetail(true);
+                }
                 console.log("Get Partner Details : ", mappedData);
             })
             .catch((err) => {

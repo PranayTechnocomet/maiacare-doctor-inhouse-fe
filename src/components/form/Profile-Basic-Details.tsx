@@ -56,7 +56,7 @@ const ProfileBasicDetails = () => {
   }
   const [defaultQualifications, setDefaultQualifications] = useState<any[]>([]);
   const [showQualificationModal, setShowQualificationModal] = useState(false);
-
+  const [selectedQualificationId, setSelectedQualificationId] = useState<string | null>(null);
   type FormData = {
     MF: string;
     SS: string;
@@ -310,10 +310,11 @@ const ProfileBasicDetails = () => {
 
 
   // ===== Edit button click in modal open ================
-  const openQualificationModal = (index: number) => {
+  const openQualificationModal = (index: number, id:string) => {
     setEditIndex(index);
     setFormData(defaultQualifications[index]); // je data show thayu e prefill karo
     setShowQualificationModal(true); // modal open
+    setSelectedQualificationId(id)
   };
 
   const closeQualificationModal = () => setShowQualificationModal(false);
@@ -339,10 +340,11 @@ const ProfileBasicDetails = () => {
   };
 
 
-  const handleEditSave = (id:string) => {
+  const handleEditSave = () => {
     const errors = EditValidtation(formData);
     setFormError(errors);
-
+    // console.log("Qualification:", id);
+    
     if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
 
     // if (editIndex !== null) {
@@ -360,7 +362,7 @@ const ProfileBasicDetails = () => {
     // }
     console.log("formData", formData);
     
-    editQualification(formData, id)
+    editQualification(formData, selectedQualificationId)
       .then((response) => {
 
         if (response.status == 200) {
@@ -702,7 +704,7 @@ const ProfileBasicDetails = () => {
 
                     <div className="d-flex gap-2">
 
-                      <Button onClick={() => openQualificationModal(idx)} className="border p-2 rounded-3 edit-del-btn  bg-transparent" variant='outline'>
+                      <Button onClick={() => openQualificationModal(idx, item._id)} className="border p-2 rounded-3 edit-del-btn  bg-transparent" variant='outline'>
                         <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
                       </Button>
 
@@ -808,7 +810,7 @@ const ProfileBasicDetails = () => {
 
 
                           {/* Save Button */}
-                          <Button onClick={()=>handleEditSave(item._id)} className="maiacare-button mt-4">
+                          <Button onClick={()=>handleEditSave()} className="maiacare-button mt-4">
                             Save
                           </Button>
 
