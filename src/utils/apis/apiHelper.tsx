@@ -241,7 +241,7 @@ export const addPartnerMedicalHistory = (data: { patientId: string | undefined; 
   });
 }
 
-export const addPartnerPhysicalAssesment = ((data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; })) => {
+export const addPartnerPhysicalAssesment = (data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; }) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/partner/physicalAssessment", {
     headers: {
