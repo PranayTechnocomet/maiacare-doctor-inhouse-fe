@@ -31,7 +31,7 @@ import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, P
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
 import { useParams } from 'next/navigation';
-import { getOne } from '@/utils/apis/apiHelper';
+import { addPartnerPhysicalAssesment, getOne } from '@/utils/apis/apiHelper';
 
 export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
 
@@ -56,7 +56,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         systolic: "",
         diastolic: "",
         heartRate: "",
-         date: ""
+        date: ""
 
     };
     const initialFormDataEditFertilityAssessment: EditFertilityAssessment = {
@@ -127,7 +127,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
 
         return errors;
     };
-
+    const [selectedId, setSelectedId] = useState<string>("")
     const handleAddPhysicalAssessment = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log("click ", formDataAddPhysicalAssessment);
@@ -136,20 +136,39 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         console.log("Form submitted", formDataAddPhysicalAssessment);
         setFormErrorAddPhysicalAssessment(errors);
 
-        if (Object.keys(errors).length === 0) {
-            // Handle form submission
-            setFormErrorAddPhysicalAssessment(initialFormErrorAddPhysicalAssessment);
-            setAddPhysicalAssessment(false);
-            setShowContent(true);
+        // if (Object.keys(errors).length === 0) {
+        //     // Handle form submission
+        //     setFormErrorAddPhysicalAssessment(initialFormErrorAddPhysicalAssessment);
+        //     setAddPhysicalAssessment(false);
+        //     setShowContent(true);
 
-            setShowData((prev: any) => ({ ...prev, PhysicalAssessmentData: [...prev.PhysicalAssessmentData, formDataAddPhysicalAssessment] }));
-            setFormDataAddPhysicalAssessment(initialFormDataAddPhysicalAssessment);
-            console.log("test click");
+        //     setShowData((prev: any) => ({ ...prev, PhysicalAssessmentData: [...prev.PhysicalAssessmentData, formDataAddPhysicalAssessment] }));
+        //     setFormDataAddPhysicalAssessment(initialFormDataAddPhysicalAssessment);
+        //     console.log("test click");
 
-            toast.success('Physical Assessment Added Successfully', {
-                icon: <BsInfoCircle size={22} color="white" />,
-            });
+        //     toast.success('Physical Assessment Added Successfully', {
+        //         icon: <BsInfoCircle size={22} color="white" />,
+        //     });
+        // }
+        const passData = {
+            height: formDataAddPhysicalAssessment.height,
+            weight: formDataAddPhysicalAssessment.weight,
+            bmi: formDataAddPhysicalAssessment.bmi,
+            bloodGroup: formDataAddPhysicalAssessment.bloodGroup,
+            bloodPressureSystolic: formDataAddPhysicalAssessment.systolic,
+            bloodPressureDiastolic: formDataAddPhysicalAssessment.diastolic,
+            heartRate: formDataAddPhysicalAssessment.heartRate
         }
+
+        addPartnerPhysicalAssesment(passData)
+            .then(() => {
+                toast.success('Physical Assessment Added Successfully', {
+                    icon: <BsInfoCircle size={22} color="white" />,
+                });
+            })
+            .catch((err) => {
+                console.log("PartnerPhysicalAssesment: ", err);
+            });
     }
 
     const handleEditFertilityAssessment = (e: FormEvent<HTMLFormElement>) => {
@@ -283,12 +302,12 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                     ...mappedData
                 }));
 
-                if(mappedData.profile.basic_detail_name != "" || null){
+                if (mappedData.profile.basic_detail_name != "" || null) {
                     setShowContent(true);
                     setShowPartnerDetail(false);
                 } else {
-                setShowContent(false);
-                setShowPartnerDetail(true);
+                    setShowContent(false);
+                    setShowPartnerDetail(true);
                 }
                 console.log("Get Partner Details : ", mappedData);
             })
