@@ -47,6 +47,7 @@ export interface PhysicalAssessmentDataModel {
   systolic: string;
   diastolic: string;
   heartRate: string;
+  date:string;
 };
 
 export interface FertilityAssessmentFormType {
