@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { parseRequestBody } from "@/utils/apis/requestHandler";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function PUT(req: Request,
-  { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest,
+  context: any) {
 
-  const { id } = params;
+  const id = context.params.id;
   const BASE_URL = `/profile/qualifications/edit/${id}`;
 
   try {

@@ -22,9 +22,9 @@ import { handleApiError } from "@/utils/apis/errorHandler";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: any
 ) {
-  const { id } = params;
+  const id = context.params.id;
 
   try {
     console.log("DELETE ID:", id);
