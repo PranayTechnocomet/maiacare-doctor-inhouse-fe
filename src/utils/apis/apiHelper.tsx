@@ -250,7 +250,7 @@ export const addPartnerMedicalHistory = (data: { patientId: string | undefined; 
 
 export const addPartnerPhysicalAssesment = (data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; }) => {
   const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/physicalAssessment", {
+  return apiClient.post("/patient/partner/physicalAssessment",data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
