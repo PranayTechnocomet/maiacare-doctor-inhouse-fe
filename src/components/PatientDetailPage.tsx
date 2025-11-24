@@ -6,15 +6,41 @@ import ContentContainer from "@/components/ui/ContentContainer";
 import patientImage from "@/assets/images/Img-1.png";
 import EditProfile from "../assets/images/EditProfile-2.png";
 import "../style/ProfileTabes.css";
-// import ContentContainer from './ui/ContentContainer';
 import CustomTabs from './ui/CustomTabs';
 import PatientBasicDetail from './PatientBasicDetail';
 import PartnerDetail from './PartnerDetail';
+import { getOne } from "@/utils/apis/apiHelper";
+import { useParams } from "next/navigation";
 
-
-export default function PatientDetailPageComponent() {
+export default function PatientDetailPageComponent({ onPatientLoaded ,}: any) {
 
     const [activeTab, setActiveTab] = useState<string>("basic");
+    const params = useParams();
+    const id = params?.id?.toString();
+
+    const [patient, setPatient] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchPatient = async () => {
+            try {
+                if (!id) return;
+
+                const res = await getOne(id);
+                const pData = res?.data?.data || res?.data;
+
+                setPatient(pData);
+
+                // Send patient name to parent
+                onPatientLoaded?.(pData?.personalDetails?.name || "N/A");
+
+            } catch (error) {
+                console.error("Error fetching patient:", error);
+            }
+        };
+
+        fetchPatient();
+    }, [id]);
+
 
     const tabOptions = [
         {
@@ -22,7 +48,7 @@ export default function PatientDetailPageComponent() {
             label: "Basic Details",
             content: (
                 <>
-                    <PatientBasicDetail />
+                    <PatientBasicDetail patientId={id}  patient={patient} />
                 </>
             ),
         },
@@ -37,47 +63,61 @@ export default function PatientDetailPageComponent() {
         },
     ];
 
+    const p = patient?.personalDetails;
+
     return (
         <>
             <div className="row mb-4">
 
+                {/* LEFT SIDE - PATIENT BASIC DETAILS */}
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Patient Details</h6>
+
                     <div className="pation-profile-data">
                         <ContentContainer className="shadow-sm border-0 patient-box">
                             <Card.Body>
                                 <div className="d-flex align-items-center mb-3">
-                                    <Image
-                                        src={patientImage}
+                                    <img
+                                        src={p?.profileImage ? p.profileImage : patientImage}
                                         alt="Patient"
                                         width={60}
                                         height={60}
                                         className="rounded-circle me-3"
                                     />
+
                                     <div>
-                                        <h5 className="mb-1 fw-semibold name-patient">Riya Gupta</h5>
+                                        <h5 className="mb-1 fw-semibold name-patient">
+                                            {p?.name || "N/A"}
+                                        </h5>
                                     </div>
                                 </div>
+
                                 <div className="row">
                                     <div className="col-6 ">
                                         <div className="heading-patient">Phone</div>
-                                        <p className="mb-2 sub-heading-patient">+91 8987656874</p>
+                                        <p className="mb-2 sub-heading-patient">{p?.contactNumber || "N/A"}</p>
                                     </div>
+
                                     <div className="col-6 ">
                                         <div className="heading-patient">Email Address</div>
-                                        <p className="mb-2 sub-heading-patient">jakewilson@gmail.com</p>
+                                        <p className="mb-2 sub-heading-patient">{p?.email || "N/A"}</p>
                                     </div>
+
                                     <div className="col-6 ">
                                         <div className="heading-patient">Gender</div>
-                                        <p className="mb-2 sub-heading-patient">Female</p>
+                                        <p className="mb-2 sub-heading-patient">{p?.gender || "N/A"}</p>
                                     </div>
+
                                     <div className="col-6 ">
                                         <div className="heading-patient">Age</div>
-                                        <p className="mb-2 sub-heading-patient">31 years</p>
+                                        <p className="mb-2 sub-heading-patient">
+                                            {p?.age ?? "N/A"}
+                                        </p>
                                     </div>
+
                                     <div className="col-6 ">
                                         <div className="heading-patient">Pin Code</div>
-                                        <p className="sub-heading-patient">400077</p>
+                                        <p className="sub-heading-patient">{p?.pincode || "N/A"}</p>
                                     </div>
                                 </div>
                             </Card.Body>
@@ -85,32 +125,36 @@ export default function PatientDetailPageComponent() {
                     </div>
                 </div>
 
+                {/* RIGHT SIDE - CONSULTATION & CONCERNS */}
                 <div className="col-md-6">
                     <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Consultation Type and Concerns</h6>
+
                     <div className='pation-profile-dataa'>
                         <ContentContainer className="shadow-sm border-0 patient-box">
                             <Card.Body>
+                                {/* CONSULTATION TYPE */}
                                 <div className="mb-3">
                                     <strong className=" d-block mb-2 heading-patient">Type:</strong>
+
                                     <div className="d-flex gap-3 flex-wrap mb-4">
-                                        {["Irregular Periods", "Trouble Getting Pregnant", "Hormonal Imbalance", " Getting Pregnant",].map((tag) => (
-                                            <span
-                                                key={tag}
-                                                className="sub-patient bg-white"
-                                            >
-                                                {tag}
-                                            </span>
-                                        ))}
+                                        {patient?.concerns?.length > 0 ? (
+                                            patient.concerns.map((tag: string, index:number) => (
+                                                <span key={`${tag}-${index}`} className="sub-patient bg-white">
+                                                    {tag}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span>No concerns found</span>
+                                        )}
                                     </div>
                                 </div>
 
+                                {/* REVIEW / CONCERNS */}
                                 <div className="mt-1 mb-3">
                                     <strong className=" d-block mb-1 heading-patient">Concerns:</strong>
-                                    <p className=" mb-0 Patient-review">
-                                        Mild endometriosis and irregular periods has been an issue for 2 months.
-                                    </p>
-                                    <p className=" mb-0 Patient-review">
-                                        Hormone Panel; All levels within normal range.
+
+                                    <p className="mb-0 Patient-review">
+                                        {patient?.consultReview || "No review added yet."}
                                     </p>
                                 </div>
                             </Card.Body>
@@ -119,7 +163,7 @@ export default function PatientDetailPageComponent() {
                 </div>
             </div>
 
-          
+            {/* FIXED FOOTER BUTTONS */}
             <div
                 className="d-flex justify-content-end gap-3 p-3 border-top bg-white w-100"
                 style={{
@@ -133,38 +177,13 @@ export default function PatientDetailPageComponent() {
                 <Button className="Button-login" variant="primary">Mark as Complete</Button>
             </div>
 
+            {/* TABS */}
             <div className="mt-1">
                 <CustomTabs
                     activeKey={activeTab}
                     setActiveKey={setActiveTab}
                     tabOptions={tabOptions}
                 />
-            </div>
-  <div className="row mb-5">
-                <div className="">
-                    <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
-                    <ContentContainer className="shadow-sm border-0 mb-4">
-                        <Card.Body>
-                            <strong className=" d-block mb-2 heading-patient">Consultation Review *</strong>
-                            <p className=" border rounded p-3 Patient-review">
-                                Patient presented for an IVF consultation due to [reason, e.g., infertility, recurrent pregnancy loss].
-                                History reviewed, including obstetric, menstrual, and medical background, along with partner’s fertility evaluation.
-                                Recommended investigations include a hormonal panel, ultrasound, and genetic screening if needed.
-                                The IVF process, success rates, potential risks, and next steps were discussed.
-                                Patient was advised on pre-treatment preparation, and a follow-up was scheduled.
-                            </p>
-
-                            <div className="d-flex justify-content-end mt-3">
-                                <Button className="edit-profile-btn d-flex align-items-center">
-                                    <span className="me-2">
-                                        {/* <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} /> */}
-                                    </span>
-                                   Save Review
-                                </Button>
-                            </div>
-                        </Card.Body>
-                    </ContentContainer>
-                </div>
             </div>
         </>
     );

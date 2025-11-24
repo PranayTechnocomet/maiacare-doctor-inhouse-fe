@@ -16,12 +16,14 @@ interface MedicalHistoryProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
     initialData?: any;
     onClose?: () => void;
+      handleSaveMedicalHistory?: (data: MedicalHistoryType) => Promise<void>; // <- new
 }
 
 export default function MedicalHistory({
     setMedicalHistoryFormData,
     setShowModal,
     initialData,
+    handleSaveMedicalHistory,
     onClose }: MedicalHistoryProps) {
 
     type FormError = Partial<Record<keyof MedicalHistoryType, string>>;
@@ -67,34 +69,63 @@ export default function MedicalHistory({
 
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Validate the formData and return any errors found
-        const errors = validateForm(formData);
-        setFormError(errors);
-        // console.log("errors", errors);
-        if (Object.keys(errors).length === 0) {
-            setShowModal(false);
-            setFormError(initialFormError);
-            if (initialData) {
-                // If editing, update the existing entry
-                setMedicalHistoryFormData(formData);
-                toast.success('Changes saved successfully', {
-                    icon: <BsInfoCircle size={22} color="white" />,
-                });
+    // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+    //     // Validate the formData and return any errors found
+    //     const errors = validateForm(formData);
+    //     setFormError(errors);
+    //     // console.log("errors", errors);
+    //     if (Object.keys(errors).length === 0) {
+    //         setShowModal(false);
+    //         setFormError(initialFormError);
+    //         if (initialData) {
+    //             // If editing, update the existing entry
+    //             setMedicalHistoryFormData(formData);
+    //             toast.success('Changes saved successfully', {
+    //                 icon: <BsInfoCircle size={22} color="white" />,
+    //             });
 
-            } else {
-                // If creating new, add to the arrayd
+    //         } else {
+    //             // If creating new, add to the arrayd
 
-                setMedicalHistoryFormData(formData)
-                // setMedicalHistoryFormData((prev: any) => [...prev, formData]);
-                toast.success('Medical history added successfully', {
-                    icon: <BsInfoCircle size={22} color="white" />,
-                });
+    //             setMedicalHistoryFormData(formData)
+    //             // setMedicalHistoryFormData((prev: any) => [...prev, formData]);
+    //             toast.success('Medical history added successfully', {
+    //                 icon: <BsInfoCircle size={22} color="white" />,
+    //             });
+    //         }
+    //         if (onClose) onClose();
+    //     }
+    // };
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const errors = validateForm(formData);
+    setFormError(errors);
+
+    if (Object.keys(errors).length === 0) {
+        try {
+            // Call API if handleSaveMedicalHistory exists
+            if (handleSaveMedicalHistory) {
+                await handleSaveMedicalHistory(formData);
             }
+
+            setFormError(initialFormError);
+            toast.success(
+                initialData ? "Changes saved successfully" : "Medical history added successfully",
+                {
+                    icon: <BsInfoCircle size={22} color="white" />,
+                }
+            );
+
+            setShowModal(false);
             if (onClose) onClose();
+        } catch (err) {
+            console.error("API error:", err);
+            toast.error("Failed to save medical history");
         }
-    };
+    }
+};
 
     return (
 
