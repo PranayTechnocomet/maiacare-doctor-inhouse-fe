@@ -13,7 +13,7 @@ import "@/style/PatientBasicDetail.css"
 import ContentContainer from "@/components/ui/ContentContainer";
 import { addphysicalassessment, addFertilityAssessment, addMedicalHistory, getFertilityAssessment, updatefertilityassessment, } from "@/utils/apis/apiHelper";
 import { useParams } from "next/navigation";
-import { getmedicalhistory, updatemedicalhistory } from "@/utils/apis/apiHelper";
+import { getmedicalhistory, updatemedicalhistory,getPhysicalAssessment } from "@/utils/apis/apiHelper";
 export default function PatientBasicDetail({ patient, patientId }: any) {
 
     const [activeAccordion, setActiveAccordion] = useState<string[]>(['0', '1', '2']);
@@ -58,6 +58,39 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
             console.error("API error:", e);
         }
     };
+
+   useEffect(() => {
+        if (!patientId) return;
+
+        const fetchPhysicalAssessment = async () => {
+            try {
+                const res = await getPhysicalAssessment(patient.physicalAssessment._id);
+
+                // res.data should be an array of assessments → match existing mapping
+                if (Array.isArray(res.data)) {
+                    const mapped = res.data.map((item: any) => ({
+                        ...item,
+                        systolic: item?.bloodPressure?.systolic || "",
+                        diastolic: item?.bloodPressure?.diastolic || "",
+                        date: new Date(item.createdAt).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                        }),
+                    }));
+
+                    setModalFormPhisicalData(mapped);
+                }
+
+            } catch (err) {
+                console.error("GET physical assessment error", err);
+            }
+        };
+
+        fetchPhysicalAssessment();
+    }, [patientId]);
+
     const handleSaveFertilityAssessment = async (data: FertilityAssessmentFormType) => {
         if (!patientId) {
             alert("❌ Patient ID missing!");

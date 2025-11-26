@@ -105,7 +105,7 @@ export const uploadkycdetails = () => {
 
 export const getAll = () => {
   const token = localStorage.getItem("token");
-  return apiClient.get("/patient/getAll", {
+  return apiClient.post("/patient/getAll", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -140,14 +140,20 @@ export const addphysicalassessment = (data: any) => {
 
 
 
-export const getphysicalassessment = (data: any) => {
+export const getPhysicalAssessment = (
+  id: string,
+) => {
   const token = localStorage.getItem("token");
 
-  return apiClient.post("/patient/physical-assessment/get", data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+  return apiClient.post(
+    `/patient/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
-  });
+  );
 };
 
 

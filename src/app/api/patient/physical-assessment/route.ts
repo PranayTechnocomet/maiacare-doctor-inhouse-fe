@@ -24,23 +24,6 @@ export async function POST(req: Request) {
 
 
 
-export async function GET() {
-  const API_BASE_URL = "/patient/physical-assessment";
-
-  try {
-    const response = await apiServer.get(API_BASE_URL);
-
-    return new NextResponse(JSON.stringify(response.data), {
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    return handleApiError(error);
-  }
-}
-
-
-
-
 
 export async function PUT(req: Request) {
   const BASE_URL = "/patient/physical-assessment";
