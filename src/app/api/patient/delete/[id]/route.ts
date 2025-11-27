@@ -20,10 +20,7 @@ import { NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function DELETE(
-  req: Request,
-  context: any
-) {
+export async function DELETE(req: Request, context: any) {
   const id = context.params.id;
 
   try {

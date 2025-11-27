@@ -115,17 +115,15 @@ export const getOne = async (id: string | number) => {
     return await api.get(`/patient/${id}`);   // FIXED ✔
 };
 
-
-export const patientDelete = (id: string) => {
+export const patientDelete = (patientId: string) => {
   const token = localStorage.getItem("token");
 
-  return apiClient.delete(`/patient/delete/${id}`, {
+  return apiClient.delete(`/patient/delete/${patientId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 };
-
 
 
 export const addphysicalassessment = (data: any) => {
@@ -146,7 +144,7 @@ export const getPhysicalAssessment = (
   const token = localStorage.getItem("token");
 
   return apiClient.post(
-    `/patient/${id}`,
+    `/patient/physical-assessment/${id}`,
     {},
     {
       headers: {
@@ -269,6 +267,28 @@ export const addPartnerMedicalHistory = (data: { patientId: string | undefined; 
   });
 }
 
+export const getPartnermedicalhistory = async (id: string) => {
+    return api.get(`/patient/partner/medical-history/${id}`);
+};
+
+
+export const updatePartnermedicalhistory = (id: string, data: any) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.put(
+    `/patient/partner/medicalHistory/${id}`,   // ✅ Correct URL
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+
+
+
 export const addPartnerPhysicalAssesment = (data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; }) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/partner/physicalAssessment",data, {
@@ -278,6 +298,39 @@ export const addPartnerPhysicalAssesment = (data: { height: string; weight: stri
   });
 }
 
+
+export const getPartnerPhysicalAssessment = (
+  id: string,
+) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.post(
+    `/patient/partner/physicalAssessment/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+
+export const updatePartnerphysicalassessment = (data: any) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.put("/patient/partner/physicalAssessment", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+
+
+
+
+
 export const addPartnerfertilityAssessment = (data: { patientId: string | undefined; semenAnalysis: { status: string; semenAnalysisDetails: string; }; fertilityIssues: { status: string; fertilityIssuesDetails: string; }; fertilityTreatments: { status: string; fertilityTreatmentsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; }) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/partner/fertilityAssessment",data, {
@@ -286,6 +339,32 @@ export const addPartnerfertilityAssessment = (data: { patientId: string | undefi
     }
   });
 }
+
+
+export const getPartnerFertilityAssessment = async (id: string) => {
+    return api.get(`/patient/partner/fertility-assessment/${id}`);
+};
+
+
+
+export const updatePartnerfertilityassessment = (id: string, data: any) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.put(
+    `/patient/partner/fertility-assessment/${id}`,
+    data, // ← payload
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+
+
+
+
 
 export const getProfileImageUrl = (formData: any) => {
   const token = localStorage.getItem("token");

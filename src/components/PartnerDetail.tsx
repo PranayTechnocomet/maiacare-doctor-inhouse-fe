@@ -236,92 +236,125 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
     // const addItem = (newItem) => {
     //     setShowData(prevItems => [...prevItems, newItem]);
     // };
-    function mapPartnerDetails(api: any) {
-        const safe = (v: any) => (v === undefined || v === null ? "" : v);
-
-        return {
-            profile: {
-                basic_detail_name: safe(api?.profile?.name),
-                basic_detail_gender: safe(api?.profile?.gender),
-                basic_detail_age: safe(api?.profile?.age),
-                basic_detail_phone: safe(api?.profile?.contactNumber),
-                basic_detail_email: safe(api?.profile?.email),
-            },
-
-            medicalHistory: {
-                medication: safe(api?.medicalHistory?.medications?.status),
-                medicationcontent: safe(api?.medicalHistory?.medications?.medicationsDetails),
-                surgeriesContent: safe(api?.medicalHistory?.surgeries?.surgeriesDetails),
-
-                surgeries: safe(api?.medicalHistory?.surgeries?.status),
-                MedicalconditionAllergies: api?.medicalHistory?.conditions ?? [],
-                familyMedicalHistory: safe(api?.medicalHistory?.familyHistory),
-                lifestyle: api?.medicalHistory?.lifestyle ?? [],
-                exercise: safe(api?.medicalHistory?.exerciseFrequency),
-                stress: safe(api?.medicalHistory?.stressLevel),
-            },
-
-            PhysicalAssessmentData: (api?.physicalAssessment || []).map((pa: any) => ({
-                height: safe(pa?.height),
-                weight: safe(pa?.weight),
-                bmi: safe(pa?.bmi),
-                bloodGroup: safe(pa?.bloodGroup),
-                systolic: safe(pa?.bloodPressure?.systolic),
-                diastolic: safe(pa?.bloodPressure?.diastolic),
-                heartRate: safe(pa?.heartRate),
-                date: safe(pa?.createdAt),
-            })),
-
-            fertilityAssessment: {
-                semenAnalysis: safe(api?.fertilityAssessment?.semenAnalysis?.status),
-                semenAnalysisContent: safe(api?.fertilityAssessment?.semenAnalysis?.semenAnalysisDetails),
-
-                fertilityIssues: safe(api?.fertilityAssessment?.fertilityIssues?.status),
-                fertilityIssuesContent: safe(api?.fertilityAssessment?.fertilityIssues?.fertilityIssuesDetails),
-
-                fertilityTreatment: safe(api?.fertilityAssessment?.fertilityTreatments?.status),
-                fertilityTreatmentContent: safe(api?.fertilityAssessment?.fertilityTreatments?.fertilityTreatmentsDetails),
-
-                surgeries: safe(api?.fertilityAssessment?.surgeries?.status),
-                surgeriesContent: safe(api?.fertilityAssessment?.surgeries?.surgeriesDetails),
-            },
-        };
-    }
-
-
-    const params = useParams();
-    const id = params?.id?.toString();
-    const getPartnerDetails = () => {
-        getOne(id ? id : "")
-            .then((res) => {
-                const apiData = res?.data?.data?.partnerDetails;
-
-                const mappedData = mapPartnerDetails(apiData);
-                setShowData((prev: any) => ({
-                    ...prev,
-                    ...mappedData
-                }));
-
-                if (mappedData.profile.basic_detail_name != "" || null) {
-                    setShowContent(true);
-                    setShowPartnerDetail(false);
-                } else {
-                    setShowContent(false);
-                    setShowPartnerDetail(true);
-                }
-                console.log("Get Partner Details : ", mappedData);
-            })
-            .catch((err) => {
-                console.log("Get Partner Details Error:", err);
-                setShowContent(false);
-                setShowPartnerDetail(true);
-            });
-    };
-
+     const params = useParams(); const id = params?.id?.toString(); // <-- make sure id exists
 
     useEffect(() => {
-        getPartnerDetails()
-    }, [])
+        if (!id) return;
+
+        const fetchPartnerDetails = async () => {
+            try {
+                const response = await getOne(id);
+
+                console.log("FULL API RESPONSE:", JSON.stringify(response, null, 2));
+
+           const patient = response.data?.data;
+
+if (!patient) {
+    console.log("❌ No patient object found.");
+    return;
+}
+
+const api = {
+    personalDetails: patient.personalDetails || {},
+    medicalHistory: patient.medicalHistory || patient.medicalhistories || {},
+    fertilityAssessment: patient.fertilityAssessment || patient.fertilityassessment || {},
+    physicalAssessment: patient.physicalAssessment || patient.physicalAssesment || [],
+    partnerDetails: patient.partnerDetails || {}   // includes partner physical + fertility + medicalHistory
+};
+
+console.log("API MEDICAL RAW:", patient.medicalHistory, patient.medicalhistories);
+console.log("API FERTILITY RAW:", patient.fertilityAssessment, patient.fertilityassessment);
+
+                if (!api) {
+                    console.log("❌ No usable API object found.");
+                    return;
+                }
+
+                const mapped = mapPartnerDetails(api);
+                console.log("Mapped data:", mapped);
+
+                // Set state
+                setShowData(mapped);
+                setShowContent(true);
+                setShowPartnerDetail(false);
+            } catch (error) {
+                console.error("API ERROR:", error);
+                
+            }
+        };
+
+        fetchPartnerDetails();
+    }, [id]);
+function mapPartnerDetails(api: any) {
+    const safe = (v: any) => (v === undefined || v === null ? "" : v);
+
+    // ✔ Correct keys based on your logs
+    const medicalHistory =
+        api.medicalhistories ||
+        api.medicalHistory ||
+        {};
+
+    const fertilityAssessment = {
+        menstrualCycle: api.menstrualCycle || {},
+        pregnancy: api.pregnancy || {},
+    };
+
+    return {
+        profile: {
+            basic_detail_name: safe(api.personalDetails?.name),
+            basic_detail_gender: safe(api.personalDetails?.gender),
+            basic_detail_age: api.personalDetails?.dob
+                ? Math.floor(
+                      (new Date().getTime() -
+                          new Date(api.personalDetails.dob).getTime()) /
+                          (1000 * 60 * 60 * 24 * 365)
+                  )
+                : "",
+            basic_detail_phone: safe(api.personalDetails?.contactNumber),
+            basic_detail_email: safe(api.personalDetails?.email),
+            profileImage: safe(api.personalDetails?.profileImage),
+        },
+
+        // ✔ FIXED medical history
+        medicalHistory: {
+            medication: safe(medicalHistory.medications?.status),
+            medicationcontent: safe(
+                medicalHistory.medications?.medicationsDetails
+            ),
+
+            surgeries: safe(medicalHistory.surgeries?.status),
+            surgeriesContent: safe(
+                medicalHistory.surgeries?.surgeriesDetails
+            ),
+
+            MedicalconditionAllergies: medicalHistory.conditions || [],
+            familyMedicalHistory: safe(medicalHistory.familyHistory),
+            lifestyle: medicalHistory.lifestyle || [],
+            exercise: safe(medicalHistory.exerciseFrequency),
+            stress: safe(medicalHistory.stressLevel),
+        },
+
+        // Physical Assessment – keep same
+        PhysicalAssessmentData: (api.physicalAssessment || []).map(
+            (pa: any) => ({
+                height: safe(pa.height),
+                weight: safe(pa.weight),
+                bmi: safe(pa.bmi),
+                bloodGroup: safe(pa.bloodGroup),
+                systolic: safe(pa.bloodPressure?.systolic || pa.systolic),
+                diastolic: safe(pa.bloodPressure?.diastolic || pa.diastolic),
+                heartRate: safe(pa.heartRate),
+                date: safe(pa.createdAt),
+            })
+        ),
+
+        // ✔ FIXED fertility section (your API has menstrual + pregnancy)
+        fertilityAssessment: {
+            menstrualCycle: fertilityAssessment.menstrualCycle,
+            pregnancy: fertilityAssessment.pregnancy,
+        },
+    };
+}
 
 
 
@@ -381,13 +414,13 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
             </Modal>
             {showContent && (
 
-                <Row className="mt-2 g-3">
+                <Row className="mt-2 g-3 mb-5">
                     <Col md={7}>
                         <ContentContainer>
                             <div className='d-flex justify-content-between align-items-start '>
                                 <div className='d-flex align-items-start align-items-sm-center gap-3 flex-column flex-sm-row'>
                                     <div>
-                                        <Image
+                                        <img
                                             src={showData?.profile?.profileImage || Simpleeditpro}
                                             alt="PartnerImage"
                                             width={90}
@@ -836,7 +869,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                 ))}
                             </Accordion>
                         </ContentContainer>
-                        <ContentContainer className="mt-3">
+                        <ContentContainer className="mt-3 mb-2">
                             {[
                                 {
 

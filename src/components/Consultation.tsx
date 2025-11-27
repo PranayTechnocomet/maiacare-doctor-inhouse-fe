@@ -327,7 +327,7 @@ import Button from "./ui/Button";
 
 // ✅ API
 import { getAll } from "@/utils/apis/apiHelper";
-// import { patientDelete } from "@/utils/apis/apiHelper";
+import { patientDelete } from "@/utils/apis/apiHelper";
 
 export type ConsultationStatus =
     | "Completed"
@@ -372,17 +372,23 @@ export default function Consultation() {
 
         fetchPatients();
     }, []);
-// const handleDelete = async (id: string) => {
-//   try {
-//     const res = await patientDelete(id);
+    const handleDelete = async (appointmentId: string) => {
+        try {
+            await patientDelete(appointmentId);
 
-//     // Remove from UI
-//     setFilteredData(prev => prev.filter(item => item.id !== id));
+            setFilteredData(prev =>
+                prev.filter(item => item.appointment_id !== appointmentId)
+            );
 
-//   } catch (error) {
-//     console.error("Delete Error:", error);
-//   }
-// };
+            setPatientData(prev =>
+                prev.filter(item => item.appointment_id !== appointmentId)
+            );
+
+        } catch (error) {
+            console.error("Delete Error:", error);
+        }
+    };
+
 
 
     // --------------------------------------
@@ -446,14 +452,6 @@ export default function Consultation() {
     }, [patientData, filter, searchQuery, timeFilter]);
 
     // --------------------------------------
-    // 🔹 Delete Row (Local)
-    // --------------------------------------
-    const handleDelete = (id: number) => {
-        const updated = filteredData.filter((item) => item.id !== id);
-        setFilteredData(updated);
-    };
-
-    // --------------------------------------
     // 🔹 Table Columns
     // --------------------------------------
     const columns: ColumnDef<any>[] = [
@@ -472,7 +470,7 @@ export default function Consultation() {
                 const id = info.row.original.patient_id; // <-- Make sure you have an `id`
 
                 return (
-                 <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
+                    <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
                         <div className="d-flex align-items-center gap-2">
                             <Image
                                 src={row.image || woman}
@@ -507,34 +505,26 @@ export default function Consultation() {
                 const row = info.row.original;
                 return (
                     <div className="d-flex">
-                         <Button
-                             variant="light"
-                             size="sm"
-                             className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border me-2"
-                             onClick={() => handleDownload(`/files/${name}.pdf`, `${name}.pdf`)}
+                        <Button
+                            variant="light"
+                            size="sm"
+                            className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border me-2"
+                            onClick={() => handleDownload(`/files/${name}.pdf`, `${name}.pdf`)}
                         >
-                             {/* <LuArrowDown className="arrow-down" /> */}
-                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M15.2594 3.85684L11.768 0.366217C11.6519 0.250114 11.5141 0.158014 11.3624 0.0951779C11.2107 0.0323417 11.0482 0 10.884 0C10.7198 0 10.5572 0.0323417 10.4056 0.0951779C10.2539 0.158014 10.1161 0.250114 10 0.366217L0.366412 9.99981C0.249834 10.1155 0.157407 10.2531 0.0945056 10.4048C0.0316038 10.5565 -0.000518312 10.7192 6.32418e-06 10.8834V14.3748C6.32418e-06 14.7063 0.131702 15.0243 0.366123 15.2587C0.600543 15.4931 0.918486 15.6248 1.25001 15.6248H14.375C14.5408 15.6248 14.6997 15.559 14.8169 15.4418C14.9342 15.3245 15 15.1656 15 14.9998C15 14.8341 14.9342 14.6751 14.8169 14.5579C14.6997 14.4407 14.5408 14.3748 14.375 14.3748H6.50938L15.2594 5.62481C15.3755 5.50873 15.4676 5.37092 15.5304 5.21925C15.5933 5.06757 15.6256 4.905 15.6256 4.74083C15.6256 4.57665 15.5933 4.41408 15.5304 4.26241C15.4676 4.11073 15.3755 3.97292 15.2594 3.85684ZM4.74141 14.3748H1.25001V10.8834L8.12501 4.0084L11.6164 7.49981L4.74141 14.3748ZM12.5 6.61622L9.00938 3.12481L10.8844 1.24981L14.375 4.74122L12.5 6.61622Z" fill="#2B4360" />
-                             </svg>
+                            {/* <LuArrowDown className="arrow-down" /> */}
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.2594 3.85684L11.768 0.366217C11.6519 0.250114 11.5141 0.158014 11.3624 0.0951779C11.2107 0.0323417 11.0482 0 10.884 0C10.7198 0 10.5572 0.0323417 10.4056 0.0951779C10.2539 0.158014 10.1161 0.250114 10 0.366217L0.366412 9.99981C0.249834 10.1155 0.157407 10.2531 0.0945056 10.4048C0.0316038 10.5565 -0.000518312 10.7192 6.32418e-06 10.8834V14.3748C6.32418e-06 14.7063 0.131702 15.0243 0.366123 15.2587C0.600543 15.4931 0.918486 15.6248 1.25001 15.6248H14.375C14.5408 15.6248 14.6997 15.559 14.8169 15.4418C14.9342 15.3245 15 15.1656 15 14.9998C15 14.8341 14.9342 14.6751 14.8169 14.5579C14.6997 14.4407 14.5408 14.3748 14.375 14.3748H6.50938L15.2594 5.62481C15.3755 5.50873 15.4676 5.37092 15.5304 5.21925C15.5933 5.06757 15.6256 4.905 15.6256 4.74083C15.6256 4.57665 15.5933 4.41408 15.5304 4.26241C15.4676 4.11073 15.3755 3.97292 15.2594 3.85684ZM4.74141 14.3748H1.25001V10.8834L8.12501 4.0084L11.6164 7.49981L4.74141 14.3748ZM12.5 6.61622L9.00938 3.12481L10.8844 1.24981L14.375 4.74122L12.5 6.61622Z" fill="#2B4360" />
+                            </svg>
 
                         </Button>
                         <Button
                             variant="light"
                             size="sm"
                             className="btn btn-sm profile-card-boeder border bg-white me-2"
-                            onClick={() => handleDelete(row.id)}
+                            onClick={() => handleDelete(row.appointment_id)}
                         >
                             <LuTrash2 className="trash" />
                         </Button>
-                        {/* <Button
-    variant="light"
-    size="sm"
-    className="btn btn-sm profile-card-boeder border bg-white me-2"
-    onClick={() => handleDelete(row.id)}
->
-    <LuTrash2 className="trash" />
-</Button> */}
 
                     </div>
                 );
