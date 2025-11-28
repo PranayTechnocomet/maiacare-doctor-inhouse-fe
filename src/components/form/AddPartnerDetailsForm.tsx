@@ -193,6 +193,8 @@ export function BasicDetailsForm({
 
         return errors;
     };
+const params = useParams();
+const patientId = params?.id?.toString();
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -209,14 +211,16 @@ export function BasicDetailsForm({
         }
         setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
 
-        const passData = {
-            partnerImage: formData.profileImage,
-            partnerName: formData.basic_detail_name,
-            partnerContactNumber: formData.basic_detail_phone,
-            partnerEmail: formData.basic_detail_email,
-            partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
-            partnerAge: formData.basic_detail_age
-        }
+       const passData = {
+    patientId: patientId,   // 👈 REQUIRED
+    partnerImage: formData.profileImage,
+    partnerName: formData.basic_detail_name,
+    partnerContactNumber: formData.basic_detail_phone,
+    partnerEmail: formData.basic_detail_email,
+    partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
+    partnerAge: formData.basic_detail_age
+};
+
         const formDataImage = {
             type: "doctor",
             files: formData.profileImage
@@ -234,19 +238,19 @@ export function BasicDetailsForm({
             .catch((err) => {
                 console.log("getImageUrl", err);
             });
-        // basicDetails(passData)
-        //     .then((response) => {
+        basicDetails(passData)
+            .then((response) => {
 
-        //         if (response.status == 200) {
-        //             console.log("Partner basic details added: ", response.data);
-        //         } else {
-        //             console.log("Error");
-        //         }
+                if (response.status == 200) {
+                    console.log("Partner basic details added: ", response.data);
+                } else {
+                    console.log("Error");
+                }
 
-        //     })
-        //     .catch((err) => {
-        //         console.log("Partner basic details adding error", err);
-        //     });
+            })
+            .catch((err) => {
+                console.log("Partner basic details adding error", err);
+            });
 
     };
     return (

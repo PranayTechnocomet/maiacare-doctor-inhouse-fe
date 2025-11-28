@@ -5,22 +5,8 @@ import Modal from './ui/Modal';
 import { FertilityAssessment, MedicalHistoryForm, PhysicalAssessment } from './form/AddPartnerDetailsForm';
 import { Accordion, Col, Dropdown, Row } from 'react-bootstrap';
 import Image from 'next/image';
-import PartnerImage from "../assets/images/Profile_Images.png";
 import ContentContainer from './ui/ContentContainer';
-import ProfileGender from '../assets/images/Profile_Gender.png'
-import ProfileId from '../assets/images/Profile_Id.png'
-import ProfileAge from '../assets/images/Profile_Age.png'
-import ProfileDob from '../assets/images/Profile_Calendar.png'
-import Phone from '../assets/images/Phone.png'
-import Email from '../assets/images/Email.png'
-import EditIcon from '../assets/images/EditIcon.png'
 // import { PartnerData, partnerData } from '@/data/partnerData';
-import hiegthImg from '../assets/images/Physical-assement-hiegth-icons.png'
-import weightImg from '../assets/images/Physical-assement-weight-icons.png'
-import BMIIMG from '../assets/images/Physical-assement-bmi.png'
-import BloodGroup from '../assets/images/Physical-assement-blod-group-icons.png'
-import BloodPressure from '../assets/images/Physical-assement-presure-icons.png'
-import HeartRate from '../assets/images/Physical-assement-heart-rate-icons.png'
 // import MedicalHistory from './form/MedicalHistory';
 // import PhysicalAssessment from '../assets/images/Pluse Sine.png';
 import Simpleeditpro from '@/assets/images/Simpleeditpro.png';
