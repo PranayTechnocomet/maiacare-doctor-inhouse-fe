@@ -39,7 +39,8 @@ export interface User {
 };
 
 export interface PhysicalAssessmentDataModel {
-  id: string;
+  id?: string;
+   _id?: string;   // ⬅ ADD THIS
   height: string;
   weight: string;
   bmi: string;
