@@ -4,10 +4,10 @@ import { handleApiError } from "@/utils/apis/errorHandler";
 
 export async function POST(
   req: Request,
-  { params }: { params: { patientId: string; physicalAssessmentId: string } }
+  context: any  
 ) {
   try {
-    const { patientId, physicalAssessmentId } = params;
+    const { patientId, physicalAssessmentId } = context.params;
 
     const response = await apiServer.post(
       `/patient/physical-assessment/${patientId}/${physicalAssessmentId}`

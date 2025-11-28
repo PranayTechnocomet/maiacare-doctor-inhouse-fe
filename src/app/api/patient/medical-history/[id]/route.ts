@@ -5,9 +5,9 @@ import { handleApiError } from "@/utils/apis/errorHandler";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: any
 ) {
-  const { id } = params;
+  const id = context.params.id;
   const API_URL = `/patient/medical-history/${id}`;
 
   try {
@@ -21,9 +21,9 @@ export async function PUT(
   }
 }
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, context: any) {
     
-    const { id } =  params;
+    const id = context.params.id;
   const API_URL = `/patient/medical-history/${id}`;
 
   try {
