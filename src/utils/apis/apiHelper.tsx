@@ -2,6 +2,7 @@ import { FertilityAssessmentType } from "../types/interfaces";
 import { LoginRequest } from "../types/requestInterface";
 import apiClient from "./axiosInstance";
 import api from "./axiosInstance";
+import {  imageUpload } from "../types/interfaces";
 
 export const login = (data: LoginRequest) => {
   return apiClient.post("/auth/login", data);
@@ -242,21 +243,10 @@ export const updatemedicalhistory = (id: string, data: any) => {
   );
 };
 
-export const basicDetails = (data: {
-  partnerImage: string | File,
-  partnerName: string,
-  partnerContactNumber: string | number,
-  partnerEmail: string,
-  partnerGender: string,
-  partnerAge: string | number
-}) => {
-  const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/basicDetails",data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    }
-  });
+export const basicDetailspost = (data : object) => {
+  return apiClient.post("/patient/partner/basicDetails" , data);
 }
+
 
 export const addPartnerMedicalHistory = (data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
   const token = localStorage.getItem("token");
@@ -287,7 +277,15 @@ export const updatePartnermedicalhistory = (id: string, data: any) => {
 };
 
 
+export const consultation = (data: any) => {
+  const token = localStorage.getItem("token");
 
+  return apiClient.post("/patient/consultReview", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+};
 
 export const addPartnerPhysicalAssesment = (data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; }) => {
   const token = localStorage.getItem("token");
@@ -365,15 +363,10 @@ export const updatePartnerfertilityassessment = (id: string, data: any) => {
 
 
 
-
-export const getProfileImageUrl = (formData: any) => {
-  const token = localStorage.getItem("token");
-
+//...... UPDATE IMAGES ......//
+export const updateImages = (formData: imageUpload) => {
   return apiClient.post("/update-images", formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
+    headers: { "Content-Type": "multipart/form-data" },
   });
 };
 

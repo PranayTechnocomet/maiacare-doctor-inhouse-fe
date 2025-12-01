@@ -18,6 +18,10 @@ export interface User {
     treatment: string;
     status: string;
   };
+export interface imageUpload {
+  type: string;
+  files: File;
+}
 
   export type OptionType = { value: string; label: string };
 

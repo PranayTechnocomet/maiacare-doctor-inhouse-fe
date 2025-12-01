@@ -13,15 +13,13 @@ import Button from '../ui/Button';
 import Simpleeditpro from '../../assets/images/Simpleeditpro.png';
 import cameraicon from '../../assets/images/Cameraicon.png';
 import { log, profile } from 'console';
-import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
+import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType,imageUpload, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
 import { partnerDetailData } from '@/utils/StaticData';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
-import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl } from '@/utils/apis/apiHelper';
+import { addPartnerMedicalHistory, basicDetailspost, updateImages } from '@/utils/apis/apiHelper';
 import { useParams } from 'next/navigation';
 // import '../../style/PartnerDetails.css'
-
-
 export function BasicDetailsForm({
     setAddPartner,
     setActiveTab,
@@ -58,31 +56,6 @@ export function BasicDetailsForm({
     // console.log("formData", formData);
     const [formError, setFormError] = useState<FormError>(initialFormError);
 
-    // const handleChange = (
-    //     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    // ) => {
-    //     const { name, value } = e.target;
-    //     const isValidNumber = /^[0-9]*$/.test(value);
-
-    //     setFormData((prev) => ({ ...prev, [name]: value }));
-    //     // setFormError((prev) => ({ ...prev, [name]: "" }));
-
-    //     console.log("value", value);
-
-    //     if (name === "basic_detail_phone") {
-    //         if (isValidNumber) {
-    //           // clear error only if numbers are entered
-    //           setFormError((prev) => ({ ...prev, [name]: "" }));
-
-    //         }
-    //         // else keep the error until user fixes
-    //       } else {
-    //         // for other fields, clear error on any input
-    //         setFormError((prev) => ({ ...prev, [name]: "" }));
-
-    //       }
-    // };
-
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
@@ -112,65 +85,79 @@ export function BasicDetailsForm({
         // console.log("value", value);
     };
 
-
     const [profileImage, setProfileImage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageClick = () => {
         fileInputRef.current?.click();
     };
-
-    const handleFileChange = (
+  const handleFileChange = (
         event: React.ChangeEvent<HTMLInputElement> | undefined
     ) => {
-        console.log("comes in this stage")
         if (event) {
             const file = event.target.files?.[0];
-            console.log("file",file);
-            
+
             if (file) {
                 const allowedTypes = ["image/jpeg", "image/png"];
 
                 if (!allowedTypes.includes(file.type)) {
                     setFormData((prev) => ({
                         ...prev,
-                        profileImage: "",
+                        partnerImage: "",
                     }));
                     setFormError((prev) => ({
                         ...prev,
-                        profileImage: "Only JPG and PNG files are allowed",
+                        partnerImage: "Only JPG and PNG files are allowed",
                     }));
-                    return;
-                }
+                    // return;
 
-                if (file.size > 5 * 1024 * 1024) {
+                } else if (file.size > 5 * 1024 * 1024) {
                     setFormData((prev) => ({
                         ...prev,
-                        profileImage: "",
+                        partnerImage: "",
                     }));
                     setFormError((prev) => ({
                         ...prev,
-                        profileImage: "File size must be less than 5MB",
+                        partnerImage: "File size must be less than 5MB",
                     }));
-                    return;
-                }
+                    // return;
 
-                const reader = new FileReader();
-                reader.onload = () => {
-                    setProfileImage(reader.result as string);
-                    setFormData((prev) => ({
-                        ...prev,
-                        profileImage: reader.result as string,
-                    }));
-                    setFormError((prev) => ({
-                        ...prev,
-                        profileImage: "",
-                    }));
-                };
-                reader.readAsDataURL(file);
+                } else {
+
+                    // console.log("file select api call : ", file);
+
+                    const data: imageUpload = {
+                        type: "doctor",
+                        files: file
+                    }
+
+                    updateImages(data).then((response) => {
+                        if (response.data.status) {
+                            console.log("response : ", response);
+                            const uploadedImage = response.data.files[0];
+
+                            setProfileImage(uploadedImage);
+                            setFormData((prev) => ({
+                                ...prev,
+                                partnerImage: uploadedImage,
+                            }));
+                            setFormError((prev) => ({
+                                ...prev,
+                                partnerImage: "",
+                            }));
+
+                        } else {
+                            console.log("error");
+                        }
+
+                    }).catch((error) => {
+                        console.log("error", error);
+                    });
+                }
             }
         }
     };
+
 
     const validateForm = (data: FormData): FormError => {
         const errors: FormError = {};
@@ -197,6 +184,7 @@ const params = useParams();
 const patientId = params?.id?.toString();
 
 
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -204,53 +192,32 @@ const patientId = params?.id?.toString();
         setFormError(errors);
         // console.log("errors", errors);
         if (Object.keys(errors).length === 0) {
-            // console.log("FormData111111 ", formData);
-            setFormError(initialFormError);
-            setActiveTab("medical history");
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
 
-       const passData = {
-    patientId: patientId,   // 👈 REQUIRED
-    partnerImage: formData.profileImage,
-    partnerName: formData.basic_detail_name,
-    partnerContactNumber: formData.basic_detail_phone,
-    partnerEmail: formData.basic_detail_email,
-    partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
-    partnerAge: formData.basic_detail_age
-};
+            const updatedFormData = {
+                ...formData,
+                patientId,
+            };
 
-        const formDataImage = {
-            type: "doctor",
-            files: formData.profileImage
-        }
-        const formDataToSend = new FormData();
-        formDataToSend.append("type", "doctor");
-        formDataToSend.append("files", formData.profileImage);
-        console.log("formDataToSend", formDataImage);
+            console.log("FormData patner basic : ", updatedFormData);
+            // setFormError(initialFormError);
+            // setActiveTab("medical history");
 
+            basicDetailspost(updatedFormData).then((response) => {
 
-        getProfileImageUrl(formDataImage)
-            .then((response) => {
-                console.log("getImageUrl: ", response.data);
-            })
-            .catch((err) => {
-                console.log("getImageUrl", err);
-            });
-        basicDetails(passData)
-            .then((response) => {
+                if (response.data.status) {
+                    console.log("basicDetailspost response : ", response);
+                    setFormError(initialFormError);
+                    setActiveTab("medical history");
 
-                if (response.status == 200) {
-                    console.log("Partner basic details added: ", response.data);
                 } else {
-                    console.log("Error");
+                    console.log("error");
                 }
-
-            })
-            .catch((err) => {
-                console.log("Partner basic details adding error", err);
+            }).catch((error) => {
+                console.log("error", error);
             });
+
+        }
+        // setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
 
     };
     return (
@@ -261,13 +228,12 @@ const patientId = params?.id?.toString();
                     <Col md={12}>
                         <div className="d-flex align-items-center gap-4  flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
                             <div className="profile-wrapper position-relative" >
-                                <Image
-                                    src={profileImage || Simpleeditpro}
+                                 <img
+                                    src={typeof Simpleeditpro === "string" ? Simpleeditpro : Simpleeditpro.src}
                                     alt="Profile"
-                                    className="profile-image"
+                                    className="object-fit-cover rounded-2"
                                     width={100}
                                     height={100}
-
                                 />
                                 <div
                                     className="camera-icon"
