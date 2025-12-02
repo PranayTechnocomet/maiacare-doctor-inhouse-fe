@@ -24,7 +24,7 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
     const [medicalHistoryFormData, setMedicalHistoryFormData] = useState<MedicalHistoryType | any>([]);
 
     const [editingMedicalHistory, setEditingMedicalHistory] = useState<any>(null);
-
+    
     const [modalFormPhisicalData, setModalFormPhisicalData] = useState<PhysicalAssessmentDataModel[]>([]);
     const [modalFormFertilityData, setModalFormFertilityData] = useState<FertilityAssessmentFormType | any>([]);
 

@@ -61,6 +61,7 @@ export function AddPartnerDetails({
                     setActiveTab={setActiveTab}
                     setShowData={setShowData}
                     initialData={modalEditTab === "medical history" ? showData.medicalHistory : undefined}
+                    mode="add"
                 />
                 // <h6>Medical History</h6>
             ),

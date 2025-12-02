@@ -258,7 +258,7 @@ export const basicDetails = (data: {
   });
 }
 
-export const addPartnerMedicalHistory = (data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
+export const addPartnerMedicalHistory = (data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: any; surgeriesDetails: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/partner/medicalHistory",data, {
     headers: {
@@ -272,11 +272,11 @@ export const getPartnermedicalhistory = async (id: string) => {
 };
 
 
-export const updatePartnermedicalhistory = (id: string, data: any) => {
+export const updatePartnermedicalhistory = (id: string|undefined, data: any) => {
   const token = localStorage.getItem("token");
 
   return apiClient.put(
-    `/patient/partner/medicalHistory/${id}`,   // ✅ Correct URL
+    `/patient/partner/medicalHistory/${id}`,
     data,
     {
       headers: {
@@ -366,14 +366,11 @@ export const updatePartnerfertilityassessment = (id: string, data: any) => {
 
 
 
-export const getProfileImageUrl = (formData: any) => {
+export const getProfileImageUrl = (formData: { type: string; files: File; }) => {
   const token = localStorage.getItem("token");
 
   return apiClient.post("/update-images", formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
-    },
+    headers: { "Content-Type": "multipart/form-data" },
   });
 };
 
