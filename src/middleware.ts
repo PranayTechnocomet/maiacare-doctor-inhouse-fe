@@ -3,12 +3,12 @@ import type { NextRequest } from "next/server";
 import { getTokenFromCookie } from "./utils/Helper";
 
 export function middleware(req: NextRequest) {
-  const token = getTokenFromCookie();
-  console.log("req", req);
-  
+  // const token = getTokenFromCookie();
+  // console.log("req", req);
+    const token = req.cookies.get("token")?.value;
   // If no token, redirect to login
   if (!token) {
-    // return NextResponse.redirect(new URL("/login", req.url));
+     return NextResponse.redirect(new URL("/login", req.url));
   }
 
   // Otherwise, allow request
