@@ -267,15 +267,15 @@ export const addPartnerMedicalHistory = (data: { patientId: string | undefined; 
   });
 }
 
-export const getPartnermedicalhistory = async (id: string) => {
-    return api.get(`/patient/partner/medical-history/${id}`);
+export const getPartnermedicalhistory = async (id: string | undefined) => {
+    return api.get(`/patient/partner/medicalHistory/${id}`);
 };
 
 
-export const updatePartnermedicalhistory = (id: string|undefined, data: any) => {
+export const updatePartnermedicalhistory = (id: string|undefined, data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: any[]; familyHistory: string; lifestyle: any[]; exerciseFrequency: string; stressLevel: string; }) => {
   const token = localStorage.getItem("token");
-
-  return apiClient.put(
+  console.log("data",data)
+  const res = apiClient.put(
     `/patient/partner/medicalHistory/${id}`,
     data,
     {
@@ -284,9 +284,8 @@ export const updatePartnermedicalhistory = (id: string|undefined, data: any) => 
       },
     }
   );
+  return res;
 };
-
-
 
 
 export const addPartnerPhysicalAssesment = (data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; }) => {
@@ -351,7 +350,7 @@ export const updatePartnerfertilityassessment = (id: string, data: any) => {
   const token = localStorage.getItem("token");
 
   return apiClient.put(
-    `/patient/partner/fertility-assessment/${id}`,
+    `/patient/partner/fertilityAssessment/${id}`,
     data, // ← payload
     {
       headers: {

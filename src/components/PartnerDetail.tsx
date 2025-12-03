@@ -17,7 +17,8 @@ import { EditFertilityAssessment, FertilityAssessmentType, FormErrorEditFertilit
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
 import { useParams } from 'next/navigation';
-import { addPartnerPhysicalAssesment, getAll, getOne } from '@/utils/apis/apiHelper';
+import { addPartnerPhysicalAssesment, getAll, getOne, updatePartnerfertilityassessment } from '@/utils/apis/apiHelper';
+import { log } from 'console';
 
 export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
 
@@ -45,7 +46,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         date: ""
 
     };
-    
+
     const initialFormDataEditFertilityAssessment: EditFertilityAssessment = {
         semenAnalysis: {
             semenAnalysisDetails: "",
@@ -127,16 +128,28 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         const errors: FormErrorEditFertilityAssessment = {};  // <-- IMPORTANT
 
         // SEMEN ANALYSIS
-        const semenDetails = data.semenAnalysis?.semenAnalysisDetails?.trim() ?? "";
-        const semenStatus = data.semenAnalysis?.status;
+        // const semenDetails = data.semenAnalysis?.semenAnalysisDetails?.trim() ?? "";
+        // const semenStatus = data.semenAnalysis?.status;
 
-        if (!semenDetails) {
-            errors.semenAnalysis = "Seminal Analysis is required";
+        // if (!semenDetails) {
+        //     errors.semenAnalysis = "Seminal Analysis is required";
+        // }
+
+        // if ((semenStatus === "yes" || semenStatus === true) && !semenDetails) {
+        //     errors.semenAnalysisDetails = "Seminal Analysis Content is required";
+        // }
+
+        const semenDetails = data.semenAnalysis?.semenAnalysisDetails?.trim() ?? "";
+        const semenStatus = (data.semenAnalysis?.status || "").toString().toLowerCase();
+
+        if (!semenStatus) {
+            errors.semenAnalysis = "Seminal analysis is required";
         }
 
-        if ((semenStatus === "yes" || semenStatus === true) && !semenDetails) {
+        if (semenStatus === "yes" && !semenDetails) {
             errors.semenAnalysisDetails = "Seminal Analysis Content is required";
         }
+
 
         // FERTILITY ISSUES
         const issuesDetails = data.fertilityIssues?.fertilityIssuesDetails?.trim() ?? "";
@@ -202,6 +215,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         //     });
         // }
         const passData = {
+            patientId: id,
             height: formDataAddPhysicalAssessment.height,
             weight: formDataAddPhysicalAssessment.weight,
             bmi: formDataAddPhysicalAssessment.bmi,
@@ -216,6 +230,8 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                 toast.success('Physical Assessment Added Successfully', {
                     icon: <BsInfoCircle size={22} color="white" />,
                 });
+                setAddPhysicalAssessment(false)
+                fetchPatient()
             })
             .catch((err) => {
                 console.log("PartnerPhysicalAssesment: ", err);
@@ -229,15 +245,35 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         const errors = validateForm2(formDataEditFertilityAssessment);
         setFormErrorEditFertilityAssessment(errors);
 
-        if (Object.keys(errors).length === 0) {
-            setFormErrorEditFertilityAssessment(initialFormErrorEditFertilityAssessment);
-            setEditFertilityAssessment(false);
-            setShowContent(true);
+        const passData = {
+            patientId: showData.patientId,
+            ...formDataEditFertilityAssessment
+        }
+        console.log("passData", passData);
 
-            setShowData((prev: any) => ({ ...prev, fertilityAssessment: { ...prev.fertilityAssessment, ...formDataEditFertilityAssessment } }));
+        updatePartnerfertilityassessment(showData.patientId, passData)
+            .then((res) => {
+                console.log("response from updatePartnerfertilityassessment: ", res);
+                fetchPatient()
+                toast.success('Changes saved successfully', {
+                    icon: <BsInfoCircle size={22} color="white" />,
+                });
+                setEditFertilityAssessment(false)
+            })
+            .catch((err) => {
+                console.log("response from updatePartnerfertilityassessment: ", err);
+            })
+
+        if (Object.keys(errors).length === 0) {
+            // setFormErrorEditFertilityAssessment(initialFormErrorEditFertilityAssessment);
+            // setEditFertilityAssessment(false);
+            // setShowContent(true);
+
+            // setShowData((prev: any) => ({ ...prev, fertilityAssessment: { ...prev.fertilityAssessment, ...formDataEditFertilityAssessment } }));
             toast.success('Changes saved successfully', {
                 icon: <BsInfoCircle size={22} color="white" />,
             });
+
         }
     }
     const convertHeightToCm = (heightStr: string): string => {
@@ -292,26 +328,25 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
 
     const params = useParams();
     const id = params?.id?.toString();
+    const fetchPatient = async () => {
+        try {
+            if (!id) return;
+
+            const res = await getOne(id);
+            const pData = res?.data?.data || res?.data;
+
+            console.log("pData", pData);
+            setShowData(pData.partnerDetails)
+            if (pData?.partnerDetails?.basicDetails?.partnerEmail !== null || pData?.partnerDetails?.basicDetails?.partnerEmail !== undefined) {
+                setShowContent(true)
+                setShowPartnerDetail(false)
+            }
+        } catch (error) {
+            console.error("Error fetching partner:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchPatient = async () => {
-            try {
-                if (!id) return;
-
-                const res = await getOne(id);
-                const pData = res?.data?.data || res?.data;
-
-                console.log("pData", pData);
-                setShowData(pData.partnerDetails)
-                if (pData?.partnerDetails?.basicDetails?.partnerEmail !== null || pData?.partnerDetails?.basicDetails?.partnerEmail !== undefined) {
-                    setShowContent(true)
-                    setShowPartnerDetail(false)
-                }
-            } catch (error) {
-                console.error("Error fetching partner:", error);
-            }
-        };
-
         fetchPatient();
     }, []);
     return (
@@ -463,7 +498,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Current Medications</h6>
                                         <p className=" accordion-title-detail">
-                                            {showData?.medicalHistory?.medications?.status}
+                                            {showData?.medicalHistory?.medications?.status == "Yes" ? showData?.medicalHistory?.medications?.medicationsDetails : showData?.medicalHistory?.medications?.status}
                                         </p>
                                     </div>
                                 </Col>
@@ -472,7 +507,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Surgeries</h6>
                                         <p className=" accordion-title-detail">
-                                            {showData.medicalHistory.surgeries.status}
+                                            {showData.medicalHistory.surgeries.status == "Yes" ? showData.medicalHistory.surgeries.surgeriesDetails : showData.medicalHistory.surgeries.status}
                                         </p>
                                     </div>
                                 </Col>
@@ -481,9 +516,9 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Medical condition / Allergies</h6>
 
-                                        {showData.medicalHistory?.conditions?.map((item: any) => {
+                                        {showData.medicalHistory?.conditions?.map((item: any, i:number) => {
                                             return (
-                                                <p key={item.id} className="accordion-title-detail d-inline-block border-box-orange-font box-border-orange me-2 mb-2">
+                                                <p key={i} className="accordion-title-detail d-inline-block border-box-orange-font box-border-orange me-2 mb-2">
                                                     {item}
                                                 </p>
                                             )
@@ -851,10 +886,10 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <div className="mb-3">
                                             <h6 className="mb-1 contact-details-emergency">Semen Analysis</h6>
                                             <p className="mb-2 accordion-title-detail">
-                                                {showData?.semenAnalysis?.status
+                                                {showData?.fertilityAssessment.semenAnalysis.status
                                                     === 'Yes'
-                                                    ? showData.semenAnalysis.semenAnalysisDetails
-                                                        ? `Yes | ${showData.semenAnalysis.semenAnalysisDetails}`
+                                                    ? showData?.fertilityAssessment.semenAnalysis.semenAnalysisDetails
+                                                        ? `Yes | ${showData?.fertilityAssessment.semenAnalysis.semenAnalysisDetails}`
                                                         : 'Yes'
                                                     : 'No'}
                                             </p>
@@ -865,10 +900,10 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <div className="mb-3">
                                             <h6 className="mb-1 contact-details-emergency">Fertility Issues</h6>
                                             <p className="mb-2 accordion-title-detail">
-                                                {showData?.fertilityIssues?.status
+                                                {showData?.fertilityAssessment?.fertilityIssues?.status
                                                     === 'Yes'
-                                                    ? showData.fertilityIssues.fertilityIssuesDetails
-                                                        ? `Yes | ${showData.fertilityIssues.fertilityIssuesDetails}`
+                                                    ? showData?.fertilityAssessment?.fertilityIssues?.fertilityIssuesDetails
+                                                        ? `Yes | ${showData?.fertilityAssessment?.fertilityIssues?.fertilityIssuesDetails}`
                                                         : 'Yes'
                                                     : 'No'}
                                             </p>
@@ -880,10 +915,10 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                             <h6 className="mb-1 contact-details-emergency">Fertility Treatment</h6>
                                             <p className="mb-2 accordion-title-detail">
 
-                                                {showData?.fertilityTreatments?.status
+                                                {showData?.fertilityAssessment?.fertilityTreatments?.status
                                                     === 'Yes'
-                                                    ? showData.fertilityTreatments.fertilityTreatmentsDetails
-                                                        ? `Yes | ${showData.fertilityTreatments.fertilityTreatmentsDetails}`
+                                                    ? showData?.fertilityAssessment?.fertilityTreatments?.fertilityTreatmentsDetails
+                                                        ? `Yes | ${showData?.fertilityAssessment?.fertilityTreatments?.fertilityTreatmentsDetails}`
                                                         : 'Yes'
                                                     : 'No'}
                                             </p>
@@ -895,10 +930,10 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                             <h6 className="mb-1 contact-details-emergency">Surgeries</h6>
                                             <p className="mb-2 accordion-title-detail">
 
-                                                {showData?.surgeries?.status
+                                                {showData?.fertilityAssessment.surgeries.status
                                                     === 'Yes'
-                                                    ? showData.surgeries.surgeriesDetails
-                                                        ? `Yes | ${showData.surgeries.surgeriesDetails}`
+                                                    ? showData.fertilityAssessment.surgeries.surgeriesDetails
+                                                        ? `Yes | ${showData.fertilityAssessment.surgeries.surgeriesDetails}`
                                                         : 'Yes'
                                                     : 'No'}
                                             </p>
@@ -988,7 +1023,6 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                     showData={showData}
                     initialData={modalEditTab === "medical history" ? showData.medicalHistory : undefined}
                     formDataMedicalHistory={formDataMedicalHistory}
-                    mode="edit"
                 />
             </Modal>
 

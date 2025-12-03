@@ -13,7 +13,8 @@ import "@/style/PatientBasicDetail.css"
 import ContentContainer from "@/components/ui/ContentContainer";
 import { addphysicalassessment, addFertilityAssessment, addMedicalHistory, getFertilityAssessment, updatefertilityassessment, } from "@/utils/apis/apiHelper";
 import { useParams } from "next/navigation";
-import { getmedicalhistory, updatemedicalhistory,getPhysicalAssessment } from "@/utils/apis/apiHelper";
+import { getmedicalhistory, updatemedicalhistory, getPhysicalAssessment } from "@/utils/apis/apiHelper";
+import { log } from "console";
 export default function PatientBasicDetail({ patient, patientId }: any) {
 
     const [activeAccordion, setActiveAccordion] = useState<string[]>(['0', '1', '2']);
@@ -24,7 +25,7 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
     const [medicalHistoryFormData, setMedicalHistoryFormData] = useState<MedicalHistoryType | any>([]);
 
     const [editingMedicalHistory, setEditingMedicalHistory] = useState<any>(null);
-    
+
     const [modalFormPhisicalData, setModalFormPhisicalData] = useState<PhysicalAssessmentDataModel[]>([]);
     const [modalFormFertilityData, setModalFormFertilityData] = useState<FertilityAssessmentFormType | any>([]);
 
@@ -59,12 +60,17 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
         }
     };
 
-   useEffect(() => {
+    useEffect(() => {
         if (!patientId) return;
 
         const fetchPhysicalAssessment = async () => {
             try {
-                const res = await getPhysicalAssessment(patient.physicalAssessment._id);
+                // const res = await getPhysicalAssessment(patient.physicalAssessment._id);
+                const assessmentId = patient?.physicalAssessment?._id;
+                if (!assessmentId) return; 
+
+                const res = await getPhysicalAssessment(assessmentId);
+
 
                 // res.data should be an array of assessments → match existing mapping
                 if (Array.isArray(res.data)) {
@@ -88,7 +94,11 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
             }
         };
 
-        fetchPhysicalAssessment();
+        try {
+            fetchPhysicalAssessment();
+        } catch (err) {
+            console.log(err);
+        }
     }, [patientId]);
 
     const handleSaveFertilityAssessment = async (data: FertilityAssessmentFormType) => {
@@ -144,7 +154,8 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
     };
     useEffect(() => {
         if (!patientId) return;
-
+        const ID = patient?.fertilityassessment?._id;
+        if(!ID) return;
         const fetchData = async () => {
             try {
                 const res = await getFertilityAssessment(patient.fertilityassessment._id);
@@ -161,6 +172,8 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
 
     useEffect(() => {
         if (!patientId) return;
+        const ID = patient?.medicalHistoryId?._id
+        if(!ID) return;
 
         const fetchMedicalHistory = async () => {
             try {
@@ -708,24 +721,24 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
                                         <Row className='g-3'>
                                             <Col sm={12}>
                                                 <div className="accordion-title-detail">
-                                                    <p>
+                                                    {/* <p> */}
                                                         <div className="contact-details-emergency">Pregnant Before:</div>{" "}
                                                         {modalFormFertilityData.pregnancy?.pregnantBefore}
-                                                    </p>
+                                                    {/* </p> */}
                                                     {modalFormFertilityData.pregnancy?.pregnantBeforeDetails && (
                                                         <p>
                                                             <div className="contact-details-emergency">Details:</div>{" "}
                                                             {modalFormFertilityData.pregnancy?.pregnantBeforeDetails}
                                                         </p>
                                                     )}
-                                                    <p>
+                                                    {/* <p> */}
                                                         <div className="contact-details-emergency">Trying to Conceive:</div>{" "}
                                                         {modalFormFertilityData.pregnancy?.tryingToConceiveDuration}
-                                                    </p>
-                                                    <p>
+                                                    {/* </p> */}
+                                                    {/* <p> */}
                                                         <div className="contact-details-emergency">Miscarriage/Ectopic History:</div>{" "}
                                                         {modalFormFertilityData.pregnancy?.miscarriageOrEctopicHistory}
-                                                    </p>
+                                                    {/* </p> */}
                                                     {modalFormFertilityData.pregnancy?.miscarriageOrEctopicDetails && (
                                                         <p>
                                                             <div className="contact-details-emergency">Details:</div>{" "}
