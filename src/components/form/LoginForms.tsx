@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { InputFieldGroup } from "../ui/InputField";
 import { MdMailOutline } from "react-icons/md";
