@@ -77,7 +77,7 @@
   flex-wrap: nowrap;
   overflow-x: hidden;
   overflow-y: scroll;
-  height: 74dvh;
+  height: 70dvh;
 }
 
 .sidebar__nav::-webkit-scrollbar {
