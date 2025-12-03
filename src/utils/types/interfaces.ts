@@ -133,3 +133,12 @@ export interface SelectPatientType {
   ProfilePhoto: StaticImageData;
   name: string;
 }
+interface DocumentType {
+  originalName?: string;
+  reportName?: string;
+  aadharNumber?: string;
+  panNumber?: string;
+  licenceNumber?: string;
+  filePath: string;
+  updatedAt?: string;
+}

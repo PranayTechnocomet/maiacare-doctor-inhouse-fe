@@ -1,9 +1,6 @@
 import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
-import ContentContainer from '../ui/ContentContainer';
-import CustomTabs from '../ui/CustomTabs';
 import Image from 'next/image';
 import "../../style/Edit-Profile.css";
-import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
 import { Accordion, Col, Row } from 'react-bootstrap';
 import { RadioButtonGroup } from '../ui/RadioField';
@@ -12,9 +9,7 @@ import { PhoneNumberInput } from '../ui/PhoneNumberInput';
 import Button from '../ui/Button';
 import Simpleeditpro from '../../assets/images/Simpleeditpro.png';
 import cameraicon from '../../assets/images/Cameraicon.png';
-import { log, profile } from 'console';
 import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType,imageUpload, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
-import { partnerDetailData } from '@/utils/StaticData';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
 import { addPartnerMedicalHistory, basicDetailspost, updateImages } from '@/utils/apis/apiHelper';
@@ -32,25 +27,24 @@ export function BasicDetailsForm({
 
     const initialFormError: FormError = {};
     type FormData = {
-        basic_detail_name: string;
-        basic_detail_gender: string;
-        basic_detail_age: string;
-        basic_detail_phone: string;
-        basic_detail_email: string;
+        partnerName: string;
+        partnerGender: string;
+        partnerAge: string;
+        partnerContactNumber: string;
+        partnerEmail: string;
         profileImage: string;
     };
 
     type FormError = Partial<Record<keyof FormData, string>>;
 
-    const initialFormData: FormData = {
-        basic_detail_name: "",
-        basic_detail_gender: "male",
-        basic_detail_age: "",
-        basic_detail_phone: "",
-        basic_detail_email: "",
-        profileImage: ""
-
-    };
+   const initialFormData: FormData = {
+    partnerName: "",
+    partnerGender: "Male",   // Capitalized
+    partnerAge: "",
+    partnerContactNumber: "",
+    partnerEmail: "",
+    profileImage: ""
+};
 
     const [formData, setFormData] = useState<FormData>(initialFormData);
     // console.log("formData", formData);
@@ -162,19 +156,19 @@ export function BasicDetailsForm({
     const validateForm = (data: FormData): FormError => {
         const errors: FormError = {};
 
-        if (!data.basic_detail_name.trim()) errors.basic_detail_name = "Name is required";
-        if (!data.basic_detail_age.trim()) errors.basic_detail_age = "Age is required";
-        if (!data.basic_detail_phone.trim()) errors.basic_detail_phone = "Phone number is required";
+        if (!data.partnerName.trim()) errors.partnerName = "Name is required";
+        if (!data.partnerGender.trim()) errors.partnerGender = "Age is required";
+        if (!data.partnerContactNumber.trim()) errors.partnerContactNumber = "Phone number is required";
 
         // Only check required here
         // if (!data.profileImage.trim()) {
         //     errors.profileImage = "Profile Image is required";
         // }
 
-        if (!data.basic_detail_email.trim()) {
-            errors.basic_detail_email = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.basic_detail_email)) {
-            errors.basic_detail_email = "Enter a valid email address";
+        if (!data.partnerEmail.trim()) {
+            errors.partnerEmail = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.partnerEmail)) {
+            errors.partnerEmail = "Enter a valid email address";
         }
 
 
@@ -182,8 +176,6 @@ export function BasicDetailsForm({
     };
 const params = useParams();
 const patientId = params?.id?.toString();
-
-
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -228,13 +220,14 @@ const patientId = params?.id?.toString();
                     <Col md={12}>
                         <div className="d-flex align-items-center gap-4  flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
                             <div className="profile-wrapper position-relative" >
-                                 <img
-                                    src={typeof Simpleeditpro === "string" ? Simpleeditpro : Simpleeditpro.src}
-                                    alt="Profile"
-                                    className="object-fit-cover rounded-2"
-                                    width={100}
-                                    height={100}
-                                />
+                             <img
+  src={profileImage || Simpleeditpro.src}
+  alt="Profile"
+  className="object-fit-cover rounded-2"
+  width={100}
+  height={100}
+/>
+
                                 <div
                                     className="camera-icon"
                                     onClick={handleImageClick}
@@ -265,46 +258,48 @@ const patientId = params?.id?.toString();
 
                         <InputFieldGroup
                             label="Name"
-                            name="basic_detail_name"
+                            name="partnerName"
                             type="text"
-                            value={formData.basic_detail_name}
+                            value={formData.partnerName}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 handleChange(e);
                             }}
                             onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                             placeholder="Enter name"
                             required={true}
-                            error={formError.basic_detail_name}
+                            error={formError.partnerName}
                             className="position-relative "
                         ></InputFieldGroup>
                     </Col>
                     <Col md={6}>
-                        <RadioButtonGroup
-                            label="Gender"
-                            name="basic_detail_gender"
-                            value={formData.basic_detail_gender || ''}
-                            // defaultValue="male"
-                            onChange={(e) => handleChange(e)}
-                            required
-                            options={[
-                                { label: "Male", value: "male" },
-                                { label: "Female", value: "female" },
-                            ]}
-                        />
+                      <RadioButtonGroup
+    label="Gender"
+    name="partnerGender"
+    value={formData.partnerGender || ''}
+
+    onChange={(e) => handleChange(e)}
+    required
+    options={[
+        { label: "Male", value: "Male" },
+        { label: "Female", value: "Female" },
+        { label: "Other", value: "Other" },
+    ]}
+/>
+
                     </Col>
 
                     <Col md={6}>
                         <InputSelect
                             label="age"
-                            name="basic_detail_age"
-                            value={formData.basic_detail_age}
+                            name="partnerAge"
+                            value={formData.partnerAge}
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                 handleChange(e);
                             }}
                             onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
                             required={true}
                             disabled={false}
-                            error={formError.basic_detail_age}
+                            error={formError.partnerAge}
                             options={[
                                 { id: "1", value: "1", label: "1" },
                                 { id: "2", value: "2", label: "2" },
@@ -339,17 +334,17 @@ const patientId = params?.id?.toString();
                     <Col md={6}>
                         <PhoneNumberInput
                             label="Contact Number"
-                            value={formData.basic_detail_phone}
+                            value={formData.partnerContactNumber}
                             onChange={(phone: any) => {
                                 // setFormData((prev) => ({ ...prev, phone }));
                                 // setFormError((prev) => ({ ...prev, phone: "" }));
                                 handleChange({
-                                    target: { name: "basic_detail_phone", value: phone },
+                                    target: { name: "partnerContactNumber", value: phone },
                                 } as React.ChangeEvent<HTMLInputElement>);
                             }}
                             placeholder='(000) 000-0000'
                             required
-                            error={formError.basic_detail_phone}
+                            error={formError.partnerContactNumber}
                         />
                     </Col>
 
@@ -358,16 +353,16 @@ const patientId = params?.id?.toString();
 
                         <InputFieldGroup
                             label="Email ID"
-                            name="basic_detail_email"
+                            name="partnerEmail"
                             type="text"
-                            value={formData.basic_detail_email}
+                            value={formData.partnerEmail}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 handleChange(e);
                             }}
                             onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                             placeholder="Enter Email ID"
                             required={false}
-                            error={formError.basic_detail_email}
+                            error={formError.partnerEmail}
                             className="position-relative "
                         ></InputFieldGroup>
 

@@ -6,7 +6,7 @@ import Image from "next/image";
 import cameraicon from "../../assets/images/Cameraicon.png";
 import { InputFieldGroup } from "../ui/InputField";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-
+import { OptionType } from "@/utils/types/interfaces";
 import { DatePickerFieldGroup } from "../ui/CustomDatePicker";
 import { RadioButtonGroup } from "../ui/RadioField";
 import Textarea from "../ui/Textarea";
@@ -23,7 +23,7 @@ import { useSearchParams } from "next/navigation";
 import { PhoneNumberInput } from "../ui/PhoneNumberInput";
 import Button from "../ui/Button";
 import { InputSelect } from "../ui/InputSelect";
-
+import { getLoggedInUser, getLoginUser, update } from "@/utils/apis/apiHelper";
 
 export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   // Personal Details
@@ -43,9 +43,9 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   ]);
 
 
-  type FormData = {
+ type FormData = {
     Name: string;
-    Speciality: string;
+    Specialty: string;
     Experience: string;
     date: string;
     gender: string; // default will be "female"
@@ -59,15 +59,17 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     startYear: string;
     endYear: string;
 
-    MF: string;
-    SS: string;
-    Time: string;
-    Timer: string;
+    // MF: string;
+    // SS: string;
+    // Time: string;
+    // Timer: string;
+    services: OptionType[];
+    fees: string;
   };
 
   const initialFormData: FormData = {
     Name: "",
-    Speciality: "",
+    Specialty: "",
     Experience: "",
     date: "",
     gender: "female", // default value
@@ -81,12 +83,13 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     startYear: "",
     endYear: "",
 
-    MF: "",
-    SS: "",
-    Time: "",
-    Timer: "",
+    // MF: "",
+    // SS: "",
+    // Time: "",
+    // Timer: "",
+    services: [],
+    fees: "",
   };
-
 
   type Qualification = {
     degree: string;
@@ -96,17 +99,15 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     endYear: string;
   };
 
-
   const [formData, setFormData] = useState<FormData>(initialFormData);
-
 
   // All Validatation  
 
-  const validateForm = (data: FormData): FormError => {
+ const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
 
     if (!data.Name.trim()) errors.Name = "Name is required";
-    if (!data.Speciality.trim()) errors.Speciality = "Speciality is required";
+    if (!data.Specialty.trim()) errors.Specialty = "Speciality is required";
     if (!data.Experience.trim()) errors.Experience = "Experience is required";
     if (!data.date.trim()) errors.date = "DOB is required";
     if (!data.gender.trim()) errors.gender = "Gender is required";
@@ -121,17 +122,17 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!data.Email.trim()) {
-      errors.Email = "Email is required";
-    } else if (!emailRegex.test(data.Email)) {
-      errors.Email = "Enter a valid email address";
-    }
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // if (!data.Email.trim()) {
+    //   errors.Email = "Email is required";
+    // } else if (!emailRegex.test(data.Email)) {
+    //   errors.Email = "Enter a valid email address";
+    // }
 
 
     if (!data.About.trim()) errors.About = "About is required";
-
-
+    if (!data.services.length) errors.services = "services is required";
+    if (!data.fees.trim()) errors.fees = "fees is required";
     // if (!data.degree.trim()) errors.degree = "Degree is required";
     // if (!data.field.trim()) errors.field = "Field is required";
     // if (!data.university.trim()) errors.university = "University is required";
@@ -147,7 +148,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     return errors;
   };
 
-
   // Add Qualifications validtation  
   const validateForm1 = (quals: typeof qualifications) => {
     const errors = quals.map((q) => ({
@@ -159,8 +159,6 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     }));
     return errors;
   };
-
-
   // const handleNextClick = () => {
   //   const errors = validateForm(formData);
   //   setFormError(errors);
@@ -171,24 +169,63 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   //   }
   // };
 
+const handleNextClick = async () => {
+  const errors = validateForm(formData); 
+  const qualErrors = validateForm1(qualifications);
 
-  const handleNextClick = () => {
-    const errors = validateForm(formData);    // single form errors All 
-    const qualErrors = validateForm1(qualifications); // qualifications errors
+  console.log("errors", errors);
+  console.log("qualErrors", qualErrors);
 
-    setFormError(errors);
-    setFormErrors(qualErrors); // 👈 new state for qualifications
+  setFormError(errors);
+  setFormErrors(qualErrors);
 
-    const hasQualError = qualErrors.some((err) =>
-      Object.values(err).some((msg) => msg !== "")
-    );
+  const hasQualError = qualErrors.some((err) =>
+    Object.values(err).some((msg) => msg !== "")
+  );
 
-    if (Object.keys(errors).length === 0 && !hasQualError) {
-      onNext();
-    } else {
-      console.log("Form has errors:", { errors, qualErrors });
+  if (Object.keys(errors).length === 0 && !hasQualError) {
+    try {
+      const payload = {
+        name: formData.Name,
+        specialty: formData.Specialty,
+        yearsOfExperience: formData.Experience,
+        dob: formData.date,
+        gender: formData.gender,
+        contactNumber: formData.Contact,
+        email: formData.Email,
+        about: formData.About,
+        servicesOffered: formData.services.map((s) => s.value),
+        fees: formData.fees,
+        profilePicture: selectedImage,
+        qualifications: qualifications.map((q) => ({
+          degree: q.degree,
+          fieldOfStudy: q.field,
+          university: q.university,
+          startYear: Number(q.startYear),
+          endYear: Number(q.endYear),
+        })),
+      };
+
+      console.log("Sending payload", payload);
+
+      const response = await update(payload);
+
+      console.log("API response", response);
+
+      if (response?.status === 200) {
+        console.log("Profile updated successfully");
+        onNext(); // move to next step
+      } else {
+        console.error("Failed to update profile", response);
+      }
+    } catch (error) {
+      console.error("Error updating profile", error);
     }
-  };
+  } else {
+    console.log("Form has errors, cannot proceed");
+  }
+};
+
 
 
 
@@ -340,32 +377,68 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     }
   }, [showModal]);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await getLoggedInUser();
+        const user = response?.data?.data;
+        if (!user) return;
 
-  //profile qualification Edit button click in scroll to qualification-section
-  // const searchParams = useSearchParams();
-  // const scrollTo = searchParams.get("scrollTo");
+        const firstQualification = user.qualifications?.[0] || {
+          degree: "",
+          fieldOfStudy: "",
+          university: "",
+          startYear: "",
+          endYear: "",
+        };
 
-  // useEffect(() => {
-  //   if (scrollTo === "qualification") {
-  //     // Check if this scroll was triggered by button click
-  //     const shouldScroll = sessionStorage.getItem("triggerQualificationScroll");
+        setFormData({
+          Name: user.name || "",
+          Specialty: user.specialty || "",
+          Experience: user.yearsOfExperience?.toString() || "",
+          date: user.dob ? user.dob.split("T")[0] : "",
+          gender: user.gender || "female",
+          Contact: user.contactNumber || "",
+          Email: user.email || "",
+          About: user.about || "",
+          services: user.servicesOffered?.map((s: string) => ({ id: s, value: s, label: s })) || [],
+           fees: user.fees?.toString() || "", 
 
-  //     if (shouldScroll === "true") {
-  //       setTimeout(() => {
-  //         const section = document.getElementById("qualification-section");
-  //         if (section) {
-  //           section.scrollIntoView({
-  //             behavior: "smooth",
-  //             block: "start",
-  //           });
-  //         }
-  //       }, 200);
+          degree: firstQualification.degree || "",
+          field: firstQualification.fieldOfStudy || "",
+          university: firstQualification.university || "",
+          startYear: firstQualification.startYear?.toString() || "",
+          endYear: firstQualification.endYear?.toString() || "",
+        });
 
-  //       // reset flag after scroll so refresh won’t scroll again
-  //       sessionStorage.removeItem("triggerQualificationScroll");
-  //     }
-  //   }
-  // }, [scrollTo]);
+        setQualifications(
+          user.qualifications?.map((q: any) => ({
+            degree: q.degree || "",
+            field: q.fieldOfStudy || "",
+            university: q.university || "",
+            startYear: q.startYear?.toString() || "",
+            endYear: q.endYear?.toString() || "",
+          })) || []
+        );
+
+        setFormErrors(
+          user.qualifications?.map(() => ({
+            degree: "",
+            field: "",
+            university: "",
+            startYear: "",
+            endYear: "",
+          })) || []
+        );
+
+        setSelectedImage(user.profilePicture || null);
+      } catch (err) {
+        console.error("Error fetching user data", err);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
 
   return (
@@ -377,8 +450,8 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             <div className="d-flex align-items-center gap-4 mt-3 flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
               <div className="profile-wrapper">
                 {/* Profile image */}
-                <Image
-                  src={selectedImage ? selectedImage : Simpleeditpro}
+                <img
+                  src={selectedImage ? selectedImage : Simpleeditpro.src}
                   alt="Profile"
                   className="profile-image"
                   width={160}
@@ -555,24 +628,25 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
                 className="position-relative">
               </InputFieldGroup> */}
 
-              <InputSelect
+              <InputFieldGroup
                 label="Speciality"
                 name="Speciality"
-                value={formData.Speciality}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  handleChange(e);
+                type="text"
+                value={formData.Specialty}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setFormData({ ...formData, Specialty: e.target.value });
+                  if (formError.Specialty) {
+                    setFormError({ ...formError, Specialty: "" });
+                  }
                 }}
-                onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                placeholder="Speciality"
                 required={true}
                 disabled={false}
-                error={formError.Speciality}
-
-                options={[
-                  { id: "1", value: "1", label: "Speciality 1" },
-                  { id: "2", value: "2", label: "Speciality 2" },
-                  { id: "3", value: "3", label: "Speciality 3" },
-                ]}
-              />
+                readOnly={false}
+                error={formError.Specialty}
+                className="position-relative">
+              </InputFieldGroup>
             </Col>
 
 
@@ -720,7 +794,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
 
 
-      <ContentContainer className="mt-4">
+      {/* <ContentContainer className="mt-4">
         <div className="d-flex flex-column flex-md-row justify-content-md-between  text-md-start mb-3">
           <h5 className="profile-card-main-titile mb-2 mb-md-0">
             Operational hours & Days
@@ -781,10 +855,71 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
             />
           </Col>
         </Row>
-      </ContentContainer>
+      </ContentContainer> */}
 
 
+{/* <ContentContainer className="mt-4">
+        <div className="d-flex flex-column flex-md-row justify-content-md-between  text-md-start mb-3">
+          <h5 className="profile-card-main-titile mb-2 mb-md-0">
+            Operational hours & Days
+          </h5>
+          <Form.Check
+            type="checkbox"
+            label="Select custom Hours and Days?"
+            className="text-nowrap check-box input"
+          />
+        </div>
 
+        <Row className="mb-3  ">
+          <Col md={6} className="edit-basic-detail-timepicker">
+            <TimePickerFieldGroup
+              label="Monday-Friday"
+              name="MF"
+              placeholder="Select Time"
+              value={formData.MF}
+              onChange={(e) => {
+                setFormData({ ...formData, MF: e.target.value });
+              }}
+            />
+          </Col>
+
+          <Col md={6} className="mt-2 edit-basic-detail-timepicker">
+            <TimePickerFieldGroup
+              name="Time"
+              placeholder="Select Time"
+              value={formData.Time}
+              onChange={(e) => {
+                setFormData({ ...formData, Time: e.target.value });
+              }}
+            />
+          </Col>
+        </Row>
+
+        <Row className="mb-3 edit-basic-detail-timepicker">
+          <Col md={6} className="edit-basic-detailsat-sun">
+            <TimePickerFieldGroup
+              label="Saturday-Sunday"
+              name="SS"
+              placeholder="Select Time"
+              value={formData.SS}
+              onChange={(e) => {
+                setFormData({ ...formData, SS: e.target.value });
+              }}
+            />
+          </Col>
+
+          <Col md={6} className="mt-2 edit-basic-detail-timepicker">
+            <TimePickerFieldGroup
+              name="Timer"
+              placeholder="Select Time"
+              value={formData.Timer}
+              onChange={(e) => {
+                setFormData({ ...formData, Timer: e.target.value });
+              }}
+            />
+          </Col>
+        </Row>
+      </ContentContainer> */}
 
 
 

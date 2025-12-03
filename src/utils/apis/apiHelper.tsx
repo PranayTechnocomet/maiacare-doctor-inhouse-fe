@@ -37,9 +37,9 @@ export const getLoggedInDevice = (data: { token: string | null }) => {
 }
 
 
-export const logout = () => {
-  return apiClient.post("/profile/logout");
-}
+// export const logout = () => {
+//   return apiClient.post("/profile/logout");
+// }
 
 export const getLoggedInUser = () => {
   const token = localStorage.getItem("token");
@@ -49,15 +49,17 @@ export const getLoggedInUser = () => {
     }
   });
 }
-
-export const update = () => {
-  const token = localStorage.getItem("token");
-  return apiClient.put("/profile/update", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    }
-  });
+export const update = (payload: any) => {
+  return apiClient.put("/profile/update",payload);
 }
+// export const update = () => {
+//   const token = localStorage.getItem("token");
+//   return apiClient.put("/profile/update", {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     }
+//   });
+// }
 
 type QualificationType = {
   degree: string;
@@ -373,4 +375,15 @@ export const updateImages = (formData: imageUpload) => {
 
 
 
+export const logout = () => {
+  return apiClient.post("/profile/logout");
+}
 
+// export const logoutByDevice = (id: string) => {
+//   return apiClient.post(`/profile/logoutByDevice/${id}`);
+// };
+
+
+export const logoutByDevice = (id: string) => {
+  return apiClient.post(`/profile/logoutByDevice`, { id });
+};

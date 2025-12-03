@@ -15,9 +15,15 @@ import { useRouter } from 'next/navigation';
 import ContentContainer from './ui/ContentContainer';
 import Button from './ui/Button';
 import { getLoggedInUser } from '@/utils/apis/apiHelper';
-
+import toast from 'react-hot-toast';
 const Profile = () => {
-
+ const [activeTab, setActiveTab] = useState<string>("basic");
+    const [doctor, setDoctor] = useState<DoctorDataType | null>(null);
+    const [fees, setFees] = useState<number | null>(null);
+    const [about, setAbout] = useState<DoctorDataType | null>(null)
+    const [servicesOffered, setServicesOffered] = useState<string[]>([]);
+    const [defaultQualifications, setDefaultQualifications] = useState<any[]>([]);
+    const [documents, setDocuments] = useState<DocumentType[]>([]);
     const router = useRouter();
 
     const handleEditProfile = () => {
@@ -78,7 +84,7 @@ const Profile = () => {
 
 
     const [user, setUser] = useState<DoctorDataType | null>(null)
-    
+
     useEffect(() => {
         getLoggedInUser()
             .then((response) => {
@@ -94,9 +100,67 @@ const Profile = () => {
             .catch((err) => {
                 console.log(err);
             });
+     }, [])
+//  const getUser = () => {
+//         getLoggedInUser()
+//             .then((response) => {
+//                 if (response.status) {
+//                     const userData = response.data.data;
+//                     console.log("DOCUMENTS FROM API:", userData.documents);
+//                     setDoctor(userData);
+//                     setAbout(userData);
+//                     // setDocuments(userData.documents || []); 
+//                     setDefaultQualifications(userData.qualifications || []);
+//                     // setServicesOffered(userData.servicesOffered || []);                
+//                     // setFees(userData.fees)
+
+//                     setDocuments(
+//                         (userData.documents || []).map((doc: any) => ({
+//                             name:
+//                                 doc.reportName ||
+//                                 doc.aadharNumber ||
+//                                 doc.panNumber ||
+//                                 doc.licenceNumber ||
+//                                 doc.originalName ||
+//                                 "Document",
+//                             date: doc.uploadedAt
+//                                 ? new Date(doc.uploadedAt).toLocaleDateString()
+//                                 : doc.updatedAt
+//                                     ? new Date(doc.updatedAt).toLocaleDateString()
+//                                     : "-",
+//                             filePath: doc.filePath || doc.url || "",
+//                         }))
+//                     );
 
 
-    }, [])
+
+
+
+//                 } else {
+//                     toast.error(response.data?.message || "Something went wrong!");
+//                     console.error("Error fetching profile");
+//                 }
+//             })
+//             .catch((err) => {
+//                 console.error("API call failed", err);
+
+//                 //  Toast error from backend message
+//                 toast.error(
+//                     err?.response?.data?.message ||
+//                     err?.response?.data?.details?.message ||
+//                     "Something went wrong!"
+//                 );
+//             });
+//     };
+
+
+
+
+    // useEffect(() => {
+    //     getUser()
+    // }, [])
+
+
     const DoctorProfileCard: React.FC<{ doctor: typeof doctorData }> = ({ doctor }) => {
         return (
 
@@ -155,17 +219,17 @@ text-center text-md-start     ======= small screen all data center */}
                                             <svg width="13" height="17" viewBox="0 0 13 17" fill="none" className='me-1' xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12.5 6.24992C12.5 5.04044 12.149 3.85695 11.4897 2.84297C10.8304 1.82899 9.89103 1.0281 8.78555 0.537431C7.68007 0.0467583 6.45597 -0.112616 5.2617 0.0786373C4.06743 0.269891 2.95432 0.803554 2.05734 1.61491C1.16037 2.42626 0.518085 3.48044 0.208378 4.6496C-0.101328 5.81875 -0.0651477 7.05266 0.312532 8.20166C0.690211 9.35066 1.39316 10.3654 2.33613 11.1228C3.2791 11.8802 4.42158 12.3477 5.625 12.4687V16.2499C5.625 16.4157 5.69085 16.5747 5.80806 16.6919C5.92527 16.8091 6.08424 16.8749 6.25 16.8749C6.41576 16.8749 6.57473 16.8091 6.69194 16.6919C6.80915 16.5747 6.875 16.4157 6.875 16.2499V12.4687C8.4159 12.3119 9.84393 11.5893 10.8829 10.4406C11.9219 9.29192 12.4981 7.79879 12.5 6.24992ZM6.25 11.2499C5.26109 11.2499 4.29439 10.9567 3.47215 10.4073C2.6499 9.85787 2.00904 9.07697 1.6306 8.16334C1.25216 7.24971 1.15315 6.24438 1.34607 5.27447C1.539 4.30457 2.0152 3.41365 2.71447 2.71439C3.41373 2.01513 4.30464 1.53892 5.27455 1.346C6.24445 1.15307 7.24979 1.25209 8.16342 1.63053C9.07705 2.00897 9.85794 2.64983 10.4073 3.47207C10.9568 4.29432 11.25 5.26102 11.25 6.24992C11.2486 7.57556 10.7213 8.84649 9.78394 9.78386C8.84657 10.7212 7.57564 11.2485 6.25 11.2499Z" fill="#8A8D93" />
                                             </svg>
-                                            {user? user.gender.charAt(0).toUpperCase()+user.gender.slice(1) : ""}</span>
+                                            {user ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : ""}</span>
                                     </div>
                                     <div className="detail-row profile-sub-title">
                                         <span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className='me-1' xmlns="http://www.w3.org/2000/svg">
                                             <path d="M14.8727 10.5045L11.1922 8.85531L11.182 8.85062C10.991 8.7689 10.7825 8.73611 10.5756 8.7552C10.3687 8.7743 10.1698 8.84469 9.99688 8.96C9.97653 8.97344 9.95696 8.98805 9.93829 9.00375L8.03673 10.6248C6.83204 10.0397 5.58829 8.80531 5.00313 7.61625L6.62657 5.68578C6.64219 5.66625 6.65704 5.64672 6.6711 5.62562C6.78394 5.4532 6.85239 5.25556 6.87039 5.05029C6.88838 4.84502 6.85534 4.63848 6.77423 4.44906V4.43969L5.12032 0.752967C5.01309 0.505517 4.8287 0.299385 4.59468 0.165341C4.36067 0.0312965 4.08958 -0.0234699 3.82188 0.00921691C2.76326 0.148519 1.79155 0.668411 1.08824 1.47179C0.384919 2.27517 -0.00190698 3.3071 7.06925e-06 4.37484C7.06925e-06 10.578 5.04688 15.6248 11.25 15.6248C12.3177 15.6268 13.3497 15.2399 14.1531 14.5366C14.9564 13.8333 15.4763 12.8616 15.6156 11.803C15.6484 11.5354 15.5937 11.2643 15.4598 11.0303C15.3259 10.7963 15.12 10.6119 14.8727 10.5045ZM11.25 14.3748C8.59873 14.3719 6.05687 13.3174 4.18214 11.4427C2.3074 9.56798 1.2529 7.02612 1.25001 4.37484C1.24707 3.61194 1.52192 2.87406 2.02324 2.29899C2.52456 1.72392 3.21806 1.35099 3.97423 1.24984C3.97392 1.25296 3.97392 1.2561 3.97423 1.25922L5.61485 4.93109L4.00001 6.8639C3.98362 6.88276 3.96873 6.90288 3.95548 6.92406C3.83791 7.10447 3.76894 7.31218 3.75525 7.52708C3.74157 7.74197 3.78362 7.95676 3.87735 8.15062C4.58516 9.59828 6.04376 11.0459 7.50704 11.753C7.70232 11.8458 7.91835 11.8864 8.13403 11.8708C8.3497 11.8552 8.55763 11.7839 8.73751 11.6639C8.75757 11.6504 8.77687 11.6358 8.79532 11.6202L10.6945 9.99984L14.3664 11.6444C14.3664 11.6444 14.3727 11.6444 14.375 11.6444C14.2751 12.4016 13.9027 13.0965 13.3275 13.5991C12.7524 14.1016 12.0138 14.3774 11.25 14.3748Z" fill="#8A8D93" />
                                         </svg>
-                                            {user? user.contactNumber : ""}</span>
+                                            {user ? user.contactNumber : ""}</span>
                                         <span> <svg width="17" height="13" viewBox="0 0 17 13" fill="none" className='me-1' xmlns="http://www.w3.org/2000/svg">
                                             <path d="M15.625 0H0.625C0.45924 0 0.300268 0.0658481 0.183058 0.183058C0.065848 0.300269 0 0.45924 0 0.625V11.25C0 11.5815 0.131696 11.8995 0.366116 12.1339C0.600537 12.3683 0.918479 12.5 1.25 12.5H15C15.3315 12.5 15.6495 12.3683 15.8839 12.1339C16.1183 11.8995 16.25 11.5815 16.25 11.25V0.625C16.25 0.45924 16.1842 0.300269 16.0669 0.183058C15.9497 0.0658481 15.7908 0 15.625 0ZM14.018 1.25L8.125 6.65234L2.23203 1.25H14.018ZM15 11.25H1.25V2.04609L7.70234 7.96094C7.81765 8.06679 7.96848 8.12552 8.125 8.12552C8.28152 8.12552 8.43235 8.06679 8.54766 7.96094L15 2.04609V11.25Z" fill="#8A8D93" />
                                         </svg>
-                                            {user? user.email : ""}</span>
+                                            {user ? user.email : ""}</span>
                                     </div>
                                 </div>
 
