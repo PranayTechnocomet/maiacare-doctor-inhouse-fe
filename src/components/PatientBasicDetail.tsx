@@ -79,12 +79,17 @@ The IVF process, success rates, potential risks, and next steps were discussed.P
         }
     };
 
-   useEffect(() => {
+    useEffect(() => {
         if (!patientId) return;
 
         const fetchPhysicalAssessment = async () => {
             try {
-                const res = await getPhysicalAssessment(patient.physicalAssessment._id);
+                // const res = await getPhysicalAssessment(patient.physicalAssessment._id);
+                const assessmentId = patient?.physicalAssessment?._id;
+                if (!assessmentId) return; 
+
+                const res = await getPhysicalAssessment(assessmentId);
+
 
                 // res.data should be an array of assessments → match existing mapping
                 if (Array.isArray(res.data)) {
@@ -108,7 +113,11 @@ The IVF process, success rates, potential risks, and next steps were discussed.P
             }
         };
 
-        fetchPhysicalAssessment();
+        try {
+            fetchPhysicalAssessment();
+        } catch (err) {
+            console.log(err);
+        }
     }, [patientId]);
 
     const handleSaveFertilityAssessment = async (data: FertilityAssessmentFormType) => {
@@ -164,7 +173,8 @@ The IVF process, success rates, potential risks, and next steps were discussed.P
     };
     useEffect(() => {
         if (!patientId) return;
-
+        const ID = patient?.fertilityassessment?._id;
+        if(!ID) return;
         const fetchData = async () => {
             try {
                 const res = await getFertilityAssessment(patient.fertilityassessment._id);
@@ -181,6 +191,8 @@ The IVF process, success rates, potential risks, and next steps were discussed.P
 
     useEffect(() => {
         if (!patientId) return;
+        const ID = patient?.medicalHistoryId?._id
+        if(!ID) return;
 
         const fetchMedicalHistory = async () => {
             try {
@@ -728,24 +740,24 @@ The IVF process, success rates, potential risks, and next steps were discussed.P
                                         <Row className='g-3'>
                                             <Col sm={12}>
                                                 <div className="accordion-title-detail">
-                                                    <p>
+                                                    {/* <p> */}
                                                         <div className="contact-details-emergency">Pregnant Before:</div>{" "}
                                                         {modalFormFertilityData.pregnancy?.pregnantBefore}
-                                                    </p>
+                                                    {/* </p> */}
                                                     {modalFormFertilityData.pregnancy?.pregnantBeforeDetails && (
                                                         <p>
                                                             <div className="contact-details-emergency">Details:</div>{" "}
                                                             {modalFormFertilityData.pregnancy?.pregnantBeforeDetails}
                                                         </p>
                                                     )}
-                                                    <p>
+                                                    {/* <p> */}
                                                         <div className="contact-details-emergency">Trying to Conceive:</div>{" "}
                                                         {modalFormFertilityData.pregnancy?.tryingToConceiveDuration}
-                                                    </p>
-                                                    <p>
+                                                    {/* </p> */}
+                                                    {/* <p> */}
                                                         <div className="contact-details-emergency">Miscarriage/Ectopic History:</div>{" "}
                                                         {modalFormFertilityData.pregnancy?.miscarriageOrEctopicHistory}
-                                                    </p>
+                                                    {/* </p> */}
                                                     {modalFormFertilityData.pregnancy?.miscarriageOrEctopicDetails && (
                                                         <p>
                                                             <div className="contact-details-emergency">Details:</div>{" "}

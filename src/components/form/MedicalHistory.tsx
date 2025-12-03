@@ -83,6 +83,8 @@ export default function MedicalHistory({
         setFormError(errors);
 
         if (Object.keys(errors).length === 0) {
+            console.log("formData", formData);
+            
             try {
                 if (handleSaveMedicalHistory) {
                     await handleSaveMedicalHistory(formData);
