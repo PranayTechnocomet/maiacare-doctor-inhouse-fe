@@ -34,7 +34,7 @@ export const removeTokenCookie = () => {
 /**
  * Clear all stored user data (Redux + LocalStorage + Cookie)
  */
-export const ClearData = (dispatch: AppDispatch) => {
+export const ClearData = () => {
   try {
     removeTokenCookie();
 
