@@ -272,9 +272,12 @@ export const getPartnermedicalhistory = async (id: string | undefined) => {
 };
 
 
-export const updatePartnermedicalhistory = (id: string|undefined, data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: any[]; familyHistory: string; lifestyle: any[]; exerciseFrequency: string; stressLevel: string; }) => {
+export const updatePartnermedicalhistory = (
+  id: string|undefined,
+   data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: any[]; familyHistory: string; lifestyle: any[]; exerciseFrequency: string; stressLevel: string; }
+  ) => {
   const token = localStorage.getItem("token");
-  console.log("data",data)
+  console.log("id----",id)
   const res = apiClient.put(
     `/patient/partner/medicalHistory/${id}`,
     data,

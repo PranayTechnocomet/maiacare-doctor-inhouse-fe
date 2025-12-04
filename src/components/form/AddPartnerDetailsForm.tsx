@@ -451,7 +451,7 @@ export function MedicalHistoryForm({
 }) {
     type FormError = Partial<Record<keyof MedicalHistoryType, string>>;
 
-    console.log("formDataMedicalHistory : ", formDataMedicalHistory);
+    // console.log("formDataMedicalHistory : ", formDataMedicalHistory);
 
     const normalizeMulti = (arr: any[]) =>
         arr.map((item) =>
@@ -505,6 +505,7 @@ export function MedicalHistoryForm({
         return errors;
     };
 
+    console.log("FormData", FormData);
 
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -521,7 +522,6 @@ export function MedicalHistoryForm({
 
         e.preventDefault();
 
-
         const errors = validateForm(FormData);
         setMedicalHistoryFormError(errors);
 
@@ -531,6 +531,7 @@ export function MedicalHistoryForm({
         if (Object.keys(errors).length === 0) {
             if (formDataMedicalHistory) {
 
+                const values = FormData.lifestyle.map((e: { label: string, value: string }) => e.value);
                 const passData = {
                     patientId: id,
 
@@ -548,45 +549,33 @@ export function MedicalHistoryForm({
 
                     familyHistory: FormData.familyMedicalHistory,
 
-                    lifestyle: FormData.lifestyle.map((e: any) => e.value),
-
+                    // lifestyle: FormData.lifestyle.map((e: { label: string, value: string }) => e.value),
+                    lifestyle: values,
                     exerciseFrequency: FormData.exercise,
                     stressLevel: FormData.stress
                 };
 
                 updatePartnermedicalhistory(showData._id, passData)
                     .then((response) => {
-                        console.log("partner medical history: ", response.data);
-                        // const updatedMedicalHistory = {
-                        //     medications: {
-                        //         status: FormData.medication,
-                        //         medicationsDetails: FormData.medicationcontent
-                        //     },
-                        //     surgeries: {
-                        //         status: FormData.surgeries,
-                        //         surgeriesDetails: FormData.surgeriescontent
-                        //     },
-                        //     conditions: FormData.medicalCondition.map(e => ({
-                        //         value: e.value,
-                        //         label: e.label
-                        //     })),
-                        //     lifestyle: FormData.lifestyle.map(e => ({
-                        //         value: e.value,
-                        //         label: e.label
-                        //     })),
-                        //     familyHistory: FormData.familyMedicalHistory,
-                        //     exerciseFrequency: FormData.exercise,
-                        //     stressLevel: FormData.stress
-                        // };
+                        console.log("partner medical history: ", response);
+                        const res = response.data.data.medicalHistory;
                         const updatedMedicalHistory = {
-                            medications: passData.medications,
-                            surgeries: passData.surgeries,
-                            conditions: FormData.medicalCondition,  
-                            lifestyle: FormData.lifestyle,         
-                            familyHistory: FormData.familyMedicalHistory,
-                            exerciseFrequency: FormData.exercise,
-                            stressLevel: FormData.stress
+                            medications: {
+                                status: res.medications.status,
+                                medicationsDetails: res.medications.medicationsDetails
+                            },
+                            surgeries: {
+                                status: res.surgeries.status,
+                                surgeriesDetails: res.surgeries.surgeriesDetails
+                            },
+                            conditions: res.conditions,
+                            lifestyle: res.lifestyle,
+                            familyHistory: res.familyHistory,
+                            exerciseFrequency: res.exerciseFrequency,
+                            stressLevel: res.stressLevel
                         };
+                        console.log("updatedMedicalHistory", updatedMedicalHistory);
+
                         setShowData((prev: any) => ({
                             ...prev,
                             medicalHistory: updatedMedicalHistory
@@ -607,12 +596,6 @@ export function MedicalHistoryForm({
                 //     ...showData,
                 //     medicalHistory: FormData,
                 // };
-
-
-                setShowData((prev: any) => ({
-                    ...prev,
-                    medicalHistory: FormData
-                }));
 
                 // setShowData(updatedData);
                 setEditMedicalHistory(false);

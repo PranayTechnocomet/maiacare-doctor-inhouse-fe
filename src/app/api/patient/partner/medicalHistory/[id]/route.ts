@@ -6,10 +6,12 @@ import { handleApiError } from "@/utils/apis/errorHandler";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: any  
 ) {
-  const { id } = params;
+    const id = context.params.id;
   const API_URL = `/patient/partner/medicalHistory/${id}`;
+  console.log("id---------------------1", id);
+  
 
   try {
     const body = await parseRequestBody(req);
