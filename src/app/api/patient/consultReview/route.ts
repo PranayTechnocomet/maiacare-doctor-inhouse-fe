@@ -1,11 +1,11 @@
-// app/api/auth/login/route.ts
+
 import { NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { parseRequestBody } from "@/utils/apis/requestHandler";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
 export async function POST(req: Request) {
-  const API_BASE_URL = "/profile/logout";
+  const API_BASE_URL = "/patient/consultReview";
 
   try {
     const body = await parseRequestBody(req);
@@ -19,3 +19,5 @@ export async function POST(req: Request) {
     return handleApiError(error);
   }
 }
+
+

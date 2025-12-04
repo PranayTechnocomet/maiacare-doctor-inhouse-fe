@@ -2,13 +2,18 @@
 import React, { useRef, useState } from "react";
 import { Nav } from "react-bootstrap";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   HiOutlineChevronDoubleLeft,
   HiOutlineChevronDoubleRight,
   HiOutlineMenu,
 } from "react-icons/hi";
-import { MdWindow, MdSettings, MdOutlineCalendarToday } from "react-icons/md";
+import {
+  MdWindow,
+  MdSettings,
+  MdOutlineCalendarToday,
+  MdOutlineLogout,
+} from "react-icons/md";
 import { BsPeople } from "react-icons/bs";
 import { FaChevronDown } from "react-icons/fa";
 import { RiChat3Line, RiNotificationLine } from "react-icons/ri";
@@ -16,9 +21,13 @@ import { IoBagAddOutline } from "react-icons/io5";
 import Logo from "../../assets/images/logo.png";
 import Maia from "../../assets/images/maia.png";
 import UserProfileIcon from "../../assets/images/user-icon.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/Hook/Redux/Store/store";
 import { FaBoxesStacked } from "react-icons/fa6";
+import { logout } from "@/utils/apis/apiHelper";
+import { ClearData } from "@/utils/Helper";
+import { setToken } from "@/Hook/Redux/Slice/tokenSlice";
+import toast from "react-hot-toast";
 
 interface Props {
   collapsed: boolean;
@@ -28,6 +37,8 @@ interface Props {
 
 const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
   const pathname = usePathname();
+  const dispatch = useDispatch();
+  const router = useRouter();
   const navRef = useRef<HTMLDivElement | null>(null);
   const authData = useSelector((state: RootState) => state.auth);
   const { title, subtitle } = useSelector((state: RootState) => state.header);
@@ -54,28 +65,53 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
     }
   };
 
+  const handleLogout = () => {
+    logout().then(() => {
+      ClearData();
+      toast.success("Logout successfully");
+      localStorage.clear();
+      dispatch(setToken(""));
+      router.push("/login");
+    }).catch(() => {
+      toast.error("Logout failed");
+    });
+  };
+
   return (
     <div className="layout">
       {/* ====== DESKTOP SIDEBAR ====== */}
       <aside
-        className={`sidebar desktop-sidebar ${collapsed ? "sidebar--collapsed" : "sidebar--expanded"
-          }`}
+        className={`sidebar desktop-sidebar ${
+          collapsed ? "sidebar--collapsed" : "sidebar--expanded"
+        }`}
       >
         <button
           type="button"
           className="sidebar__toggle"
           onClick={() => setCollapsed(!collapsed)}
         >
-          {collapsed ? <HiOutlineChevronDoubleRight /> : <HiOutlineChevronDoubleLeft />}
+          {collapsed ? (
+            <HiOutlineChevronDoubleRight />
+          ) : (
+            <HiOutlineChevronDoubleLeft />
+          )}
         </button>
 
         <div className="sidebar__top">
           <Link href="/" className="sidebar__logo-link">
             {/* <img src={Logo.src} alt="Logo" className="sidebar__logo" /> */}
             {collapsed ? (
-              <img src={Logo.src} alt="Collapsed Logo" className="sidebar__logo" />
+              <img
+                src={Logo.src}
+                alt="Collapsed Logo"
+                className="sidebar__logo"
+              />
             ) : (
-              <img src={Maia.src} alt="Expanded Logo" className="sidebar__logo" />
+              <img
+                src={Maia.src}
+                alt="Expanded Logo"
+                className="sidebar__logo"
+              />
             )}
           </Link>
           <hr className="sidebar__divider" />
@@ -95,9 +131,18 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
             })}
           </Nav>
         </div>
-
+        <div
+          className="sidebar__nav-item d-flex align-items-center justify-content-center mb-2"
+          onClick={handleLogout}
+        >
+          <MdOutlineLogout size={20} />
+        </div>
         <div className="sidebar__bottom">
-          <div role="button" className="sidebar__collapse" onClick={handleScrollDown}>
+          <div
+            role="button"
+            className="sidebar__collapse"
+            onClick={handleScrollDown}
+          >
             <FaChevronDown size={20} />
           </div>
           <div className="sidebar__user">
@@ -106,15 +151,21 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
               alt="User"
               className="sidebar__user-avatar"
             />
-            <span className="sidebar__text">{authData.user?.name || "John Doe"}</span>
+            <span className="sidebar__text">
+              {authData.user?.name || "John Doe"}
+            </span>
           </div>
         </div>
       </aside>
 
-
       {/* ====== OFFCANVAS SIDEBAR (MOBILE/TABLET) ====== */}
-      <div className={`offcanvas-backdrop ${showOffcanvas ? "show" : ""}`} onClick={() => setShowOffcanvas(false)}></div>
-      <aside className={`sidebar offcanvas-sidebar ${showOffcanvas ? "open" : ""}`}>
+      <div
+        className={`offcanvas-backdrop ${showOffcanvas ? "show" : ""}`}
+        onClick={() => setShowOffcanvas(false)}
+      ></div>
+      <aside
+        className={`sidebar offcanvas-sidebar ${showOffcanvas ? "open" : ""}`}
+      >
         <div className="offcanvas-header">
           <button
             type="button"
@@ -125,10 +176,13 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
           </button>
         </div>
         <div className="sidebar__top">
-          <Link href="/" className="sidebar__logo-link" onClick={() => setShowOffcanvas(false)}>
+          <Link
+            href="/"
+            className="sidebar__logo-link"
+            onClick={() => setShowOffcanvas(false)}
+          >
             {/* <img src={Logo.src} alt="Logo" className="sidebar__logo" /> */}
             <img src={Maia.src} alt="Expanded Logo" className="sidebar__logo" />
-
           </Link>
           <hr className="sidebar__divider" />
           <Nav className="sidebar__nav">
@@ -146,12 +200,23 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
                 </Link>
               );
             })}
-
           </Nav>
         </div>
 
+        <div
+          className="sidebar__nav-item d-flex align-items-center justify-content-start mb-2"
+          onClick={handleLogout}
+        >
+          <MdOutlineLogout size={20} />
+          <span className="sidebar__text">Logout</span>
+        </div>
+
         <div className="sidebar__bottom">
-          <div role="button" className="sidebar__collapse" onClick={handleScrollDown}>
+          <div
+            role="button"
+            className="sidebar__collapse"
+            onClick={handleScrollDown}
+          >
             <FaChevronDown size={20} />
           </div>
           <div className="sidebar__user">
@@ -160,7 +225,9 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
               alt="User"
               className="sidebar__user-avatar"
             />
-            <span className="sidebar__text">{authData.user?.name || "John Doe"}</span>
+            <span className="sidebar__text">
+              {authData.user?.name || "John Doe"}
+            </span>
           </div>
         </div>
       </aside>
@@ -184,7 +251,10 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
             <span className="header-icon-container">
               <RiChat3Line size={18} />
             </span>
-            <Link href="/notifications" className="header-icon-container sitelayout-header-icon" >
+            <Link
+              href="/notifications"
+              className="header-icon-container sitelayout-header-icon"
+            >
               <RiNotificationLine size={18} />
             </Link>
           </div>

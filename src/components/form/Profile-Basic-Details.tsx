@@ -12,11 +12,21 @@ import ContentContainer from '../ui/ContentContainer';
 import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
 import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
-
 import Button from '../ui/Button';
 import toast from 'react-hot-toast';
 import { InputSelect } from '../ui/InputSelect';
 import { addQualification, deleteQualification, editQualification, getLoggedInUser } from '@/utils/apis/apiHelper';
+interface DocumentType {
+  originalName?: string;
+  reportName?: string;
+  aadharNumber?: string;
+  panNumber?: string;
+  licenceNumber?: string;
+  filePath: string;
+  updatedAt?: string;
+    name: string;
+    date: string;
+}
 
 
 const ProfileBasicDetails = () => {
@@ -24,27 +34,13 @@ const ProfileBasicDetails = () => {
     [key: string]: string;
 
   }
-
   const router = useRouter();
-
-  // const handleEditClick = () => {
-  //   // set flag before navigation
-  //   sessionStorage.setItem("triggerQualificationScroll", "true");
-  //   router.push("/edit-profile?scrollTo=qualification");
-  // };
-
   const initialFormError: FormError = {};
-
   const [formError, setFormError] = useState<FormError>(initialFormError);
   const [activeTab,] = useState('basic');
   const [startTime, setStartTime] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [endTime, setEndTime] = useState("");
-
-  // const [defaultQualifications, setDefaultQualifications] = useState([
-  //   { title: 'MD Gynaecology', university: 'Medical University', years: '2015 - 2017' },
-  //   { title: 'MBBS', university: 'Medical University', years: '2010 - 2015' },
-  // ]);
 
   interface qualificationType {
     degree: string,
@@ -95,14 +91,8 @@ const ProfileBasicDetails = () => {
   ]);
 
 
+ const [documents, setDocuments] = useState<DocumentType[]>([]);
 
-  // const documents = [
-  //   { name: 'Certificate.pdf', date: 'October 20, 2024' },
-  //   { name: 'Aadhar Card.pdf', date: 'October 20, 2024' },
-  //   { name: 'License.pdf', date: 'October 20, 2024' },
-  //   { name: 'Certificate.pdf', date: 'October 20, 2024' },
-  // ];
-  const [documents, setDocuments] = useState<{ name: string; date: string }[]>([]);
 
   const handleDelete = (id: string) => {
     // const updated = defaultQualifications.filter((_, i) => i !== index);
@@ -139,10 +129,6 @@ const ProfileBasicDetails = () => {
     { days: "Sat & Sun", time: "10 AM – 2 PM" },
   ];
 
-
-
-
-
   //================  + add  Modal all data below ============= //
 
   const handleOpen = () => {
@@ -171,20 +157,10 @@ const ProfileBasicDetails = () => {
     return { id: year.toString(), value: year.toString(), label: year.toString() };
   });
 
-
   const validateForm = (data: FormData): FormError => {
     const errors: FormError = {};
-
-    // if (!data.degree.trim()) errors.degree = "Degree is required";
-    // if (!data.field.trim()) errors.field = "Field is required";
-    // if (!data.university.trim()) errors.university = "University is required";
-    // if (!data.startYear.trim()) errors.startYear = "Start year is required";
-    // if (!data.endYear.trim()) errors.endYear = "End year is required";
-
     return errors;
   };
-
-
   const validateForm1 = (quals: typeof qualifications) => {
     const errors = quals.map((q) => ({
 
@@ -205,10 +181,7 @@ const ProfileBasicDetails = () => {
       ...formErrors,
       { degree: "", fieldOfStudy: "", university: "", startYear: "", endYear: "" }
     ]);
-
-
   };
-
   const handleRemoveQualification = (index: number) => {
     const updated = [...qualifications];
     updated.splice(index, 1);
@@ -256,8 +229,6 @@ const ProfileBasicDetails = () => {
 
       // 🔹 Success → close modal + reset data
 
-
-
       const passData = qualifications.map((q) => ({
         degree: q.degree,
         fieldOfStudy: q.fieldOfStudy,
@@ -297,17 +268,11 @@ const ProfileBasicDetails = () => {
     else {
       console.log("Form has errors : ", { errors, qualErrors });
     }
-
-
   };
-
-
   // + add Qualification button diable data show after unable
   const isQualificationComplete = (q: any) => {
     return q.degree && q.fieldOfStudy && q.university && q.startYear && q.endYear;
   };
-
-
 
   // ===== Edit button click in modal open ================
   const openQualificationModal = (index: number, id:string) => {
@@ -339,27 +304,12 @@ const ProfileBasicDetails = () => {
     return errors;
   };
 
-
   const handleEditSave = () => {
     const errors = EditValidtation(formData);
     setFormError(errors);
     // console.log("Qualification:", id);
     
     if (Object.keys(errors).length > 0) return; // ❌ don't save if errors
-
-    // if (editIndex !== null) {
-    //   const updated = [...defaultQualifications];
-    //   updated[editIndex] = {
-    //     title: `${formData.degree} - ${formData.fieldOfStudy}`,
-    //     university: formData.university,
-    //     years: `${formData.startYear} - ${formData.endYear}`,
-    //     degree: formData.degree,
-    //     fieldOfStudy: formData.fieldOfStudy,
-    //     startYear: formData.startYear,
-    //     endYear: formData.endYear
-    //   };
-    //   setDefaultQualifications(updated);
-    // }
     console.log("formData", formData);
     
     editQualification(formData, selectedQualificationId)
@@ -383,21 +333,13 @@ const ProfileBasicDetails = () => {
     setEditIndex(null);
   };
 
-
   const [editIndex, setEditIndex] = useState<number | null>(null); // track current editing row
-
-
-
-
-
-
   interface OperationalHour {
     day: string;
     openTime: string;
     closeTime: string;
     _id: string;
   }
-
   interface Qualification {
     degree: string;
     fieldOfStudy: string;
@@ -406,7 +348,6 @@ const ProfileBasicDetails = () => {
     endYear: number;
     _id: string;
   }
-
   interface DoctorDataType {
     _id: string;
     name: string;
@@ -429,33 +370,52 @@ const ProfileBasicDetails = () => {
     memberSince: string;
     documents: any[];
   }
-
-
   const [user, setUser] = useState<DoctorDataType | null>(null)
-  const getUser = () => {
-    getLoggedInUser()
-      .then((response) => {
+  // const getUser = () => {
+  //   getLoggedInUser()
+  //     .then((response) => {
 
-        if (response.status == 200) {
-          setUser(response.data.data)
-          setDocuments(response.data.data.documents)
-          setDefaultQualifications(response.data.data.qualifications)
-        } else {
-          console.log("Error");
-        }
+  //       if (response.status == 200) {
+  //         setUser(response.data.data)
+  //         setDocuments(response.data.data.documents)
+  //         setDefaultQualifications(response.data.data.qualifications)
+  //       } else {
+  //         console.log("Error");
+  //       }
 
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+const getUser = () => {
+  getLoggedInUser()
+    .then((response) => {
+      if (response.status == 200) {
+        const userData = response.data.data;
+
+        // 🔥 Normalize document fields
+        const normalizedDocs = userData.documents.map((doc: any, i: number) => ({
+          ...doc,
+          originalName: doc.originalName || doc.reportName || doc.name || `Document-${i + 1}`,
+          updatedAt: doc.updatedAt || doc.uploadedAt || doc.date || null,
+        }));
+
+        setUser(userData);
+        setDocuments(normalizedDocs);
+        setDefaultQualifications(userData.qualifications);
+      } else {
+        console.log("Error");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
   useEffect(() => {
     getUser()
   }, [])
-
-
-
 
   return (
     // <Container fluid className="mt-3">
@@ -861,32 +821,43 @@ const ProfileBasicDetails = () => {
               <div>
                 <h5 className="mb-4 profile-card-main-titile">Documents</h5>
 
-                {documents.map((doc, index) => (
-                  <div
-                    className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border"
-                    key={index}
-                  >
-                    <div className="d-flex align-items-center">
-                      <Image
-                        src={Pdfimg}
-                        alt="pdf"
-                        width="40"
-                        className="me-3"
-                      />
-                      <div>
-                        <div className="card-feild">{doc.name}</div>
-                        <div className="card-year">{doc.date}</div>
-                      </div>
-                    </div>
+      {documents.map((doc, index) => {
+  const docName =
+    doc.originalName ||
+    doc.reportName ||
+    doc.aadharNumber ||
+    doc.panNumber ||
+    doc.licenceNumber ||
+    `Document-${index + 1}`;
 
-                    <button
-                      className="d-flex  bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border"
-                      onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}
-                    >
-                      <Image src={Download} alt="experience" width={25} height={25} />
-                    </button>
-                  </div>
-                ))}
+  const formattedDate = doc.updatedAt
+    ? new Date(doc.updatedAt).toLocaleDateString()
+    : "";
+
+  return (
+    <div
+      key={index}
+      className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border"
+    >
+      <div className="d-flex align-items-center">
+        <Image src={Pdfimg} alt="pdf" width="40" className="me-3" />
+
+        <div>
+          <div className="card-feild">{docName}</div>
+          <div className="card-year">{formattedDate}</div>
+        </div>
+      </div>
+
+     <button
+                    className="d-flex  bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border"
+                    onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}
+                  >
+                    <Image src={Download} alt="experience" width={25} height={25} />
+                  </button>
+    </div>
+  );
+})}
+
 
               </div>
 

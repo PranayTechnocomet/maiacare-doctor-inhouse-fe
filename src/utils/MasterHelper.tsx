@@ -50,6 +50,9 @@ const authPages = ["/login", "/register", "/forgotppassword","/resetpassword","/
     // console.log("localToken", localToken);
 
     if (localToken) {
+      if(authPages.includes(pathName)){
+        router.push("/profile")
+      }
       dispatch(setToken(localToken));
       getUser();
     } else {

@@ -374,11 +374,11 @@ export const tableResponse: Patient[] = [
 
 export const partnerDetailData = {
   profile: {
-    basic_detail_name: "Raj Desai",
-    basic_detail_gender: "Male",
-    basic_detail_age: "31",
-    basic_detail_phone: "12345 67890",
-    basic_detail_email: "riyadharang@miacare.com",
+    partnerName: "Raj Desai",
+    partnerGender: "Male",
+    partnerAge: "31",
+    partnerContactNumber: "12345 67890",
+    partnerEmail: "riyadharang@miacare.com",
 
   },
   medicalHistory: {
