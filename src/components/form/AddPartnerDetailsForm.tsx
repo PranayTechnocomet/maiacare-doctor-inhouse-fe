@@ -18,11 +18,17 @@ import { useParams } from 'next/navigation';
 export function BasicDetailsForm({
     setAddPartner,
     setActiveTab,
-    setShowData
+    setShowData,
+    setTabManagement,
+    setAllData,
+    allData
 }: {
     setAddPartner: (value: boolean) => void,
     setActiveTab: (tab: string) => void,
-    setShowData: (value: any) => void
+    setShowData: (value: any) => void,
+    setTabManagement: (value: number) => void | number,
+    setAllData: (value: any) => unknown,
+    allData: (value: any) => unknown
 }) {
 
     const initialFormError: FormError = {};
@@ -37,14 +43,14 @@ export function BasicDetailsForm({
 
     type FormError = Partial<Record<keyof FormData, string>>;
 
-   const initialFormData: FormData = {
-    partnerName: "",
-    partnerGender: "Male",   // Capitalized
-    partnerAge: "",
-    partnerContactNumber: "",
-    partnerEmail: "",
-    profileImage: ""
-};
+    const initialFormData: FormData = {
+        partnerName: "",
+        partnerGender: "Male",   // Capitalized
+        partnerAge: "",
+        partnerContactNumber: "",
+        partnerEmail: "",
+        profileImage: ""
+    };
 
     const [formData, setFormData] = useState<FormData>(initialFormData);
     // console.log("formData", formData);
@@ -85,13 +91,13 @@ export function BasicDetailsForm({
     const handleImageClick = () => {
         fileInputRef.current?.click();
     };
-  const handleFileChange = (
+    const handleFileChange = (
         event: React.ChangeEvent<HTMLInputElement> | undefined
     ) => {
         if (event) {
             const file = event.target.files?.[0];
-            console.log("file",file);
-            
+            console.log("file", file);
+
             if (file) {
                 const allowedTypes = ["image/jpeg", "image/png"];
 
@@ -133,6 +139,33 @@ export function BasicDetailsForm({
                 };
                 reader.readAsDataURL(file);
             }
+            const data = {
+                type: "doctor",
+                files: file
+            }
+            getProfileImageUrl(data)
+                .then((response) => {
+                    if (response.data.status) {
+                        console.log("response : ", response);
+                        const uploadedImage = response.data.files[0];
+
+                        setProfileImage(uploadedImage);
+                        setFormData((prev) => ({
+                            ...prev,
+                            partnerImage: uploadedImage,
+                        }));
+                        setFormError((prev) => ({
+                            ...prev,
+                            partnerImage: "",
+                        }));
+
+                    } else {
+                        console.log("error");
+                    }
+
+                }).catch((error) => {
+                    console.log("error", error);
+                });
         }
     };
 
@@ -158,65 +191,60 @@ export function BasicDetailsForm({
 
         return errors;
     };
-const params = useParams();
-const patientId = params?.id?.toString();
+    const params = useParams();
+    const patientId = params?.id?.toString();
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         const errors = validateForm(formData);
         setFormError(errors);
         // console.log("errors", errors);
         if (Object.keys(errors).length === 0) {
+            setTabManagement(1)
             // console.log("FormData111111 ", formData);
             setFormError(initialFormError);
             setActiveTab("medical history");
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
-
-       const passData = {
-    patientId: patientId,   // 👈 REQUIRED
-    partnerImage: formData.profileImage,
-    partnerName: formData.partnerName,
-    partnerContactNumber: formData.partnerContactNumber,
-    partnerEmail: formData.partnerEmail,
-    partnerGender: formData.partnerGender.charAt(0).toUpperCase() + formData.partnerGender.slice(1),
-    partnerAge: formData.partnerAge
-};
-
-        const formDataImage = {
-            type: "doctor",
-            files: formData.profileImage
-        }
+        const passData = {
+            patientId: patientId,
+            partnerImage: profileImage,
+            partnerName: formData.partnerName,
+            partnerContactNumber: formData.partnerContactNumber,
+            partnerEmail: formData.partnerEmail,
+            partnerGender: formData.partnerGender.charAt(0).toUpperCase() + formData.partnerGender.slice(1),
+            partnerAge: formData.partnerAge
+        };
+        
         const formDataToSend = new FormData();
         formDataToSend.append("type", "doctor");
         formDataToSend.append("files", formData.profileImage);
-        console.log("formDataToSend", formDataImage);
 
+        // getProfileImageUrl(formDataImage)
+        //     .then((response) => {
+        //         console.log("getImageUrl: ", response.data);
+        //     })
+        //     .catch((err) => {
+        //         console.log("getImageUrl", err);
+        //     });
 
-        getProfileImageUrl(formDataImage)
-            .then((response) => {
-                console.log("getImageUrl: ", response.data);
-            })
-            .catch((err) => {
-                console.log("getImageUrl", err);
-            });
-        basicDetails(passData)
-            .then((response) => {
+        // basicDetails(passData)
+        //     .then((response) => {
 
-                if (response.status == 200) {
-                    console.log("Partner basic details added: ", response.data);
-                } else {
-                    console.log("Error");
-                }
+        //         if (response.status == 200) {
+        //             console.log("Partner basic details added: ", response.data);
+        //         } else {
+        //             console.log("Error");
+        //         }
 
-            })
-            .catch((err) => {
-                console.log("Partner basic details adding error", err);
-            });
+        //     })
+        //     .catch((err) => {
+        //         console.log("Partner basic details adding error", err);
+        //     });
 
+        setAllData({ ...allData, basicDetailsPassingData: passData })
     };
     return (
         <>
@@ -226,13 +254,13 @@ const patientId = params?.id?.toString();
                     <Col md={12}>
                         <div className="d-flex align-items-center gap-4  flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
                             <div className="profile-wrapper position-relative" >
-                             <img
-  src={profileImage || Simpleeditpro.src}
-  alt="Profile"
-  className="object-fit-cover rounded-2"
-  width={100}
-  height={100}
-/>
+                                <img
+                                    src={profileImage || Simpleeditpro.src}
+                                    alt="Profile"
+                                    className="object-fit-cover rounded-2"
+                                    width={100}
+                                    height={100}
+                                />
 
                                 <div
                                     className="camera-icon"
@@ -278,19 +306,19 @@ const patientId = params?.id?.toString();
                         ></InputFieldGroup>
                     </Col>
                     <Col md={6}>
-                      <RadioButtonGroup
-    label="Gender"
-    name="partnerGender"
-    value={formData.partnerGender || ''}
+                        <RadioButtonGroup
+                            label="Gender"
+                            name="partnerGender"
+                            value={formData.partnerGender || ''}
 
-    onChange={(e) => handleChange(e)}
-    required
-    options={[
-        { label: "Male", value: "Male" },
-        { label: "Female", value: "Female" },
-        { label: "Other", value: "Other" },
-    ]}
-/>
+                            onChange={(e) => handleChange(e)}
+                            required
+                            options={[
+                                { label: "Male", value: "Male" },
+                                { label: "Female", value: "Female" },
+                                { label: "Other", value: "Other" },
+                            ]}
+                        />
 
                     </Col>
 
@@ -397,6 +425,9 @@ export function MedicalHistoryForm({
     initialData,
     setEditMedicalHistory,
     formDataMedicalHistory,
+    setTabManagement,
+    setAllData,
+    allData
 }: {
     setAddPartner: (value: boolean) => void,
     setActiveTab: (tab: string) => void,
@@ -405,6 +436,9 @@ export function MedicalHistoryForm({
     showData?: any,
     setEditMedicalHistory?: React.Dispatch<React.SetStateAction<boolean>> | any;
     formDataMedicalHistory?: MedicalHistoryType | any,
+    setTabManagement: (value: number) => void | number,
+    setAllData: (value: any) => unknown,
+    allData?: any
 }) {
     type FormError = Partial<Record<keyof MedicalHistoryType, string>>;
 
@@ -421,25 +455,25 @@ export function MedicalHistoryForm({
         );
 
     const initialFormData: MedicalHistoryType = {
-        medication: formDataMedicalHistory.medications.status || "Yes",
-        surgeries: formDataMedicalHistory.surgeries.status || "Yes",
-        surgeriesContent: formDataMedicalHistory.surgeries.surgeriesDetails || "",
+        medication: formDataMedicalHistory?.medications?.status || "Yes",
+        surgeries: formDataMedicalHistory?.surgeries?.status || "Yes",
+        surgeriesContent: formDataMedicalHistory?.surgeries?.surgeriesDetails || "",
 
-        medicalCondition: formDataMedicalHistory.conditions
-            ? normalizeMulti(formDataMedicalHistory.conditions)
+        medicalCondition: formDataMedicalHistory?.conditions
+            ? normalizeMulti(formDataMedicalHistory?.conditions)
             : [],
 
-        lifestyle: formDataMedicalHistory.lifestyle
-            ? normalizeMulti(formDataMedicalHistory.lifestyle)
+        lifestyle: formDataMedicalHistory?.lifestyle
+            ? normalizeMulti(formDataMedicalHistory?.lifestyle)
             : [],
 
 
         familyMedicalHistory: formDataMedicalHistory?.familyHistory || "",
 
-        stress: formDataMedicalHistory.stressLevel || "Moderate",
-        exercise: formDataMedicalHistory.exerciseFrequency || "Regularly",
-        medicationcontent: formDataMedicalHistory.medications.medicationsDetails || "",
-        surgeriescontent: formDataMedicalHistory.surgeries.surgeriesDetails || "",
+        stress: formDataMedicalHistory?.stressLevel || "Moderate",
+        exercise: formDataMedicalHistory?.exerciseFrequency || "Regularly",
+        medicationcontent: formDataMedicalHistory?.medications?.medicationsDetails || "",
+        surgeriescontent: formDataMedicalHistory?.surgeries?.surgeriesDetails || "",
     }
 
 
@@ -559,10 +593,11 @@ export function MedicalHistoryForm({
 
 
             } else {
+                setTabManagement(2)
                 setActiveTab("physical & fertility assessment");
                 // console.log("FormData55", FormData);
                 // setShowData((prev: any) => ({ ...prev, medicalHistory: FormData }));
-                const passData = {
+                const medicalHistoryPassingData = {
                     patientId: id,
                     medications: {
                         status: FormData.medication.charAt(0).toUpperCase() + FormData.medication.slice(1),
@@ -579,13 +614,14 @@ export function MedicalHistoryForm({
                     stressLevel: FormData.stress.charAt(0).toUpperCase() + FormData.stress.slice(1)
 
                 }
-                addPartnerMedicalHistory(passData)
-                    .then((response) => {
-                        console.log("partner medical history: ", response.data);
-                    })
-                    .catch((err) => {
-                        console.log("partner medical history", err);
-                    });
+                setAllData({ ...allData, medicalHistoryPassingData: medicalHistoryPassingData });
+                // addPartnerMedicalHistory(medicalHistoryPassingData)
+                //     .then((response) => {
+                //         console.log("partner medical history: ", response.data);
+                //     })
+                //     .catch((err) => {
+                //         console.log("partner medical history", err);
+                //     });
             }
 
         }

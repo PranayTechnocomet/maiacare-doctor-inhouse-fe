@@ -2,7 +2,6 @@ import { FertilityAssessmentType } from "../types/interfaces";
 import { LoginRequest } from "../types/requestInterface";
 import apiClient from "./axiosInstance";
 import api from "./axiosInstance";
-import { imageUpload } from "../types/interfaces";
 
 export const login = (data: LoginRequest) => {
   return apiClient.post("/auth/login", data);
@@ -97,9 +96,9 @@ export const deleteQualification = (id: string) => {
   });
 };
 
-export const uploadkycdetails = () => {
+export const uploadkycdetails = (data: { aadharNumber: string; aadharFile: string; panNumber: string; panFile: string; licenceNumber: string; licenceFile: string; otherDocuments: { reportName: string; filePath: string; originalName: string; }[]; }) => {
   const token = localStorage.getItem("token");
-  return apiClient.delete("/profile/uploadkycdetails", {
+  return apiClient.put("/profile/upload-kyc-details",data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -245,8 +244,8 @@ export const updatemedicalhistory = (id: string, data: any) => {
   );
 };
 
-export const basicDetails = (data: object) => {
-  return apiClient.post("/patient/partner/basicDetails", data);
+export const basicDetails = (data : object) => {
+  return apiClient.post("/patient/partner/basicDetails" , data);
 }
 
 
@@ -334,15 +333,6 @@ export const addPartnerfertilityAssessment = (data: { patientId: string | undefi
   });
 }
 
-export const consultation = (data: any) => {
-  const token = localStorage.getItem("token");
-
-  return apiClient.post("/patient/consultReview", data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    }
-  });
-};
 
 export const getPartnerFertilityAssessment = async (id: string) => {
   return api.get(`/patient/partner/fertility-assessment/${id}`);
@@ -369,7 +359,7 @@ export const updatePartnerfertilityassessment = (id: string, data: any) => {
 
 
 
-export const getProfileImageUrl = (formData: { type: string; files: string; }) => {
+export const getProfileImageUrl = (formData: { type: string; files: string|File|undefined; }) => {
   const token = localStorage.getItem("token");
 
   return apiClient.post("/update-images", formData, {
@@ -391,4 +381,13 @@ export const logout = () => {
 
 export const logoutByDevice = (id: string) => {
   return apiClient.post(`/profile/logoutByDevice`, { id });
+};
+export const consultation = (data: any) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.post("/patient/consultReview", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
 };

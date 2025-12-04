@@ -339,7 +339,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
             setShowData(pData.partnerDetails)
             if (pData?.partnerDetails?.basicDetails?.partnerEmail !== null || pData?.partnerDetails?.basicDetails?.partnerEmail !== undefined) {
                 setShowContent(true)
-                setShowPartnerDetail(false)
+                // setShowPartnerDetail(false)
             }
         } catch (error) {
             console.error("Error fetching partner:", error);

@@ -22,6 +22,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
 import Button from "../ui/Button";
+import { getProfileImageUrl, uploadkycdetails } from "@/utils/apis/apiHelper";
 
 
 export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void, onPrevious: () => void }) {
@@ -31,6 +32,24 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     [key: string]: string;
 
   }
+  type ApiFile = {
+    name: string;
+    url: string;
+    size?: number;
+    type?: string;
+  };
+
+  type OtherDocUrlType = {
+    filePath: ApiFile[];
+  };
+  type OtherDocNameType = {
+    reportName: string[];
+  };
+  type OtherDocOriNameType = {
+    oriName: string[];
+  };
+
+
   const initialFormError: FormError = {};
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
@@ -40,6 +59,30 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [aadharFile, setAadharFile] = useState<UploadedFile | null>(null);
   const [panFile, setPanFile] = useState<UploadedFile | null>(null);
   const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
+
+  const [aadharFileUrl, setAadharFileUrl] = useState<string>("")
+  const [panFileUrl, setPanFileUrl] = useState<string>("")
+  const [licFileUrl, setLicFileUrl] = useState<string>("")
+  const [otherDocName, setOtherDocName] = useState<OtherDocNameType>({
+    reportName: [""],
+  });
+
+  const [otherDocUrl, setOtherDocUrl] = useState<OtherDocUrlType>({
+    filePath: [],
+  });
+  console.log("otherDocUrl", otherDocUrl);
+
+  const [otherDocOriName, setOtherDocOriName] = useState<OtherDocOriNameType>({
+    oriName: [],
+  });
+  type OtherDoc = {
+    reportName: string;
+    filePath: string;
+    originalName: string;
+  };
+
+  const [otherDocuments, setOtherDocuments] = useState<OtherDoc[]>([]);
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [fileError, setFileError] = useState<string>("");
 
@@ -114,7 +157,27 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
     if (Object.keys(errors).length === 0) {
       console.log("✅ Form is valid, go to next step");
-      router.push("/profile");  //navigate for profile screen  
+
+
+      const passData = {
+        aadharNumber: formData.Adcard.replaceAll(" ", ""),
+        aadharFile: aadharFileUrl,
+        panNumber: formData.Pancard,
+        panFile: panFileUrl,
+        licenceNumber: formData.LicNumber,
+        licenceFile: licFileUrl,
+        otherDocuments: otherDocuments
+      }
+      uploadkycdetails(passData)
+        .then((res) => {
+          console.log("res", res.data);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        })
+      console.log("passData", passData);
+
+      // router.push("/profile");  
       // onNext(); // navigate to next tab or page
     } else {
       console.log("❌ Form has errors:", errors);
@@ -144,7 +207,17 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       year: "numeric",
     });
     const fileURL = URL.createObjectURL(file);
-
+    const passData = {
+      type: "doctor",
+      files: file
+    }
+    getProfileImageUrl(passData)
+      .then((res) => {
+        setAadharFileUrl(res.data.files[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     const newFile: UploadedFile = {
       name: file.name,
       size: `${sizeInKB} KB`,
@@ -154,8 +227,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       status: "completed",
       reportName: "Aadhar Card",
     };
+    setAadharFile(newFile)
 
-    setAadharFile(newFile);
     setFormError((prev) => ({ ...prev, Adphoto: "" }));
   };
 
@@ -192,8 +265,19 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       status: "completed",
       reportName: "Pan Card",
     };
+    setPanFile(newFile)
+    const passData = {
+      type: "doctor",
+      files: file
+    }
+    getProfileImageUrl(passData)
+      .then((res) => {
+        setPanFileUrl(res.data.files[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
 
-    setPanFile(newFile);
     setFormError((prev) => ({ ...prev, Panphoto: "" }));
   };
 
@@ -219,7 +303,17 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       month: "short",
       year: "numeric",
     });
-
+    const passData = {
+      type: "doctor",
+      files: file
+    }
+    getProfileImageUrl(passData)
+      .then((res) => {
+        setLicFileUrl(res.data.files[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     const newFile: UploadedFile = {
       name: file.name,
       size: `${sizeInKB} KB`,
@@ -265,6 +359,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       reportName: "MBBS Certificate",
     },
   ]);
+  console.log("uploadedFiles", uploadedFiles);
+
 
   const handleOpenModal = () => {
     setUploadedFiles([]); // reset every time modal opens
@@ -308,7 +404,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
     const sizeInKB = `${Math.round(file.size / 1024)} KB`;
     const fileURL = URL.createObjectURL(file);
-
     const newFile: UploadedFile = {
       name: file.name,
       size: sizeInKB,
@@ -318,6 +413,35 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       preview: fileURL,
       uploadedAt: Date.now(), // 👈 upload date store
     };
+    const passData = {
+      type: "doctor",
+      files: file
+    }
+    getProfileImageUrl(passData)
+      .then((res) => {
+        setOtherDocuments((prev) => [
+          ...prev,
+          {
+            reportName: newFile.name.split(".")[0],
+            filePath: res.data.files[0],   // <= URL AVAILABLE HERE ✔
+            originalName: newFile.name,
+          }
+        ]);
+      })
+      .catch((err) => {
+        console.log("err", err);
+
+      })
+
+    setOtherDocOriName({
+      ...otherDocOriName,
+      oriName: [...(otherDocOriName.oriName || []), newFile.name],
+    });
+
+    setOtherDocName({
+      ...otherDocName,
+      reportName: [...(otherDocName.reportName || []), newFile.reportName],
+    });
 
     setSelectedFile(newFile);
     setUploadedFiles((prev) => [...prev, newFile]);
@@ -482,7 +606,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       <div className="card-feild">Aadhar Card</div>
                       <div
                         className="kyc-details file-name-ellipsis "
-                        title={aadharFile.name} // show full name on hover
+                        title={aadharFile.name}
                       >  {aadharFile.name}
                       </div>
                       <div className="card-year">

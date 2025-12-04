@@ -9,7 +9,7 @@ import Button from "./ui/Button";
 import { FertilityAssessmentType } from "@/utils/types/interfaces";
 import toast from "react-hot-toast";
 import { BsInfoCircle } from "react-icons/bs";
-import { addPartnerfertilityAssessment, addPartnerPhysicalAssesment } from "@/utils/apis/apiHelper";
+import { addPartnerfertilityAssessment, addPartnerMedicalHistory, addPartnerPhysicalAssesment, basicDetails } from "@/utils/apis/apiHelper";
 import { useParams } from "next/navigation";
 
 interface AddPartnerDetailsProps {
@@ -33,6 +33,8 @@ export function AddPartnerDetails({
     : AddPartnerDetailsProps) {
 
     const [activeTab, setActiveTab] = useState<string>("basic");
+    const [tabManagement, setTabManagement] = useState<number>(0);
+    const [allData, setAllData] = useState();
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -47,6 +49,9 @@ export function AddPartnerDetails({
                     <BasicDetailsForm setAddPartner={setAddPartner}
                         setActiveTab={setActiveTab}
                         setShowData={setShowData}
+                        setTabManagement={setTabManagement}
+                        setAllData={setAllData}
+                        allData={allData}
                     />
                 </div>
             ),
@@ -55,12 +60,16 @@ export function AddPartnerDetails({
         {
             key: "medical history",
             label: "Medical History",
+            disabled: tabManagement == 0,
             content: (
                 <MedicalHistoryForm
                     setAddPartner={setAddPartner}
                     setActiveTab={setActiveTab}
                     setShowData={setShowData}
                     initialData={modalEditTab === "medical history" ? showData.medicalHistory : undefined}
+                    setTabManagement={setTabManagement}
+                    setAllData={setAllData}
+                    allData={allData}
                 />
                 // <h6>Medical History</h6>
             ),
@@ -68,6 +77,7 @@ export function AddPartnerDetails({
         {
             key: "physical & fertility assessment",
             label: "Physical & Fertility Assessment",
+            disabled: !(tabManagement > 1),
             content: (
                 <PhysicalFertilityAssessmentAccordion
                     setShowContent={setShowContent}
@@ -76,6 +86,7 @@ export function AddPartnerDetails({
                     setShowData={setShowData}
                     showData={showData}
                     initialData={modalEditTab === "physical & fertility assessment" ? showData.fertilityAssessment : undefined}
+                    allData={allData}
                 />
 
                 // <PhysicalFertilityAssessmentForm
@@ -104,7 +115,7 @@ export function AddPartnerDetails({
     )
 }
 
-export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPartner, setShowPartnerDetail, setShowData, showData, initialData }: { setShowContent: (value: boolean) => void, setAddPartner: (value: boolean) => void, setShowPartnerDetail: (value: boolean) => void, setShowData: (value: any) => void, showData: any, initialData: any }) {
+export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPartner, setShowPartnerDetail, setShowData, showData, initialData, allData }: { setShowContent: (value: boolean) => void, setAddPartner: (value: boolean) => void, setShowPartnerDetail: (value: boolean) => void, setShowData: (value: any) => void, showData: any, initialData: any, allData: (value: any) => unknown }) {
 
     const initialFormData: FertilityAssessmentType = {
         height: "",
@@ -129,29 +140,58 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
 
     const initialFormError: FormError = {};
     const [formError, setFormError] = useState<FormError>(initialFormError);
-
+    const safeTrim = (val: any) => (typeof val === "string" ? val.trim() : "");
     const validateForm = (data: FertilityAssessmentType): FormError => {
         const errors: FormError = {};
 
-        if (!data.height.trim()) errors.height = "Height is required";
-        if (!data.weight.trim()) errors.weight = "Weight is required";
-        if (!data.bmi.trim()) errors.bmi = "BMI is required";
-        if (!data.bloodGroup.trim()) errors.bloodGroup = "Blood group is required";
-        if (!data.systolic.trim()) errors.systolic = "Blood pressure is required";
+        if (!safeTrim(data.height)) errors.height = "Height is required";
+        if (!safeTrim(data.weight)) errors.weight = "Weight is required";
+        if (!safeTrim(data.bmi)) errors.bmi = "BMI is required";
+        if (!safeTrim(data.bloodGroup)) errors.bloodGroup = "Blood group is required";
+        if (!safeTrim(data.systolic)) errors.systolic = "Blood pressure is required";
+        if (!safeTrim(data.heartRate)) errors.heartRate = "Heart rate is required";
 
-        if (!data.heartRate.trim()) errors.heartRate = "Heart rate is required";
+        if (!safeTrim(data.semenAnalysis)) errors.semenAnalysis = "Seminal Analysis is required";
+        if (data.semenAnalysis === "yes" && !safeTrim(data.semenAnalysisContent))
+            errors.semenAnalysisContent = "Seminal Analysis Content is required";
 
-        if (!data.semenAnalysis.trim()) errors.semenAnalysis = "Seminal Analysis is required";
-        if (data.semenAnalysis === 'yes' && !data.semenAnalysisContent.trim()) errors.semenAnalysisContent = "Seminal Analysis Content is required";
-        if (!data.fertilityIssues.trim()) errors.fertilityIssues = "Fertility Issues is required";
-        if (data.fertilityIssues === 'yes' && !data.fertilityIssuesContent.trim()) errors.fertilityIssuesContent = "Fertility Issues Content is required";
-        if (!data.fertilityTreatment.trim()) errors.fertilityTreatment = "Fertility Treatment is required";
-        if (data.fertilityTreatment === 'yes' && !data.fertilityTreatmentContent.trim()) errors.fertilityTreatmentContent = "Fertility Treatment Content is required";
-        if (!data.surgeries.trim()) errors.surgeries = "Surgeries is required";
-        if (data.surgeries === 'yes' && !data.surgeriesContent.trim()) errors.surgeriesContent = "Surgeries Content is required";
+        if (!safeTrim(data.fertilityIssues)) errors.fertilityIssues = "Fertility Issues is required";
+        if (data.fertilityIssues === "yes" && !safeTrim(data.fertilityIssuesContent))
+            errors.fertilityIssuesContent = "Fertility Issues Content is required";
+
+        if (!safeTrim(data.fertilityTreatment)) errors.fertilityTreatment = "Fertility Treatment is required";
+        if (data.fertilityTreatment === "yes" && !safeTrim(data.fertilityTreatmentContent))
+            errors.fertilityTreatmentContent = "Fertility Treatment Content is required";
+
+        if (!safeTrim(data.surgeries)) errors.surgeries = "Surgeries is required";
+        if (data.surgeries === "yes" && !safeTrim(data.surgeriesContent))
+            errors.surgeriesContent = "Surgeries Content is required";
 
         return errors;
     };
+
+    // const validateForm = (data: FertilityAssessmentType): FormError => {
+    //     const errors: FormError = {};
+
+    //     if (!data.height.trim()) errors.height = "Height is required";
+    //     if (!data.weight.trim()) errors.weight = "Weight is required";
+    //     if (!data.bmi.trim()) errors.bmi = "BMI is required";
+    //     if (!data.bloodGroup.trim()) errors.bloodGroup = "Blood group is required";
+    //     if (!data.systolic.trim()) errors.systolic = "Blood pressure is required";
+
+    //     if (!data.heartRate.trim()) errors.heartRate = "Heart rate is required";
+
+    //     if (!data?.semenAnalysis?.trim()) errors.semenAnalysis = "Seminal Analysis is required";
+    //     if (data.semenAnalysis === 'yes' && !data?.semenAnalysisContent?.trim()) errors.semenAnalysisContent = "Seminal Analysis Content is required";
+    //     if (!data?.fertilityIssues?.trim()) errors.fertilityIssues = "Fertility Issues is required";
+    //     if (data.fertilityIssues === 'yes' && !data?.fertilityIssuesContent?.trim()) errors.fertilityIssuesContent = "Fertility Issues Content is required";
+    //     if (!data?.fertilityTreatment?.trim()) errors.fertilityTreatment = "Fertility Treatment is required";
+    //     if (data.fertilityTreatment === 'yes' && !data?.fertilityTreatmentContent?.trim()) errors.fertilityTreatmentContent = "Fertility Treatment Content is required";
+    //     if (!data?.surgeries?.trim()) errors.surgeries = "Surgeries is required";
+    //     if (data.surgeries === 'yes' && !data?.surgeriesContent?.trim()) errors.surgeriesContent = "Surgeries Content is required";
+
+    //     return errors;
+    // };
 
     const params = useParams();
     const id = params?.id?.toString();
@@ -163,7 +203,10 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
         console.log("Form submitted", formData);
         setFormError(errors);
 
-        // Handle form submission
+        console.log("allData", allData);
+        addPartnerMedicalHistory(allData.medicalHistoryPassingData)
+        basicDetails(allData.basicDetailsPassingData)
+        // Handle form submission basicDetailsPassingData
         const passData = {
             patientId: id,
             height: formData.height,
@@ -191,26 +234,49 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
             .catch((err) => {
                 console.log("PartnerPhysicalAssesment: ", err);
             });
-
+        const normalizeStatus = (val: any) =>
+            typeof val === "string" && val.length > 0
+                ? val.charAt(0).toUpperCase() + val.slice(1)
+                : "";
         const passFertilityAssessmentData = {
             patientId: id,
-            semenAnalysis : {
-                status: formData.semenAnalysis.charAt(0).toUpperCase() + formData.semenAnalysis.slice(1),
-                semenAnalysisDetails: formData.semenAnalysisContent
+            semenAnalysis: {
+                status: normalizeStatus(formData.semenAnalysis),
+                semenAnalysisDetails: formData.semenAnalysisContent || ""
             },
-            fertilityIssues : {
-                status: formData.fertilityIssues.charAt(0).toUpperCase() + formData.fertilityIssues.slice(1),
-                fertilityIssuesDetails: formData.fertilityIssuesContent
+            fertilityIssues: {
+                status: normalizeStatus(formData.fertilityIssues),
+                fertilityIssuesDetails: formData.fertilityIssuesContent || ""
             },
-            fertilityTreatments : {
-                status: formData.fertilityTreatment.charAt(0).toUpperCase() + formData.fertilityTreatment.slice(1),
-                fertilityTreatmentsDetails: formData.fertilityTreatmentContent
+            fertilityTreatments: {
+                status: normalizeStatus(formData.fertilityTreatment),
+                fertilityTreatmentsDetails: formData.fertilityTreatmentContent || ""
             },
-            surgeries : {
-                status: formData.surgeries.charAt(0).toUpperCase() + formData.surgeries.slice(1),
-                surgeriesDetails: formData.surgeriesContent
+            surgeries: {
+                status: normalizeStatus(formData.surgeries),
+                surgeriesDetails: formData.surgeriesContent || ""
             }
-        }
+        };
+
+        // const passFertilityAssessmentData = {
+        //     patientId: id,
+        //     semenAnalysis: {
+        //         status: formData.semenAnalysis.charAt(0).toUpperCase() + formData.semenAnalysis.slice(1),
+        //         semenAnalysisDetails: formData.semenAnalysisContent
+        //     },
+        //     fertilityIssues: {
+        //         status: formData.fertilityIssues.charAt(0).toUpperCase() + formData.fertilityIssues.slice(1),
+        //         fertilityIssuesDetails: formData.fertilityIssuesContent
+        //     },
+        //     fertilityTreatments: {
+        //         status: formData.fertilityTreatment.charAt(0).toUpperCase() + formData.fertilityTreatment.slice(1),
+        //         fertilityTreatmentsDetails: formData.fertilityTreatmentContent
+        //     },
+        //     surgeries: {
+        //         status: formData.surgeries.charAt(0).toUpperCase() + formData.surgeries.slice(1),
+        //         surgeriesDetails: formData.surgeriesContent
+        //     }
+        // }
 
         addPartnerfertilityAssessment(passFertilityAssessmentData)
             .then(() => {
