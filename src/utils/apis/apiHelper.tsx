@@ -2,7 +2,7 @@ import { FertilityAssessmentType } from "../types/interfaces";
 import { LoginRequest } from "../types/requestInterface";
 import apiClient from "./axiosInstance";
 import api from "./axiosInstance";
-import {  imageUpload } from "../types/interfaces";
+
 
 export const login = (data: LoginRequest) => {
   return apiClient.post("/auth/login", data);
@@ -245,7 +245,7 @@ export const updatemedicalhistory = (id: string, data: any) => {
   );
 };
 
-export const basicDetailspost = (data : object) => {
+export const basicDetails = (data : object) => {
   return apiClient.post("/patient/partner/basicDetails" , data);
 }
 
@@ -379,4 +379,13 @@ export const logout = () => {
 
 export const logoutByDevice = (id: string) => {
   return apiClient.post(`/profile/logoutByDevice`, { id });
+};
+export const consultation = (data: any) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.post("/patient/consultReview", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
 };

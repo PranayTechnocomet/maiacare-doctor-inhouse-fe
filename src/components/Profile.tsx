@@ -101,65 +101,6 @@ const Profile = () => {
                 console.log(err);
             });
      }, [])
-//  const getUser = () => {
-//         getLoggedInUser()
-//             .then((response) => {
-//                 if (response.status) {
-//                     const userData = response.data.data;
-//                     console.log("DOCUMENTS FROM API:", userData.documents);
-//                     setDoctor(userData);
-//                     setAbout(userData);
-//                     // setDocuments(userData.documents || []); 
-//                     setDefaultQualifications(userData.qualifications || []);
-//                     // setServicesOffered(userData.servicesOffered || []);                
-//                     // setFees(userData.fees)
-
-//                     setDocuments(
-//                         (userData.documents || []).map((doc: any) => ({
-//                             name:
-//                                 doc.reportName ||
-//                                 doc.aadharNumber ||
-//                                 doc.panNumber ||
-//                                 doc.licenceNumber ||
-//                                 doc.originalName ||
-//                                 "Document",
-//                             date: doc.uploadedAt
-//                                 ? new Date(doc.uploadedAt).toLocaleDateString()
-//                                 : doc.updatedAt
-//                                     ? new Date(doc.updatedAt).toLocaleDateString()
-//                                     : "-",
-//                             filePath: doc.filePath || doc.url || "",
-//                         }))
-//                     );
-
-
-
-
-
-//                 } else {
-//                     toast.error(response.data?.message || "Something went wrong!");
-//                     console.error("Error fetching profile");
-//                 }
-//             })
-//             .catch((err) => {
-//                 console.error("API call failed", err);
-
-//                 //  Toast error from backend message
-//                 toast.error(
-//                     err?.response?.data?.message ||
-//                     err?.response?.data?.details?.message ||
-//                     "Something went wrong!"
-//                 );
-//             });
-//     };
-
-
-
-
-    // useEffect(() => {
-    //     getUser()
-    // }, [])
-
 
     const DoctorProfileCard: React.FC<{ doctor: typeof doctorData }> = ({ doctor }) => {
         return (
