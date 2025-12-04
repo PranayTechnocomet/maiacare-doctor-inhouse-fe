@@ -9,10 +9,10 @@ import { PhoneNumberInput } from '../ui/PhoneNumberInput';
 import Button from '../ui/Button';
 import Simpleeditpro from '../../assets/images/Simpleeditpro.png';
 import cameraicon from '../../assets/images/Cameraicon.png';
-import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType,imageUpload, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
+import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
-import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl } from '@/utils/apis/apiHelper';
+import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl, updatePartnermedicalhistory } from '@/utils/apis/apiHelper';
 import { useParams } from 'next/navigation';
 // import '../../style/PartnerDetails.css'
 export function BasicDetailsForm({
@@ -179,11 +179,11 @@ const patientId = params?.id?.toString();
        const passData = {
     patientId: patientId,   // 👈 REQUIRED
     partnerImage: formData.profileImage,
-    partnerName: formData.basic_detail_name,
-    partnerContactNumber: formData.basic_detail_phone,
-    partnerEmail: formData.basic_detail_email,
-    partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
-    partnerAge: formData.basic_detail_age
+    partnerName: formData.partnerName,
+    partnerContactNumber: formData.partnerContactNumber,
+    partnerEmail: formData.partnerEmail,
+    partnerGender: formData.partnerGender.charAt(0).toUpperCase() + formData.partnerGender.slice(1),
+    partnerAge: formData.partnerAge
 };
 
         const formDataImage = {
