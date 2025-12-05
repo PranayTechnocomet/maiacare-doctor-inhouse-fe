@@ -14,6 +14,8 @@ import { InputFieldGroup } from '../ui/InputField';
 import Button from '../ui/Button';
 import toast from 'react-hot-toast';
 import { InputSelect } from '../ui/InputSelect';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { addQualification, deleteQualification, editQualification, getLoggedInUser } from '@/utils/apis/apiHelper';
 interface DocumentType {
   originalName?: string;
@@ -40,7 +42,7 @@ const ProfileBasicDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [endTime, setEndTime] = useState("");
 
-
+   const [loading, setLoading] = useState(true);
   interface qualificationType {
     degree: string,
     fieldOfStudy: string,
@@ -372,32 +374,63 @@ interface OperationalHour {
   }
   const [user, setUser] = useState<DoctorDataType | null>(null)
 
+// const getUser = () => {
+//   getLoggedInUser()
+//     .then((response) => {
+//       if (response.status == 200) {
+//         const userData = response.data.data;
+
+//         // Normalize documents
+//         const normalizedDocs = userData.documents.map((doc: any, i: number) => ({
+//           ...doc,
+//           originalName: doc.originalName || doc.reportName || doc.name || `Document-${i + 1}`,
+//           updatedAt: doc.updatedAt || doc.uploadedAt || doc.date || null,
+//         }));
+
+//         setUser(userData);
+//         setDocuments(normalizedDocs);
+//         setDefaultQualifications(userData.qualifications);
+
+//         // ⭐ ADD THIS
+//         setOperationalHours(userData.operationalHours || []);
+
+//       } else {
+//         console.log("Error");
+//       }
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// };
 const getUser = () => {
+  setLoading(true);  // start loading
+
   getLoggedInUser()
     .then((response) => {
-      if (response.status == 200) {
+      if (response.status === 200) {
         const userData = response.data.data;
 
         // Normalize documents
-        const normalizedDocs = userData.documents.map((doc: any, i: number) => ({
+        const normalizedDocs = userData.documents?.map((doc: any, i: number) => ({
           ...doc,
           originalName: doc.originalName || doc.reportName || doc.name || `Document-${i + 1}`,
           updatedAt: doc.updatedAt || doc.uploadedAt || doc.date || null,
-        }));
+        })) || [];
 
         setUser(userData);
         setDocuments(normalizedDocs);
-        setDefaultQualifications(userData.qualifications);
-
-        // ⭐ ADD THIS
+        setDefaultQualifications(userData.qualifications || []);
         setOperationalHours(userData.operationalHours || []);
 
       } else {
         console.log("Error");
       }
+
+      setLoading(false); // stop loading
     })
     .catch((err) => {
       console.log(err);
+      setLoading(false); // stop loading on error
     });
 };
 
@@ -419,11 +452,17 @@ const getUser = () => {
 <div>
   <ContentContainer className="mt-4">
     <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
+        {loading ? (
+                                          <Skeleton width={120} height={18} />
+                                      ) : (
       <h5 className="profile-card-main-titile mb-2 mb-md-0">
         Timings
       </h5>
+                                      )}
     </div>
-
+      {loading ? (
+                                          <Skeleton width={170} height={25} />
+                                      ) : (
     <div>
       {operationalHours?.length > 0 ? (
         (() => {
@@ -464,361 +503,106 @@ const getUser = () => {
         <p className="text-muted">No operational hours available</p>
       )}
     </div>
+                                      )}
   </ContentContainer>
 </div>
 
 
           {/* Qualification */}
-          <div>
-            <ContentContainer className='mt-4' >
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h5 className="profile-card-main-titile">Qualification</h5>
-                <Button onClick={handleOpen} className="profile-card-boeder profile-card-button bg-transparent" variant="outline">
-                  {/* <Image src={Add} alt="Add" /> */}
+       <div>
+  <ContentContainer className='mt-4'>
 
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 9C18 9.19891 17.921 9.38968 17.7803 9.53033C17.6397 9.67098 17.4489 9.75 17.25 9.75H9.75V17.25C9.75 17.4489 9.67098 17.6397 9.53033 17.7803C9.38968 17.921 9.19891 18 9 18C8.80109 18 8.61032 17.921 8.46967 17.7803C8.32902 17.6397 8.25 17.4489 8.25 17.25V9.75H0.75C0.551088 9.75 0.360322 9.67098 0.21967 9.53033C0.0790178 9.38968 0 9.19891 0 9C0 8.80109 0.0790178 8.61032 0.21967 8.46967C0.360322 8.32902 0.551088 8.25 0.75 8.25H8.25V0.75C8.25 0.551088 8.32902 0.360322 8.46967 0.21967C8.61032 0.0790178 8.80109 0 9 0C9.19891 0 9.38968 0.0790178 9.53033 0.21967C9.67098 0.360322 9.75 0.551088 9.75 0.75V8.25H17.25C17.4489 8.25 17.6397 8.32902 17.7803 8.46967C17.921 8.61032 18 8.80109 18 9Z" fill="#2B4360" />
-                  </svg>
+    {/* ---------- HEADER SKELETON ---------- */}
+    <div className="d-flex justify-content-between align-items-center mb-3">
+      {loading ? (
+        <>
+          <Skeleton width={140} height={20} />
+          <Skeleton width={35} height={35} circle />
+        </>
+      ) : (
+        <>
+          <h5 className="profile-card-main-titile">Qualification</h5>
 
-                </Button>
+          <Button onClick={handleOpen} className="profile-card-boeder profile-card-button bg-transparent" variant="outline">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 9C18 9.19891 17.921 9.38968 17.7803 9.53033C17.6397
+              9.67098 17.4489 9.75 17.25 9.75H9.75V17.25C9.75 17.4489 9.67098
+              17.6397 9.53033 17.7803C9.38968 17.921 9.19891 18 9 18C8.80109 18
+              8.61032 17.921 8.46967 17.7803C8.32902 17.6397 8.25 17.4489 8.25
+              17.25V9.75H0.75C0.551088 9.75 0.360322 9.67098 0.21967 9.53033C0.0790178
+              9.38968 0 9.19891 0 9C0 8.80109 0.0790178 8.61032 0.21967 8.46967C0.360322
+              8.32902 0.551088 8.25 0.75 8.25H8.25V0.75C8.25 0.551088 8.32902 0.360322
+              8.46967 0.21967C8.61032 0.0790178 8.80109 0 9 0C9.19891 0 9.38968 0.0790178
+              9.53033 0.21967C9.67098 0.360322 9.75 0.551088 9.75 0.75V8.25H17.25C17.4489
+              8.25 17.6397 8.32902 17.7803 8.46967C17.921 8.61032 18 8.80109 18 9Z"
+                fill="#2B4360" />
+            </svg>
+          </Button>
+        </>
+      )}
+    </div>
 
+    {/* ---------- BODY SKELETON ---------- */}
+    {loading ? (
+      <>
+        {/* card skeleton */}
+        <div className="p-3 mb-3 bg-white border rounded-4">
+          <Skeleton width={180} height={18} className="mb-2" />
+          <Skeleton width={140} height={15} className="mb-2" />
+          <Skeleton width={100} height={15} />
+        </div>
 
-                <Modal
-                  show={showModal}
-                  onHide={handleClose}
-                  dialogClassName="custom-modal-width"
-                  header="Qualification Details"
-                  centered
-                >
-
-                  <div>
-                    {/* 🔁 Loop through all qualifications */}
-                    <Accordion defaultActiveKey="0" alwaysOpen>
-                      {qualifications.map((q, index) => (
-                        <div key={index} className="mb-4"> {/* ← Add margin-bottom here for spacing */}
-                          <Accordion.Item eventKey={index.toString()}>
-                            <Accordion.Header>
-                              Qualification {index + 1}
-                            </Accordion.Header>
-
-                            <Accordion.Body>
-                              <div className="position-relative pt-3 p-3 modal-border-dashed">
-
-                                {/* Remove button - show only if NOT first item */}
-                                {index !== 0 && (
-                                  <button
-                                    type="button"
-                                    className="btn-close position-absolute profile-basic-details-remove-button"
-                                    style={{ top: "10px", right: "10px" }}
-                                    onClick={() => handleRemoveQualification(index)}
-                                  />
-                                )}
-
-                                <Row>
-                                  <Col md={6} className="mt-3">
-                                    <InputFieldGroup
-                                      label="Degree"
-                                      name="degree"
-                                      type="text"
-                                      value={q.degree}
-                                      onChange={(e) => {
-                                        const updated = [...qualifications];
-                                        updated[index].degree = e.target.value;
-                                        setQualifications(updated);
-
-                                        const updatedErrors = [...formErrors];
-                                        if (updatedErrors[index]) {
-                                          updatedErrors[index].degree = "";
-                                        }
-                                        setFormErrors(updatedErrors);
-                                      }}
-                                      placeholder="Enter Degree"
-                                      required={true}
-                                      error={formErrors[index]?.degree}
-                                    />
-                                  </Col>
-
-                                  <Col md={6} className="mt-3">
-                                    <InputFieldGroup
-                                      label="Field of study"
-                                      name="field"
-                                      type="text"
-                                      value={q.fieldOfStudy}
-                                      onChange={(e) => {
-                                        const updated = [...qualifications];
-                                        updated[index].fieldOfStudy = e.target.value;
-                                        setQualifications(updated);
-
-                                        const updatedErrors = [...formErrors];
-                                        if (updatedErrors[index]) {
-                                          updatedErrors[index].fieldOfStudy = "";
-                                        }
-                                        setFormErrors(updatedErrors);
-                                      }}
-                                      placeholder="Select Field"
-                                      required={true}
-                                      error={formErrors[index]?.fieldOfStudy}
-                                    />
-                                  </Col>
-
-                                  <Col md={12} className="mt-3">
-                                    <InputFieldGroup
-                                      label="University"
-                                      name="university"
-                                      type="text"
-                                      value={q.university}
-                                      onChange={(e) => {
-                                        const updated = [...qualifications];
-                                        updated[index].university = e.target.value;
-                                        setQualifications(updated);
-
-                                        const updatedErrors = [...formErrors];
-                                        if (updatedErrors[index]) {
-                                          updatedErrors[index].university = "";
-                                        }
-                                        setFormErrors(updatedErrors);
-                                      }}
-                                      placeholder="University"
-                                      required={true}
-                                      error={formErrors[index]?.university}
-                                    />
-                                  </Col>
-
-                                  <Col md={6} className="mt-3">
-                                    <InputSelect
-                                      label="Start Year"
-                                      name="startYear"
-                                      value={q.startYear}
-                                      onChange={(e) => {
-                                        const updated = [...qualifications];
-                                        updated[index].startYear = e.target.value;
-                                        setQualifications(updated);
-
-                                        const updatedErrors = [...formErrors];
-                                        if (updatedErrors[index]) {
-                                          updatedErrors[index].startYear = "";
-                                        }
-                                        setFormErrors(updatedErrors);
-                                      }}
-                                      required={true}
-                                      error={formErrors[index]?.startYear}
-                                      options={yearOptions}
-                                    />
-                                  </Col>
-
-                                  <Col md={6} className="mt-3">
-                                    <InputSelect
-                                      label="End Year"
-                                      name="endYear"
-                                      value={q.endYear}
-                                      onChange={(e) => {
-                                        const updated = [...qualifications];
-                                        updated[index].endYear = e.target.value;
-                                        setQualifications(updated);
-
-                                        const updatedErrors = [...formErrors];
-                                        if (updatedErrors[index]) {
-                                          updatedErrors[index].endYear = "";
-                                        }
-                                        setFormErrors(updatedErrors);
-                                      }}
-                                      required={true}
-                                      error={formErrors[index]?.endYear}
-                                      options={yearOptions.filter((year) => {
-                                        if (!q.startYear) return true;
-                                        return Number(year.value) >= Number(q.startYear) + 1;
-                                      })}
-                                    />
-                                  </Col>
-                                </Row>
-
-                              </div>
-                            </Accordion.Body>
-
-                          </Accordion.Item>
-                        </div>
-                      ))}
-                    </Accordion>
-
-
-                  </div>
-
-                  <div className="d-flex justify-content-between mt-4">
-                    {/* Add Qualification Button */}
-                    <Button onClick={handleAddQualification} variant='default'
-                      disabled={
-                        qualifications.length > 0 &&
-                        !isQualificationComplete(qualifications[qualifications.length - 1])
-                      }
-                    >
-                      + Add Qualification
-                    </Button>
-
-                    {/* Save Button */}
-                    <Button onClick={handleSave} variant='default'>
-                      Save
-                    </Button>
-                  </div>
-                </Modal>
-
-
-
+        <div className="p-3 mb-3 bg-white border rounded-4">
+          <Skeleton width={180} height={18} className="mb-2" />
+          <Skeleton width={140} height={15} className="mb-2" />
+          <Skeleton width={100} height={15} />
+        </div>
+      </>
+    ) : (
+      <>
+        {defaultQualifications.length === 0 ? (
+          <div className="text-center text-muted p-4 border rounded-4">
+            "Data not found. Please Add Data"
+          </div>
+        ) : (
+          defaultQualifications.map((item, idx) => (
+            <div
+              key={idx}
+              className="d-flex justify-content-between align-items-start p-3 mb-3 bg-white border rounded-4 profile-card-boeder"
+            >
+              <div>
+                <div className="card-feild">{item.degree}</div>
+                <div className="card-university-text">{item.university}</div>
+                <div className="card-year">{`${item.startYear} - ${item.endYear}`}</div>
               </div>
 
-              {defaultQualifications.length === 0 ? (
-                <div className="text-center text-muted p-4 border rounded-4">
-                  "Data not found. Please Add Data"
-                </div>
-              ) : (
-                defaultQualifications.map((item, idx) => (
+              <div className="d-flex gap-2">
+                <Button
+                  onClick={() => openQualificationModal(idx, item._id)}
+                  className="border p-2 rounded-3 edit-del-btn bg-transparent"
+                  variant="outline"
+                >
+                  <Image src={LightEditimg} alt="Edit" width={18} height={18} />
+                </Button>
 
-                  <div
-                    key={idx}
-                    className="d-flex justify-content-between align-items-start p-3 mb-3 bg-white border rounded-4 profile-card-boeder"
-                  >
-                    <div>
-                      <div className="card-feild">{item.degree}</div>
-                      <div className="card-university-text">{item.university}</div>
-                      <div className="card-year">{`${item.startYear} - ${item.endYear}`}</div>
-                    </div>
+                <Button
+                  className="border p-2 rounded-2 edit-del-btn bg-transparent"
+                  onClick={() => handleDelete(item._id)}
+                  variant="outline"
+                >
+                  <Image src={Delete} alt="Delete" width={18} height={18} />
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
+      </>
+    )}
 
+  </ContentContainer>
+</div>
 
-                    <div className="d-flex gap-2">
-
-                      <Button onClick={() => openQualificationModal(idx, item._id)} className="border p-2 rounded-3 edit-del-btn  bg-transparent" variant='outline'>
-                        <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
-                      </Button>
-
-
-                      <Modal
-                        show={showQualificationModal}
-                        onHide={closeQualificationModal}
-                        centered
-                        dialogClassName="custom-modal-width"
-                        header="Qualification Details"
-                      >
-                        <div>
-
-                          <Row >
-                            <Col md={6} className="mt-3">
-                              <InputFieldGroup
-                                label="Degree"
-                                name="degree"
-                                type="text"
-                                value={formData.degree}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                                placeholder="Enter degree"
-                                required={true}
-                                disabled={false}
-                                readOnly={false}   // ✅ remove or set false
-                                error={formError.degree}
-                              />
-                            </Col>
-
-
-                            <Col md={6} className="mt-3">
-                              <InputFieldGroup
-                                label="Field of study"
-                                name="field"
-                                type="text"
-                                value={formData.fieldOfStudy}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                                placeholder="Enter field"
-                                required={true}
-                                disabled={false}
-                                readOnly={false}   // ✅ remove or set false
-                                error={formError.fieldOfStudy}
-                              />
-                            </Col>
-
-                            <Col md={12} className="mt-3">
-                              <InputFieldGroup
-                                label="University"
-                                name="university"
-                                type="text"
-                                value={formData.university}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
-                                placeholder="Enter university"
-                                required={true}
-                                disabled={false}
-                                readOnly={false}   // ✅ remove or set false
-                                error={formError.university}
-                              />
-                            </Col>
-
-
-                            <Col md={6} className="mt-3">
-                              <InputSelect
-                                label="Start Year"
-                                name="startYear"
-                                value={formData.startYear}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
-                                required={true}
-                                disabled={false}
-                                error={formError.startYear}
-                                options={yearOptions}
-                              />
-                            </Col>
-
-                            <Col md={6} className="mt-3">
-                              <InputSelect
-                                label="End Year"
-                                name="endYear"
-                                value={formData.endYear}
-                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
-                                required={true}
-                                disabled={false}
-                                error={formError.endYear}
-                                options={yearOptions}
-                              />
-                            </Col>
-                          </Row>
-
-
-                          {/* Save Button */}
-                          <Button onClick={()=>handleEditSave()} className="maiacare-button mt-4">
-                            Save
-                          </Button>
-
-                        </div>
-
-                      </Modal>
-
-
-
-
-
-
-                      <Button className="border p-2 rounded-2 edit-del-btn  bg-transparent"
-                        onClick={() => handleDelete(item._id)} variant='outline' //click par delete
-                      >
-                        <Image src={Delete} alt="Specialization" width={18} height={18} />
-                      </Button>
-
-                    </div>
-                  </div>
-                ))
-              )}
-
-
-            </ContentContainer>
-
-          </div>
 
         </Col>
 
@@ -826,66 +610,114 @@ const getUser = () => {
         {/* ======RIGHT COLUMN =========== */}
         {/* About */}
 
-        <Col xl={4} md={5}>
-          <div>
-            <ContentContainer className="mt-4">
-              <h5 className="profile-card-main-titile">About</h5>
-              <p className="mb-0 about-text" >
-                {user ? user.about : ""}
-              </p>
-            </ContentContainer>
+       <Col xl={4} md={5}>
+  <div>
+    <ContentContainer className="mt-4">
+
+      {/* -------- ABOUT TITLE SKELETON -------- */}
+      {loading ? (
+        <Skeleton width={80} height={20} className="mb-2" />
+      ) : (
+        <h5 className="profile-card-main-titile">About</h5>
+      )}
+
+      {/* -------- ABOUT TEXT SKELETON -------- */}
+      {loading ? (
+        <>
+          <Skeleton width={"100%"} height={14} className="mb-2" />
+          <Skeleton width={"95%"} height={14} className="mb-2" />
+          <Skeleton width={"80%"} height={14} />
+        </>
+      ) : (
+        <p className="mb-0 about-text">
+          {user ? user.about : ""}
+        </p>
+      )}
+
+    </ContentContainer>
+  </div>
+
+  {/* Documents */}
+  <div>
+    <ContentContainer className="mt-4">
+
+      {/* -------- DOCUMENTS TITLE SKELETON -------- */}
+      {loading ? (
+        <Skeleton width={120} height={20} className="mb-4" />
+      ) : (
+        <h5 className="mb-4 profile-card-main-titile">Documents</h5>
+      )}
+
+      {/* -------- DOCUMENTS LIST SKELETON -------- */}
+      {loading ? (
+        <>
+          {/* Skeleton card 1 */}
+          <div className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border">
+            <div className="d-flex align-items-center">
+              <Skeleton width={40} height={40} className="me-3" />
+              <div>
+                <Skeleton width={140} height={16} className="mb-2" />
+                <Skeleton width={90} height={14} />
+              </div>
+            </div>
+            <Skeleton width={35} height={35} className="rounded" />
           </div>
 
-          {/* Documents */}
-          <div>
-            <ContentContainer className="mt-4">
+          {/* Skeleton card 2 */}
+          <div className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border">
+            <div className="d-flex align-items-center">
+              <Skeleton width={40} height={40} className="me-3" />
               <div>
-                <h5 className="mb-4 profile-card-main-titile">Documents</h5>
+                <Skeleton width={140} height={16} className="mb-2" />
+                <Skeleton width={90} height={14} />
+              </div>
+            </div>
+            <Skeleton width={35} height={35} className="rounded" />
+          </div>
+        </>
+      ) : (
+        documents.map((doc, index) => {
+          const docName =
+            doc.originalName ||
+            doc.reportName ||
+            doc.aadharNumber ||
+            doc.panNumber ||
+            doc.licenceNumber ||
+            `Document-${index + 1}`;
 
-      {documents.map((doc, index) => {
-  const docName =
-    doc.originalName ||
-    doc.reportName ||
-    doc.aadharNumber ||
-    doc.panNumber ||
-    doc.licenceNumber ||
-    `Document-${index + 1}`;
+          const formattedDate = doc.updatedAt
+            ? new Date(doc.updatedAt).toLocaleDateString()
+            : "";
 
-  const formattedDate = doc.updatedAt
-    ? new Date(doc.updatedAt).toLocaleDateString()
-    : "";
+          return (
+            <div
+              key={index}
+              className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border"
+            >
+              <div className="d-flex align-items-center">
+                <Image src={Pdfimg} alt="pdf" width="40" className="me-3" />
 
-  return (
-    <div
-      key={index}
-      className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border"
-    >
-      <div className="d-flex align-items-center">
-        <Image src={Pdfimg} alt="pdf" width="40" className="me-3" />
-
-        <div>
-          <div className="card-feild">{docName}</div>
-          <div className="card-year">{formattedDate}</div>
-        </div>
-      </div>
-
-     <button
-                    className="d-flex  bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border"
-                    onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}
-                  >
-                    <Image src={Download} alt="experience" width={25} height={25} />
-                  </button>
-    </div>
-  );
-})}
-
-
+                <div>
+                  <div className="card-feild">{docName}</div>
+                  <div className="card-year">{formattedDate}</div>
+                </div>
               </div>
 
-            </ContentContainer>
-          </div>
+              <button
+                className="d-flex bg-white justify-content-center align-items-center border profile-card-boeder rounded Download-border"
+                onClick={() => handleDownload(`/files/${doc.name}.pdf`, doc.name)}
+              >
+                <Image src={Download} alt="download" width={25} height={25} />
+              </button>
+            </div>
+          );
+        })
+      )}
 
-        </Col>
+    </ContentContainer>
+  </div>
+</Col>
+
       </Row>
     </div>
     // </Container>

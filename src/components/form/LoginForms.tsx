@@ -86,7 +86,7 @@ export function LoginForms() {
             setTokenInCookie(token);
             dispatch(setToken(token));
             dispatch(setAuthData(response?.data?.data.doctor));
-            router.push("/profile");
+            router.push("/dashboard");
           }
         })
         .catch((err) => {

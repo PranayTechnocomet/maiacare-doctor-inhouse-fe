@@ -49,9 +49,10 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
   console.log("authData", authData);
 
   const navItems = [
+      { label: "Dashboard", href: "/dashboard", icon: <FaBoxesStacked size={22} /> },
     { label: "Profile", href: "/profile", icon: <MdWindow size={22} /> },
     // { label: "EditProfile", href: "/EditProfile"},
-    { label: "Doctors", href: "/doctors", icon: <FaBoxesStacked size={22} /> },
+    // { label: "Doctors", href: "/doctors", icon: <FaBoxesStacked size={22} /> },
     { label: "Patients", href: "/patients", icon: <BsPeople size={22} /> },
     // { label: "Inventory", href: "/inventory", icon: <FaBoxesStacked size={22} /> },
     // { label: "Appointments", href: "/appointments", icon: <MdOutlineCalendarToday size={22} />, },
@@ -98,7 +99,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
         </button>
 
         <div className="sidebar__top">
-          <Link href="/" className="sidebar__logo-link">
+          <Link href="/dashboard" className="sidebar__logo-link">
             {/* <img src={Logo.src} alt="Logo" className="sidebar__logo" /> */}
             {collapsed ? (
               <img
@@ -135,7 +136,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
           className="sidebar__nav-item d-flex align-items-center justify-content-center mb-2"
           onClick={handleLogout}
         >
-          <MdOutlineLogout size={20} />
+          <MdOutlineLogout size={20} />Logout
         </div>
         <div className="sidebar__bottom">
           <div
