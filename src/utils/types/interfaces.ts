@@ -117,13 +117,25 @@ export interface FertilityAssessmentType {
   systolic: string;
   diastolic: string;
   heartRate: string;
-  semenAnalysis: string;
+  semenAnalysis: {
+    status: string,
+    semenAnalysisDetails: string
+  };
   semenAnalysisContent: string;
-  fertilityIssues: string;
+  fertilityIssues: {
+    status: string,
+    fertilityIssuesDetails: string
+  };
   fertilityIssuesContent: string;
-  fertilityTreatment: string;
+  fertilityTreatments: {
+    status: string,
+    fertilityTreatmentsDetails: string
+  };
   fertilityTreatmentContent: string;
-  surgeries: string;
+  surgeries: {
+    status: string,
+    surgeriesDetails: string
+  };
   surgeriesContent: string;
 }
 
@@ -170,4 +182,42 @@ interface DocumentType {
   licenceNumber?: string;
   filePath: string;
   updatedAt?: string;
+}
+
+export interface PartnerData {
+  patientId: string|number;
+  partnerImage: string | null;
+  partnerName: string;
+  partnerContactNumber: string;
+  partnerEmail: string;
+  partnerGender: string;
+  partnerAge: number;
+}
+export interface MedicalHistoryData {
+  patientId: string;
+
+  medications: {
+    status: string;
+    medicationsDetails: string;
+  };
+
+  surgeries: {
+    status: string;
+    surgeriesDetails: string;
+  };
+
+  conditions: string[];
+
+  familyHistory: string;
+
+  lifestyle: string[];
+
+  exerciseFrequency: string;
+
+  stressLevel: string;
+}
+
+export interface allDataType {
+  basicDetailsPassingData?: PartnerData,
+  medicalHistoryPassingData?: MedicalHistoryData
 }

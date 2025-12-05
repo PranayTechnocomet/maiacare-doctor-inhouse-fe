@@ -23,6 +23,7 @@ import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
 import Button from "../ui/Button";
 import { getProfileImageUrl, uploadkycdetails } from "@/utils/apis/apiHelper";
+import { Prev } from "react-bootstrap/esm/PageItem";
 
 
 export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void, onPrevious: () => void }) {
@@ -67,10 +68,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     reportName: [""],
   });
 
-  const [otherDocUrl, setOtherDocUrl] = useState<OtherDocUrlType>({
-    filePath: [],
+  const [otherDocReportName, setOtherDocReportName] = useState<{ reportName: string[] }>({
+    reportName: []
   });
-  console.log("otherDocUrl", otherDocUrl);
+  console.log("otherDocReportName", otherDocReportName);
+
 
   const [otherDocOriName, setOtherDocOriName] = useState<OtherDocOriNameType>({
     oriName: [],
@@ -162,10 +164,13 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       const passData = {
         aadharNumber: formData.Adcard.replaceAll(" ", ""),
         aadharFile: aadharFileUrl,
+        aadharSize: aadharFile?.size,
         panNumber: formData.Pancard,
         panFile: panFileUrl,
+        panSize: panFile?.size,
         licenceNumber: formData.LicNumber,
         licenceFile: licFileUrl,
+        licenceSize: licenceFile?.size,
         otherDocuments: otherDocuments
       }
       uploadkycdetails(passData)
@@ -346,17 +351,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   // Add Button click in modal open //
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([
     {
-      name: "MD_Gynaecologist_Certificate.pdf",
-      size: "60 KB of 120 KB",
-      progress: 50,
+      name: "",
+      size: "",
+      progress: 0,
       status: "uploading",
       reportName: "",
-    },
-    {
-      name: "MBBS_Certificate.pdf",
-      size: "60 KB",
-      status: "completed",
-      reportName: "MBBS Certificate",
     },
   ]);
   console.log("uploadedFiles", uploadedFiles);
@@ -422,9 +421,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         setOtherDocuments((prev) => [
           ...prev,
           {
-            reportName: newFile.name.split(".")[0],
-            filePath: res.data.files[0],   // <= URL AVAILABLE HERE ✔
+            reportName: otherDocReportName.reportName[0],
+            filePath: res.data.files[0],
             originalName: newFile.name,
+            fileSize: newFile.size,
           }
         ]);
       })
@@ -1111,6 +1111,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       value={file.reportName}
                       onChange={(e) => {
                         const value = e.target.value;
+                        setOtherDocReportName(value);
+
                         setUploadedFiles((prev) =>
                           prev.map((f, i) =>
                             i === index ? { ...f, reportName: value } : f

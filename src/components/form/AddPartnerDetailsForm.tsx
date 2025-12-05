@@ -9,7 +9,7 @@ import { PhoneNumberInput } from '../ui/PhoneNumberInput';
 import Button from '../ui/Button';
 import Simpleeditpro from '../../assets/images/Simpleeditpro.png';
 import cameraicon from '../../assets/images/Cameraicon.png';
-import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
+import { allDataType, EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
 import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl, updatePartnermedicalhistory } from '@/utils/apis/apiHelper';
@@ -27,8 +27,8 @@ export function BasicDetailsForm({
     setActiveTab: (tab: string) => void,
     setShowData: (value: any) => void,
     setTabManagement: (value: number) => void | number,
-    setAllData: (value: any) => unknown,
-    allData: (value: any) => unknown
+    allData: allDataType | undefined;
+    setAllData: React.Dispatch<React.SetStateAction<allDataType | undefined>>;
 }) {
 
     const initialFormError: FormError = {};
@@ -209,15 +209,15 @@ export function BasicDetailsForm({
         }
         setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
         const passData = {
-            patientId: patientId,
+            patientId: String(patientId),
             partnerImage: profileImage,
             partnerName: formData.partnerName,
             partnerContactNumber: formData.partnerContactNumber,
             partnerEmail: formData.partnerEmail,
             partnerGender: formData.partnerGender.charAt(0).toUpperCase() + formData.partnerGender.slice(1),
-            partnerAge: formData.partnerAge
+            partnerAge: Number(formData.partnerAge)
         };
-        
+
         const formDataToSend = new FormData();
         formDataToSend.append("type", "doctor");
         formDataToSend.append("files", formData.profileImage);
@@ -436,8 +436,8 @@ export function MedicalHistoryForm({
     showData?: any,
     setEditMedicalHistory?: React.Dispatch<React.SetStateAction<boolean>> | any;
     formDataMedicalHistory?: MedicalHistoryType | any,
-    setTabManagement: (value: number) => void | number,
-    setAllData: (value: any) => unknown,
+    setTabManagement?: (value: number) => void | number,
+    setAllData?: (value: any) => unknown,
     allData?: any
 }) {
     type FormError = Partial<Record<keyof MedicalHistoryType, string>>;
@@ -495,8 +495,6 @@ export function MedicalHistoryForm({
 
         return errors;
     };
-
-    console.log("FormData", FormData);
 
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -593,7 +591,10 @@ export function MedicalHistoryForm({
 
 
             } else {
-                setTabManagement(2)
+                if (setTabManagement) {
+                    setTabManagement(2);
+                }
+
                 setActiveTab("physical & fertility assessment");
                 // console.log("FormData55", FormData);
                 // setShowData((prev: any) => ({ ...prev, medicalHistory: FormData }));
@@ -614,7 +615,9 @@ export function MedicalHistoryForm({
                     stressLevel: FormData.stress.charAt(0).toUpperCase() + FormData.stress.slice(1)
 
                 }
-                setAllData({ ...allData, medicalHistoryPassingData: medicalHistoryPassingData });
+                if(setAllData){
+                    setAllData({ ...allData, medicalHistoryPassingData: medicalHistoryPassingData });
+                }
                 // addPartnerMedicalHistory(medicalHistoryPassingData)
                 //     .then((response) => {
                 //         console.log("partner medical history: ", response.data);

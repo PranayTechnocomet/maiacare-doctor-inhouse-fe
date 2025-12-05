@@ -6,7 +6,7 @@ import { BasicDetailsForm, FertilityAssessment, MedicalHistoryForm, PhysicalAsse
 import { Accordion } from "react-bootstrap";
 import Button from "./ui/Button";
 // import '../style/fertilityassessment.css'
-import { FertilityAssessmentType } from "@/utils/types/interfaces";
+import { allDataType, FertilityAssessmentType, MedicalHistoryData, PartnerData } from "@/utils/types/interfaces";
 import toast from "react-hot-toast";
 import { BsInfoCircle } from "react-icons/bs";
 import { addPartnerfertilityAssessment, addPartnerMedicalHistory, addPartnerPhysicalAssesment, basicDetails } from "@/utils/apis/apiHelper";
@@ -34,7 +34,7 @@ export function AddPartnerDetails({
 
     const [activeTab, setActiveTab] = useState<string>("basic");
     const [tabManagement, setTabManagement] = useState<number>(0);
-    const [allData, setAllData] = useState();
+    const [allData, setAllData] = useState<allDataType>();
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -115,7 +115,10 @@ export function AddPartnerDetails({
     )
 }
 
-export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPartner, setShowPartnerDetail, setShowData, showData, initialData, allData }: { setShowContent: (value: boolean) => void, setAddPartner: (value: boolean) => void, setShowPartnerDetail: (value: boolean) => void, setShowData: (value: any) => void, showData: any, initialData: any, allData: (value: any) => unknown }) {
+export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPartner, setShowPartnerDetail, setShowData, showData, initialData, allData }: {
+    setShowContent: (value: boolean) => void, setAddPartner: (value: boolean) => void, setShowPartnerDetail: (value: boolean) => void, setShowData: (value: any) => void, showData: any, initialData: any, allData: allDataType | undefined;
+
+}) {
 
     const initialFormData: FertilityAssessmentType = {
         height: "",
@@ -129,7 +132,7 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
         semenAnalysisContent: initialData?.semenAnalysisContent || "",
         fertilityIssues: initialData?.fertilityIssues || "no",
         fertilityIssuesContent: initialData?.fertilityIssuesContent || "",
-        fertilityTreatment: initialData?.fertilityTreatment || "no",
+        fertilityTreatments: initialData?.fertilityTreatment || "no",
         fertilityTreatmentContent: initialData?.fertilityTreatmentContent || "",
         surgeries: initialData?.surgeries || "no",
         surgeriesContent: initialData?.surgeriesContent || "",
@@ -152,19 +155,19 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
         if (!safeTrim(data.heartRate)) errors.heartRate = "Heart rate is required";
 
         if (!safeTrim(data.semenAnalysis)) errors.semenAnalysis = "Seminal Analysis is required";
-        if (data.semenAnalysis === "yes" && !safeTrim(data.semenAnalysisContent))
+        if (data.semenAnalysis.status === "yes" && !safeTrim(data.semenAnalysisContent))
             errors.semenAnalysisContent = "Seminal Analysis Content is required";
 
         if (!safeTrim(data.fertilityIssues)) errors.fertilityIssues = "Fertility Issues is required";
-        if (data.fertilityIssues === "yes" && !safeTrim(data.fertilityIssuesContent))
+        if (data.fertilityIssues.status === "yes" && !safeTrim(data.fertilityIssuesContent))
             errors.fertilityIssuesContent = "Fertility Issues Content is required";
 
-        if (!safeTrim(data.fertilityTreatment)) errors.fertilityTreatment = "Fertility Treatment is required";
-        if (data.fertilityTreatment === "yes" && !safeTrim(data.fertilityTreatmentContent))
+        if (!safeTrim(data.fertilityTreatments)) errors.fertilityTreatments = "Fertility Treatment is required";
+        if (data.fertilityTreatments.status === "yes" && !safeTrim(data.fertilityTreatmentContent))
             errors.fertilityTreatmentContent = "Fertility Treatment Content is required";
 
         if (!safeTrim(data.surgeries)) errors.surgeries = "Surgeries is required";
-        if (data.surgeries === "yes" && !safeTrim(data.surgeriesContent))
+        if (data.surgeries.status === "yes" && !safeTrim(data.surgeriesContent))
             errors.surgeriesContent = "Surgeries Content is required";
 
         return errors;
@@ -202,11 +205,16 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
         const errors = validateForm(formData);
         console.log("Form submitted", formData);
         setFormError(errors);
+        if (!allData) return;
+        if (!allData?.medicalHistoryPassingData || !allData.basicDetailsPassingData) return;
+
+        addPartnerMedicalHistory(allData.medicalHistoryPassingData);
+        basicDetails(allData.basicDetailsPassingData);
 
         console.log("allData", allData);
-        addPartnerMedicalHistory(allData.medicalHistoryPassingData)
-        basicDetails(allData.basicDetailsPassingData)
-        // Handle form submission basicDetailsPassingData
+        addPartnerMedicalHistory(allData?.medicalHistoryPassingData)
+        basicDetails(allData?.basicDetailsPassingData)
+        
         const passData = {
             patientId: id,
             height: formData.height,
@@ -238,23 +246,24 @@ export function PhysicalFertilityAssessmentAccordion({ setShowContent, setAddPar
             typeof val === "string" && val.length > 0
                 ? val.charAt(0).toUpperCase() + val.slice(1)
                 : "";
+
         const passFertilityAssessmentData = {
             patientId: id,
             semenAnalysis: {
-                status: normalizeStatus(formData.semenAnalysis),
-                semenAnalysisDetails: formData.semenAnalysisContent || ""
+                status: normalizeStatus(formData.semenAnalysis.status),
+                semenAnalysisDetails: formData.semenAnalysis.semenAnalysisDetails || ""
             },
             fertilityIssues: {
-                status: normalizeStatus(formData.fertilityIssues),
-                fertilityIssuesDetails: formData.fertilityIssuesContent || ""
+                status: normalizeStatus(formData.fertilityIssues.status),
+                fertilityIssuesDetails: formData.fertilityIssues.fertilityIssuesDetails || ""
             },
             fertilityTreatments: {
-                status: normalizeStatus(formData.fertilityTreatment),
-                fertilityTreatmentsDetails: formData.fertilityTreatmentContent || ""
+                status: normalizeStatus(formData.fertilityTreatments.status),
+                fertilityTreatmentsDetails: formData.fertilityTreatments.fertilityTreatmentsDetails || ""
             },
             surgeries: {
-                status: normalizeStatus(formData.surgeries),
-                surgeriesDetails: formData.surgeriesContent || ""
+                status: normalizeStatus(formData.surgeries.status),
+                surgeriesDetails: formData.surgeries.surgeriesDetails || ""
             }
         };
 
