@@ -13,10 +13,29 @@ import "@/style/PatientBasicDetail.css"
 import ContentContainer from "@/components/ui/ContentContainer";
 import { addphysicalassessment, addFertilityAssessment, addMedicalHistory, getFertilityAssessment, updatefertilityassessment, } from "@/utils/apis/apiHelper";
 import { useParams } from "next/navigation";
-import { getmedicalhistory, updatemedicalhistory, getPhysicalAssessment } from "@/utils/apis/apiHelper";
-import { log } from "console";
+import { getmedicalhistory, updatemedicalhistory,getPhysicalAssessment } from "@/utils/apis/apiHelper";
+import { consultation } from "@/utils/apis/apiHelper"; // adjust your path
 export default function PatientBasicDetail({ patient, patientId }: any) {
+      const [review, setReview] = useState(
+    `Patient presented for an IVF consultation due to [reason, e.g., infertility, recurrent pregnancy loss].History reviewed, including obstetric, menstrual, and medical background, along with partner’s fertility evaluation.Recommended investigations include a hormonal panel, ultrasound, and genetic screening if needed.
+The IVF process, success rates, potential risks, and next steps were discussed.Patient was advised on pre-treatment preparation, and a follow-up was scheduled.`
+  );
+  const handleSave = async () => {
+    try {
+      const payload = {
+        patientId,
+        consultReview: review,
+      };
 
+      const response = await consultation(payload);
+
+      console.log("Saved:", response.data);
+      alert("Review saved successfully!");
+    } catch (error) {
+      console.error("Error saving review:", error);
+      alert("Failed to save review.");
+    }
+  };
     const [activeAccordion, setActiveAccordion] = useState<string[]>(['0', '1', '2']);
     const [showPhisicalAssessment, setShowPhisicalAssessment] = useState<boolean>(false);
     const [showFertilityAssessment, setShowFertilityAssessment] = useState<boolean>(false);
@@ -920,32 +939,35 @@ export default function PatientBasicDetail({ patient, patientId }: any) {
                     ))}
                 </Accordion>
 
-                <div className="row mb-5">
-                    <div className="">
-                        <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
-                        <ContentContainer className="shadow-sm border-0 mb-4">
-                            <Card.Body>
-                                <strong className=" d-block mb-2 heading-patient">Consultation Review *</strong>
-                                <p className=" border rounded p-3 Patient-review">
-                                    Patient presented for an IVF consultation due to [reason, e.g., infertility, recurrent pregnancy loss].
-                                    History reviewed, including obstetric, menstrual, and medical background, along with partner’s fertility evaluation.
-                                    Recommended investigations include a hormonal panel, ultrasound, and genetic screening if needed.
-                                    The IVF process, success rates, potential risks, and next steps were discussed.
-                                    Patient was advised on pre-treatment preparation, and a follow-up was scheduled.
-                                </p>
+            <div className="row mb-5">
+      <div>
+        <h6 className="fw-semibold mb-3 mt-2 Patient-Details">Review</h6>
 
-                                <div className="d-flex justify-content-end mt-3">
-                                    <Button className="edit-profile-btn d-flex align-items-center">
-                                        <span className="me-2">
-                                            {/* <Image src={EditProfile} alt="EditProfile-btn" width={18} height={18} /> */}
-                                        </span>
-                                        Save Review
-                                    </Button>
-                                </div>
-                            </Card.Body>
-                        </ContentContainer>
-                    </div>
-                </div>
+        <ContentContainer className="shadow-sm border-0 mb-4">
+          <Card.Body>
+            <strong className="d-block mb-2 heading-patient">
+              Consultation Review *
+            </strong>
+
+            {/* TEXTAREA INSTEAD OF P TAG */}
+            <textarea
+              className="form-control border rounded p-3 Patient-review"
+              rows={8}
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            />
+
+            <div className="d-flex justify-content-end mt-3">
+              <Button className="edit-profile-btn d-flex align-items-center"
+                onClick={handleSave}
+              >
+                Save Review
+              </Button>
+            </div>
+          </Card.Body>
+        </ContentContainer>
+      </div>
+    </div>
 
 
 

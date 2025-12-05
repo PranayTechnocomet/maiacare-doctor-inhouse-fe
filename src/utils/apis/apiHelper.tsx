@@ -2,6 +2,7 @@ import { FertilityAssessmentType } from "../types/interfaces";
 import { LoginRequest } from "../types/requestInterface";
 import apiClient from "./axiosInstance";
 import api from "./axiosInstance";
+import {  imageUpload } from "../types/interfaces";
 
 export const login = (data: LoginRequest) => {
   return apiClient.post("/auth/login", data);
@@ -36,9 +37,9 @@ export const getLoggedInDevice = (data: { token: string | null }) => {
 }
 
 
-export const logout = () => {
-  return apiClient.post("/profile/logout");
-}
+// export const logout = () => {
+//   return apiClient.post("/profile/logout");
+// }
 
 export const getLoggedInUser = () => {
   const token = localStorage.getItem("token");
@@ -48,15 +49,17 @@ export const getLoggedInUser = () => {
     }
   });
 }
-
-export const update = () => {
-  const token = localStorage.getItem("token");
-  return apiClient.put("/profile/update", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    }
-  });
+export const update = (payload: any) => {
+  return apiClient.put("/profile/update",payload);
 }
+// export const update = () => {
+//   const token = localStorage.getItem("token");
+//   return apiClient.put("/profile/update", {
+//     headers: {
+//       Authorization: `Bearer ${token}`,
+//     }
+//   });
+// }
 
 type QualificationType = {
   degree: string;
@@ -242,23 +245,12 @@ export const updatemedicalhistory = (id: string, data: any) => {
   );
 };
 
-export const basicDetails = (data: {
-  partnerImage: string | File,
-  partnerName: string,
-  partnerContactNumber: string | number,
-  partnerEmail: string,
-  partnerGender: string,
-  partnerAge: string | number
-}) => {
-  const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/basicDetails",data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    }
-  });
+export const basicDetailspost = (data : object) => {
+  return apiClient.post("/patient/partner/basicDetails" , data);
 }
 
-export const addPartnerMedicalHistory = (data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: any; surgeriesDetails: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
+
+export const addPartnerMedicalHistory = (data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/partner/medicalHistory",data, {
     headers: {
@@ -376,4 +368,15 @@ export const getProfileImageUrl = (formData: { type: string; files: File; }) => 
 
 
 
+export const logout = () => {
+  return apiClient.post("/profile/logout");
+}
 
+// export const logoutByDevice = (id: string) => {
+//   return apiClient.post(`/profile/logoutByDevice/${id}`);
+// };
+
+
+export const logoutByDevice = (id: string) => {
+  return apiClient.post(`/profile/logoutByDevice`, { id });
+};

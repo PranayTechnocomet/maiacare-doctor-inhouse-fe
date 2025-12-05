@@ -1,9 +1,6 @@
 import React, { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
-import ContentContainer from '../ui/ContentContainer';
-import CustomTabs from '../ui/CustomTabs';
 import Image from 'next/image';
 import "../../style/Edit-Profile.css";
-import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
 import { Accordion, Col, Row } from 'react-bootstrap';
 import { RadioButtonGroup } from '../ui/RadioField';
@@ -12,16 +9,12 @@ import { PhoneNumberInput } from '../ui/PhoneNumberInput';
 import Button from '../ui/Button';
 import Simpleeditpro from '../../assets/images/Simpleeditpro.png';
 import cameraicon from '../../assets/images/Cameraicon.png';
-import { log, profile } from 'console';
-import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
-import { partnerDetailData } from '@/utils/StaticData';
+import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType,imageUpload, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
-import { addPartnerMedicalHistory, basicDetails, getPartnermedicalhistory, getProfileImageUrl, updatePartnermedicalhistory } from '@/utils/apis/apiHelper';
+import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl } from '@/utils/apis/apiHelper';
 import { useParams } from 'next/navigation';
 // import '../../style/PartnerDetails.css'
-
-
 export function BasicDetailsForm({
     setAddPartner,
     setActiveTab,
@@ -34,54 +27,28 @@ export function BasicDetailsForm({
 
     const initialFormError: FormError = {};
     type FormData = {
-        basic_detail_name: string;
-        basic_detail_gender: string;
-        basic_detail_age: string;
-        basic_detail_phone: string;
-        basic_detail_email: string;
+        partnerName: string;
+        partnerGender: string;
+        partnerAge: string;
+        partnerContactNumber: string;
+        partnerEmail: string;
         profileImage: string;
     };
 
     type FormError = Partial<Record<keyof FormData, string>>;
 
-    const initialFormData: FormData = {
-        basic_detail_name: "",
-        basic_detail_gender: "male",
-        basic_detail_age: "",
-        basic_detail_phone: "",
-        basic_detail_email: "",
-        profileImage: ""
-
-    };
+   const initialFormData: FormData = {
+    partnerName: "",
+    partnerGender: "Male",   // Capitalized
+    partnerAge: "",
+    partnerContactNumber: "",
+    partnerEmail: "",
+    profileImage: ""
+};
 
     const [formData, setFormData] = useState<FormData>(initialFormData);
     // console.log("formData", formData);
     const [formError, setFormError] = useState<FormError>(initialFormError);
-
-    // const handleChange = (
-    //     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    // ) => {
-    //     const { name, value } = e.target;
-    //     const isValidNumber = /^[0-9]*$/.test(value);
-
-    //     setFormData((prev) => ({ ...prev, [name]: value }));
-    //     // setFormError((prev) => ({ ...prev, [name]: "" }));
-
-    //     console.log("value", value);
-
-    //     if (name === "basic_detail_phone") {
-    //         if (isValidNumber) {
-    //           // clear error only if numbers are entered
-    //           setFormError((prev) => ({ ...prev, [name]: "" }));
-
-    //         }
-    //         // else keep the error until user fixes
-    //       } else {
-    //         // for other fields, clear error on any input
-    //         setFormError((prev) => ({ ...prev, [name]: "" }));
-
-    //       }
-    // };
 
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -112,66 +79,44 @@ export function BasicDetailsForm({
         // console.log("value", value);
     };
 
-
     const [profileImage, setProfileImage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageClick = () => {
         fileInputRef.current?.click();
     };
-
-    const handleFileChange = (
+  const handleFileChange = (
         event: React.ChangeEvent<HTMLInputElement> | undefined
     ) => {
-        console.log("comes in this stage")
         if (event) {
             const file = event.target.files?.[0];
-            console.log("file", file);
-
+            console.log("file",file);
+            
             if (file) {
                 const allowedTypes = ["image/jpeg", "image/png"];
 
                 if (!allowedTypes.includes(file.type)) {
                     setFormData((prev) => ({
                         ...prev,
-                        profileImage: "",
+                        partnerImage: "",
                     }));
                     setFormError((prev) => ({
                         ...prev,
-                        profileImage: "Only JPG and PNG files are allowed",
+                        partnerImage: "Only JPG and PNG files are allowed",
                     }));
-                    // return;
-                } else if (file.size > 5 * 1024 * 1024) {
+                    return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
                     setFormData((prev) => ({
                         ...prev,
-                        profileImage: "",
+                        partnerImage: "",
                     }));
                     setFormError((prev) => ({
                         ...prev,
-                        profileImage: "File size must be less than 5MB",
+                        partnerImage: "File size must be less than 5MB",
                     }));
-                    // return;
-                } else {
-
-                    const formDataImage = {
-                        type: "doctor",
-                        files: file
-                    }
-
-                    console.log("formDataImage : ", formDataImage);
-
-
-                    getProfileImageUrl(formDataImage)
-                        .then((response) => {
-                            if (response.data.status) {
-                                console.log("response : ", response);
-                            } else {
-                                console.log("error");
-                            }
-
-                        }).catch((error) => {
-                            console.log("error", error);
-                        });
+                    return;
                 }
 
                 const reader = new FileReader();
@@ -191,29 +136,30 @@ export function BasicDetailsForm({
         }
     };
 
+
     const validateForm = (data: FormData): FormError => {
         const errors: FormError = {};
 
-        if (!data.basic_detail_name.trim()) errors.basic_detail_name = "Name is required";
-        if (!data.basic_detail_age.trim()) errors.basic_detail_age = "Age is required";
-        if (!data.basic_detail_phone.trim()) errors.basic_detail_phone = "Phone number is required";
+        if (!data.partnerName.trim()) errors.partnerName = "Name is required";
+        if (!data.partnerGender.trim()) errors.partnerGender = "Age is required";
+        if (!data.partnerContactNumber.trim()) errors.partnerContactNumber = "Phone number is required";
 
         // Only check required here
         // if (!data.profileImage.trim()) {
         //     errors.profileImage = "Profile Image is required";
         // }
 
-        if (!data.basic_detail_email.trim()) {
-            errors.basic_detail_email = "Email is required";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.basic_detail_email)) {
-            errors.basic_detail_email = "Enter a valid email address";
+        if (!data.partnerEmail.trim()) {
+            errors.partnerEmail = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.partnerEmail)) {
+            errors.partnerEmail = "Enter a valid email address";
         }
 
 
         return errors;
     };
-    const params = useParams();
-    const patientId = params?.id?.toString();
+const params = useParams();
+const patientId = params?.id?.toString();
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -230,37 +176,46 @@ export function BasicDetailsForm({
         }
         setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
 
-        const passData = {
-            patientId: patientId,   // 👈 REQUIRED
-            partnerImage: formData.profileImage,
-            partnerName: formData.basic_detail_name,
-            partnerContactNumber: formData.basic_detail_phone,
-            partnerEmail: formData.basic_detail_email,
-            partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
-            partnerAge: formData.basic_detail_age
-        };
+       const passData = {
+    patientId: patientId,   // 👈 REQUIRED
+    partnerImage: formData.profileImage,
+    partnerName: formData.basic_detail_name,
+    partnerContactNumber: formData.basic_detail_phone,
+    partnerEmail: formData.basic_detail_email,
+    partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
+    partnerAge: formData.basic_detail_age
+};
 
-
+        const formDataImage = {
+            type: "doctor",
+            files: formData.profileImage
+        }
         const formDataToSend = new FormData();
         formDataToSend.append("type", "doctor");
         formDataToSend.append("files", formData.profileImage);
-        // console.log("formDataToSend", formDataImage);
+        console.log("formDataToSend", formDataImage);
 
 
+        getProfileImageUrl(formDataImage)
+            .then((response) => {
+                console.log("getImageUrl: ", response.data);
+            })
+            .catch((err) => {
+                console.log("getImageUrl", err);
+            });
+        basicDetails(passData)
+            .then((response) => {
 
-        // basicDetails(passData)
-        //     .then((response) => {
+                if (response.status == 200) {
+                    console.log("Partner basic details added: ", response.data);
+                } else {
+                    console.log("Error");
+                }
 
-        //         if (response.status == 200) {
-        //             console.log("Partner basic details added: ", response.data);
-        //         } else {
-        //             console.log("Error");
-        //         }
-
-        //     })
-        //     .catch((err) => {
-        //         console.log("Partner basic details adding error", err);
-        //     });
+            })
+            .catch((err) => {
+                console.log("Partner basic details adding error", err);
+            });
 
     };
     return (
@@ -271,14 +226,14 @@ export function BasicDetailsForm({
                     <Col md={12}>
                         <div className="d-flex align-items-center gap-4  flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
                             <div className="profile-wrapper position-relative" >
-                                <Image
-                                    src={profileImage || Simpleeditpro}
-                                    alt="Profile"
-                                    className="profile-image"
-                                    width={100}
-                                    height={100}
+                             <img
+  src={profileImage || Simpleeditpro.src}
+  alt="Profile"
+  className="object-fit-cover rounded-2"
+  width={100}
+  height={100}
+/>
 
-                                />
                                 <div
                                     className="camera-icon"
                                     onClick={handleImageClick}
@@ -309,46 +264,48 @@ export function BasicDetailsForm({
 
                         <InputFieldGroup
                             label="Name"
-                            name="basic_detail_name"
+                            name="partnerName"
                             type="text"
-                            value={formData.basic_detail_name}
+                            value={formData.partnerName}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 handleChange(e);
                             }}
                             onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                             placeholder="Enter name"
                             required={true}
-                            error={formError.basic_detail_name}
+                            error={formError.partnerName}
                             className="position-relative "
                         ></InputFieldGroup>
                     </Col>
                     <Col md={6}>
-                        <RadioButtonGroup
-                            label="Gender"
-                            name="basic_detail_gender"
-                            value={formData.basic_detail_gender || ''}
-                            // defaultValue="male"
-                            onChange={(e) => handleChange(e)}
-                            required
-                            options={[
-                                { label: "Male", value: "male" },
-                                { label: "Female", value: "female" },
-                            ]}
-                        />
+                      <RadioButtonGroup
+    label="Gender"
+    name="partnerGender"
+    value={formData.partnerGender || ''}
+
+    onChange={(e) => handleChange(e)}
+    required
+    options={[
+        { label: "Male", value: "Male" },
+        { label: "Female", value: "Female" },
+        { label: "Other", value: "Other" },
+    ]}
+/>
+
                     </Col>
 
                     <Col md={6}>
                         <InputSelect
                             label="age"
-                            name="basic_detail_age"
-                            value={formData.basic_detail_age}
+                            name="partnerAge"
+                            value={formData.partnerAge}
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                 handleChange(e);
                             }}
                             onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
                             required={true}
                             disabled={false}
-                            error={formError.basic_detail_age}
+                            error={formError.partnerAge}
                             options={[
                                 { id: "1", value: "1", label: "1" },
                                 { id: "2", value: "2", label: "2" },
@@ -383,17 +340,17 @@ export function BasicDetailsForm({
                     <Col md={6}>
                         <PhoneNumberInput
                             label="Contact Number"
-                            value={formData.basic_detail_phone}
+                            value={formData.partnerContactNumber}
                             onChange={(phone: any) => {
                                 // setFormData((prev) => ({ ...prev, phone }));
                                 // setFormError((prev) => ({ ...prev, phone: "" }));
                                 handleChange({
-                                    target: { name: "basic_detail_phone", value: phone },
+                                    target: { name: "partnerContactNumber", value: phone },
                                 } as React.ChangeEvent<HTMLInputElement>);
                             }}
                             placeholder='(000) 000-0000'
                             required
-                            error={formError.basic_detail_phone}
+                            error={formError.partnerContactNumber}
                         />
                     </Col>
 
@@ -402,16 +359,16 @@ export function BasicDetailsForm({
 
                         <InputFieldGroup
                             label="Email ID"
-                            name="basic_detail_email"
+                            name="partnerEmail"
                             type="text"
-                            value={formData.basic_detail_email}
+                            value={formData.partnerEmail}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 handleChange(e);
                             }}
                             onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
                             placeholder="Enter Email ID"
                             required={false}
-                            error={formError.basic_detail_email}
+                            error={formError.partnerEmail}
                             className="position-relative "
                         ></InputFieldGroup>
 
