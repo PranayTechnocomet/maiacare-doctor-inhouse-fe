@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(req: NextRequest, context: any) {
+  const id = context.params.id;
 
   try {
     const response = await apiServer.get(`/patient/${id}`);
 
-    return new NextResponse(JSON.stringify(response.data), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(response.data);
   } catch (error) {
     return handleApiError(error);
   }

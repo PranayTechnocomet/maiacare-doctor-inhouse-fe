@@ -1,20 +1,21 @@
 import { NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
-import { parseRequestBody } from "@/utils/apis/requestHandler";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function DELETE(
+export async function POST(
   req: Request,
-  context: any
+  context: any  
 ) {
-  const id = context.params.id;
-
   try {
-    const response = await apiServer.delete(`/profile/qualifications/delete/${id}`);
+    const { patientId, physicalAssessmentId } = context.params;
+
+    const response = await apiServer.post(
+      `/patient/physical-assessment/${patientId}/${physicalAssessmentId}`
+    );
 
     return NextResponse.json(response.data);
   } catch (error) {
-    console.error("Error deleting qualification:", error);
     return handleApiError(error);
   }
 }
+

@@ -3,8 +3,6 @@
 import { AppDispatch } from "@/utils/redux/store";
 import { useDispatch } from "react-redux";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { setHeaderData } from "@/utils/redux/slices/headerSlice";
-import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { InputFieldGroup } from "@/components/ui/InputField";
 import { Col, Row } from "react-bootstrap";

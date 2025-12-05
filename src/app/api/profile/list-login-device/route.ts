@@ -1,9 +1,9 @@
 // app/api/auth/login/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import apiServer from "@/utils/apis/axiosBackendHelper";
 import { handleApiError } from "@/utils/apis/errorHandler";
 
-export async function POST(req: {token:string}) {
+export async function POST(req: NextRequest, context: any) {
   const API_BASE_URL = "/profile/list-login-device";
 
   try {
