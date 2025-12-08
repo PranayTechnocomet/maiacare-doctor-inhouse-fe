@@ -33,6 +33,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
     const [EditMedicalHistory, setEditMedicalHistory] = useState<boolean>(false);
 
     const [showData, setShowData] = useState<any>(partnerDetailData);
+    console.log("showData", showData);
 
     const initialFormDataAddPhysicalAssessment: PhysicalAssessmentDataModel = {
         id: "",
@@ -335,8 +336,8 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
             const res = await getOne(id);
             const pData = res?.data?.data || res?.data;
 
-            setShowData(pData.partnerDetails)
-            
+            setShowData(pData?.partnerDetails)
+
             if (pData?.partnerDetails?.basicDetails?.partnerEmail) {
                 setShowContent(true);
                 setShowPartnerDetail(false);
@@ -349,14 +350,15 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
     function convertDate(isoString: string) {
         const dateObj = new Date(isoString);
 
-        const options = {
-            weekday: 'short',
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric'
+        const options: Intl.DateTimeFormatOptions = {
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
         };
 
-        let formattedDate = dateObj.toLocaleDateString('en-GB', options);
+        let formattedDate = dateObj.toLocaleDateString("en-GB", options);
+
 
         return formattedDate;
     }
@@ -428,7 +430,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                 <div className='d-flex align-items-start align-items-sm-center gap-3 flex-column flex-sm-row'>
                                     <div>
                                         <img
-                                            src={showData?.profile?.profileImage || Simpleeditpro}
+                                            src={showData?.basicDetails?.partnerImage || Simpleeditpro}
                                             alt="PartnerImage"
                                             width={90}
                                             height={90}
@@ -900,7 +902,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <div className="mb-3">
                                             <h6 className="mb-1 contact-details-emergency">Semen Analysis</h6>
                                             <p className="mb-2 accordion-title-detail">
-                                                {showData?.fertilityAssessment.semenAnalysis.status
+                                                {showData?.fertilityAssessment?.semenAnalysis?.status
                                                     === 'Yes'
                                                     ? showData?.fertilityAssessment.semenAnalysis.semenAnalysisDetails
                                                         ? `Yes | ${showData?.fertilityAssessment.semenAnalysis.semenAnalysisDetails}`
@@ -944,7 +946,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                             <h6 className="mb-1 contact-details-emergency">Surgeries</h6>
                                             <p className="mb-2 accordion-title-detail">
 
-                                                {showData?.fertilityAssessment.surgeries.status
+                                                {showData?.fertilityAssessment?.surgeries?.status
                                                     === 'Yes'
                                                     ? showData.fertilityAssessment.surgeries.surgeriesDetails
                                                         ? `Yes | ${showData.fertilityAssessment.surgeries.surgeriesDetails}`

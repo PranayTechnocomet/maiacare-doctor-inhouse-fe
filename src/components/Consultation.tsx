@@ -754,6 +754,7 @@ export default function Consultation() {
             header: "Name",
             cell: (info) => {
                 const row = info.row.original;
+                
                 const id = info.row.original.patient_id; // <-- Make sure you have an `id`
 
                 return (
@@ -761,7 +762,7 @@ export default function Consultation() {
                         <div className="d-flex align-items-center gap-2">
                             <Image
                                 src={row.image || woman}
-                                alt={row.name}
+                                alt={row.name || "patient"}
                                 width={36}
                                 height={36}
                                 className="rounded-circle border"
