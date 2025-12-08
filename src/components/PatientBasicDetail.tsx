@@ -451,7 +451,7 @@ The IVF process, success rates, potential risks, and next steps were discussed.P
                                         Add new
                                     </div>
                                 </Button>
-                                {modalFormPhisicalData?.map((item: any, index: any): any => {
+                                {modalFormPhisicalData?.map((item: any, index: number): any => {
                                     return (
                                         <Accordion.Item eventKey={index.toString()} className='phisical-assessment-accordion-item mb-3' key={index}>
                                             <Accordion.Header >

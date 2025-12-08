@@ -17,6 +17,12 @@ import { setAuthData } from "@/Hook/Redux/Slice/authSlice";
 export function LoginForms() {
     const [showPassword, setShowPassword] = useState(false);
     const [maskedValue, setMaskedValue] = useState("");
+    const [touched, setTouched] = useState({
+        email: false,
+        password: false,
+    });
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
     const dispatch = useDispatch();
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
@@ -35,16 +41,40 @@ export function LoginForms() {
     const [formData, setFormData] = useState(defaultFormValue);
     const [formError, setFormError] = useState(defaultFormError);
 
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setFormData({ ...formData, [name]: value });
+    //     // setFormError({ ...formError, [name]: "" });
+    //     if (name === "email") {
+    //         const emailRegex = /^[^\s@]+@[^\s@]+\.(com|in)$/;
+    //         setFormError({
+    //             ...formError,
+    //             email: emailRegex.test(value) ? "" : "Invalid email format",
+    //         });
+    //     }
+
+    //     if (name === "password") {
+    //         setFormError({
+    //             ...formError,
+    //             password: value.trim() ? "" : "Password is required",
+    //         });
+    //     }
+
+    //     setTouched({ ...touched, [name]: true });
+    //     if (name === "password") {
+    //         // setMaskedValue(value.replace(/./g, "*").slice(0, value.length));
+    //         setMaskedValue(value.replace(/./g, "*"));
+    //     }
+    // };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        setFormError({ ...formError, [name]: "" });
 
         if (name === "password") {
-            // setMaskedValue(value.replace(/./g, "*").slice(0, value.length));
             setMaskedValue(value.replace(/./g, "*"));
         }
     };
+
 
     const validateForm = () => {
         const errors: typeof defaultFormError = { ...defaultFormError };
@@ -72,30 +102,51 @@ export function LoginForms() {
 
     const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsSubmitted(true);
 
-    if (validateForm()) {
-      login(formData)
-        .then((response) => {
-          if (response.status) {
-            toast.success(response?.data?.message || "Login successful!");
-            console.log("response", response);
-            
-            // Save token
-            const token = response?.data?.token;
-            localStorage.setItem("token", token);
-            setTokenInCookie(token);
-            dispatch(setToken(token));
-            dispatch(setAuthData(response?.data?.data.doctor));
-            router.push("/dashboard");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      setFormError(defaultFormError);
-      // router.push("/selectprofile");
-    }
-  };
+        if (validateForm()) {
+            login(formData)
+                .then((response) => {
+                    if (response.status) {
+                        toast.success(response?.data?.message || "Login successful!");
+                        console.log("response", response);
+
+                        // Save token
+                        const token = response?.data?.token;
+                        localStorage.setItem("token", token);
+                        setTokenInCookie(token);
+                        dispatch(setToken(token));
+                        dispatch(setAuthData(response?.data?.data.doctor));
+                        router.push("/dashboard");
+
+                        setFormError(defaultFormError);
+                        setIsSubmitted(false);
+                        setTouched({ email: false, password: false });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+
+                    const message = err?.response?.data?.message || "Login failed";
+
+                    if (message.toLowerCase().includes("password")) {
+                        setFormError((prev) => ({
+                            ...prev,
+                            password: message,
+                        }));
+                    } else if (message.toLowerCase().includes("email")) {
+                        setFormError((prev) => ({
+                            ...prev,
+                            email: message,
+                        }));
+                    } else {
+                        toast.error(message);
+                    }
+                });
+
+            // router.push("/selectprofile");
+        }
+    };
 
     return (
         <div>
@@ -105,7 +156,10 @@ export function LoginForms() {
                     value={formData.email}
                     name="email"
                     onChange={handleChange}
-                    error={formError.email}
+                    // error={formError.email}
+                    // error={(isSubmitted || touched.email) && formError.email ? formError.email : ""}
+                    error={(touched.email || isSubmitted) ? formError.email : ""}
+                    onBlur={() => setTouched({ ...touched, email: true })}
                     label="Enter ID"
                     placeholder="doctor@maiacare.com"
                     required={true}
@@ -135,7 +189,11 @@ export function LoginForms() {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        error={formError.password}
+                        // error={formError.password}
+                        // error={(isSubmitted || touched.password) && formError.password ? formError.password : ""}
+                        error={(isSubmitted || touched.password) ? formError.password : ""}
+                        onBlur={() => setTouched({ ...touched, password: true })}
+
                         className="position-relative  input-email-login-data login-password-data"
                     >
                         {/* <BiLockAlt size={24} className="input-email-data" /> */}
@@ -371,11 +429,11 @@ export function ResetPasswordScreen({
             // router.push("/"); // set route in success model
             // setFormError(defaultFormError);
             // setPasswordChangedSuccessModel(true);
-            const passData:{password:string, token: string | null} = {
+            const passData: { password: string, token: string | null } = {
                 password: formData.confirmpassword,
                 token: localStorage.getItem("token")
             }
-             newPassword(passData)
+            newPassword(passData)
                 .then((response) => {
 
                     console.log("response", response.data);
@@ -516,13 +574,13 @@ export function VerifyOtp() {
         //     isValid = false;
         // }
 
-  if (!formData.number) {
-  errors.number = "Please enter Verification code";
-  isValid = false;
-} else if (formData.number.length !== 6) {
-  errors.number = "Please enter valid number";
-  isValid = false;
-}
+        if (!formData.number) {
+            errors.number = "Please enter Verification code";
+            isValid = false;
+        } else if (formData.number.length !== 6) {
+            errors.number = "Please enter valid number";
+            isValid = false;
+        }
 
         setFormError(errors);
         return isValid;
