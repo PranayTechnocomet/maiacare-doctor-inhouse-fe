@@ -175,16 +175,20 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     if (Object.keys(errors).length === 0) {
       console.log("✅ Form is valid, go to next step");
 
-      // const newOtherDocs = completedFiles.filter(doc => !doc.fromAPI);
       const formattedOtherDocs = completedFiles
-        .filter(doc => !doc.fromAPI) // only new docs
-        .map(doc => ({
-          reportName: doc.reportName || doc.name?.split(".")[0] || "",
-          filePath: otherDocuments.filePath, 
-          // filePath: doc.filePath, 
-          originalName: doc.name,
-          fileSize: doc.size
-        }));
+        .filter((doc) => !doc.fromAPI)
+        .map((doc, index) => {
+          const fileData = otherDocuments[index];
+
+          return {
+            reportName: doc.reportName || doc.name?.split(".")[0] || "",
+            filePath: fileData?.filePath || "",
+            originalName: doc.name,
+            fileSize: doc.size
+          };
+        });
+
+      console.log("otherDocuments", formattedOtherDocs);
 
       const passData = {
         aadharNumber: formData.Adcard.replaceAll(" ", ""),
@@ -202,6 +206,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       uploadkycdetails(passData)
         .then((res) => {
           console.log("res", res.data);
+          router.push("/profile");
+          onNext();
         })
         .catch((err) => {
           console.log("err", err);
@@ -442,8 +448,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     }
     getProfileImageUrl(passData)
       .then((res) => {
-        console.log("res.data.files[0]",res.data.files[0]);
-        
+        console.log("res.data.files[0]", res.data.files[0]);
+
         setOtherDocuments((prev) => [
           ...prev,
           {
@@ -541,8 +547,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const getDetails = () => {
     getKyc()
       .then((res) => {
-        console.log("res----------", res?.data?.data);
-
         setAadharNumber(res?.data?.data?.aadharCard?.aadharNumber)
         setPanNumber(res?.data?.data?.panCard?.panNumber)
         setLicNumber(res?.data?.data?.licenceCard?.licenceNumber)
@@ -572,6 +576,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
   useEffect(() => {
     getDetails()
+
   }, [])
 
   useEffect(() => {
@@ -1012,7 +1017,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   </div>
                 </button>
                 {/* File Icon (PDF or Image) */}
-                <Image
+                {/* <Image
                   src={
                     file.name?.toLowerCase().endsWith(".pdf")
                       ? pdfimg
@@ -1027,7 +1032,21 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   alt={file.name}
                   width={40}
                   height={40}
+                /> */}
+
+                <Image
+                  src={
+                    file.fileType?.toLowerCase() === "pdf"
+                      ? pdfimg
+                      : /\.(jpg|jpeg|png|gif)$/i.test(file.name || file.url || "")
+                        ? Jpgimg
+                        : pdfimg
+                  }
+                  alt={file.name || file.reportName}
+                  width={40}
+                  height={40}
                 />
+
 
                 {/* File Title */}
                 <div
