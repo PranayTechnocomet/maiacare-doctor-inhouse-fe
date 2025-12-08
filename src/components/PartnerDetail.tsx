@@ -335,12 +335,13 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
             const res = await getOne(id);
             const pData = res?.data?.data || res?.data;
 
-            console.log("pData", pData);
             setShowData(pData.partnerDetails)
-            if (pData?.partnerDetails?.basicDetails?.partnerEmail !== null || pData?.partnerDetails?.basicDetails?.partnerEmail !== undefined) {
-                setShowContent(true)
-                setShowPartnerDetail(false)
+            
+            if (pData?.partnerDetails?.basicDetails?.partnerEmail) {
+                setShowContent(true);
+                setShowPartnerDetail(false);
             }
+
         } catch (error) {
             console.error("Error fetching partner:", error);
         }
@@ -349,10 +350,10 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
         const dateObj = new Date(isoString);
 
         const options = {
-            weekday: 'short', 
-            day: 'numeric',   
-            month: 'short',   
-            year: 'numeric'   
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
         };
 
         let formattedDate = dateObj.toLocaleDateString('en-GB', options);
@@ -522,7 +523,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Surgeries</h6>
                                         <p className=" accordion-title-detail">
-                                            {showData.medicalHistory.surgeries.status == "Yes" ? showData.medicalHistory.surgeries.surgeriesDetails : showData.medicalHistory.surgeries.status}
+                                            {showData?.medicalHistory?.surgeries?.status == "Yes" ? showData?.medicalHistory?.surgeries?.surgeriesDetails : showData?.medicalHistory?.surgeries?.status}
                                         </p>
                                     </div>
                                 </Col>
@@ -531,7 +532,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Medical condition / Allergies</h6>
 
-                                        {showData.medicalHistory?.conditions?.map((item: any, i: number) => {
+                                        {showData?.medicalHistory?.conditions?.map((item: any, i: number) => {
                                             return (
                                                 <p key={i} className="accordion-title-detail d-inline-block border-box-orange-font box-border-orange me-2 mb-2">
                                                     {item}
@@ -548,7 +549,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <div className=" accordion-title-detail">
                                             <ul>
 
-                                                <li className='medical-emergency-fimily-history'>{showData.medicalHistory?.familyHistory || "No added family history"}</li>
+                                                <li className='medical-emergency-fimily-history'>{showData?.medicalHistory?.familyHistory || "No added family history"}</li>
 
 
                                             </ul>
@@ -559,7 +560,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                 <Col sm={7}>
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Lifestyle</h6>
-                                        {showData.medicalHistory?.lifestyle?.map((item: any, i: number) => {
+                                        {showData?.medicalHistory?.lifestyle?.map((item: any, i: number) => {
                                             return (
                                                 <p key={i} className="accordion-title-detail d-inline-block border-box-blue-font box-border-blue me-2 mb-2">
                                                     {item}
@@ -575,7 +576,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <h6 className=" contact-details-emergency">Physical Exercise</h6>
                                         <p className="accordion-title-detail border-box-orange-font box-border-orange d-inline-block ">
 
-                                            {showData.medicalHistory?.exerciseFrequency}
+                                            {showData?.medicalHistory?.exerciseFrequency}
 
                                         </p>
                                     </div>
@@ -585,7 +586,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Stress Level</h6>
                                         <p className="accordion-title-detail d-inline-block border-box-red-font box-border-red">
-                                            {showData.medicalHistory?.stressLevel}
+                                            {showData?.medicalHistory?.stressLevel}
                                         </p>
                                     </div>
                                 </Col>
@@ -745,7 +746,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                             </div>
                             <Accordion defaultActiveKey="0">
 
-                                {showData.physicalAssessment?.map((item: any, index: any) => (
+                                {showData?.physicalAssessment?.map((item: any, index: any) => (
                                     <Accordion.Item eventKey={index.toString()} className='phisical-assessment-accordion-item mb-3' key={index}>
                                         <Accordion.Header className='phisical-assessment-accordion-title-showData'>
                                             <div className='phisical-assessment-accordion-title-showData'>

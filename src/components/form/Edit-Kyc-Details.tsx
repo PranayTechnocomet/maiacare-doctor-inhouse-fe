@@ -376,6 +376,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     date?: string;       // For uploaded date
     preview?: string;    // For preview URL or icon
     actualSize?: string; // For original file size
+    fromAPI?: boolean;
+    url?: string;
   }
 
 
@@ -600,23 +602,42 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     }
   }, [aadharNumber, panNumber, licNumber]);
 
+  // useEffect(() => {
+  //   if (aadharImg) {
+  //     setAadharFile({
+  //       url: aadharImg,
+  //       name: "Aadhar Document",
+  //       size: aadharSize ? aadharSize : "",
+  //     });
+  //     setAadharFileUrl(aadharImg)
+  //   }
+  // }, [aadharImg]);
+
   useEffect(() => {
     if (aadharImg) {
       setAadharFile({
         url: aadharImg,
         name: "Aadhar Document",
-        size: aadharSize ? aadharSize : "",
+        size: aadharSize || "",
+        status: "completed",      
+        reportName: "Aadhar Card",
+        fromAPI: true,            
       });
-      setAadharFileUrl(aadharImg)
+
+      setAadharFileUrl(aadharImg);
     }
   }, [aadharImg]);
+
 
   useEffect(() => {
     if (panImg) {
       setPanFile({
         url: panImg,
         name: "PAN Document",
-        size: panSize ? panSize : "",
+        size: panSize || "",
+        status: "completed",
+        reportName: "Pan Card",
+        fromAPI: true
       });
       setPanFileUrl(panImg)
     }
@@ -628,7 +649,10 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       setLicenceFile({
         url: licImg,
         name: "License Document",
-        size: licSize ? licSize : "",
+        size: licSize || "",
+        status: "completed",
+        reportName: "License",
+        fromAPI: true
       });
       setLicFileUrl(licImg)
     }
