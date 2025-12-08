@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Row, Col, Form, ProgressBar, Toast } from "react-bootstrap";
 import Jpgimg from "../../assets/images/Jpgimg.png";
 import ContentContainer from "../ui/ContentContainer";
@@ -22,7 +22,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import Modal from "../ui/Modal";
 import { useRouter } from "next/navigation";
 import Button from "../ui/Button";
-import { getProfileImageUrl, uploadkycdetails } from "@/utils/apis/apiHelper";
+import { getKyc, getProfileImageUrl, uploadkycdetails } from "@/utils/apis/apiHelper";
 import { Prev } from "react-bootstrap/esm/PageItem";
 
 
@@ -56,8 +56,11 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [showModal, setShowModal] = useState(false);
   const [formError, setFormError] = useState<FormError>(initialFormError);
   const [completedFiles, setCompletedFiles] = useState<UploadedFile[]>([]);
+  const [apiOtherDocs, setApiOtherDocs] = useState<UploadedFile[]>([]);
+
   const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
   const [aadharFile, setAadharFile] = useState<UploadedFile | null>(null);
+
   const [panFile, setPanFile] = useState<UploadedFile | null>(null);
   const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
 
@@ -71,7 +74,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
   const [otherDocReportName, setOtherDocReportName] = useState<{ reportName: string[] }>({
     reportName: []
   });
-  console.log("otherDocReportName", otherDocReportName);
 
 
   const [otherDocOriName, setOtherDocOriName] = useState<OtherDocOriNameType>({
@@ -99,9 +101,22 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     Pancard: string,
     LicNumber: string,
   };
+  const [aadharNumber, setAadharNumber] = useState(null);
+  const [aadharImg, setAadharImg] = useState(null);
+  const [aadharSize, setAadharSize] = useState(null);
+  const [panNumber, setPanNumber] = useState(null);
+  const [panImg, setPanImg] = useState(null);
+  const [panSize, setPanSize] = useState(null);
+  const [licNumber, setLicNumber] = useState(null);
+  const [licImg, setLicImg] = useState(null);
+  const [licSize, setLicSize] = useState(null);
+
+
   const initialFormData: FormData = {
-    Adcard: "",
-    Pancard: "",
+    // Adcard: (responseData ?? "").toString(),
+    Adcard: String(aadharNumber) || "",
+
+    Pancard: String(panNumber) || "",
     LicNumber: "",
   };
 
@@ -160,6 +175,16 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     if (Object.keys(errors).length === 0) {
       console.log("✅ Form is valid, go to next step");
 
+      // const newOtherDocs = completedFiles.filter(doc => !doc.fromAPI);
+      const formattedOtherDocs = completedFiles
+        .filter(doc => !doc.fromAPI) // only new docs
+        .map(doc => ({
+          reportName: doc.reportName || doc.name?.split(".")[0] || "",
+          filePath: otherDocuments.filePath, 
+          // filePath: doc.filePath, 
+          originalName: doc.name,
+          fileSize: doc.size
+        }));
 
       const passData = {
         aadharNumber: formData.Adcard.replaceAll(" ", ""),
@@ -171,7 +196,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
         licenceNumber: formData.LicNumber,
         licenceFile: licFileUrl,
         licenceSize: licenceFile?.size,
-        otherDocuments: otherDocuments
+        otherDocuments: formattedOtherDocs
+        // otherDocuments: otherDocuments
       }
       uploadkycdetails(passData)
         .then((res) => {
@@ -358,8 +384,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
       reportName: "",
     },
   ]);
-  console.log("uploadedFiles", uploadedFiles);
-
 
   const handleOpenModal = () => {
     setUploadedFiles([]); // reset every time modal opens
@@ -418,6 +442,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     }
     getProfileImageUrl(passData)
       .then((res) => {
+        console.log("res.data.files[0]",res.data.files[0]);
+        
         setOtherDocuments((prev) => [
           ...prev,
           {
@@ -511,6 +537,97 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     setShowModal(false);
     setFileError("");       // file upload error reset (jo use karto hoy to)
   };
+
+  const getDetails = () => {
+    getKyc()
+      .then((res) => {
+        console.log("res----------", res?.data?.data);
+
+        setAadharNumber(res?.data?.data?.aadharCard?.aadharNumber)
+        setPanNumber(res?.data?.data?.panCard?.panNumber)
+        setLicNumber(res?.data?.data?.licenceCard?.licenceNumber)
+        setAadharImg(res?.data?.data?.aadharCard?.filePath)
+        setPanImg(res?.data?.data?.panCard?.filePath)
+        setLicImg(res?.data?.data?.licenceCard?.filePath)
+        setAadharSize(res?.data?.data?.aadharCard?.aadharSize)
+        setPanSize(res?.data?.data?.panCard?.panSize)
+        setLicSize(res?.data?.data?.licenceCard?.licenceSize)
+        const mappedDocs = res?.data?.data?.otherDocuments?.map((doc: any) => ({
+          name: doc.fileName || "",
+          url: doc.filePath || "",
+          reportName: doc.reportName || "",
+          size: doc.fileSize || "",
+          fileType: doc.fileType || "",
+          uploadedAt: doc.uploadedAt || new Date().toISOString(),
+          fromAPI: true
+        }));
+
+        setCompletedFiles(mappedDocs)
+        // setCompletedFiles(res?.data?.data?.otherDocuments)
+      })
+      .catch((err) => {
+        console.log("Response from getting KYC: ", err);
+      })
+  }
+
+  useEffect(() => {
+    getDetails()
+  }, [])
+
+  useEffect(() => {
+    if (aadharNumber) {
+      setFormData(prev => ({
+        ...prev,
+        Adcard: String(aadharNumber)
+      }));
+    }
+    if (panNumber) {
+      setFormData(prev => ({
+        ...prev,
+        Pancard: String(panNumber)
+      }));
+    }
+    if (licNumber) {
+      setFormData(prev => ({
+        ...prev,
+        LicNumber: String(licNumber)
+      }));
+    }
+  }, [aadharNumber, panNumber, licNumber]);
+
+  useEffect(() => {
+    if (aadharImg) {
+      setAadharFile({
+        url: aadharImg,
+        name: "Aadhar Document",
+        size: aadharSize ? aadharSize : "",
+      });
+      setAadharFileUrl(aadharImg)
+    }
+  }, [aadharImg]);
+
+  useEffect(() => {
+    if (panImg) {
+      setPanFile({
+        url: panImg,
+        name: "PAN Document",
+        size: panSize ? panSize : "",
+      });
+      setPanFileUrl(panImg)
+    }
+
+  }, [panImg]);
+
+  useEffect(() => {
+    if (licImg) {
+      setLicenceFile({
+        url: licImg,
+        name: "License Document",
+        size: licSize ? licSize : "",
+      });
+      setLicFileUrl(licImg)
+    }
+  }, [licImg]);
 
 
   return (
@@ -901,6 +1018,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       ? pdfimg
                       : [".jpg", ".jpeg", ".png", ".gif"].some((ext) =>
                         file.name?.toLowerCase().endsWith(ext)
+                          ? file.name?.toLowerCase().endsWith(ext)
+                          : file.fileType
                       )
                         ? Jpgimg
                         : pdfimg
@@ -915,7 +1034,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                   className="mt-2 card-feild text-truncate d-block qualification-certificates-file-title"
                   title={file.reportName || file.name}
                 >
-                  {file.reportName || file.name}
+                  {file.reportName || file.name || "No Name"}
                 </div>
 
                 {/* File Name */}
@@ -1111,8 +1230,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                       value={file.reportName}
                       onChange={(e) => {
                         const value = e.target.value;
-                        setOtherDocReportName(value);
-
                         setUploadedFiles((prev) =>
                           prev.map((f, i) =>
                             i === index ? { ...f, reportName: value } : f

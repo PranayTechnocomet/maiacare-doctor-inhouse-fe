@@ -96,9 +96,18 @@ export const deleteQualification = (id: string) => {
   });
 };
 
+export const getKyc = () => {
+  const token = localStorage.getItem("token");
+  return apiClient.get("/profile/get/kyc-details", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+}
+
 export const uploadkycdetails = (data: { aadharNumber: string; aadharFile: string; panNumber: string; panFile: string; licenceNumber: string; licenceFile: string; otherDocuments: { reportName: string; filePath: string; originalName: string; }[]; }) => {
   const token = localStorage.getItem("token");
-  return apiClient.put("/profile/upload-kyc-details",data, {
+  return apiClient.put("/profile/upload-kyc-details", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -244,8 +253,8 @@ export const updatemedicalhistory = (id: string, data: any) => {
   );
 };
 
-export const basicDetails = (data : object) => {
-  return apiClient.post("/patient/partner/basicDetails" , data);
+export const basicDetails = (data: object) => {
+  return apiClient.post("/patient/partner/basicDetails", data);
 }
 
 
@@ -359,7 +368,7 @@ export const updatePartnerfertilityassessment = (id: string, data: any) => {
 
 
 
-export const getProfileImageUrl = (formData: { type: string; files: string|File|undefined; }) => {
+export const getProfileImageUrl = (formData: { type: string; files: string | File | undefined; }) => {
   const token = localStorage.getItem("token");
 
   return apiClient.post("/update-images", formData, {
