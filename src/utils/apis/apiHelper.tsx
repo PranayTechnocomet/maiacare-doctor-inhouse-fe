@@ -2,7 +2,6 @@ import { FertilityAssessmentType } from "../types/interfaces";
 import { LoginRequest } from "../types/requestInterface";
 import apiClient from "./axiosInstance";
 import api from "./axiosInstance";
-import {  imageUpload } from "../types/interfaces";
 
 export const login = (data: LoginRequest) => {
   return apiClient.post("/auth/login", data);
@@ -50,7 +49,7 @@ export const getLoggedInUser = () => {
   });
 }
 export const update = (payload: any) => {
-  return apiClient.put("/profile/update",payload);
+  return apiClient.put("/profile/update", payload);
 }
 // export const update = () => {
 //   const token = localStorage.getItem("token");
@@ -79,7 +78,7 @@ export const addQualification = (data: QualificationType[]) => {
 }
 
 
-export const editQualification = (data: QualificationType, id:string|null) => {
+export const editQualification = (data: QualificationType, id: string | null) => {
   const token = localStorage.getItem("token");
   return apiClient.put(`/profile/qualifications/edit/${id}`, data, {
     headers: {
@@ -88,7 +87,7 @@ export const editQualification = (data: QualificationType, id:string|null) => {
   });
 }
 
-export const deleteQualification = (id:string) => {
+export const deleteQualification = (id: string) => {
   const token = localStorage.getItem("token");
   return apiClient.delete(`/profile/qualifications/delete/${id}`, {
     headers: {
@@ -97,9 +96,9 @@ export const deleteQualification = (id:string) => {
   });
 };
 
-export const uploadkycdetails = () => {
+export const uploadkycdetails = (data: { aadharNumber: string; aadharFile: string; panNumber: string; panFile: string; licenceNumber: string; licenceFile: string; otherDocuments: { reportName: string; filePath: string; originalName: string; }[]; }) => {
   const token = localStorage.getItem("token");
-  return apiClient.delete("/profile/uploadkycdetails", {
+  return apiClient.put("/profile/upload-kyc-details",data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -115,7 +114,7 @@ export const getAll = () => {
   });
 };
 export const getOne = async (id: string | number) => {
-    return await api.get(`/patient/${id}`);   // FIXED ✔
+  return await api.get(`/patient/${id}`);   // FIXED ✔
 };
 
 export const patientDelete = (patientId: string) => {
@@ -169,7 +168,7 @@ export const updatephysicalassessment = (data: any) => {
 };
 
 
-export const addFertilityAssessment = (data: any  ) => {
+export const addFertilityAssessment = (data: any) => {
   const token = localStorage.getItem("token");
   return apiClient.post("/patient/fertility-assessment", data, {
     headers: {
@@ -180,7 +179,7 @@ export const addFertilityAssessment = (data: any  ) => {
 
 
 export const getFertilityAssessment = async (id: string) => {
-    return api.get(`/patient/fertility-assessment/${id}`);
+  return api.get(`/patient/fertility-assessment/${id}`);
 };
 
 
@@ -227,7 +226,7 @@ export const addMedicalHistory = (data: any) => {
 };
 
 export const getmedicalhistory = async (id: string) => {
-    return api.get(`/patient/medical-history/${id}`);
+  return api.get(`/patient/medical-history/${id}`);
 };
 
 
@@ -245,14 +244,14 @@ export const updatemedicalhistory = (id: string, data: any) => {
   );
 };
 
-export const basicDetailspost = (data : object) => {
+export const basicDetails = (data : object) => {
   return apiClient.post("/patient/partner/basicDetails" , data);
 }
 
 
 export const addPartnerMedicalHistory = (data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: string[]; familyHistory: string; lifestyle: string[]; exerciseFrequency: string; stressLevel: string; }) => {
   const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/medicalHistory",data, {
+  return apiClient.post("/patient/partner/medicalHistory", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
@@ -260,13 +259,16 @@ export const addPartnerMedicalHistory = (data: { patientId: string | undefined; 
 }
 
 export const getPartnermedicalhistory = async (id: string | undefined) => {
-    return api.get(`/patient/partner/medicalHistory/${id}`);
+  return api.get(`/patient/partner/medicalHistory/${id}`);
 };
 
 
-export const updatePartnermedicalhistory = (id: string|undefined, data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: any[]; familyHistory: string; lifestyle: any[]; exerciseFrequency: string; stressLevel: string; }) => {
+export const updatePartnermedicalhistory = (
+  id: string | undefined,
+  data: { patientId: string | undefined; medications: { status: string; medicationsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; conditions: any[]; familyHistory: string; lifestyle: any[]; exerciseFrequency: string; stressLevel: string; }
+) => {
   const token = localStorage.getItem("token");
-  console.log("data",data)
+  console.log("id----", id)
   const res = apiClient.put(
     `/patient/partner/medicalHistory/${id}`,
     data,
@@ -282,7 +284,7 @@ export const updatePartnermedicalhistory = (id: string|undefined, data: { patien
 
 export const addPartnerPhysicalAssesment = (data: { height: string; weight: string; bmi: string; bloodGroup: string; bloodPressureSystolic: string; bloodPressureDiastolic: string; heartRate: string; }) => {
   const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/physicalAssessment",data, {
+  return apiClient.post("/patient/partner/physicalAssessment", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
@@ -324,7 +326,7 @@ export const updatePartnerphysicalassessment = (data: any) => {
 
 export const addPartnerfertilityAssessment = (data: { patientId: string | undefined; semenAnalysis: { status: string; semenAnalysisDetails: string; }; fertilityIssues: { status: string; fertilityIssuesDetails: string; }; fertilityTreatments: { status: string; fertilityTreatmentsDetails: string; }; surgeries: { status: string; surgeriesDetails: string; }; }) => {
   const token = localStorage.getItem("token");
-  return apiClient.post("/patient/partner/fertilityAssessment",data, {
+  return apiClient.post("/patient/partner/fertilityAssessment", data, {
     headers: {
       Authorization: `Bearer ${token}`,
     }
@@ -333,7 +335,7 @@ export const addPartnerfertilityAssessment = (data: { patientId: string | undefi
 
 
 export const getPartnerFertilityAssessment = async (id: string) => {
-    return api.get(`/patient/partner/fertility-assessment/${id}`);
+  return api.get(`/patient/partner/fertility-assessment/${id}`);
 };
 
 
@@ -357,7 +359,7 @@ export const updatePartnerfertilityassessment = (id: string, data: any) => {
 
 
 
-export const getProfileImageUrl = (formData: { type: string; files: File; }) => {
+export const getProfileImageUrl = (formData: { type: string; files: string|File|undefined; }) => {
   const token = localStorage.getItem("token");
 
   return apiClient.post("/update-images", formData, {
@@ -379,4 +381,13 @@ export const logout = () => {
 
 export const logoutByDevice = (id: string) => {
   return apiClient.post(`/profile/logoutByDevice`, { id });
+};
+export const consultation = (data: any) => {
+  const token = localStorage.getItem("token");
+
+  return apiClient.post("/patient/consultReview", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
 };

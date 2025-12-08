@@ -9,7 +9,6 @@ import Image from 'next/image';
 import { useRouter } from "next/navigation";
 // import Modal from "../ui/Modal";
 import ContentContainer from '../ui/ContentContainer';
-import { TimePickerFieldGroup } from '../ui/CustomTimePicker';
 import Modal from '../ui/Modal';
 import { InputFieldGroup } from '../ui/InputField';
 import Button from '../ui/Button';
@@ -28,7 +27,6 @@ interface DocumentType {
     date: string;
 }
 
-
 const ProfileBasicDetails = () => {
   interface FormError {
     [key: string]: string;
@@ -41,6 +39,7 @@ const ProfileBasicDetails = () => {
   const [startTime, setStartTime] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [endTime, setEndTime] = useState("");
+
 
   interface qualificationType {
     degree: string,
@@ -72,8 +71,6 @@ const ProfileBasicDetails = () => {
     SS: "",
     Time: "",
     Timer: "",
-
-
     degree: "",
     fieldOfStudy: "",
     university: "",
@@ -92,6 +89,8 @@ const ProfileBasicDetails = () => {
 
 
  const [documents, setDocuments] = useState<DocumentType[]>([]);
+const [operationalHours, setOperationalHours] = useState<OperationalHour[]>([]);
+
 
 
   const handleDelete = (id: string) => {
@@ -124,10 +123,10 @@ const ProfileBasicDetails = () => {
     document.body.removeChild(link);
   };
 
-  const operationalHours = [
-    { days: "Mon to Fri", time: "10 AM – 5 PM" },
-    { days: "Sat & Sun", time: "10 AM – 2 PM" },
-  ];
+  // const operationalHours = [
+  //   { days: "Mon to Fri", time: "10 AM – 5 PM" },
+  //   { days: "Sat & Sun", time: "10 AM – 2 PM" },
+  // ];
 
   //================  + add  Modal all data below ============= //
 
@@ -334,12 +333,13 @@ const ProfileBasicDetails = () => {
   };
 
   const [editIndex, setEditIndex] = useState<number | null>(null); // track current editing row
-  interface OperationalHour {
-    day: string;
-    openTime: string;
-    closeTime: string;
-    _id: string;
-  }
+interface OperationalHour {
+  _id: string;
+  day: string;
+  openTime: string;
+  closeTime: string;
+}
+
   interface Qualification {
     degree: string;
     fieldOfStudy: string;
@@ -371,30 +371,14 @@ const ProfileBasicDetails = () => {
     documents: any[];
   }
   const [user, setUser] = useState<DoctorDataType | null>(null)
-  // const getUser = () => {
-  //   getLoggedInUser()
-  //     .then((response) => {
 
-  //       if (response.status == 200) {
-  //         setUser(response.data.data)
-  //         setDocuments(response.data.data.documents)
-  //         setDefaultQualifications(response.data.data.qualifications)
-  //       } else {
-  //         console.log("Error");
-  //       }
-
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
 const getUser = () => {
   getLoggedInUser()
     .then((response) => {
       if (response.status == 200) {
         const userData = response.data.data;
 
-        // 🔥 Normalize document fields
+        // Normalize documents
         const normalizedDocs = userData.documents.map((doc: any, i: number) => ({
           ...doc,
           originalName: doc.originalName || doc.reportName || doc.name || `Document-${i + 1}`,
@@ -404,6 +388,10 @@ const getUser = () => {
         setUser(userData);
         setDocuments(normalizedDocs);
         setDefaultQualifications(userData.qualifications);
+
+        // ⭐ ADD THIS
+        setOperationalHours(userData.operationalHours || []);
+
       } else {
         console.log("Error");
       }
@@ -427,24 +415,57 @@ const getUser = () => {
 
         <Col xl={8} md={7}>
 
-          {/* Operational hours & Days */}
-          <div>
-            <ContentContainer className="mt-4">
-              <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
-                <h5 className="profile-card-main-titile mb-2 mb-md-0">
-                  Operational hours & Days
-                </h5>
-              </div>
-              <div>
-                {operationalHours.map((item, idx) => (
-                  <p key={idx} className="mb-1 basic-detail-text ">
-                    <span className=" maiacare-radio-label">{item.days}:</span>{" "}
-                    {item.time}
-                  </p>
-                ))}
-              </div>
-            </ContentContainer>
-          </div>
+{/* Operational Hours & Days */}
+<div>
+  <ContentContainer className="mt-4">
+    <div className="d-flex flex-column flex-md-row justify-content-md-between align-items-center text-center text-md-start mb-3">
+      <h5 className="profile-card-main-titile mb-2 mb-md-0">
+        Timings
+      </h5>
+    </div>
+
+    <div>
+      {operationalHours?.length > 0 ? (
+        (() => {
+          // Group continuous days with same time
+          const groups = [];
+          let start = operationalHours[0];
+          let prev = operationalHours[0];
+
+          for (let i = 1; i < operationalHours.length; i++) {
+            const curr = operationalHours[i];
+
+            if (
+              curr.openTime === prev.openTime &&
+              curr.closeTime === prev.closeTime
+            ) {
+              // continue grouping
+              prev = curr;
+            } else {
+              groups.push({ start, end: prev });
+              start = curr;
+              prev = curr;
+            }
+          }
+
+          groups.push({ start, end: prev });
+
+          return groups.map((g, index) => (
+            <div key={index} className="mb-3">
+              <p className="basic-detail-text mb-1">
+            <span className=''>  {g.start.day} {g.start.day !== g.end.day && `- ${g.end.day}`} :-</span>
+             
+              <span className='ms-1'> {g.start.openTime} - {g.start.closeTime}</span> 
+              </p>
+            </div>
+          ));
+        })()
+      ) : (
+        <p className="text-muted">No operational hours available</p>
+      )}
+    </div>
+  </ContentContainer>
+</div>
 
 
           {/* Qualification */}

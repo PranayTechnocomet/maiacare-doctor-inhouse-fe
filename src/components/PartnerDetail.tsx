@@ -345,6 +345,21 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
             console.error("Error fetching partner:", error);
         }
     };
+    function convertDate(isoString: string) {
+        const dateObj = new Date(isoString);
+
+        const options = {
+            weekday: 'short', 
+            day: 'numeric',   
+            month: 'short',   
+            year: 'numeric'   
+        };
+
+        let formattedDate = dateObj.toLocaleDateString('en-GB', options);
+
+        return formattedDate;
+    }
+
 
     useEffect(() => {
         fetchPatient();
@@ -516,7 +531,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Medical condition / Allergies</h6>
 
-                                        {showData.medicalHistory?.conditions?.map((item: any, i:number) => {
+                                        {showData.medicalHistory?.conditions?.map((item: any, i: number) => {
                                             return (
                                                 <p key={i} className="accordion-title-detail d-inline-block border-box-orange-font box-border-orange me-2 mb-2">
                                                     {item}
@@ -734,7 +749,8 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <Accordion.Item eventKey={index.toString()} className='phisical-assessment-accordion-item mb-3' key={index}>
                                         <Accordion.Header className='phisical-assessment-accordion-title-showData'>
                                             <div className='phisical-assessment-accordion-title-showData'>
-                                                {formatDate(item.date)}
+                                                {/* {formatDate(item.date)} */}
+                                                {convertDate(item.createdAt)}
                                             </div>
                                         </Accordion.Header>
                                         <Accordion.Body className='pt-0'>
@@ -826,10 +842,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
 
                                                             {/* <span className='phisical-assessment-accordion-showData-box-subtitle'>{item.systolic}/{item.diastolic} mmHg</span> */}
                                                             <span className='phisical-assessment-accordion-showData-box-subtitle'>
-                                                                {item.systolic}
-                                                                {item.systolic && item.diastolic && "/"}
-                                                                {item.diastolic}
-                                                                {(item.systolic || item.diastolic) && " mmHg"}
+                                                                {`${item.bloodPressure.systolic}/${item.bloodPressure.diastolic} mmHg`}
                                                             </span>
                                                         </div>
                                                     </div>

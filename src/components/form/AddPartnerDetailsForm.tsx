@@ -9,20 +9,26 @@ import { PhoneNumberInput } from '../ui/PhoneNumberInput';
 import Button from '../ui/Button';
 import Simpleeditpro from '../../assets/images/Simpleeditpro.png';
 import cameraicon from '../../assets/images/Cameraicon.png';
-import { EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType,imageUpload, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
+import { allDataType, EditFertilityAssessment, FertilityAssessmentType, MedicalHistoryType, PhysicalAssessmentDataModel } from '@/utils/types/interfaces';
 import toast from 'react-hot-toast';
 import { BsInfoCircle } from 'react-icons/bs';
-import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl } from '@/utils/apis/apiHelper';
+import { addPartnerMedicalHistory, basicDetails, getProfileImageUrl, updatePartnermedicalhistory } from '@/utils/apis/apiHelper';
 import { useParams } from 'next/navigation';
 // import '../../style/PartnerDetails.css'
 export function BasicDetailsForm({
     setAddPartner,
     setActiveTab,
-    setShowData
+    setShowData,
+    setTabManagement,
+    setAllData,
+    allData
 }: {
     setAddPartner: (value: boolean) => void,
     setActiveTab: (tab: string) => void,
-    setShowData: (value: any) => void
+    setShowData: (value: any) => void,
+    setTabManagement: (value: number) => void | number,
+    allData: allDataType | undefined;
+    setAllData: React.Dispatch<React.SetStateAction<allDataType | undefined>>;
 }) {
 
     const initialFormError: FormError = {};
@@ -37,14 +43,14 @@ export function BasicDetailsForm({
 
     type FormError = Partial<Record<keyof FormData, string>>;
 
-   const initialFormData: FormData = {
-    partnerName: "",
-    partnerGender: "Male",   // Capitalized
-    partnerAge: "",
-    partnerContactNumber: "",
-    partnerEmail: "",
-    profileImage: ""
-};
+    const initialFormData: FormData = {
+        partnerName: "",
+        partnerGender: "Male",   // Capitalized
+        partnerAge: "",
+        partnerContactNumber: "",
+        partnerEmail: "",
+        profileImage: ""
+    };
 
     const [formData, setFormData] = useState<FormData>(initialFormData);
     // console.log("formData", formData);
@@ -85,13 +91,13 @@ export function BasicDetailsForm({
     const handleImageClick = () => {
         fileInputRef.current?.click();
     };
-  const handleFileChange = (
+    const handleFileChange = (
         event: React.ChangeEvent<HTMLInputElement> | undefined
     ) => {
         if (event) {
             const file = event.target.files?.[0];
-            console.log("file",file);
-            
+            console.log("file", file);
+
             if (file) {
                 const allowedTypes = ["image/jpeg", "image/png"];
 
@@ -133,6 +139,33 @@ export function BasicDetailsForm({
                 };
                 reader.readAsDataURL(file);
             }
+            const data = {
+                type: "doctor",
+                files: file
+            }
+            getProfileImageUrl(data)
+                .then((response) => {
+                    if (response.data.status) {
+                        console.log("response : ", response);
+                        const uploadedImage = response.data.files[0];
+
+                        setProfileImage(uploadedImage);
+                        setFormData((prev) => ({
+                            ...prev,
+                            partnerImage: uploadedImage,
+                        }));
+                        setFormError((prev) => ({
+                            ...prev,
+                            partnerImage: "",
+                        }));
+
+                    } else {
+                        console.log("error");
+                    }
+
+                }).catch((error) => {
+                    console.log("error", error);
+                });
         }
     };
 
@@ -158,65 +191,60 @@ export function BasicDetailsForm({
 
         return errors;
     };
-const params = useParams();
-const patientId = params?.id?.toString();
+    const params = useParams();
+    const patientId = params?.id?.toString();
 
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         const errors = validateForm(formData);
         setFormError(errors);
         // console.log("errors", errors);
         if (Object.keys(errors).length === 0) {
+            setTabManagement(1)
             // console.log("FormData111111 ", formData);
             setFormError(initialFormError);
             setActiveTab("medical history");
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
+        const passData = {
+            patientId: String(patientId),
+            partnerImage: profileImage,
+            partnerName: formData.partnerName,
+            partnerContactNumber: formData.partnerContactNumber,
+            partnerEmail: formData.partnerEmail,
+            partnerGender: formData.partnerGender.charAt(0).toUpperCase() + formData.partnerGender.slice(1),
+            partnerAge: Number(formData.partnerAge)
+        };
 
-       const passData = {
-    patientId: patientId,   // 👈 REQUIRED
-    partnerImage: formData.profileImage,
-    partnerName: formData.basic_detail_name,
-    partnerContactNumber: formData.basic_detail_phone,
-    partnerEmail: formData.basic_detail_email,
-    partnerGender: formData.basic_detail_gender.charAt(0).toUpperCase() + formData.basic_detail_gender.slice(1),
-    partnerAge: formData.basic_detail_age
-};
-
-        const formDataImage = {
-            type: "doctor",
-            files: formData.profileImage
-        }
         const formDataToSend = new FormData();
         formDataToSend.append("type", "doctor");
         formDataToSend.append("files", formData.profileImage);
-        console.log("formDataToSend", formDataImage);
 
+        // getProfileImageUrl(formDataImage)
+        //     .then((response) => {
+        //         console.log("getImageUrl: ", response.data);
+        //     })
+        //     .catch((err) => {
+        //         console.log("getImageUrl", err);
+        //     });
 
-        getProfileImageUrl(formDataImage)
-            .then((response) => {
-                console.log("getImageUrl: ", response.data);
-            })
-            .catch((err) => {
-                console.log("getImageUrl", err);
-            });
-        basicDetails(passData)
-            .then((response) => {
+        // basicDetails(passData)
+        //     .then((response) => {
 
-                if (response.status == 200) {
-                    console.log("Partner basic details added: ", response.data);
-                } else {
-                    console.log("Error");
-                }
+        //         if (response.status == 200) {
+        //             console.log("Partner basic details added: ", response.data);
+        //         } else {
+        //             console.log("Error");
+        //         }
 
-            })
-            .catch((err) => {
-                console.log("Partner basic details adding error", err);
-            });
+        //     })
+        //     .catch((err) => {
+        //         console.log("Partner basic details adding error", err);
+        //     });
 
+        setAllData({ ...allData, basicDetailsPassingData: passData })
     };
     return (
         <>
@@ -226,13 +254,13 @@ const patientId = params?.id?.toString();
                     <Col md={12}>
                         <div className="d-flex align-items-center gap-4  flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
                             <div className="profile-wrapper position-relative" >
-                             <img
-  src={profileImage || Simpleeditpro.src}
-  alt="Profile"
-  className="object-fit-cover rounded-2"
-  width={100}
-  height={100}
-/>
+                                <img
+                                    src={profileImage || Simpleeditpro.src}
+                                    alt="Profile"
+                                    className="object-fit-cover rounded-2"
+                                    width={100}
+                                    height={100}
+                                />
 
                                 <div
                                     className="camera-icon"
@@ -278,19 +306,19 @@ const patientId = params?.id?.toString();
                         ></InputFieldGroup>
                     </Col>
                     <Col md={6}>
-                      <RadioButtonGroup
-    label="Gender"
-    name="partnerGender"
-    value={formData.partnerGender || ''}
+                        <RadioButtonGroup
+                            label="Gender"
+                            name="partnerGender"
+                            value={formData.partnerGender || ''}
 
-    onChange={(e) => handleChange(e)}
-    required
-    options={[
-        { label: "Male", value: "Male" },
-        { label: "Female", value: "Female" },
-        { label: "Other", value: "Other" },
-    ]}
-/>
+                            onChange={(e) => handleChange(e)}
+                            required
+                            options={[
+                                { label: "Male", value: "Male" },
+                                { label: "Female", value: "Female" },
+                                { label: "Other", value: "Other" },
+                            ]}
+                        />
 
                     </Col>
 
@@ -397,6 +425,9 @@ export function MedicalHistoryForm({
     initialData,
     setEditMedicalHistory,
     formDataMedicalHistory,
+    setTabManagement,
+    setAllData,
+    allData
 }: {
     setAddPartner: (value: boolean) => void,
     setActiveTab: (tab: string) => void,
@@ -405,10 +436,13 @@ export function MedicalHistoryForm({
     showData?: any,
     setEditMedicalHistory?: React.Dispatch<React.SetStateAction<boolean>> | any;
     formDataMedicalHistory?: MedicalHistoryType | any,
+    setTabManagement?: (value: number) => void | number,
+    setAllData?: (value: any) => unknown,
+    allData?: any
 }) {
     type FormError = Partial<Record<keyof MedicalHistoryType, string>>;
 
-    console.log("formDataMedicalHistory : ", formDataMedicalHistory);
+    // console.log("formDataMedicalHistory : ", formDataMedicalHistory);
 
     const normalizeMulti = (arr: any[]) =>
         arr.map((item) =>
@@ -421,25 +455,25 @@ export function MedicalHistoryForm({
         );
 
     const initialFormData: MedicalHistoryType = {
-        medication: formDataMedicalHistory.medications.status || "Yes",
-        surgeries: formDataMedicalHistory.surgeries.status || "Yes",
-        surgeriesContent: formDataMedicalHistory.surgeries.surgeriesDetails || "",
+        medication: formDataMedicalHistory?.medications?.status || "Yes",
+        surgeries: formDataMedicalHistory?.surgeries?.status || "Yes",
+        surgeriesContent: formDataMedicalHistory?.surgeries?.surgeriesDetails || "",
 
-        medicalCondition: formDataMedicalHistory.conditions
-            ? normalizeMulti(formDataMedicalHistory.conditions)
+        medicalCondition: formDataMedicalHistory?.conditions
+            ? normalizeMulti(formDataMedicalHistory?.conditions)
             : [],
 
-        lifestyle: formDataMedicalHistory.lifestyle
-            ? normalizeMulti(formDataMedicalHistory.lifestyle)
+        lifestyle: formDataMedicalHistory?.lifestyle
+            ? normalizeMulti(formDataMedicalHistory?.lifestyle)
             : [],
 
 
         familyMedicalHistory: formDataMedicalHistory?.familyHistory || "",
 
-        stress: formDataMedicalHistory.stressLevel || "Moderate",
-        exercise: formDataMedicalHistory.exerciseFrequency || "Regularly",
-        medicationcontent: formDataMedicalHistory.medications.medicationsDetails || "",
-        surgeriescontent: formDataMedicalHistory.surgeries.surgeriesDetails || "",
+        stress: formDataMedicalHistory?.stressLevel || "Moderate",
+        exercise: formDataMedicalHistory?.exerciseFrequency || "Regularly",
+        medicationcontent: formDataMedicalHistory?.medications?.medicationsDetails || "",
+        surgeriescontent: formDataMedicalHistory?.surgeries?.surgeriesDetails || "",
     }
 
 
@@ -462,7 +496,6 @@ export function MedicalHistoryForm({
         return errors;
     };
 
-
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
@@ -478,7 +511,6 @@ export function MedicalHistoryForm({
 
         e.preventDefault();
 
-
         const errors = validateForm(FormData);
         setMedicalHistoryFormError(errors);
 
@@ -488,6 +520,7 @@ export function MedicalHistoryForm({
         if (Object.keys(errors).length === 0) {
             if (formDataMedicalHistory) {
 
+                const values = FormData.lifestyle.map((e: { label: string, value: string }) => e.value);
                 const passData = {
                     patientId: id,
 
@@ -505,45 +538,33 @@ export function MedicalHistoryForm({
 
                     familyHistory: FormData.familyMedicalHistory,
 
-                    lifestyle: FormData.lifestyle.map((e: any) => e.value),
-
+                    // lifestyle: FormData.lifestyle.map((e: { label: string, value: string }) => e.value),
+                    lifestyle: values,
                     exerciseFrequency: FormData.exercise,
                     stressLevel: FormData.stress
                 };
 
                 updatePartnermedicalhistory(showData._id, passData)
                     .then((response) => {
-                        console.log("partner medical history: ", response.data);
-                        // const updatedMedicalHistory = {
-                        //     medications: {
-                        //         status: FormData.medication,
-                        //         medicationsDetails: FormData.medicationcontent
-                        //     },
-                        //     surgeries: {
-                        //         status: FormData.surgeries,
-                        //         surgeriesDetails: FormData.surgeriescontent
-                        //     },
-                        //     conditions: FormData.medicalCondition.map(e => ({
-                        //         value: e.value,
-                        //         label: e.label
-                        //     })),
-                        //     lifestyle: FormData.lifestyle.map(e => ({
-                        //         value: e.value,
-                        //         label: e.label
-                        //     })),
-                        //     familyHistory: FormData.familyMedicalHistory,
-                        //     exerciseFrequency: FormData.exercise,
-                        //     stressLevel: FormData.stress
-                        // };
+                        console.log("partner medical history: ", response);
+                        const res = response.data.data.medicalHistory;
                         const updatedMedicalHistory = {
-                            medications: passData.medications,
-                            surgeries: passData.surgeries,
-                            conditions: FormData.medicalCondition,  
-                            lifestyle: FormData.lifestyle,         
-                            familyHistory: FormData.familyMedicalHistory,
-                            exerciseFrequency: FormData.exercise,
-                            stressLevel: FormData.stress
+                            medications: {
+                                status: res.medications.status,
+                                medicationsDetails: res.medications.medicationsDetails
+                            },
+                            surgeries: {
+                                status: res.surgeries.status,
+                                surgeriesDetails: res.surgeries.surgeriesDetails
+                            },
+                            conditions: res.conditions,
+                            lifestyle: res.lifestyle,
+                            familyHistory: res.familyHistory,
+                            exerciseFrequency: res.exerciseFrequency,
+                            stressLevel: res.stressLevel
                         };
+                        console.log("updatedMedicalHistory", updatedMedicalHistory);
+
                         setShowData((prev: any) => ({
                             ...prev,
                             medicalHistory: updatedMedicalHistory
@@ -565,21 +586,19 @@ export function MedicalHistoryForm({
                 //     medicalHistory: FormData,
                 // };
 
-
-                setShowData((prev: any) => ({
-                    ...prev,
-                    medicalHistory: FormData
-                }));
-
                 // setShowData(updatedData);
                 setEditMedicalHistory(false);
 
 
             } else {
+                if (setTabManagement) {
+                    setTabManagement(2);
+                }
+
                 setActiveTab("physical & fertility assessment");
                 // console.log("FormData55", FormData);
                 // setShowData((prev: any) => ({ ...prev, medicalHistory: FormData }));
-                const passData = {
+                const medicalHistoryPassingData = {
                     patientId: id,
                     medications: {
                         status: FormData.medication.charAt(0).toUpperCase() + FormData.medication.slice(1),
@@ -596,13 +615,16 @@ export function MedicalHistoryForm({
                     stressLevel: FormData.stress.charAt(0).toUpperCase() + FormData.stress.slice(1)
 
                 }
-                addPartnerMedicalHistory(passData)
-                    .then((response) => {
-                        console.log("partner medical history: ", response.data);
-                    })
-                    .catch((err) => {
-                        console.log("partner medical history", err);
-                    });
+                if(setAllData){
+                    setAllData({ ...allData, medicalHistoryPassingData: medicalHistoryPassingData });
+                }
+                // addPartnerMedicalHistory(medicalHistoryPassingData)
+                //     .then((response) => {
+                //         console.log("partner medical history: ", response.data);
+                //     })
+                //     .catch((err) => {
+                //         console.log("partner medical history", err);
+                //     });
             }
 
         }
