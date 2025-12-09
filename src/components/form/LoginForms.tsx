@@ -129,8 +129,9 @@ export function LoginForms() {
 
                     const message = err?.response?.data?.details?.errors?.password || "Login failed";
                     console.log("message--------", message);
-
-                    if (String(message).toLowerCase().includes("password") || String(message).toLowerCase().includes("Login")) {
+                    
+                    //  || String(message).toLowerCase().includes("login")
+                    if (String(message).toLowerCase().includes("password")) {
                         if (message.toLowerCase().includes("Login")) {
                             setFormError((prev) => ({
                                 ...prev,

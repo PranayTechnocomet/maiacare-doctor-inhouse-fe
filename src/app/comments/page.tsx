@@ -73,3 +73,7 @@
 //     </div>
 //   );
 // }
+
+export default function CommentsPage() { // remove this after component is ready
+  return <div>Coming Soon...</div>; 
+}
