@@ -178,7 +178,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
         </div>
         <div className="sidebar__top">
           <Link
-            href="/"
+            href="/dashboard"
             className="sidebar__logo-link"
             onClick={() => setShowOffcanvas(false)}
           >
@@ -212,7 +212,7 @@ const SiteLayout = ({ collapsed, setCollapsed, children }: Props) => {
           <span className="sidebar__text">Logout</span>
         </div>
 
-        <div className="sidebar__bottom">
+        <div className="sidebar__bottom ">
           <div
             role="button"
             className="sidebar__collapse"

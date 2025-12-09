@@ -37,3 +37,19 @@
 .appointment-overview-charts{
     height: 100% !important;
 }
+.consultations-card{
+    border: none;
+}
+
+.consultations-layout{
+    border-radius: 12px;
+}
+
+
+@media (max-width: 1199px) {
+.consultation-button{
+    font-size: 13px ;
+    font-weight: 500;
+}
+
+}

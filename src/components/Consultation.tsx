@@ -611,7 +611,7 @@ import Skeleton from "react-loading-skeleton";
 // ✅ API
 import { getAll } from "@/utils/apis/apiHelper";
 import { patientDelete } from "@/utils/apis/apiHelper";
-
+import patientImage from "@/assets/images/Img-1.png";
 export type ConsultationStatus =
     | "Completed"
     | "Pending"
@@ -760,12 +760,19 @@ export default function Consultation() {
                     <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
                         <div className="d-flex align-items-center gap-2">
                             <Image
-                                src={row.image || woman}
+                                src={row.profileImage }
                                 alt={row.name}
                                 width={36}
                                 height={36}
                                 className="rounded-circle border"
                             />
+                              {/* <img
+                                            src={row?.profileImage ? row.profileImage : patientImage}
+                                            alt="Patient"
+                                            width={60}
+                                            height={60}
+                                            className="rounded-circle me-3"
+                                          /> */}
                             {row.name}
                         </div>
                     </Link>
