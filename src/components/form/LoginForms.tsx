@@ -127,13 +127,21 @@ export function LoginForms() {
                 .catch((err) => {
                     console.log(err);
 
-                    const message = err?.response?.data?.message || "Login failed";
+                    const message = err?.response?.data?.details?.errors?.password || "Login failed";
+                    console.log("message--------", message);
 
-                    if (message.toLowerCase().includes("password")) {
-                        setFormError((prev) => ({
-                            ...prev,
-                            password: message,
-                        }));
+                    if (String(message).toLowerCase().includes("password") || String(message).toLowerCase().includes("Login")) {
+                        if (message.toLowerCase().includes("Login")) {
+                            setFormError((prev) => ({
+                                ...prev,
+                                password: "Incorrect Password",
+                            }));
+                        } else {
+                            setFormError((prev) => ({
+                                ...prev,
+                                password: message,
+                            }));
+                        }
                     } else if (message.toLowerCase().includes("email")) {
                         setFormError((prev) => ({
                             ...prev,
