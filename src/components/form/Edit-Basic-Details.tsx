@@ -109,7 +109,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
     if (!data.date.trim()) errors.date = "DOB is required";
     if (!data.gender.trim()) errors.gender = "Gender is required";
 
-    const contactRegex = /^[0-9]{10}$/;
+    const contactRegex = /^[0-9]{12}$/;
     if (!data.Contact.trim()) {
       errors.Contact = "Contact number is required";
     } else if (!contactRegex.test(data.Contact)) {
@@ -202,7 +202,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
           },
         };
 
-        console.log("Sending payload", payload);
+        console.log("Sending payload", payload.contactNumber);
 
         const response = await update(payload);
 
@@ -264,7 +264,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);  //previewImage 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);//selectedImage 
-
+  
   const handleOpenModal = () => {
     setPreviewImage(selectedImage || Simpleeditpro.src); // show image in modal
     setShowModal(true);
@@ -504,7 +504,7 @@ useEffect(() => {
             width={160}
             height={160}
           />
-
+          
           {/* Camera Icon */}
           <div className="camera-icon" onClick={handleOpenModal}>
             <Image src={cameraicon} alt="Upload" width={44} height={44} />
@@ -758,7 +758,7 @@ useEffect(() => {
         value={formData.Contact}
         inputMode="numeric"
         onChange={(phone: string) => {
-          let value = phone.replace(/\D/g, "").slice(0, 10);
+          let value = phone.replace(/\D/g, "").slice(0, 12);
           setFormData({ ...formData, Contact: value });
           if (formError.Contact) setFormError({ ...formError, Contact: "" });
         }}
