@@ -33,6 +33,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
     const [EditMedicalHistory, setEditMedicalHistory] = useState<boolean>(false);
 
     const [showData, setShowData] = useState<any>(partnerDetailData);
+    console.log("showData", showData);
 
     const initialFormDataAddPhysicalAssessment: PhysicalAssessmentDataModel = {
         id: "",
@@ -335,12 +336,13 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
             const res = await getOne(id);
             const pData = res?.data?.data || res?.data;
 
-            console.log("pData", pData);
-            setShowData(pData.partnerDetails)
-            if (pData?.partnerDetails?.basicDetails?.partnerEmail !== null || pData?.partnerDetails?.basicDetails?.partnerEmail !== undefined) {
-                setShowContent(true)
-                setShowPartnerDetail(false)
+            setShowData(pData?.partnerDetails)
+
+            if (pData?.partnerDetails?.basicDetails?.partnerEmail) {
+                setShowContent(true);
+                setShowPartnerDetail(false);
             }
+
         } catch (error) {
             console.error("Error fetching partner:", error);
         }
@@ -348,14 +350,15 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
     function convertDate(isoString: string) {
         const dateObj = new Date(isoString);
 
-        const options = {
-            weekday: 'short', 
-            day: 'numeric',   
-            month: 'short',   
-            year: 'numeric'   
+        const options: Intl.DateTimeFormatOptions = {
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
         };
 
-        let formattedDate = dateObj.toLocaleDateString('en-GB', options);
+        let formattedDate = dateObj.toLocaleDateString("en-GB", options);
+
 
         return formattedDate;
     }
@@ -427,7 +430,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                 <div className='d-flex align-items-start align-items-sm-center gap-3 flex-column flex-sm-row'>
                                     <div>
                                         <img
-                                            src={showData?.profile?.profileImage || Simpleeditpro}
+                                            src={showData?.basicDetails?.partnerImage || Simpleeditpro}
                                             alt="PartnerImage"
                                             width={90}
                                             height={90}
@@ -522,7 +525,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Surgeries</h6>
                                         <p className=" accordion-title-detail">
-                                            {showData.medicalHistory.surgeries.status == "Yes" ? showData.medicalHistory.surgeries.surgeriesDetails : showData.medicalHistory.surgeries.status}
+                                            {showData?.medicalHistory?.surgeries?.status == "Yes" ? showData?.medicalHistory?.surgeries?.surgeriesDetails : showData?.medicalHistory?.surgeries?.status}
                                         </p>
                                     </div>
                                 </Col>
@@ -531,7 +534,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Medical condition / Allergies</h6>
 
-                                        {showData.medicalHistory?.conditions?.map((item: any, i: number) => {
+                                        {showData?.medicalHistory?.conditions?.map((item: any, i: number) => {
                                             return (
                                                 <p key={i} className="accordion-title-detail d-inline-block border-box-orange-font box-border-orange me-2 mb-2">
                                                     {item}
@@ -548,7 +551,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <div className=" accordion-title-detail">
                                             <ul>
 
-                                                <li className='medical-emergency-fimily-history'>{showData.medicalHistory?.familyHistory || "No added family history"}</li>
+                                                <li className='medical-emergency-fimily-history'>{showData?.medicalHistory?.familyHistory || "No added family history"}</li>
 
 
                                             </ul>
@@ -559,7 +562,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                 <Col sm={7}>
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Lifestyle</h6>
-                                        {showData.medicalHistory?.lifestyle?.map((item: any, i: number) => {
+                                        {showData?.medicalHistory?.lifestyle?.map((item: any, i: number) => {
                                             return (
                                                 <p key={i} className="accordion-title-detail d-inline-block border-box-blue-font box-border-blue me-2 mb-2">
                                                     {item}
@@ -575,7 +578,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <h6 className=" contact-details-emergency">Physical Exercise</h6>
                                         <p className="accordion-title-detail border-box-orange-font box-border-orange d-inline-block ">
 
-                                            {showData.medicalHistory?.exerciseFrequency}
+                                            {showData?.medicalHistory?.exerciseFrequency}
 
                                         </p>
                                     </div>
@@ -585,7 +588,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                     <div className="">
                                         <h6 className=" contact-details-emergency">Stress Level</h6>
                                         <p className="accordion-title-detail d-inline-block border-box-red-font box-border-red">
-                                            {showData.medicalHistory?.stressLevel}
+                                            {showData?.medicalHistory?.stressLevel}
                                         </p>
                                     </div>
                                 </Col>
@@ -745,7 +748,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                             </div>
                             <Accordion defaultActiveKey="0">
 
-                                {showData.physicalAssessment?.map((item: any, index: any) => (
+                                {showData?.physicalAssessment?.map((item: any, index: any) => (
                                     <Accordion.Item eventKey={index.toString()} className='phisical-assessment-accordion-item mb-3' key={index}>
                                         <Accordion.Header className='phisical-assessment-accordion-title-showData'>
                                             <div className='phisical-assessment-accordion-title-showData'>
@@ -899,7 +902,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                         <div className="mb-3">
                                             <h6 className="mb-1 contact-details-emergency">Semen Analysis</h6>
                                             <p className="mb-2 accordion-title-detail">
-                                                {showData?.fertilityAssessment.semenAnalysis.status
+                                                {showData?.fertilityAssessment?.semenAnalysis?.status
                                                     === 'Yes'
                                                     ? showData?.fertilityAssessment.semenAnalysis.semenAnalysisDetails
                                                         ? `Yes | ${showData?.fertilityAssessment.semenAnalysis.semenAnalysisDetails}`
@@ -943,7 +946,7 @@ export default function PartnerDetail({ setActiveTab }: { setActiveTab: (tab: st
                                             <h6 className="mb-1 contact-details-emergency">Surgeries</h6>
                                             <p className="mb-2 accordion-title-detail">
 
-                                                {showData?.fertilityAssessment.surgeries.status
+                                                {showData?.fertilityAssessment?.surgeries?.status
                                                     === 'Yes'
                                                     ? showData.fertilityAssessment.surgeries.surgeriesDetails
                                                         ? `Yes | ${showData.fertilityAssessment.surgeries.surgeriesDetails}`

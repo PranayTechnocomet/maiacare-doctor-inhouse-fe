@@ -166,10 +166,10 @@ export const getPhysicalAssessment = (
 };
 
 
-export const updatephysicalassessment = (data: any) => {
+export const updatephysicalassessment = (data: any, id:string|undefined) => {
   const token = localStorage.getItem("token");
 
-  return apiClient.put("/patient/physical-assessment", data, {
+  return apiClient.put(`/patient/physical-assessment/${id}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

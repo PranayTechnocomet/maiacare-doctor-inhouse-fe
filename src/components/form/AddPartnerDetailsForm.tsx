@@ -207,7 +207,15 @@ export function BasicDetailsForm({
             setActiveTab("medical history");
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
+        // setShowData((prev: any) => ({ ...prev, profile: { ...prev.profile, ...formData } }));
+        setShowData((prev: any) => ({
+            ...(prev || {}),
+            profile: {
+                ...((prev && prev.profile) || {}),
+                ...formData,
+            },
+        }));
+        
         const passData = {
             patientId: String(patientId),
             partnerImage: profileImage,
@@ -615,7 +623,7 @@ export function MedicalHistoryForm({
                     stressLevel: FormData.stress.charAt(0).toUpperCase() + FormData.stress.slice(1)
 
                 }
-                if(setAllData){
+                if (setAllData) {
                     setAllData({ ...allData, medicalHistoryPassingData: medicalHistoryPassingData });
                 }
                 // addPartnerMedicalHistory(medicalHistoryPassingData)
