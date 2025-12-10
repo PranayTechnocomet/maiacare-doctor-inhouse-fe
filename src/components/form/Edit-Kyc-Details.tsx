@@ -378,6 +378,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     actualSize?: string; // For original file size
     fromAPI?: boolean;
     url?: string;
+    fileType?: string;
   }
 
 
