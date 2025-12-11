@@ -13,6 +13,7 @@ import { setTokenInCookie } from "@/utils/Helper";
 import { setToken } from "@/Hook/Redux/Slice/tokenSlice";
 import { useDispatch } from "react-redux";
 import { setAuthData } from "@/Hook/Redux/Slice/authSlice";
+import path from "path";
 
 export function LoginForms() {
     const [showPassword, setShowPassword] = useState(false);
@@ -127,20 +128,19 @@ export function LoginForms() {
                 .catch((err) => {
                     console.log(err);
 
-                    const message = err?.response?.data?.details?.errors?.password || "Login failed";
-                    console.log("message--------", message);
-                    
-                    //  || String(message).toLowerCase().includes("login")
-                    if (String(message).toLowerCase().includes("password")) {
+                    const message = err?.response?.data?.details?.errors?.password || "failed";
+
+
+                    if (String(message).toLowerCase().includes("password") || String(message).toLowerCase().includes("failed")) {
                         if (message.toLowerCase().includes("Login")) {
                             setFormError((prev) => ({
                                 ...prev,
-                                password: "Incorrect Password",
+                                password: message,
                             }));
                         } else {
                             setFormError((prev) => ({
                                 ...prev,
-                                password: message,
+                                password: "Incorrect Password",
                             }));
                         }
                     } else if (message.toLowerCase().includes("email")) {
@@ -294,39 +294,91 @@ export function ForgotPassword() {
         setFormError(errors);
         return isValid;
     };
+    const sendResetPasswordEmail = async (email: string, otp: string) => {
+        try {
+            const response = await fetch('/api/send-email', { // Changed endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    to: email,
+                    otp: otp
+                    // Remove 'type' if not needed
+                }),
+            });
 
+            if (!response.ok) {
+                throw new Error('Failed to send email');
+            }
+
+            const result = await response.json();
+            console.log('Email sent successfully:', result);
+            return result;
+        } catch (error) {
+            console.error('Error sending email:', error);
+            throw error;
+        }
+    };
     const router = useRouter();
+    // const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    //     e.preventDefault();
+
+    //     if (validateForm()) {
+    //         forgotPassword(data)
+    //             .then((response) => {
+    //                 const otp = response?.data?.data?.otp
+    //                 console.log("response", otp);
+    //                 if (response.status == 200) {
+    //                     router.push("/verification");
+    //                     setFormError(defaultFormError);
+    //                     localStorage.setItem("useremail", data.email);
+    //                     localStorage.setItem("token", response.data.data.token);
+    //                 } else {
+    //                     console.log("Error");
+    //                 }
+
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //         setFormError(defaultFormError);
+    //     }
+    // };
+
     const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (validateForm()) {
-            //   alert("Form Submitted");
-            //   router.push("/verification");
-            //   setFormError(defaultFormError);
-            //   localStorage.setItem("useremail", data.email);
-            forgotPassword(data)
-                .then((response) => {
+            try {
+                const response = await forgotPassword(data);
+                const otp = response?.data?.data?.otp;
+                const token = response?.data?.data?.token;
 
-                    console.log("response", response.data);
-                    if (response.status == 200) {
-                        router.push("/verification");
-                        setFormError(defaultFormError);
-                        localStorage.setItem("useremail", data.email);
-                        localStorage.setItem("token", response.data.data.token);
-                    } else {
-                        console.log("Error");
-                    }
+                console.log("response", otp);
 
-                })
-                .catch((err) => {
-                    console.log(err);
+                if (response.status === 200) {
+                    // Save data to localStorage
+                    localStorage.setItem("useremail", data.email);
+                    localStorage.setItem("token", token);
+
+                    await sendResetPasswordEmail(data.email, otp);
+
+                    router.push("/verification");
+                    setFormError(defaultFormError);
+                } else {
+                    console.log("Error in forgot password");
+                }
+            } catch (err) {
+                console.log(err);
+                setFormError({
+                    ...defaultFormError,
+                    email: "Failed to process request"
                 });
-            setFormError(defaultFormError);
-            // router.push("/selectprofile");
-            // router.push("/"); // set route in success model
-
+            }
         }
     };
+
     return (
         <div>
             <form onSubmit={handleFormSubmit}>

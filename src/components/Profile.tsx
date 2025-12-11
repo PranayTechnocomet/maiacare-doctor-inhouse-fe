@@ -102,7 +102,8 @@ const Profile = () => {
     //         });
     // }, [])
     const [user, setUser] = useState<DoctorDataType | null>(null);
-
+    // console.log("user----", user?.profilePicture);
+    
     const [loading, setLoading] = useState(true);  // <-- add this
 
     useEffect(() => {
@@ -139,7 +140,10 @@ const Profile = () => {
                                 <Skeleton height={100} width={100} />
                             ) : (
                                 <Image
-                                    src={doctor.image}
+                                    src={user?.profilePicture || ""}
+                                    // src={doctor.image}
+                                    width={100}
+                                    height={100}
                                     alt="Profile"
                                     className="profile-img"
                                 />
