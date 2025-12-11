@@ -30,17 +30,17 @@ const ProfileTabes = () => {
         </>
       ),
     },
-    {
-      key: "reviews",
-      label: "Reviews",
-      content: (
-        <>
-          <ContentContainer className="mt-5">
-            <h1>Reviews Content</h1>
-          </ContentContainer>
-        </>
-      ),
-    },
+    // {
+    //   key: "reviews",
+    //   label: "Reviews",
+    //   content: (
+    //     <>
+    //       <ContentContainer className="mt-5">
+    //         <h1>Reviews Content</h1>
+    //       </ContentContainer>
+    //     </>
+    //   ),
+    // },
 
   ];
 

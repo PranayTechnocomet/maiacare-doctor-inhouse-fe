@@ -9,7 +9,7 @@ import Dashboard from "@/components/Dashboard";
 function Page() {
   const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
-    dispatch(setHeaderData({ title: "Doctors", subtitle: "Doctor - Dash Board" }));
+    dispatch(setHeaderData({ title: "Doctors", subtitle: "Doctor - Dashboard" }));
   }, []);
   return (
     <div>
