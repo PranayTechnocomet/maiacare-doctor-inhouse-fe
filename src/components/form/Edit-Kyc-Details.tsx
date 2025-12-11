@@ -310,6 +310,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     getProfileImageUrl(passData)
       .then((res) => {
         setPanFileUrl(res.data.files[0]);
+        console.log("Done--");
+        
       })
       .catch((err) => {
         console.log(err);
@@ -744,8 +746,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 {aadharFile ? (
                   <>
                     <Image
-                      src={aadharFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
-                      alt={aadharFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                      src={aadharFileUrl?.endsWith(".pdf") ? PDFAddhar : Jpgimg}
+                      alt={aadharFileUrl?.endsWith(".pdf") ? "pdf" : "jpg"}
                       width={50}
                       className="me-3"
                     />
@@ -816,8 +818,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 {panFile ? (
                   <>
                     <Image
-                      src={panFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
-                      alt={panFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                      src={panFileUrl?.endsWith(".pdf") ? PDFAddhar : Jpgimg}
+                      alt={panFileUrl?.endsWith(".pdf") ? "pdf" : "jpg"}
                       width={50}
                       className="me-3"
                     />
@@ -929,8 +931,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                 {licenceFile ? (
                   <>
                     <Image
-                      src={licenceFile.name.endsWith(".pdf") ? PDFAddhar : Jpgimg}
-                      alt={licenceFile.name.endsWith(".pdf") ? "pdf" : "jpg"}
+                      src={licFileUrl?.endsWith(".pdf") ? PDFAddhar : Jpgimg}
+                      alt={licFileUrl?.endsWith(".pdf") ? "pdf" : "jpg"}
                       width={50}
                       className="me-3"
                     />
@@ -1024,7 +1026,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
           {/* modal save button click in add data  */}
           <div className="d-flex gap-3 flex-wrap ">
 
-            {completedFiles.map((file, idx) => (
+            {completedFiles?.map((file, idx) => (
               <div
                 key={idx}
                 className="qualification-certificates rounded-3 p-4 text-center position-relative bg-white qualification-certificates-data"

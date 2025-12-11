@@ -101,29 +101,29 @@ const Profile = () => {
     //             console.log(err);
     //         });
     // }, [])
-const [user, setUser] = useState<DoctorDataType | null>(null);
+    const [user, setUser] = useState<DoctorDataType | null>(null);
 
-const [loading, setLoading] = useState(true);  // <-- add this
+    const [loading, setLoading] = useState(true);  // <-- add this
 
-useEffect(() => {
-    setLoading(true);  // start loading
+    useEffect(() => {
+        setLoading(true);  // start loading
 
-    getLoggedInUser()
-        .then((response) => {
+        getLoggedInUser()
+            .then((response) => {
 
-            if (response.status === 200) {
-                setUser(response.data.data);
-            } else {
-                console.log("Error");
-            }
+                if (response.status === 200) {
+                    setUser(response.data.data);
+                } else {
+                    console.log("Error");
+                }
 
-            setLoading(false); // stop loading
-        })
-        .catch((err) => {
-            console.log(err);
-            setLoading(false); // stop loading even with error
-        });
-}, []);
+                setLoading(false); // stop loading
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false); // stop loading even with error
+            });
+    }, []);
 
 
     const DoctorProfileCard: React.FC<{ doctor: typeof doctorData }> = ({ doctor }) => {
@@ -233,7 +233,7 @@ text-center text-md-start     ======= small screen all data center */}
                                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className='me-1' xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M14.8727 10.5045L11.1922 8.85531L11.182 8.85062C10.991 8.7689 10.7825 8.73611 10.5756 8.7552C10.3687 8.7743 10.1698 8.84469 9.99688 8.96C9.97653 8.97344 9.95696 8.98805 9.93829 9.00375L8.03673 10.6248C6.83204 10.0397 5.58829 8.80531 5.00313 7.61625L6.62657 5.68578C6.64219 5.66625 6.65704 5.64672 6.6711 5.62562C6.78394 5.4532 6.85239 5.25556 6.87039 5.05029C6.88838 4.84502 6.85534 4.63848 6.77423 4.44906V4.43969L5.12032 0.752967C5.01309 0.505517 4.8287 0.299385 4.59468 0.165341C4.36067 0.0312965 4.08958 -0.0234699 3.82188 0.00921691C2.76326 0.148519 1.79155 0.668411 1.08824 1.47179C0.384919 2.27517 -0.00190698 3.3071 7.06925e-06 4.37484C7.06925e-06 10.578 5.04688 15.6248 11.25 15.6248C12.3177 15.6268 13.3497 15.2399 14.1531 14.5366C14.9564 13.8333 15.4763 12.8616 15.6156 11.803C15.6484 11.5354 15.5937 11.2643 15.4598 11.0303C15.3259 10.7963 15.12 10.6119 14.8727 10.5045ZM11.25 14.3748C8.59873 14.3719 6.05687 13.3174 4.18214 11.4427C2.3074 9.56798 1.2529 7.02612 1.25001 4.37484C1.24707 3.61194 1.52192 2.87406 2.02324 2.29899C2.52456 1.72392 3.21806 1.35099 3.97423 1.24984C3.97392 1.25296 3.97392 1.2561 3.97423 1.25922L5.61485 4.93109L4.00001 6.8639C3.98362 6.88276 3.96873 6.90288 3.95548 6.92406C3.83791 7.10447 3.76894 7.31218 3.75525 7.52708C3.74157 7.74197 3.78362 7.95676 3.87735 8.15062C4.58516 9.59828 6.04376 11.0459 7.50704 11.753C7.70232 11.8458 7.91835 11.8864 8.13403 11.8708C8.3497 11.8552 8.55763 11.7839 8.73751 11.6639C8.75757 11.6504 8.77687 11.6358 8.79532 11.6202L10.6945 9.99984L14.3664 11.6444C14.3664 11.6444 14.3727 11.6444 14.375 11.6444C14.2751 12.4016 13.9027 13.0965 13.3275 13.5991C12.7524 14.1016 12.0138 14.3774 11.25 14.3748Z" fill="#8A8D93" />
                                                     </svg>
-                                                    {user ? "+91 "+user.contactNumber : ""}
+                                                    {user ? "+" + user.contactNumber : ""}
                                                 </>
                                             )}
                                         </span>
@@ -251,13 +251,13 @@ text-center text-md-start     ======= small screen all data center */}
                                     </div>
                                 </div>
 
-                                  <div className="mt-3 profile-member-since profile-sub-title">
-                                {loading ? (
-                                    <Skeleton width={120} height={18} />
-                                ) : (
-                                    <>Member since {doctor?.memberSince || ''}</>
-                                )}
-                            </div>
+                                <div className="mt-3 profile-member-since profile-sub-title">
+                                    {loading ? (
+                                        <Skeleton width={120} height={18} />
+                                    ) : (
+                                        <>Member since {doctor?.memberSince || ''}</>
+                                    )}
+                                </div>
 
 
                                 {/* <div className="mt-3 profile-member-since profile-sub-title">
@@ -269,7 +269,7 @@ text-center text-md-start     ======= small screen all data center */}
                     </Col>
                     <Col lg={5} md={3} className="text-md-end text-center mt-4 mt-md-0">
                         <Button onClick={handleEditProfile} variant='outline'>
-                            
+
                             <span className="me-2">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18.9516 4.73772L14.7619 0.548975C14.4103 0.197466 13.9334 0 13.4363 0C12.9391 0 12.4622 0.197466 12.1106 0.548975L0.549382 12.1093C0.374676 12.2829 0.236159 12.4895 0.141857 12.717C0.0475541 12.9446 -0.000660167 13.1886 6.82682e-06 13.4349V17.6246C6.82682e-06 18.1219 0.197551 18.5988 0.549182 18.9504C0.900812 19.3021 1.37773 19.4996 1.87501 19.4996H17.625C17.9234 19.4996 18.2095 19.3811 18.4205 19.1701C18.6315 18.9591 18.75 18.673 18.75 18.3746C18.75 18.0762 18.6315 17.7901 18.4205 17.5791C18.2095 17.3681 17.9234 17.2496 17.625 17.2496H9.09376L18.9516 7.38991C19.1258 7.21579 19.2639 7.00906 19.3582 6.78152C19.4525 6.55399 19.501 6.31011 19.501 6.06382C19.501 5.81753 19.4525 5.57365 19.3582 5.34611C19.2639 5.11858 19.1258 4.91184 18.9516 4.73772ZM5.90626 17.2496H2.25001V13.5933L10.125 5.71835L13.7813 9.3746L5.90626 17.2496ZM15.375 7.78085L11.7188 4.1246L13.4381 2.40522L17.0944 6.06147L15.375 7.78085Z" fill="#2B4360" />
