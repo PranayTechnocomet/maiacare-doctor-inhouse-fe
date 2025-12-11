@@ -456,7 +456,7 @@ const getUser = () => {
                                           <Skeleton width={120} height={18} />
                                       ) : (
       <h5 className="profile-card-main-titile mb-2 mb-md-0">
-        Timings
+   Operational Hours & Days
       </h5>
                                       )}
     </div>
@@ -469,7 +469,19 @@ const getUser = () => {
           // Group continuous days with same time
           const groups = [];
           let start = operationalHours[0];
-          let prev = operationalHours[0];
+          let prev = operationalHours[0]; 
+const formatTimeToAMPM = (timeString: string): string => {
+  if (!timeString) return "";
+
+  const [hour, minute] = timeString.split(":");
+  const date = new Date();
+  date.setHours(Number(hour), Number(minute));
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+  });
+};
 
           for (let i = 1; i < operationalHours.length; i++) {
             const curr = operationalHours[i];
@@ -492,9 +504,13 @@ const getUser = () => {
           return groups.map((g, index) => (
             <div key={index} className="mb-3">
               <p className="basic-detail-text mb-1">
-            <span className=''>  {g.start.day} {g.start.day !== g.end.day && `- ${g.end.day}`} :-</span>
+            <span className=''>  {g.start.day} {g.start.day !== g.end.day && `- ${g.end.day}`} :</span>
              
-              <span className='ms-1'> {g.start.openTime} - {g.start.closeTime}</span> 
+<span className='ms-1'>
+  {formatTimeToAMPM(g.start.openTime)} - {formatTimeToAMPM(g.start.closeTime)}
+</span>
+
+
               </p>
             </div>
           ));
@@ -509,99 +525,366 @@ const getUser = () => {
 
 
           {/* Qualification */}
-       <div>
-  <ContentContainer className='mt-4'>
-
-    {/* ---------- HEADER SKELETON ---------- */}
-    <div className="d-flex justify-content-between align-items-center mb-3">
-      {loading ? (
+ <div>
+            <div>
+              <ContentContainer className='mt-4' >
+                <div className="d-flex justify-content-between align-items-center mb-3">
+               {loading ? (
         <>
           <Skeleton width={140} height={20} />
-          <Skeleton width={35} height={35} circle />
+          <Skeleton width={45} height={35}  />
         </>
       ) : (
-        <>
-          <h5 className="profile-card-main-titile">Qualification</h5>
+               <>
+                  <h5 className="profile-card-main-titile">Qualification</h5>                                                                 
+                  <Button onClick={handleOpen} className="profile-card-boeder profile-card-button bg-transparent" variant="outline">
+                    {/* <Image src={Add} alt="Add" /> */}
 
-          <Button onClick={handleOpen} className="profile-card-boeder profile-card-button bg-transparent" variant="outline">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 9C18 9.19891 17.921 9.38968 17.7803 9.53033C17.6397
-              9.67098 17.4489 9.75 17.25 9.75H9.75V17.25C9.75 17.4489 9.67098
-              17.6397 9.53033 17.7803C9.38968 17.921 9.19891 18 9 18C8.80109 18
-              8.61032 17.921 8.46967 17.7803C8.32902 17.6397 8.25 17.4489 8.25
-              17.25V9.75H0.75C0.551088 9.75 0.360322 9.67098 0.21967 9.53033C0.0790178
-              9.38968 0 9.19891 0 9C0 8.80109 0.0790178 8.61032 0.21967 8.46967C0.360322
-              8.32902 0.551088 8.25 0.75 8.25H8.25V0.75C8.25 0.551088 8.32902 0.360322
-              8.46967 0.21967C8.61032 0.0790178 8.80109 0 9 0C9.19891 0 9.38968 0.0790178
-              9.53033 0.21967C9.67098 0.360322 9.75 0.551088 9.75 0.75V8.25H17.25C17.4489
-              8.25 17.6397 8.32902 17.7803 8.46967C17.921 8.61032 18 8.80109 18 9Z"
-                fill="#2B4360" />
-            </svg>
-          </Button>
-        </>
-      )}
-    </div>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18 9C18 9.19891 17.921 9.38968 17.7803 9.53033C17.6397 9.67098 17.4489 9.75 17.25 9.75H9.75V17.25C9.75 17.4489 9.67098 17.6397 9.53033 17.7803C9.38968 17.921 9.19891 18 9 18C8.80109 18 8.61032 17.921 8.46967 17.7803C8.32902 17.6397 8.25 17.4489 8.25 17.25V9.75H0.75C0.551088 9.75 0.360322 9.67098 0.21967 9.53033C0.0790178 9.38968 0 9.19891 0 9C0 8.80109 0.0790178 8.61032 0.21967 8.46967C0.360322 8.32902 0.551088 8.25 0.75 8.25H8.25V0.75C8.25 0.551088 8.32902 0.360322 8.46967 0.21967C8.61032 0.0790178 8.80109 0 9 0C9.19891 0 9.38968 0.0790178 9.53033 0.21967C9.67098 0.360322 9.75 0.551088 9.75 0.75V8.25H17.25C17.4489 8.25 17.6397 8.32902 17.7803 8.46967C17.921 8.61032 18 8.80109 18 9Z" fill="#2B4360" />
+                    </svg>
 
-    {/* ---------- BODY SKELETON ---------- */}
-    {loading ? (
-      <>
-        {/* card skeleton */}
-        <div className="p-3 mb-3 bg-white border rounded-4">
-          <Skeleton width={180} height={18} className="mb-2" />
-          <Skeleton width={140} height={15} className="mb-2" />
-          <Skeleton width={100} height={15} />
-        </div>
+                  </Button>
+                    </>    
+      )}              
+                </div>
+                {/* ---------- BODY SKELETON ---------- */}
+                <Modal
+                  show={showModal}
+                  onHide={handleClose}
+                  dialogClassName="custom-modal-width"
+                  header="Qualification Details"
+                  centered>
+                  <div>
+                    {/* 🔁 Loop through all qualifications */}
+                    <Accordion defaultActiveKey="0" alwaysOpen>
+                      {qualifications.map((q, index) => (
+                        <div key={index} className="mb-4"> {/* ← Add margin-bottom here for spacing */}
+                          <Accordion.Item eventKey={index.toString()}>
+                            <Accordion.Header>
+                              Qualification {index + 1}
+                            </Accordion.Header>
 
-        <div className="p-3 mb-3 bg-white border rounded-4">
-          <Skeleton width={180} height={18} className="mb-2" />
-          <Skeleton width={140} height={15} className="mb-2" />
-          <Skeleton width={100} height={15} />
-        </div>
-      </>
-    ) : (
-      <>
-        {defaultQualifications.length === 0 ? (
-          <div className="text-center text-muted p-4 border rounded-4">
-            "Data not found. Please Add Data"
-          </div>
-        ) : (
-          defaultQualifications.map((item, idx) => (
-            <div
-              key={idx}
-              className="d-flex justify-content-between align-items-start p-3 mb-3 bg-white border rounded-4 profile-card-boeder"
-            >
-              <div>
-                <div className="card-feild">{item.degree}</div>
-                <div className="card-university-text">{item.university}</div>
-                <div className="card-year">{`${item.startYear} - ${item.endYear}`}</div>
-              </div>
+                            <Accordion.Body>
+                              <div className="position-relative pt-3 p-3 modal-border-dashed">
 
-              <div className="d-flex gap-2">
-                <Button
-                  onClick={() => openQualificationModal(idx, item._id)}
-                  className="border p-2 rounded-3 edit-del-btn bg-transparent"
-                  variant="outline"
-                >
-                  <Image src={LightEditimg} alt="Edit" width={18} height={18} />
-                </Button>
+                                {/* Remove button - show only if NOT first item */}
+                                {index !== 0 && (
+                                  <button
+                                    type="button"
+                                    className="btn-close position-absolute profile-basic-details-remove-button"
+                                    style={{ top: "10px", right: "10px" }}
+                                    onClick={() => handleRemoveQualification(index)}
+                                  />
+                                )}
 
-                <Button
-                  className="border p-2 rounded-2 edit-del-btn bg-transparent"
-                  onClick={() => handleDelete(item._id)}
-                  variant="outline"
-                >
-                  <Image src={Delete} alt="Delete" width={18} height={18} />
-                </Button>
-              </div>
+                                <Row>
+                                  <Col md={6} className="mt-3">
+                                    <InputFieldGroup
+                                      label="Degree"
+                                      name="degree"
+                                      type="text"
+                                      value={q.degree}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].degree = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].degree = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      placeholder="Enter Degree"
+                                      required={true}
+                                      error={formErrors[index]?.degree}
+                                    />
+                                  </Col>
+
+                                  <Col md={6} className="mt-3">
+                                    <InputFieldGroup
+                                      label="Field of study"
+                                      name="field"
+                                      type="text"
+                                      value={q.fieldOfStudy}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].fieldOfStudy = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].fieldOfStudy = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      placeholder="Select Field"
+                                      required={true}
+                                      error={formErrors[index]?.fieldOfStudy}
+                                    />
+                                  </Col>
+
+                                  <Col md={12} className="mt-3">
+                                    <InputFieldGroup
+                                      label="University"
+                                      name="university"
+                                      type="text"
+                                      value={q.university}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].university = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].university = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      placeholder="University"
+                                      required={true}
+                                      error={formErrors[index]?.university}
+                                    />
+                                  </Col>
+
+                                  <Col md={6} className="mt-3">
+                                    <InputSelect
+                                      label="Start Year"
+                                      name="startYear"
+                                      value={q.startYear}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].startYear = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].startYear = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      required={true}
+                                      error={formErrors[index]?.startYear}
+                                      options={yearOptions}
+                                    />
+                                  </Col>
+
+                                  <Col md={6} className="mt-3">
+                                    <InputSelect
+                                      label="End Year"
+                                      name="endYear"
+                                      value={q.endYear}
+                                      onChange={(e) => {
+                                        const updated = [...qualifications];
+                                        updated[index].endYear = e.target.value;
+                                        setQualifications(updated);
+
+                                        const updatedErrors = [...formErrors];
+                                        if (updatedErrors[index]) {
+                                          updatedErrors[index].endYear = "";
+                                        }
+                                        setFormErrors(updatedErrors);
+                                      }}
+                                      required={true}
+                                      error={formErrors[index]?.endYear}
+                                      options={yearOptions.filter((year) => {
+                                        if (!q.startYear) return true;
+                                        return Number(year.value) >= Number(q.startYear) + 1;
+                                      })}
+                                    />
+                                  </Col>
+                                </Row>
+
+                              </div>
+                            </Accordion.Body>
+
+                          </Accordion.Item>
+                        </div>
+                      ))}
+                    </Accordion>
+
+
+                  </div>
+
+                  <div className="d-flex justify-content-between mt-4">
+                    {/* Add Qualification Button */}
+                    <Button onClick={handleAddQualification} variant='default'
+                      disabled={
+                        qualifications.length > 0 &&
+                        !isQualificationComplete(qualifications[qualifications.length - 1])
+                      }
+                    >
+                      + Add Qualification
+                    </Button>
+
+                    {/* Save Button */}
+                    <Button onClick={handleSave} variant='default'>
+                      Save
+                    </Button>
+                  </div>
+                </Modal>
+
+
+
+         {loading ? (
+                Array(3).fill(0).map((_, idx) => (
+                  <div key={idx} className="d-flex justify-content-between align-items-start p-3 mb-3 bg-white border rounded-4 profile-card-boeder">
+                    <div className="flex-grow-1">
+                      <Skeleton height={20} width={`60%`} className="mb-2" />
+                      <Skeleton height={18} width={`80%`} className="mb-1" />
+                      <Skeleton height={18} width={`50%`} />
+                    </div>
+
+                    <div className="d-flex gap-2">
+                      {/* Skeleton for edit/delete buttons */}
+                      <Skeleton height={32} width={32} className="rounded-1" />
+                      <Skeleton height={32} width={32} className="rounded-1" />
+                    </div>
+                  </div>
+                ))
+              ) : defaultQualifications.length === 0 ? (
+                <div className="text-center text-muted p-4 border rounded-4">
+                  "Data not found. Please Add Data"
+                </div>
+              ) : (
+                defaultQualifications.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="d-flex justify-content-between align-items-start p-3 mb-3 bg-white border rounded-4 profile-card-boeder"
+                  >
+                    <div>
+                      <div className="card-feild">{item.degree}</div>
+                      <div className="card-university-text">{item.university}</div>
+                      <div className="card-year">{`${item.startYear} - ${item.endYear}`}</div>
+                    </div>
+
+                    <div className="d-flex gap-2">
+                      <Button onClick={() => openQualificationModal(idx, item._id)} className="border p-2 rounded-3 edit-del-btn  bg-transparent" variant='outline'>
+                        <Image src={LightEditimg} alt="Specialization" width={18} height={18} />
+                      </Button>
+
+                      <Button className="border p-2 rounded-2 edit-del-btn  bg-transparent"
+                        onClick={() => handleDelete(item._id)} variant='outline'
+                      >
+                        <Image src={Delete} alt="Specialization" width={18} height={18} />
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+              </ContentContainer>
             </div>
-          ))
-        )}
-      </>
-    )}
+          </div>
 
-  </ContentContainer>
-</div>
+  <Modal
+                          show={showQualificationModal}
+                          onHide={closeQualificationModal}
+                          centered
+                          dialogClassName="custom-modal-width"
+                          header="Qualification Details"
+                        >
+                          <div>
+
+                            <Row >
+                              <Col md={6} className="mt-3">
+                                <InputFieldGroup
+                                  label="Degree"
+                                  name="degree"
+                                  type="text"
+                                  value={formData.degree}
+                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                                  placeholder="Enter degree"
+                                  required={true}
+                                  disabled={false}
+                                  readOnly={false}   // ✅ remove or set false
+                                  error={formError.degree}
+                                />
+                              </Col>
+
+
+                              <Col md={6} className="mt-3">
+                                <InputFieldGroup
+                                  label="Field of study"
+                                  name="field"
+                                  type="text"
+                                  value={formData.fieldOfStudy}
+                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                                  placeholder="Enter field"
+                                  required={true}
+                                  disabled={false}
+                                  readOnly={false}   // ✅ remove or set false
+                                  error={formError.fieldOfStudy}
+                                />
+                              </Col>
+
+                              <Col md={12} className="mt-3">
+                                <InputFieldGroup
+                                  label="University"
+                                  name="university"
+                                  type="text"
+                                  value={formData.university}
+                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={(e: React.FocusEvent<HTMLInputElement>) => { }}
+                                  placeholder="Enter university"
+                                  required={true}
+                                  disabled={false}
+                                  readOnly={false}   // ✅ remove or set false
+                                  error={formError.university}
+                                />
+                              </Col>
+
+
+                              <Col md={6} className="mt-3">
+                                <InputSelect
+                                  label="Start Year"
+                                  name="startYear"
+                                  value={formData.startYear}
+                                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+                                  required={true}
+                                  disabled={false}
+                                  error={formError.startYear}
+                                  options={yearOptions}
+                                />
+                              </Col>
+
+                              <Col md={6} className="mt-3">
+                                <InputSelect
+                                  label="End Year"
+                                  name="endYear"
+                                  value={formData.endYear}
+                                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={(e: React.FocusEvent<HTMLSelectElement>) => { }}
+                                  required={true}
+                                  disabled={false}
+                                  error={formError.endYear}
+                                  options={yearOptions}
+                                />
+                              </Col>
+                            </Row>
+
+
+                            {/* Save Button */}
+                            <Button onClick={() => handleEditSave()} className="maiacare-button mt-4">
+                              Save
+                            </Button>
+
+                          </div>
+
+                        </Modal>
 
 
         </Col>
@@ -685,9 +968,14 @@ const getUser = () => {
             doc.licenceNumber ||
             `Document-${index + 1}`;
 
-          const formattedDate = doc.updatedAt
-            ? new Date(doc.updatedAt).toLocaleDateString()
-            : "";
+       const formattedDate = doc.updatedAt
+  ? new Date(doc.updatedAt).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  : "";
+
 
           return (
             <div
@@ -695,8 +983,12 @@ const getUser = () => {
               className="d-flex justify-content-between align-items-center border profile-card-boeder p-3 mb-3 document-main-border"
             >
               <div className="d-flex align-items-center">
-                <Image src={Pdfimg} alt="pdf" width="40" className="me-3" />
-
+              <div>              <svg className='me-2' xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+<path d="M37.8125 12.375H28.875V3.4375C28.875 3.25516 28.8026 3.0803 28.6736 2.95136C28.5447 2.82243 28.3698 2.75 28.1875 2.75H8.9375C8.75516 2.75 8.5803 2.82243 8.45136 2.95136C8.32243 3.0803 8.25 3.25516 8.25 3.4375V22.6875C8.25 22.8698 8.32243 23.0447 8.45136 23.1736C8.5803 23.3026 8.75516 23.375 8.9375 23.375H27.5V34.375H8.9375C8.75516 34.375 8.5803 34.4474 8.45136 34.5764C8.32243 34.7053 8.25 34.8802 8.25 35.0625V40.5625C8.25 40.7448 8.32243 40.9197 8.45136 41.0486C8.5803 41.1776 8.75516 41.25 8.9375 41.25H37.8125C37.9948 41.25 38.1697 41.1776 38.2986 41.0486C38.4276 40.9197 38.5 40.7448 38.5 40.5625V13.0625C38.5 12.8802 38.4276 12.7053 38.2986 12.5764C38.1697 12.4474 37.9948 12.375 37.8125 12.375Z" fill="#EEEEEE"/>
+<path d="M28.1875 22H6.1875C5.8078 22 5.5 22.3078 5.5 22.6875V35.0625C5.5 35.4422 5.8078 35.75 6.1875 35.75H28.1875C28.5672 35.75 28.875 35.4422 28.875 35.0625V22.6875C28.875 22.3078 28.5672 22 28.1875 22Z" fill="#EF5350"/>
+<path d="M38.3006 12.5745L28.6756 2.94947C28.5795 2.85251 28.4566 2.78639 28.3227 2.75952C28.1888 2.73266 28.05 2.74628 27.9239 2.79865C27.7978 2.85101 27.6901 2.93975 27.6146 3.05355C27.5391 3.16734 27.4992 3.30104 27.5 3.43759V13.0626C27.5 13.2449 27.5724 13.4198 27.7014 13.5487C27.8303 13.6777 28.0052 13.7501 28.1875 13.7501H37.8125C37.9491 13.7509 38.0828 13.711 38.1966 13.6355C38.3104 13.56 38.3991 13.4524 38.4515 13.3262C38.5038 13.2001 38.5174 13.0613 38.4906 12.9274C38.4637 12.7935 38.3976 12.6706 38.3006 12.5745Z" fill="#E0E0E0"/>
+<path d="M10.3125 31.6253V26.1253H12.1413C12.6108 26.0941 13.0755 26.236 13.4475 26.5241C13.6353 26.6874 13.784 26.8908 13.8828 27.1192C13.9816 27.3477 14.0278 27.5954 14.0181 27.8441C14.014 28.1655 13.9212 28.4795 13.75 28.7516C13.5892 29.0197 13.3489 29.2312 13.0625 29.3566C12.8139 29.4672 12.5439 29.5212 12.2719 29.5147H11.4469V31.6253H10.3125ZM11.4744 28.5178H12.1206C12.3242 28.5285 12.524 28.4595 12.6775 28.3253C12.7455 28.2571 12.7984 28.1753 12.8327 28.0853C12.8671 27.9953 12.8821 27.899 12.8769 27.8028C12.8769 27.3812 12.6248 27.1703 12.1206 27.1703H11.4744V28.5178ZM15.0906 31.6253V26.1253H17.1531C17.6701 26.1071 18.1768 26.2727 18.5831 26.5928C18.9197 26.8666 19.1867 27.2161 19.3623 27.6128C19.538 28.0095 19.6173 28.4421 19.5938 28.8753C19.5997 29.3797 19.4816 29.8779 19.25 30.326C19.0332 30.745 18.6986 31.0915 18.2875 31.3228C17.8124 31.5509 17.2874 31.655 16.7612 31.6253H15.0906ZM16.2525 30.5803H16.995C17.2591 30.59 17.52 30.5206 17.7444 30.381C17.9823 30.2024 18.1704 29.9658 18.2907 29.6937C18.4111 29.4217 18.4597 29.1234 18.4319 28.8272C18.4553 28.5488 18.4076 28.2691 18.2934 28.0142C18.1792 27.7592 18.0021 27.5375 17.7788 27.3697C17.5574 27.2291 17.2983 27.1595 17.0363 27.1703H16.2525V30.5803ZM20.79 31.6253V26.1253H23.9388V27.1703H21.9519V28.291H23.7738V29.336H21.9519V31.6253H20.79Z" fill="white"/>
+</svg></div>
                 <div>
                   <div className="card-feild">{docName}</div>
                   <div className="card-year">{formattedDate}</div>
