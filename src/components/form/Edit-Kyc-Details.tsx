@@ -60,7 +60,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
 
   const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
   const [aadharFile, setAadharFile] = useState<UploadedFile | null>(null);
-
+  console.log("aadharFile.name",aadharFile?.name);
+  
   const [panFile, setPanFile] = useState<UploadedFile | null>(null);
   const [licenceFile, setLicenceFile] = useState<UploadedFile | null>(null);
 
@@ -453,8 +454,6 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
     }
     getProfileImageUrl(passData)
       .then((res) => {
-        console.log("res.data.files[0]", res.data.files[0]);
-
         setOtherDocuments((prev) => [
           ...prev,
           {
@@ -754,7 +753,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     <div className="flex-grow-1">
                       <div className="card-feild">Aadhar Card</div>
                       <div
-                        className="kyc-details file-name-ellipsis "
+                        className="kyc-details"
                         title={aadharFile.name}
                       >  {aadharFile.name}
                       </div>
@@ -825,7 +824,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     />
                     <div className="flex-grow-1">
                       <div className="card-feild  ">Pan Card</div>
-                      <div className="kyc-details file-name-ellipsis ">{panFile.name}</div>
+                      <div className="kyc-details ">{panFile.name}</div>
 
 
                       <div className="card-year">
@@ -938,7 +937,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     />
                     <div className="flex-grow-1">
                       <div className="card-feild">License</div>
-                      <div className="kyc-details file-name-ellipsis  ">{licenceFile.name}</div>
+                      <div className="kyc-details  ">{licenceFile.name}</div>
                       <div className="card-year">
                         {licenceFile.size} - {licenceFile.date}
                       </div>
@@ -1039,8 +1038,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                     setCompletedFiles((prev) => prev.filter((_, i) => i !== idx))
                   }
                 >
-                  <div className=" profile-card-boeder rounded-2 d-inline-flex p-1">
-                    <Image src={Trash} alt="delete" width={18} height={18} />
+                  <div className=" profile-card-boeder rounded-2 d-inline-flex p-1 border">
+                    <Image src={Trash} alt="delete" width={17} height={17} />
                   </div>
                 </button>
                 {/* File Icon (PDF or Image) */}
@@ -1070,8 +1069,8 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         : pdfimg
                   }
                   alt={file.name || file.reportName}
-                  width={40}
-                  height={40}
+                  width={55}
+                  height={55}
                 />
 
 
@@ -1180,7 +1179,7 @@ export default function KYCDetails({ onNext, onPrevious }: { onNext: () => void,
                         </div>
                         <div className="d-flex align-items-center gap-1">
                           <span className="profile-sub-title">{file.size}</span>
-                          <span>•</span>
+                          <span className="profile-sub-title">•</span>
                           {file.status === "uploading" ? (
                             <span className="d-flex align-items-center gap-1 upload-text">
                               <Image src={Loading} alt="loading" width={20} height={20} />

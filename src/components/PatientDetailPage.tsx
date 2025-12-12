@@ -57,7 +57,7 @@ export default function PatientDetailPageComponent({ onPatientLoaded, }: any) {
       label: "Basic Details",
       content: (
         <>
-          <PatientBasicDetail patientId={id} patient={patient} />
+          <PatientBasicDetail patientId={id} patient={patient}     loading={loading}/>
         </>
       ),
     },

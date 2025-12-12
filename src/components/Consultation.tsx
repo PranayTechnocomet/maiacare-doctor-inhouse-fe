@@ -760,20 +760,19 @@ export default function Consultation() {
                 return (
                     <Link href={`/patients/${id}`} className="text-decoration-none text-dark">
                         <div className="d-flex align-items-center gap-2">
-                            <Image
+                            {/* <Image
                                 src={row.image || woman}
                                 alt={row.name || "patient"}
                                 width={36}
                                 height={36}
                                 className="rounded-circle border"
+                            /> */}
+                              <img
+                                src={row?.profileImage || patientImage.src}
+                                width={36}
+                                height={36}
+                                className="rounded-circle me-3"
                             />
-                              {/* <img
-                                            src={row?.profileImage ? row.profileImage : patientImage}
-                                            alt="Patient"
-                                            width={60}
-                                            height={60}
-                                            className="rounded-circle me-3"
-                                          /> */}
                             {row.name}
                         </div>
                     </Link>

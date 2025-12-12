@@ -245,8 +245,8 @@
 
 .card-feild {
     color: var(--color-radio-lable) !important;
-    font-weight: 6 00;
-    font-size: 16px;
+    font-weight: 600;
+    font-size: 18px;
     word-break: break-all !important;
     /* Add this line */
 }

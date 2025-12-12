@@ -23,7 +23,7 @@ import { useSearchParams } from "next/navigation";
 import { PhoneNumberInput } from "../ui/PhoneNumberInput";
 import Button from "../ui/Button";
 import { InputSelect } from "../ui/InputSelect";
-import { getLoggedInUser, getLoginUser, update } from "@/utils/apis/apiHelper";
+import { getLoggedInUser, getLoginUser, getProfileImageUrl, update } from "@/utils/apis/apiHelper";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 export default function PersonalDetails({ onNext }: { onNext: () => void }) {
@@ -38,7 +38,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
   const [qualifications, setQualifications] = useState([
     { degree: "", field: "", university: "", startYear: "", endYear: "" }
   ]);
-   const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [formErrors, setFormErrors] = useState([
     { degree: "", field: "", university: "", startYear: "", endYear: "" },
   ]);
@@ -264,7 +264,7 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);  //previewImage 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);//selectedImage 
-  
+
   const handleOpenModal = () => {
     setPreviewImage(selectedImage || Simpleeditpro.src); // show image in modal
     setShowModal(true);
@@ -310,6 +310,17 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       event.target.value = ""; // reset input
       return;
     }
+    const passData = {
+      type: "doctor",
+      files: selectedFile
+    }
+    getProfileImageUrl(passData)
+      .then((res) => {
+        setSelectedImage(res.data.files[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
 
     // ✅ 3. If valid → set preview & clear error
     const imageURL = URL.createObjectURL(selectedFile);
@@ -369,720 +380,720 @@ export default function PersonalDetails({ onNext }: { onNext: () => void }) {
       setPreviewImage(selectedImage);
     }
   }, [showModal]);
-useEffect(() => {
-  const fetchUserData = async () => {
-    try {
-      setLoading(true);  // <-- START LOADING
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);  // <-- START LOADING
 
-      const response = await getLoggedInUser();
-      const user = response?.data?.data;
-      console.log("user", user);
+        const response = await getLoggedInUser();
+        const user = response?.data?.data;
+        console.log("user", user);
 
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+        if (!user) {
+          setLoading(false);
+          return;
+        }
 
-      const firstQualification = user.qualifications?.[0] || {
-        degree: "",
-        fieldOfStudy: "",
-        university: "",
-        startYear: "",
-        endYear: "",
-      };
-
-      setFormData((prev) => ({
-        Name: user.name || "",
-        Specialty: user.specialty || "",
-        Experience: user.yearsOfExperience?.toString() || "",
-        date: user.dob ? user.dob.split("T")[0] : "",
-        gender: user.gender || "female",
-        Contact: user.contactNumber || "",
-        Email: user.email || "",
-        About: user.about || "",
-        fees: user.fees?.toString() || "",
-        services: user.servicesOffered?.map((s: string) => ({
-          id: s,
-          value: s,
-          label: s,
-        })) || [],
-
-        degree: firstQualification.degree || "",
-        field: firstQualification.fieldOfStudy || "",
-        university: firstQualification.university || "",
-        startYear: firstQualification.startYear?.toString() || "",
-        endYear: firstQualification.endYear?.toString() || "",
-
-        MF: user.useCustomHours === false
-          ? user.operationalHours?.[0]?.openTime || ""
-          : prev.MF,
-
-        Time: user.useCustomHours === false
-          ? user.operationalHours?.[0]?.closeTime || ""
-          : prev.Time,
-
-        SS: user.useCustomHours === false
-          ? user.operationalHours?.[5]?.openTime || ""
-          : prev.SS,
-
-        Timer: user.useCustomHours === false
-          ? user.operationalHours?.[5]?.closeTime || ""
-          : prev.Timer,
-      }));
-
-      setQualifications(
-        user.qualifications?.map((q: any) => ({
-          degree: q.degree || "",
-          field: q.fieldOfStudy || "",
-          university: q.university || "",
-          startYear: q.startYear?.toString() || "",
-          endYear: q.endYear?.toString() || "",
-        })) || []
-      );
-
-      setFormErrors(
-        user.qualifications?.map(() => ({
+        const firstQualification = user.qualifications?.[0] || {
           degree: "",
-          field: "",
+          fieldOfStudy: "",
           university: "",
           startYear: "",
           endYear: "",
-        })) || []
-      );
+        };
 
-      setSelectedImage(user.profilePicture || null);
+        setFormData((prev) => ({
+          Name: user.name || "",
+          Specialty: user.specialty || "",
+          Experience: user.yearsOfExperience?.toString() || "",
+          date: user.dob ? user.dob.split("T")[0] : "",
+          gender: user.gender || "female",
+          Contact: user.contactNumber || "",
+          Email: user.email || "",
+          About: user.about || "",
+          fees: user.fees?.toString() || "",
+          services: user.servicesOffered?.map((s: string) => ({
+            id: s,
+            value: s,
+            label: s,
+          })) || [],
 
-    } catch (err) {
-      console.error("Error fetching user data", err);
-    }
+          degree: firstQualification.degree || "",
+          field: firstQualification.fieldOfStudy || "",
+          university: firstQualification.university || "",
+          startYear: firstQualification.startYear?.toString() || "",
+          endYear: firstQualification.endYear?.toString() || "",
 
-    setLoading(false);   // <-- END LOADING (VERY IMPORTANT)
-  };
+          MF: user.useCustomHours === false
+            ? user.operationalHours?.[0]?.openTime || ""
+            : prev.MF,
 
-  fetchUserData();
-}, []);
+          Time: user.useCustomHours === false
+            ? user.operationalHours?.[0]?.closeTime || ""
+            : prev.Time,
+
+          SS: user.useCustomHours === false
+            ? user.operationalHours?.[5]?.openTime || ""
+            : prev.SS,
+
+          Timer: user.useCustomHours === false
+            ? user.operationalHours?.[5]?.closeTime || ""
+            : prev.Timer,
+        }));
+
+        setQualifications(
+          user.qualifications?.map((q: any) => ({
+            degree: q.degree || "",
+            field: q.fieldOfStudy || "",
+            university: q.university || "",
+            startYear: q.startYear?.toString() || "",
+            endYear: q.endYear?.toString() || "",
+          })) || []
+        );
+
+        setFormErrors(
+          user.qualifications?.map(() => ({
+            degree: "",
+            field: "",
+            university: "",
+            startYear: "",
+            endYear: "",
+          })) || []
+        );
+
+        setSelectedImage(user.profilePicture || null);
+
+      } catch (err) {
+        console.error("Error fetching user data", err);
+      }
+
+      setLoading(false);   // <-- END LOADING (VERY IMPORTANT)
+    };
+
+    fetchUserData();
+  }, []);
 
 
   return (
     <div>
       <ContentContainer className="mt-3">
         <Row>
-         <Col>
-  {/* -------- TITLE SKELETON -------- */}
-  {loading ? (
-    <Skeleton width={140} height={22} className="mb-2" />
-  ) : (
-    <h5 className="profile-card-main-titile">Personal Details</h5>
-  )}
+          <Col>
+            {/* -------- TITLE SKELETON -------- */}
+            {loading ? (
+              <Skeleton width={140} height={22} className="mb-2" />
+            ) : (
+              <h5 className="profile-card-main-titile">Personal Details</h5>
+            )}
 
-  <div className="d-flex align-items-center gap-4 mt-3 flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
+            <div className="d-flex align-items-center gap-4 mt-3 flex-wrap justify-content-center justify-content-sm-start text-center text-md-start">
 
-    {/* -------- PROFILE IMAGE SKELETON -------- */}
-    <div className="profile-wrapper">
+              {/* -------- PROFILE IMAGE SKELETON -------- */}
+              <div className="profile-wrapper">
 
-      {loading ? (
-        <>
-          {/* Profile image skeleton */}
-          <Skeleton width={160} height={160} circle />
+                {loading ? (
+                  <>
+                    {/* Profile image skeleton */}
+                    <Skeleton width={160} height={160} circle />
 
-          {/* Camera icon skeleton */}
-          <Skeleton
-            width={44}
-            height={44}
-            circle
-            className="position-absolute"
-            style={{ bottom: "-10px", right: "-10px" }}
-          />
-        </>
-      ) : (
-        <>
-          {/* Normal profile image */}
-          <img
-            src={selectedImage ? selectedImage : Simpleeditpro.src}
-            alt="Profile"
-            className="profile-image"
-            width={160}
-            height={160}
-          />
-          
-          {/* Camera Icon */}
-          <div className="camera-icon" onClick={handleOpenModal}>
-            <Image src={cameraicon} alt="Upload" width={44} height={44} />
-          </div>
-        </>
-      )}
+                    {/* Camera icon skeleton */}
+                    <Skeleton
+                      width={44}
+                      height={44}
+                      circle
+                      className="position-absolute"
+                      style={{ bottom: "-10px", right: "-10px" }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {/* Normal profile image */}
+                    <img
+                      src={selectedImage ? selectedImage : Simpleeditpro.src}
+                      alt="Profile"
+                      className="profile-image"
+                      width={160}
+                      height={160}
+                    />
 
-    </div>
+                    {/* Camera Icon */}
+                    <div className="camera-icon" onClick={handleOpenModal}>
+                      <Image src={cameraicon} alt="Upload" width={44} height={44} />
+                    </div>
+                  </>
+                )}
 
-    {/* -------- RIGHT TEXT SKELETON -------- */}
-    {loading ? (
-      <div className="mt-2">
-        <Skeleton width={150} height={18} className="mb-2" />
-        <Skeleton width={120} height={14} />
-      </div>
-    ) : (
-      <div>
-        <div className="fw-semibold">Add Profile Picture</div>
-        <div className="text-muted small">
-          Allowed Jpg, png of max size 5MB
-        </div>
-      </div>
-    )}
-
-    {/* -------- MODAL (DO NOT SKELETON MODAL) -------- */}
-    {!loading && (
-      <Modal
-        show={showModal}
-        onHide={() => {
-          setShowModal(false);
-          setErrorMessage("");
-        }}
-        size="md"
-        header="Profile Photo"
-        closeButton={true}
-        className="text-pink"
-        dialogClassName="custom-modal-width"
-      >
-
-        <div className="d-flex flex-column align-items-center">
-
-          <div className="rounded overflow-hidden mb-3 mx-auto position-relative edit-basic-details-modal">
-            <Image
-              src={previewImage ? previewImage : Simpleeditpro}
-              alt="Simpleeditpro"
-              width={160}
-              height={160}
-              className="edit-basic-details-image"
-            />
-          </div>
-
-          {errorMessage && (
-            <div className="text-danger mb-2 edit-basic-details-error-font">
-              {errorMessage}
-            </div>
-          )}
-
-          <div className="w-100 border-top pt-3 d-flex justify-content-between align-items-center flex-wrap">
-
-            <div className="d-flex gap-3 align-items-center flex-wrap">
-
-              {/* Add Photo Button */}
-              <div className="text-center edit-basic-details-edit-button" onClick={handleEditClick}>
-                <Image src={ImageSquare} alt="Add Photo" width={21} height={21} />
-                <div className="small">Add Photo</div>
-
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  className="edit-basic-details-edit-input"
-                />
               </div>
 
-              {/* Take Photo */}
-              <div className="text-center edit-basic-camera-icon">
-                <Image src={Camera} alt="Take Photo" width={21} height={21} onClick={openCamera} />
-                <div className="small">Take Photo</div>
+              {/* -------- RIGHT TEXT SKELETON -------- */}
+              {loading ? (
+                <div className="mt-2">
+                  <Skeleton width={150} height={18} className="mb-2" />
+                  <Skeleton width={120} height={14} />
+                </div>
+              ) : (
+                <div>
+                  <div className="fw-semibold">Add Profile Picture</div>
+                  <div className="text-muted small">
+                    Allowed Jpg, png of max size 5MB
+                  </div>
+                </div>
+              )}
 
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="user"
-                  ref={cameraInputRef}
-                  className="edit-basic-details-edit-input"
-                  onChange={handleFileCamera}
-                />
-              </div>
+              {/* -------- MODAL (DO NOT SKELETON MODAL) -------- */}
+              {!loading && (
+                <Modal
+                  show={showModal}
+                  onHide={() => {
+                    setShowModal(false);
+                    setErrorMessage("");
+                  }}
+                  size="md"
+                  header="Profile Photo"
+                  closeButton={true}
+                  className="text-pink"
+                  dialogClassName="custom-modal-width"
+                >
+
+                  <div className="d-flex flex-column align-items-center">
+
+                    <div className="rounded overflow-hidden mb-3 mx-auto position-relative edit-basic-details-modal">
+                      <Image
+                        src={previewImage ? previewImage : Simpleeditpro}
+                        alt="Simpleeditpro"
+                        width={160}
+                        height={160}
+                        className="edit-basic-details-image"
+                      />
+                    </div>
+
+                    {errorMessage && (
+                      <div className="text-danger mb-2 edit-basic-details-error-font">
+                        {errorMessage}
+                      </div>
+                    )}
+
+                    <div className="w-100 border-top pt-3 d-flex justify-content-between align-items-center flex-wrap">
+
+                      <div className="d-flex gap-3 align-items-center flex-wrap">
+
+                        {/* Add Photo Button */}
+                        <div className="text-center edit-basic-details-edit-button" onClick={handleEditClick}>
+                          <Image src={ImageSquare} alt="Add Photo" width={21} height={21} />
+                          <div className="small">Add Photo</div>
+
+                          <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            className="edit-basic-details-edit-input"
+                          />
+                        </div>
+
+                        {/* Take Photo */}
+                        <div className="text-center edit-basic-camera-icon">
+                          <Image src={Camera} alt="Take Photo" width={21} height={21} onClick={openCamera} />
+                          <div className="small">Take Photo</div>
+
+                          <input
+                            type="file"
+                            accept="image/*"
+                            capture="user"
+                            ref={cameraInputRef}
+                            className="edit-basic-details-edit-input"
+                            onChange={handleFileCamera}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="d-flex gap-3 mt-md-0 align-items-center">
+                        <button className="btn p-0" onClick={handleDelete}>
+                          <Image src={LightTrush} alt="Trash" width={21} height={21} />
+                          <div className="maiacare-input-field-helper-text">Delete</div>
+                        </button>
+
+                        <Button variant="default" contentSize="small" onClick={handleSave}>
+                          Save
+                        </Button>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </Modal>
+              )}
             </div>
-
-            <div className="d-flex gap-3 mt-md-0 align-items-center">
-              <button className="btn p-0" onClick={handleDelete}>
-                <Image src={LightTrush} alt="Trash" width={21} height={21} />
-                <div className="maiacare-input-field-helper-text">Delete</div>
-              </button>
-
-              <Button variant="default" contentSize="small" onClick={handleSave}>
-                Save
-              </Button>
-            </div>
-
-          </div>
-        </div>
-
-      </Modal>
-    )}
-  </div>
-</Col>
+          </Col>
 
         </Row>
 
         <div>
-        <Row className="g-3">
+          <Row className="g-3">
 
-  {/* ---------- NAME FIELD ---------- */}
-  <Col md={12}>
-    {loading ? (
-      <>
-        <Skeleton width={80} height={14} className="mb-2" />
-        <Skeleton width="100%" height={42} className="mb-3" />
-      </>
-    ) : (
-      <InputFieldGroup
-        label="Name"
-        name="Name"
-        type="text"
-        value={formData.Name}
-        onChange={(e) => {
-          setFormData({ ...formData, Name: e.target.value });
-          if (formError.Name) setFormError({ ...formError, Name: "" });
-        }}
-        placeholder="Name"
-        required
-        error={formError.Name}
-      />
-    )}
-  </Col>
+            {/* ---------- NAME FIELD ---------- */}
+            <Col md={12}>
+              {loading ? (
+                <>
+                  <Skeleton width={80} height={14} className="mb-2" />
+                  <Skeleton width="100%" height={42} className="mb-3" />
+                </>
+              ) : (
+                <InputFieldGroup
+                  label="Name"
+                  name="Name"
+                  type="text"
+                  value={formData.Name}
+                  onChange={(e) => {
+                    setFormData({ ...formData, Name: e.target.value });
+                    if (formError.Name) setFormError({ ...formError, Name: "" });
+                  }}
+                  placeholder="Name"
+                  required
+                  error={formError.Name}
+                />
+              )}
+            </Col>
 
-  {/* ---------- SPECIALITY FIELD ---------- */}
-  <Col md={6}>
-    {loading ? (
-      <>
-        <Skeleton width={90} height={14} className="mb-2" />
-        <Skeleton width="100%" height={42} className="mb-3" />
-      </>
-    ) : (
-      <InputFieldGroup
-        label="Speciality"
-        name="Speciality"
-        type="text"
-        value={formData.Specialty}
-        onChange={(e) => {
-          setFormData({ ...formData, Specialty: e.target.value });
-          if (formError.Specialty) setFormError({ ...formError, Specialty: "" });
-        }}
-        placeholder="Speciality"
-        required
-        error={formError.Specialty}
-      />
-    )}
-  </Col>
+            {/* ---------- SPECIALITY FIELD ---------- */}
+            <Col md={6}>
+              {loading ? (
+                <>
+                  <Skeleton width={90} height={14} className="mb-2" />
+                  <Skeleton width="100%" height={42} className="mb-3" />
+                </>
+              ) : (
+                <InputFieldGroup
+                  label="Speciality"
+                  name="Speciality"
+                  type="text"
+                  value={formData.Specialty}
+                  onChange={(e) => {
+                    setFormData({ ...formData, Specialty: e.target.value });
+                    if (formError.Specialty) setFormError({ ...formError, Specialty: "" });
+                  }}
+                  placeholder="Speciality"
+                  required
+                  error={formError.Specialty}
+                />
+              )}
+            </Col>
 
-  {/* ---------- EXPERIENCE FIELD ---------- */}
-  <Col md={6}>
-    {loading ? (
-      <>
-        <Skeleton width={120} height={14} className="mb-2" />
-        <Skeleton width="100%" height={42} className="mb-3" />
-      </>
-    ) : (
-      <InputFieldGroup
-        label="Year Of Experience"
-        name="Experience"
-        type="text"
-        value={formData.Experience}
-        onChange={(e) => {
-          setFormData({ ...formData, Experience: e.target.value });
-          if (formError.Experience) setFormError({ ...formError, Experience: "" });
-        }}
-        placeholder="Year Of Experience"
-        required
-        error={formError.Experience}
-      />
-    )}
-  </Col>
+            {/* ---------- EXPERIENCE FIELD ---------- */}
+            <Col md={6}>
+              {loading ? (
+                <>
+                  <Skeleton width={120} height={14} className="mb-2" />
+                  <Skeleton width="100%" height={42} className="mb-3" />
+                </>
+              ) : (
+                <InputFieldGroup
+                  label="Year Of Experience"
+                  name="Experience"
+                  type="text"
+                  value={formData.Experience}
+                  onChange={(e) => {
+                    setFormData({ ...formData, Experience: e.target.value });
+                    if (formError.Experience) setFormError({ ...formError, Experience: "" });
+                  }}
+                  placeholder="Year Of Experience"
+                  required
+                  error={formError.Experience}
+                />
+              )}
+            </Col>
 
-  {/* ---------- DOB FIELD ---------- */}
-  <Col md={6}>
-    {loading ? (
-      <>
-        <Skeleton width={60} height={14} className="mb-2" />
-        <Skeleton width="100%" height={42} className="mb-3" />
-      </>
-    ) : (
-      <DatePickerFieldGroup
-        label="DOB"
-        name="date"
-        placeholder="Select DOB"
-        value={formData.date}
-        onChange={(e) => {
-          handleChange(e);
-          if (formError.date) setFormError({ ...formError, date: "" });
-        }}
-        required
-        error={formError.date}
-        max={new Date().toISOString().split("T")[0]}
-      />
-    )}
-  </Col>
+            {/* ---------- DOB FIELD ---------- */}
+            <Col md={6}>
+              {loading ? (
+                <>
+                  <Skeleton width={60} height={14} className="mb-2" />
+                  <Skeleton width="100%" height={42} className="mb-3" />
+                </>
+              ) : (
+                <DatePickerFieldGroup
+                  label="DOB"
+                  name="date"
+                  placeholder="Select DOB"
+                  value={formData.date}
+                  onChange={(e) => {
+                    handleChange(e);
+                    if (formError.date) setFormError({ ...formError, date: "" });
+                  }}
+                  required
+                  error={formError.date}
+                  max={new Date().toISOString().split("T")[0]}
+                />
+              )}
+            </Col>
 
-  {/* ---------- GENDER RADIO BUTTON ---------- */}
-  <Col md={6}>
-    {loading ? (
-      <>
-        <Skeleton width={50} height={14} className="mb-2" />
-        <div className="d-flex gap-3">
-          <Skeleton width={20} height={20} circle />
-          <Skeleton width={20} height={20} circle />
-        </div>
-      </>
-    ) : (
-      <RadioButtonGroup
-        label="Gender"
-        name="gender"
-        value={formData.gender}
-        onChange={(e) => {
-          handleChange(e);
-          if (formError.gender) setFormError({ ...formError, gender: "" });
-        }}
-        required
-        options={[
-          { label: "Male", value: "male" },
-          { label: "Female", value: "female" },
-        ]}
-        error={formError.gender}
-      />
-    )}
-  </Col>
+            {/* ---------- GENDER RADIO BUTTON ---------- */}
+            <Col md={6}>
+              {loading ? (
+                <>
+                  <Skeleton width={50} height={14} className="mb-2" />
+                  <div className="d-flex gap-3">
+                    <Skeleton width={20} height={20} circle />
+                    <Skeleton width={20} height={20} circle />
+                  </div>
+                </>
+              ) : (
+                <RadioButtonGroup
+                  label="Gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={(e) => {
+                    handleChange(e);
+                    if (formError.gender) setFormError({ ...formError, gender: "" });
+                  }}
+                  required
+                  options={[
+                    { label: "Male", value: "male" },
+                    { label: "Female", value: "female" },
+                  ]}
+                  error={formError.gender}
+                />
+              )}
+            </Col>
 
-  {/* ---------- CONTACT NUMBER ---------- */}
-  <Col md={6}>
-    {loading ? (
-      <>
-        <Skeleton width={120} height={14} className="mb-2" />
-        <Skeleton width="100%" height={42} className="mb-3" />
-      </>
-    ) : (
-      <PhoneNumberInput
-        label="Contact Number"
-        value={formData.Contact}
-        inputMode="numeric"
-        onChange={(phone: string) => {
-          let value = phone.replace(/\D/g, "").slice(0, 12);
-          setFormData({ ...formData, Contact: value });
-          if (formError.Contact) setFormError({ ...formError, Contact: "" });
-        }}
-        required
-        error={formError.Contact}
-      />
-    )}
-  </Col>
+            {/* ---------- CONTACT NUMBER ---------- */}
+            <Col md={6}>
+              {loading ? (
+                <>
+                  <Skeleton width={120} height={14} className="mb-2" />
+                  <Skeleton width="100%" height={42} className="mb-3" />
+                </>
+              ) : (
+                <PhoneNumberInput
+                  label="Contact Number"
+                  value={formData.Contact}
+                  inputMode="numeric"
+                  onChange={(phone: string) => {
+                    let value = phone.replace(/\D/g, "").slice(0, 12);
+                    setFormData({ ...formData, Contact: value });
+                    if (formError.Contact) setFormError({ ...formError, Contact: "" });
+                  }}
+                  required
+                  error={formError.Contact}
+                />
+              )}
+            </Col>
 
-  {/* ---------- EMAIL ---------- */}
-  <Col md={6}>
-    {loading ? (
-      <>
-        <Skeleton width={100} height={14} className="mb-2" />
-        <Skeleton width="100%" height={42} className="mb-3" />
-      </>
-    ) : (
-      <InputFieldGroup
-        label="Email ID"
-        name="Email"
-        type="text"
-        value={formData.Email}
-        onChange={(e) => {
-          setFormData({ ...formData, Email: e.target.value });
-          if (formError.Email) setFormError({ ...formError, Email: "" });
-        }}
-        placeholder="Email"
-        required
-        error={formError.Email}
-      />
-    )}
-  </Col>
+            {/* ---------- EMAIL ---------- */}
+            <Col md={6}>
+              {loading ? (
+                <>
+                  <Skeleton width={100} height={14} className="mb-2" />
+                  <Skeleton width="100%" height={42} className="mb-3" />
+                </>
+              ) : (
+                <InputFieldGroup
+                  label="Email ID"
+                  name="Email"
+                  type="text"
+                  value={formData.Email}
+                  onChange={(e) => {
+                    setFormData({ ...formData, Email: e.target.value });
+                    if (formError.Email) setFormError({ ...formError, Email: "" });
+                  }}
+                  placeholder="Email"
+                  required
+                  error={formError.Email}
+                />
+              )}
+            </Col>
 
-  {/* ---------- ABOUT TEXTAREA ---------- */}
-  <Col md={12}>
-    {loading ? (
-      <>
-        <Skeleton width={60} height={14} className="mb-2" />
-        <Skeleton width="100%" height={90} className="mb-3" />
-      </>
-    ) : (
-    <Textarea label="About" name="About" value={formData.About} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handleChange(e); if (formError.About) { setFormError({ ...formError, About: "" }); } }} onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => { }} placeholder="About" required={true} disabled={false} error={formError.About} maxLength={500} />
-    )}
-  </Col>
+            {/* ---------- ABOUT TEXTAREA ---------- */}
+            <Col md={12}>
+              {loading ? (
+                <>
+                  <Skeleton width={60} height={14} className="mb-2" />
+                  <Skeleton width="100%" height={90} className="mb-3" />
+                </>
+              ) : (
+                <Textarea label="About" name="About" value={formData.About} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => { handleChange(e); if (formError.About) { setFormError({ ...formError, About: "" }); } }} onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => { }} placeholder="About" required={true} disabled={false} error={formError.About} maxLength={500} />
+              )}
+            </Col>
 
-</Row>
+          </Row>
 
         </div>
       </ContentContainer>
 
-  <ContentContainer className="mt-4">
-  {loading ? (
-    <>
-      {/* ---------- TITLE SKELETON ---------- */}
-      <div className="d-flex flex-column flex-md-row justify-content-md-between mb-3">
-        <Skeleton width={220} height={22} className="mb-2 mb-md-0" />
-        <Skeleton width={180} height={20} />
-      </div>
-
-      {/* ---------- Monday-Friday Row Skeleton ---------- */}
-      <Row className="mb-3">
-        <Col md={6} className="edit-basic-detail-timepicker">
-          <Skeleton width="100%" height={42} className="mb-2" />
-        </Col>
-        <Col md={6} className="mt-2 edit-basic-detail-timepicker">
-          <Skeleton width="100%" height={42} />
-        </Col>
-      </Row>
-
-      {/* ---------- Saturday-Sunday Row Skeleton ---------- */}
-      <Row className="mb-3 edit-basic-detail-timepicker">
-        <Col md={6} className="edit-basic-detailsat-sun">
-          <Skeleton width="100%" height={42} className="mb-2" />
-        </Col>
-        <Col md={6} className="mt-2 edit-basic-detail-timepicker">
-          <Skeleton width="100%" height={42} />
-        </Col>
-      </Row>
-    </>
-  ) : (
-    <>
-      {/* ---------- ORIGINAL FORM ---------- */}
-      <div className="d-flex flex-column flex-md-row justify-content-md-between text-md-start mb-3">
-        <h5 className="profile-card-main-titile mb-2 mb-md-0">
-          Operational hours & Days
-        </h5>
-        <Form.Check
-          type="checkbox"
-          label="Select custom Hours and Days?"
-          className="text-nowrap check-box input"
-        />
-      </div>
-
-      <Row className="mb-3">
-        <Col md={6} className="edit-basic-detail-timepicker">
-          <TimePickerFieldGroup
-            label="Monday-Friday"
-            name="MF"
-            placeholder="Select Time"
-            value={formData.MF}
-            onChange={(e) => {
-              const time = e.target.value;
-              setFormData({ ...formData, MF: time });
-            }}
-          />
-        </Col>
-
-        <Col md={6} className="mt-2 edit-basic-detail-timepicker">
-          <TimePickerFieldGroup
-            name="Time"
-            placeholder="Select Time"
-            value={formData.Time}
-            onChange={(e) => {
-              const time = e.target.value;
-              setFormData({ ...formData, Time: time });
-            }}
-          />
-        </Col>
-      </Row>
-
-      <Row className="mb-3 edit-basic-detail-timepicker">
-        <Col md={6} className="edit-basic-detailsat-sun">
-          <TimePickerFieldGroup
-            label="Saturday-Sunday"
-            name="SS"
-            placeholder="Select Time"
-            value={formData.SS}
-            onChange={(e) => {
-              const time = e.target.value;
-              setFormData({ ...formData, SS: time });
-            }}
-          />
-        </Col>
-
-        <Col md={6} className="mt-2 edit-basic-detail-timepicker">
-          <TimePickerFieldGroup
-            name="Timer"
-            placeholder="Select Time"
-            value={formData.Timer}
-            onChange={(e) => {
-              const time = e.target.value;
-              setFormData({ ...formData, Timer: time });
-            }}
-          />
-        </Col>
-      </Row>
-    </>
-  )}
-</ContentContainer>
-
-
-      {/* <div id="qualification-section"> */}
-    <ContentContainer className="mt-3">
-  {/* ---------- TITLE SKELETON ---------- */}
-  {loading ? (
-    <Skeleton width={180} height={22} className="mb-4" />
-  ) : (
-    <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
-  )}
-
-  {/* ---------- QUALIFICATION LIST SKELETON ---------- */}
-  {loading
-    ? Array.from({ length: 2 }).map((_, idx) => (
-        <div key={idx} className="position-relative mb-4 p-3 border rounded-3">
-          <Row className="g-3">
-            <Col md={6}>
-              <Skeleton width="100%" height={42} />
-            </Col>
-            <Col md={6}>
-              <Skeleton width="100%" height={42} />
-            </Col>
-            <Col md={12}>
-              <Skeleton width="100%" height={42} />
-            </Col>
-            <Col md={6}>
-              <Skeleton width="100%" height={42} />
-            </Col>
-            <Col md={6}>
-              <Skeleton width="100%" height={42} />
-            </Col>
-          </Row>
-        </div>
-      ))
-    : qualifications.map((q, index) => (
-        <div key={index} className="position-relative mb-4">
-          {/* Remove Button */}
-          {index > 0 && (
-            <div className="d-flex justify-content-end mb-1">
-              <Button
-                variant="danger"
-                size="sm"
-                className="d-flex align-items-center justify-content-center edit-basic-qualification-button"
-                onClick={() => {
-                  const updatedQuals = qualifications.filter((_, i) => i !== index);
-                  const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
-                  setQualifications(updatedQuals);
-                  setFormErrors(updatedErrors);
-                }}
-              >
-                -
-              </Button>
+      <ContentContainer className="mt-4">
+        {loading ? (
+          <>
+            {/* ---------- TITLE SKELETON ---------- */}
+            <div className="d-flex flex-column flex-md-row justify-content-md-between mb-3">
+              <Skeleton width={220} height={22} className="mb-2 mb-md-0" />
+              <Skeleton width={180} height={20} />
             </div>
-          )}
 
-          {/* Qualification Box */}
-          <div className="p-3">
-            <Row className="g-3">
-              <Col md={6}>
-                <InputFieldGroup
-                  label="Degree"
-                  name="degree"
-                  type="text"
-                  value={q.degree}
+            {/* ---------- Monday-Friday Row Skeleton ---------- */}
+            <Row className="mb-3">
+              <Col md={6} className="edit-basic-detail-timepicker">
+                <Skeleton width="100%" height={42} className="mb-2" />
+              </Col>
+              <Col md={6} className="mt-2 edit-basic-detail-timepicker">
+                <Skeleton width="100%" height={42} />
+              </Col>
+            </Row>
+
+            {/* ---------- Saturday-Sunday Row Skeleton ---------- */}
+            <Row className="mb-3 edit-basic-detail-timepicker">
+              <Col md={6} className="edit-basic-detailsat-sun">
+                <Skeleton width="100%" height={42} className="mb-2" />
+              </Col>
+              <Col md={6} className="mt-2 edit-basic-detail-timepicker">
+                <Skeleton width="100%" height={42} />
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <>
+            {/* ---------- ORIGINAL FORM ---------- */}
+            <div className="d-flex flex-column flex-md-row justify-content-md-between text-md-start mb-3">
+              <h5 className="profile-card-main-titile mb-2 mb-md-0">
+                Operational hours & Days
+              </h5>
+              <Form.Check
+                type="checkbox"
+                label="Select custom Hours and Days?"
+                className="text-nowrap check-box input"
+              />
+            </div>
+
+            <Row className="mb-3">
+              <Col md={6} className="edit-basic-detail-timepicker">
+                <TimePickerFieldGroup
+                  label="Monday-Friday"
+                  name="MF"
+                  placeholder="Select Time"
+                  value={formData.MF}
                   onChange={(e) => {
-                    const updatedQuals = [...qualifications];
-                    updatedQuals[index].degree = e.target.value;
-                    setQualifications(updatedQuals);
-
-                    const updatedErrors = [...formErrors];
-                    updatedErrors[index].degree = "";
-                    setFormErrors(updatedErrors);
+                    const time = e.target.value;
+                    setFormData({ ...formData, MF: time });
                   }}
-                  placeholder="Degree"
-                  required
-                  error={formErrors[index]?.degree}
                 />
               </Col>
 
-              <Col md={6}>
-                <InputFieldGroup
-                  label="Field of study"
-                  name="field"
-                  type="text"
-                  value={q.field}
+              <Col md={6} className="mt-2 edit-basic-detail-timepicker">
+                <TimePickerFieldGroup
+                  name="Time"
+                  placeholder="Select Time"
+                  value={formData.Time}
                   onChange={(e) => {
-                    const updatedQuals = [...qualifications];
-                    updatedQuals[index].field = e.target.value;
-                    setQualifications(updatedQuals);
-
-                    const updatedErrors = [...formErrors];
-                    updatedErrors[index].field = "";
-                    setFormErrors(updatedErrors);
+                    const time = e.target.value;
+                    setFormData({ ...formData, Time: time });
                   }}
-                  placeholder="Field"
-                  required
-                  error={formErrors[index]?.field}
-                />
-              </Col>
-
-              <Col md={12}>
-                <InputFieldGroup
-                  label="University"
-                  name="university"
-                  type="text"
-                  value={q.university}
-                  onChange={(e) => {
-                    const updatedQuals = [...qualifications];
-                    updatedQuals[index].university = e.target.value;
-                    setQualifications(updatedQuals);
-
-                    const updatedErrors = [...formErrors];
-                    updatedErrors[index].university = "";
-                    setFormErrors(updatedErrors);
-                  }}
-                  placeholder="University"
-                  required
-                  error={formErrors[index]?.university}
-                />
-              </Col>
-
-              <Col md={6}>
-                <InputSelect
-                  label="Start Year"
-                  name="startYear"
-                  value={q.startYear}
-                  onChange={(e) => {
-                    const updatedQuals = [...qualifications];
-                    updatedQuals[index].startYear = e.target.value;
-                    setQualifications(updatedQuals);
-
-                    const updatedErrors = [...formErrors];
-                    updatedErrors[index].startYear = "";
-                    setFormErrors(updatedErrors);
-                  }}
-                  options={yearOptions}
-                  error={formErrors[index]?.startYear}
-                  required
-                />
-              </Col>
-
-              <Col md={6}>
-                <InputSelect
-                  label="End Year"
-                  name="endYear"
-                  value={q.endYear}
-                  onChange={(e) => {
-                    const updatedQuals = [...qualifications];
-                    updatedQuals[index].endYear = e.target.value;
-                    setQualifications(updatedQuals);
-
-                    const updatedErrors = [...formErrors];
-                    updatedErrors[index].endYear = "";
-                    setFormErrors(updatedErrors);
-                  }}
-                  options={yearOptions.filter((year) => {
-                    if (!q.startYear) return true;
-                    return Number(year.value) >= Number(q.startYear) + 1;
-                  })}
-                  error={formErrors[index]?.endYear}
-                  required
                 />
               </Col>
             </Row>
-          </div>
-        </div>
-      ))}
 
-  {/* Add Qualification Button */}
-  {!loading && (
-    <Button variant="default" className="maiacare-button" onClick={handleAddQualification}>
-      + Add Qualification
-    </Button>
-  )}
-</ContentContainer>
+            <Row className="mb-3 edit-basic-detail-timepicker">
+              <Col md={6} className="edit-basic-detailsat-sun">
+                <TimePickerFieldGroup
+                  label="Saturday-Sunday"
+                  name="SS"
+                  placeholder="Select Time"
+                  value={formData.SS}
+                  onChange={(e) => {
+                    const time = e.target.value;
+                    setFormData({ ...formData, SS: time });
+                  }}
+                />
+              </Col>
+
+              <Col md={6} className="mt-2 edit-basic-detail-timepicker">
+                <TimePickerFieldGroup
+                  name="Timer"
+                  placeholder="Select Time"
+                  value={formData.Timer}
+                  onChange={(e) => {
+                    const time = e.target.value;
+                    setFormData({ ...formData, Timer: time });
+                  }}
+                />
+              </Col>
+            </Row>
+          </>
+        )}
+      </ContentContainer>
+
+
+      {/* <div id="qualification-section"> */}
+      <ContentContainer className="mt-3">
+        {/* ---------- TITLE SKELETON ---------- */}
+        {loading ? (
+          <Skeleton width={180} height={22} className="mb-4" />
+        ) : (
+          <h5 className="profile-card-main-titile mb-4">Qualification Details</h5>
+        )}
+
+        {/* ---------- QUALIFICATION LIST SKELETON ---------- */}
+        {loading
+          ? Array.from({ length: 2 }).map((_, idx) => (
+            <div key={idx} className="position-relative mb-4 p-3 border rounded-3">
+              <Row className="g-3">
+                <Col md={6}>
+                  <Skeleton width="100%" height={42} />
+                </Col>
+                <Col md={6}>
+                  <Skeleton width="100%" height={42} />
+                </Col>
+                <Col md={12}>
+                  <Skeleton width="100%" height={42} />
+                </Col>
+                <Col md={6}>
+                  <Skeleton width="100%" height={42} />
+                </Col>
+                <Col md={6}>
+                  <Skeleton width="100%" height={42} />
+                </Col>
+              </Row>
+            </div>
+          ))
+          : qualifications.map((q, index) => (
+            <div key={index} className="position-relative mb-4">
+              {/* Remove Button */}
+              {index > 0 && (
+                <div className="d-flex justify-content-end mb-1">
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="d-flex align-items-center justify-content-center edit-basic-qualification-button"
+                    onClick={() => {
+                      const updatedQuals = qualifications.filter((_, i) => i !== index);
+                      const updatedErrors = formErrors.filter((_, i) => i !== index); // keep errors in sync
+                      setQualifications(updatedQuals);
+                      setFormErrors(updatedErrors);
+                    }}
+                  >
+                    -
+                  </Button>
+                </div>
+              )}
+
+              {/* Qualification Box */}
+              <div className="p-3">
+                <Row className="g-3">
+                  <Col md={6}>
+                    <InputFieldGroup
+                      label="Degree"
+                      name="degree"
+                      type="text"
+                      value={q.degree}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].degree = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].degree = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      placeholder="Degree"
+                      required
+                      error={formErrors[index]?.degree}
+                    />
+                  </Col>
+
+                  <Col md={6}>
+                    <InputFieldGroup
+                      label="Field of study"
+                      name="field"
+                      type="text"
+                      value={q.field}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].field = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].field = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      placeholder="Field"
+                      required
+                      error={formErrors[index]?.field}
+                    />
+                  </Col>
+
+                  <Col md={12}>
+                    <InputFieldGroup
+                      label="University"
+                      name="university"
+                      type="text"
+                      value={q.university}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].university = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].university = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      placeholder="University"
+                      required
+                      error={formErrors[index]?.university}
+                    />
+                  </Col>
+
+                  <Col md={6}>
+                    <InputSelect
+                      label="Start Year"
+                      name="startYear"
+                      value={q.startYear}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].startYear = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].startYear = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      options={yearOptions}
+                      error={formErrors[index]?.startYear}
+                      required
+                    />
+                  </Col>
+
+                  <Col md={6}>
+                    <InputSelect
+                      label="End Year"
+                      name="endYear"
+                      value={q.endYear}
+                      onChange={(e) => {
+                        const updatedQuals = [...qualifications];
+                        updatedQuals[index].endYear = e.target.value;
+                        setQualifications(updatedQuals);
+
+                        const updatedErrors = [...formErrors];
+                        updatedErrors[index].endYear = "";
+                        setFormErrors(updatedErrors);
+                      }}
+                      options={yearOptions.filter((year) => {
+                        if (!q.startYear) return true;
+                        return Number(year.value) >= Number(q.startYear) + 1;
+                      })}
+                      error={formErrors[index]?.endYear}
+                      required
+                    />
+                  </Col>
+                </Row>
+              </div>
+            </div>
+          ))}
+
+        {/* Add Qualification Button */}
+        {!loading && (
+          <Button variant="default" className="maiacare-button" onClick={handleAddQualification}>
+            + Add Qualification
+          </Button>
+        )}
+      </ContentContainer>
 
       {/* </div> */}
 
